@@ -1,0 +1,172 @@
+@extends('index')
+
+@section('title', '- Create Daily Man Schedule')
+
+@section('body-class', 'mansked-create')
+
+@section('container-body')
+<div class="container-fluid">
+
+  <div>
+    
+    <ol class="breadcrumb">
+      <li><a href="/">Home</a></li>
+      <li><a href="/branch">Branch</a></li>
+      <li><a href="/branch/manday">Daily Man Schedule</a></li>
+      <li class="active">Add</li>
+    </ol>
+
+    <nav id="nav-action" class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-form">
+          <div class="btn-group" role="group">
+            <a href="/branch/manday" class="btn btn-default">
+              <span class="glyphicon glyphicon-th-list"></span>
+            </a>
+            <button type="button" class="btn btn-default active">
+              <span class="glyphicon glyphicon-file"></span>
+            </button>   
+          </div>
+      </div><!-- end btn-grp -->
+      </div>
+    </nav>
+
+
+    
+
+    {!! Form::open(['url' => 'api/t/manskedday', 'action'=>'PUT', 'accept-charset'=>'utf-8', 'id'=>'frm-manskedday', 'name'=>'frm-manskedday', 'class'=>'table-manskedday']) !!}
+    <div class="panel panel-default">
+        <div class="panel-heading">Forecasted  Information</div>
+        <div class="panel-body row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="date" class="control-label">Date</label>
+            <input type="text" class="form-control" id="date" name="date" placeholder="YYYY-MM-DD">
+          </div>
+        </div>   
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="custcount" class="control-label">Forecasted No. of Customers</label>
+            <input type="text" class="form-control" id="custcount" name="custcount" placeholder="No. of Customers" >
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="empcount" class="control-label">Total Crew on Duty</label>
+            <input type="text" class="form-control text-right" id="empcount" name="empcount" placeholder="0" readonly>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="manpower" class="control-label">Manpower - Short/(Over)</label>
+            <input type="text" class="form-control text-right" id="manpower" placeholder="0" readonly>
+          </div>
+        </div>  
+
+        <div class="col-md-3 col-md-offset-3">
+          <div class="form-group">
+            <label for="headspend" class="control-label">Forecasted Average Spending</label>
+            <input type="text" class="form-control" id="headspend" name="headspend" placeholder="Spending" >
+          </div>
+        </div>  
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="mancost" class="control-label">Manpower Cost %</label>
+            <div class="input-group">
+              <input type="text" class="form-control text-right" id="mancost" placeholder="0" readonly>
+              <span class="input-group-addon">%</span>
+            </div>
+          </div>
+        </div>   
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="comment" class="control-label">Comment</label>
+            <input type="text" class="form-control" id="comment" placeholder="Ok, Over, High, Too High" readonly>
+          </div>
+        </div>  
+        
+      </div>
+    </div>
+
+    <div class="row">
+      <?php
+        $ctr=0;
+      ?>
+      @foreach($depts as $dept)
+        <div class="col-md-6">
+          <div class="panel panel-default">
+            <div class="panel-heading">{{ $dept['name'] }} Schedule</div>
+            <div class="panel-body row">
+              <table class="table tb-manday">
+              @for ($i = 0; $i < count($dept['employees']); $i++)
+                <tr>
+                  <td>{{ $dept['employees'][$i]->lastname }}, {{ $dept['employees'][$i]->firstname }}</td>
+                  <td>{{ $dept['employees'][$i]->position->code }}</td>
+                  <td>
+                    <div>
+                      <input type="hidden" id="manskeddtl.{{ $ctr }}.daytype" name="manskeddtl[{{ $ctr }}][daytype]" class="daytype" value="0">
+                      <input type="hidden" id="manskeddtl.{{ $ctr }}.employeeid" name="manskeddtl[{{ $ctr }}][employeeid]" value="{{ $dept['employees'][$i]->id }}">
+                      <select name="manskeddtl[{{ $ctr }}][starttime]" class="form-control"> 
+                        <option value="off">DAY OFF</option>
+                        @for ($j = 1; $j <= 24; $j++)
+                          <option value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
+                        @endfor
+                      </select>
+                    </div>
+                  </td>
+                </tr>
+                <?php
+                  $ctr++;
+                ?>
+              @endfor
+              </table>
+            </div>  
+          </div>
+        </div>
+      @endforeach
+      
+      
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <a href="{{ isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'/branch/manday' }}" class="btn btn-default">Cancel</a>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+
+    {!! Form::close() !!}
+    
+      
+  </div>
+
+
+<!-- end main -->
+</div>
+@endsection
+
+
+
+
+@section('js-external')
+  @parent
+  
+
+<script>
+  $('document').ready(function(){
+
+   // $('#date').datepicker({'format':'yyyy-mm-dd'})
+
+    $('select.form-control').on('change', function(e){
+      //console.log(e);
+      var x = ($(this)[0].value=='off') ? 0:1; 
+     $(this).parent().children('.daytype').val(x);
+    });
+
+
+
+     $("#date").datepicker({ minDate: 1, dateFormat: 'yy-mm-dd',});
+  });
+</script>
+@endsection
+

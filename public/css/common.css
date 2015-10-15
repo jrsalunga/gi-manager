@@ -1,0 +1,21 @@
+
+
+
+
+
+
+
+
+
+.tab-container {
+    margin-bottom: 20px;
+    padding-top: 20px;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+
+.control-label {
+    font-weight: normal;
+    color: #3B5998;
+}

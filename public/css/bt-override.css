@@ -1,0 +1,101 @@
+body {
+  min-height: 100%;
+  padding-top: 51px;
+}
+
+body.jumbo {
+  padding-top: 71px;
+}
+
+
+.navbar-brand {
+    padding: 0px 15px;
+}
+
+.navbar-brand > img {
+  max-height: 46px;
+}
+
+@media (max-width: 768px) {
+
+.navbar {
+    border-radius: 4px;
+}
+
+#nav-action .navbar-form {
+    width: auto;
+    padding: 0;
+    margin-right: 0;
+    margin-left: 0;
+    border: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+}
+
+
+
+
+
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: 992px) { 
+
+.input-group select.form-control {
+  width: 25%;
+}
+.input-group select.form-control:not(:first-child) {
+      border-left: 0;
+}
+
+
+
+/* centered columns styles */
+.row-centered {
+    text-align:center;
+}
+.col-centered {
+    display:inline-block;
+    float:none;
+    /* reset the text-align */
+    text-align:left;
+    /* inline-block space fix */
+    margin-right:-4px;
+    vertical-align: top;
+
+
+} 
+
+}
+/* end Medium devices (desktops, 992px and up) */
+
+
+#panel-tasks .panel-body, 
+#panel-reports .panel-body {
+  
+} 
+
+
+
+
+
+
+
+.table.tb-manday tbody tr td{
+  vertical-align: middle;
+}
+
+.table.tb-manday tbody tr td:nth-child(2) {
+  width: 6%;
+}
+
+.table.tb-manday tbody tr td .input-group{
+  width: 100%;
+}
+
+.input-group .form-control {
+
+    z-index: 1
+}
+
+
