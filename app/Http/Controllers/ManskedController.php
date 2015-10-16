@@ -10,6 +10,7 @@ use App\Models\Manskedhdr as Mansked;
 use App\Models\Manskedday as Manday;
 use App\Models\Manskeddtl as Mandtl;
 use Auth;
+use Carbon\Carbon;
 
 class ManskedController extends Controller {
 
@@ -57,17 +58,23 @@ class ManskedController extends Controller {
 	}
 
 	public function makeListView(Request $request, $param1, $param2) {
-		return Mansked::all();
+		//return dd(app());
+		$manskeds = Mansked::with('manskeddays')->where('branchid', $this->branchid)
+																			->orderBy('weekno', 'DESC')->paginate('10');
+		//return $pages;
+		return view('task.mansked.list2')->with('manskeds', $manskeds);
 
-		return $weeks = Mansked::paginateWeeks($request, '2015', 5);
+		$weeks = Mansked::paginateWeeks($request, '2015', 5);
 		return view('task.mansked.list')->with('weeks', $weeks);
 	}
 
 
 	public function makeViewWeek($weekno){
-		$mansked = Mansked::getManskedday('2015', $weekno);
-		//return $mansked;
-		return view('task.mansked.week')->with('mansked', $mansked);
+		$manday = Mansked::getManskedday('2015', $weekno);
+		$mansked = Mansked::whereWeekno($weekno)->get()->first();
+		//return $mansked->nextByField('weekno');
+		//return $mansked->previousByField('weekno');
+		return view('task.mansked.week')->with('manday', $manday)->with('mansked', $mansked);
 	}
 
 
@@ -131,6 +138,8 @@ class ManskedController extends Controller {
     }
 
     \DB::commit();
+
+    return redirect('/task/mansked/week/'. $mansked->weekno);
 
 		//$mansked->id
     //return $id;

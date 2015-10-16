@@ -29,6 +29,18 @@ class BaseModel extends Model {
 		return !empty($res) ? $res : 'false';
 	}
 
+	public function lid(){
+		return strtolower($this->id);
+	}
+
+	public function nextByField($field = 'id'){
+		return $this->query()->where($field, '>', $this->{$field})->orderBy($field, 'ASC')->get()->first();
+	}
+
+	public function previousByField($field = 'id'){
+		return $this->query()->where($field, '<', $this->{$field})->orderBy($field, 'DESC')->get()->first();
+	}
+
 
 
 	public static function getLastDayLastWeekOfYear($year=""){

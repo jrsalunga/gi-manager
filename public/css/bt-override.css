@@ -41,7 +41,15 @@ a, a:hover {
 }
 
 
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: 768px) { 
 
+.input-group select.form-control {
+  width: 25%;
+}
+.input-group select.form-control:not(:first-child) {
+      border-left: 0;
+}
 
 
 /* Medium devices (desktops, 992px and up) */
@@ -102,6 +110,11 @@ a, a:hover {
 .input-group .form-control {
 
     z-index: 1
+}
+
+#accordion-week-days .btn.alert-success {
+  margin-bottom: 5px;
+
 }
 
 

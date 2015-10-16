@@ -70,7 +70,7 @@ class ManskeddayController extends Controller {
 					$mandtl = Mandtl::where('employeeid', $depts[$h]['employees'][$i]->id)
 													->where('mandayid', $param1)->get()->first();
 					$depts[$h]['employees'][$i]['manskeddtl'] = count($mandtl) > 0 ?
-						['daytype'=>$mandtl->daytype, 
+						['daytype'=> $mandtl->daytype, 
 						'timestart'=>$mandtl->timestart,
 						'breakstart'=>$mandtl->breakstart,
 						'breakend'=>$mandtl->breakend,
@@ -79,7 +79,16 @@ class ManskeddayController extends Controller {
 						'breakhrs'=>$mandtl->breakhrs,
 						'loading'=>$mandtl->loading, 
 						'id'=>$mandtl->id]: 
-						['daytype'=>'0', 'starttime'=>'off', 'id'=>''];
+						['daytype'=> 0, 
+						'timestart'=>'off',
+						'breakstart'=>'',
+						'breakend'=>'',
+						'timeend'=>'',
+						'workhrs'=>'',
+						'breakhrs'=>'',
+						'loading'=>'', 
+						'id'=>''];
+						//['daytype'=>'0', 'starttime'=>'off', 'id'=>''];
 				}
 			}
 		} else {
@@ -131,7 +140,7 @@ class ManskeddayController extends Controller {
 	}
 
 	public function put(Request $request, $id){
-		//return $request->all();
+		//return $request->input('manskeddtls');
 		if(strtolower($request->input('id')) == strtolower($id)){
 			$manday = Manday::find($id);
 			if(count($manday) > 0){
@@ -141,7 +150,8 @@ class ManskeddayController extends Controller {
 				$manday->empcount 	= $request->input('empcount');
 				$manday->workhrs 		= $request->input('workhrs');
 				$manday->breakhrs 	= $request->input('breakhrs');
-				$manday->loading 		= $request->input('loading');
+				$manday->overload 	= $request->input('overload');
+				$manday->underload 	= $request->input('overload');
 
 				\DB::beginTransaction(); //Start transaction!
 		    try {
@@ -149,25 +159,28 @@ class ManskeddayController extends Controller {
 		        try {
 		          foreach($request->input('manskeddtls') as $mandtl){
 								$n = Mandtl::find($mandtl['id']);
-								if(count($manday) > 0){
-
+								if(count($n) > 0){
 									foreach ($mandtl as $key => $value) {
+										if($mandtl['timestart']=='off'){
+											$n->breakstart = 'off';
+											$n->breakend = 'off';
+											$n->timeend = 'off';
+										}
 										$n->{$key} = $value;
 									}
-									/*
-									$n->daytype 		= $mandtl['daytype'];
-									$n->timestart 	= $mandtl['timestart'];
-									$n->breakstart 	= $mandtl['breakstart'];
-									$n->breakend 		= $mandtl['breakend'];
-									$n->timeend 		= $mandtl['timeend'];
-									$n->workhrs 		= $mandtl['workhrs'];
-									$n->breakhrs 		= $mandtl['breakhrs'];
-									$n->loading 		= $mandtl['loading'];
-									*/
 									$n->save();
 								} else {
-									\DB::rollback();
-									return 'no mandtl found!';
+									$m = new Mandtl;
+									foreach ($mandtl as $key => $value) {
+										if($key=='id')
+											$m->id = $m->get_uid();
+										else
+											$m->{$key} = $value;
+									}
+									$m->mandayid = $request->input('id');
+									$m->save();
+									//\DB::rollback();
+									//return 'no mandtl found!';
 								}
 							}
 		        } catch(\Exception $e) {
@@ -180,8 +193,8 @@ class ManskeddayController extends Controller {
 		    }
 		    \DB::commit();
 				
-				$manday->load('manskeddtls');
-				return $manday;
+				//$manday->load('manskeddtls');
+				//return $manday;
 				//return $request->input('manskeddtls');
 			}
 		}

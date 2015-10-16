@@ -10,7 +10,7 @@
   <ol class="breadcrumb">
     <li><span class="gly gly-shop"></span> <a href="/">{{ $branch }}</a></li>
     <li><a href="/task/mansked">Manpower Schedule</a></li>
-    <li class="active">Week</li>
+    <li class="active">Week {{ $mansked->weekno }}</li>
   </ol>
 
   <div>
@@ -73,15 +73,15 @@
           if($i==1 || $i==2 || $i==6)
             continue;
           else if($i==7 && $j!=0)
-            if($mansked[$j]['created']=='true')
-              echo '<td><a class="btn btn-default" href="/task/manday/'.strtolower($mansked[$j]['id']).'/edit"><i class="fa fa-calendar-plus-o"></i>
+            if($manday[$j]['created']=='true')
+              echo '<td><a class="btn btn-default" href="/task/manday/'.strtolower($manday[$j]['id']).'/edit"><i class="fa fa-calendar-o"></i>
 </a></td>';
             else
-              echo '<td><a href="#">'. $mansked[$j]['created'] .'</a></td>';
+              echo '<td><a href="#">'. $manday[$j]['created'] .'</a></td>';
           else if($i==0 && $j!=0)
-                echo '<td>'. date('M j',strtotime($mansked[$j][$i])) .'</td>';
+                echo '<td>'. date('M j',strtotime($manday[$j][$i])) .'</td>';
           else 
-            echo '<td>'. $mansked[$j][$i] .'</td>';
+            echo '<td>'. $manday[$j][$i] .'</td>';
       }
       echo '</tr>';
     }
