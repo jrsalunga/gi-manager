@@ -8,7 +8,7 @@
 
   <title>Giligan's Restaurant @yield('title')</title>
 
-  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico" />
+  <link rel="shortcut icon" type="image/x-icon" href="/images/g.png" />
 @if(app()->environment() == 'local')
   <link rel="stylesheet" href="/css/normalize-3.0.3.min.css">
   <link rel="stylesheet" href="/css/font-awesome.min.css">
@@ -38,7 +38,7 @@
       </button>
     
       <a class="navbar-brand" href="/">
-        <img src="/images/giligans-logo.png" class="img-responsive header-logo" style="max-height: 44px;">
+        <img src="/images/giligans-header.png" class="img-responsive header-logo">
       </a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">

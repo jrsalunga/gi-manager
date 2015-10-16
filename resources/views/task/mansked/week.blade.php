@@ -27,15 +27,23 @@
             <button type="button" class="btn btn-default active">
               <span class="glyphicon glyphicon-calendar"></span>
             </button>
+            <!--
             <a href="/masterfiles/employee/" class="btn btn-default">
               <span class="glyphicon glyphicon-file"></span>
             </a>   
+          -->
+          </div>
+
+          <div class="btn-group" role="group">
+            <a href="/task/mansked/add" class="btn btn-default">
+              <span class="glyphicon glyphicon-plus"></span>
+            </a>
           </div>
       </div><!-- end btn-grp -->
       </div>
     </nav>
 
-    <table class="table tb-mansked-week">
+    <table class="table tb-mansked-week table-responsive">
       <tbody>
     <?php
 

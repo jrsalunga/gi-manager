@@ -57,7 +57,9 @@ class ManskedController extends Controller {
 	}
 
 	public function makeListView(Request $request, $param1, $param2) {
-		$weeks = Mansked::paginateWeeks($request, '2015', 5);
+		return Mansked::all();
+
+		return $weeks = Mansked::paginateWeeks($request, '2015', 5);
 		return view('task.mansked.list')->with('weeks', $weeks);
 	}
 

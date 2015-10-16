@@ -7,6 +7,12 @@ body.jumbo {
   padding-top: 71px;
 }
 
+a, a:hover {
+  color: #3c763d;
+}
+
+
+
 
 .navbar-brand {
     padding: 0px 15px;
