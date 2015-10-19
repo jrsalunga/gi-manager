@@ -152,7 +152,7 @@ class ManskeddayController extends Controller {
 	}
 
 	public function put(Request $request, $id){
-		return $request->all();
+		//return $request->all();
 		if(strtolower($request->input('id')) == strtolower($id)){
 			$manday = Manday::find($id);
 			if(count($manday) > 0){
