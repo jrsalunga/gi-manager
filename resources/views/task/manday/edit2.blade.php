@@ -57,6 +57,7 @@
     <form method="post" action="/api/t/manskedday/{{strtolower($manday->id)}}" id="frm-manskedday" name="frm-manskedday" role="form" data-table="manskedday">
     <input type="hidden" name="_method" value="PUT">
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
+    <input type="hidden" id="id" name="id" value="{{ $manday->id }}">
     <table class="table table-bordered">
       <tbody>
         <tr>
