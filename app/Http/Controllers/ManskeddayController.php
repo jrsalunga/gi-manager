@@ -55,20 +55,13 @@ class ManskeddayController extends Controller {
 		 return  $depts;
 	}
 
-	private function empGrpByDeptWithManday(){
-
-	}
-
-	public function makeEditView(Request $request, $param1) {
-		$manday = Manday::find($param1);
-		//return $manday;
-		if(count($manday) > 0){ // check if the $id 
-			$depts = $this->empGrpByDept(); // get array of dept w/ emp grouped by department e.g. dining, kitchen
+	private function empGrpByDeptWithManday($id){
+		$depts = $this->empGrpByDept(); // get array of dept w/ emp grouped by department e.g. dining, kitchen
 			for($h=0; $h<count($depts); $h++){
 				$arr = $depts[$h]['employees']->toArray(); // extract emp on each dept
 				for($i=0; $i<count($arr); $i++){
 					$mandtl = Mandtl::where('employeeid', $depts[$h]['employees'][$i]->id)
-													->where('mandayid', $param1)->get()->first();
+													->where('mandayid', $id)->get()->first();
 					$depts[$h]['employees'][$i]['manskeddtl'] = count($mandtl) > 0 ?
 						['daytype'=> $mandtl->daytype, 
 						'timestart'=>$mandtl->timestart,
@@ -88,14 +81,24 @@ class ManskeddayController extends Controller {
 						'breakhrs'=>'',
 						'loading'=>'', 
 						'id'=>''];
-						//['daytype'=>'0', 'starttime'=>'off', 'id'=>''];
 				}
 			}
+		return $depts;
+	}
+
+	public function makeEditView(Request $request, $param1) {
+		$manday = Manday::find($param1);
+		if(strtotime($manday->date) < strtotime('now')){
+			return redirect(URL::previous())->withErrors(['message' => 'Editing is disabled! ']);
+		}
+		if(count($manday) > 0){ // check if the $id 
+			$depts = $this->empGrpByDeptWithManday($param1);			
 		} else {
 			return redirect(URL::previous());
 		}
 		//return $depts;
-		return view('task.manday.edit')->with('depts', $depts)->with('manday', $manday);
+		//return view('task.manday.edit')->with('depts', $depts)->with('manday', $manday);
+		return view('task.manday.edit2')->with('depts', $depts)->with('manday', $manday);
 	}
 
 	public function makeAddView(Request $request) {
@@ -120,34 +123,7 @@ class ManskeddayController extends Controller {
 		$manday = Manday::find($param1);
 		//return $manday;
 		if(count($manday) > 0){ // check if the $id 
-			$depts = $this->empGrpByDept(); // get array of dept w/ emp grouped by department e.g. dining, kitchen
-			for($h=0; $h<count($depts); $h++){
-				$arr = $depts[$h]['employees']->toArray(); // extract emp on each dept
-				for($i=0; $i<count($arr); $i++){
-					$mandtl = Mandtl::where('employeeid', $depts[$h]['employees'][$i]->id)
-													->where('mandayid', $param1)->get()->first();
-					$depts[$h]['employees'][$i]['manskeddtl'] = count($mandtl) > 0 ?
-						['daytype'=> $mandtl->daytype, 
-						'timestart'=>$mandtl->timestart,
-						'breakstart'=>$mandtl->breakstart,
-						'breakend'=>$mandtl->breakend,
-						'timeend'=>$mandtl->timeend,
-						'workhrs'=>$mandtl->workhrs,
-						'breakhrs'=>$mandtl->breakhrs,
-						'loading'=>$mandtl->loading, 
-						'id'=>$mandtl->id]: 
-						['daytype'=> 0, 
-						'timestart'=>'off',
-						'breakstart'=>'',
-						'breakend'=>'',
-						'timeend'=>'',
-						'workhrs'=>'',
-						'breakhrs'=>'',
-						'loading'=>'', 
-						'id'=>''];
-						//['daytype'=>'0', 'starttime'=>'off', 'id'=>''];
-				}
-			}
+			$depts = $this->empGrpByDeptWithManday($param1);			
 		} else {
 			return redirect(URL::previous());
 		}
@@ -176,7 +152,7 @@ class ManskeddayController extends Controller {
 	}
 
 	public function put(Request $request, $id){
-		//return $request->input('manskeddtls');
+		return $request->all();
 		if(strtolower($request->input('id')) == strtolower($id)){
 			$manday = Manday::find($id);
 			if(count($manday) > 0){

@@ -59,9 +59,11 @@ get('csv/{year}/week/{weekno}', function($year, $weekno){
   echo PHP_EOL;
 	foreach ($manskeds->manskeddays as $manday) {
 		echo $manday->date.',';
-		echo $manday->custcount.',';
-		echo $manday->headspend.',';
-		echo $manday->empcount;
+		echo empty($manday->custcount) ? 0: $manday->custcount;
+		echo ',';
+		echo empty($manday->headspend) ? 0: $manday->headspend;
+		echo ',';
+		echo empty($manday->empcount) ? 0: $manday->empcount;
 		echo PHP_EOL;
 	}
 

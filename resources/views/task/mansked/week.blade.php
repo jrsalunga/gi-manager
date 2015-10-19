@@ -44,7 +44,7 @@
       </div>
     </nav>
 
-
+    <!--
     <table class="table table-bordered">
       <tbody>
         <tr>
@@ -61,7 +61,7 @@
         </tr>
       </tbody>
     <table>
-
+    -->
     <div class="graph" style="height: 250px">
 
     </div>
@@ -137,7 +137,7 @@
 <script>
 $(function () {
 
-  $.get('/csv/2015/week/42', function (csv) {
+  $.get('/csv/2015/week/{{$mansked->weekno}}', function (csv) {
     //console.log(csv);
     $('.graph').highcharts({
         chart: {

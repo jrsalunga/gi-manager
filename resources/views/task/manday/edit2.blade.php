@@ -29,20 +29,16 @@
             <a href="/task/mansked/week/{{$wn}}" class="btn btn-default">
               <span class="gly gly-table"></span>
             </a>
-            <button type="button" class="btn btn-default active">
+            <a href="/task/manday/{{strtolower($manday->id)}}" class="btn btn-default">
               <span class="fa fa-calendar-o"></span>
-            </button>   
+            </a>   
           </div>
           <div class="btn-group" role="group">
-            @if(strtotime($manday->date) > strtotime('now'))
-            <a href="/task/manday/{{strtolower($manday->id)}}/edit" class="btn btn-default">
-              <span class="glyphicon glyphicon-edit"></span>
-            </a>
-            @else
-            <button type="button" class="btn btn-default" disabled>
+            
+            <button type="button" class="btn btn-default active">
               <span class="glyphicon glyphicon-edit"></span>
             </button>
-            @endif
+            
           </div><!-- end btn-grp -->
         </div>
       </div>
@@ -58,6 +54,9 @@
     @endforeach
 
 
+    <form method="post" action="/api/t/manskedday/{{strtolower($manday->id)}}" id="frm-manskedday" name="frm-manskedday" role="form" data-table="manskedday">
+    <input type="hidden" name="_method" value="PUT">
+    <input type="hidden" name="_token" value="{{ csrf_token() }}">
     <table class="table table-bordered">
       <tbody>
         <tr>
@@ -113,7 +112,7 @@
       </tbody>
     </table>
 
-    <table class="table table-bordered">
+    <table id="tb-mandtl" class="table table-bordered">
       <tbody>
         <tr>
           <td>
@@ -155,61 +154,86 @@
                 <td class="text-right">{{ $dept['employees'][$i]['manskeddtl']['workhrs'] }}</td>
                 <td class="text-right">{{ $dept['employees'][$i]['manskeddtl']['loading'] }}</td>
               @else
-                <!--
-                <td class="text-right">
-                  <select name="manskeddtls[{{ $ctr }}][timestart]" class="form-control tk-select"> 
-                    <option value="off">DAY OFF</option>
+                
+                <td class="text-right text-input">
+                  <select name="manskeddtls[{{ $ctr }}][timestart]" class="frm-ctrl tk-select timestart"> 
+                    <option value="off">-</option>
                     @for ($j = 1; $j <= 24; $j++)
                       @if($dept['employees'][$i]['manskeddtl']['timestart'] == date('G:i', strtotime( $j .':00')))
                         <option selected value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
                       @else
                         <option value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
                       @endif
-                    @endfor
-                  </select>
-                </td>
-                <td class="text-right">
-                  <select name="manskeddtls[{{ $ctr }}][timestart]" class="form-control tk-select"> 
-                    <option value="off">DAY OFF</option>
-                    @for ($j = 1; $j <= 24; $j++)
-                      @if($dept['employees'][$i]['manskeddtl']['timestart'] == date('G:i', strtotime( $j .':00')))
-                        <option selected value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
-                      @else
-                        <option value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
-                      @endif
-                    @endfor
-                  </select>
-                </td>
-                <td class="text-right">
-                  <select name="manskeddtls[{{ $ctr }}][timestart]" class="form-control tk-select"> 
-                    <option value="off">DAY OFF</option>
-                    @for ($j = 1; $j <= 24; $j++)
-                      @if($dept['employees'][$i]['manskeddtl']['timestart'] == date('G:i', strtotime( $j .':00')))
-                        <option selected value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
-                      @else
-                        <option value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
-                      @endif
-                    @endfor
-                  </select>
-                </td>
-                <td class="text-right">
-                  <select name="manskeddtls[{{ $ctr }}][timestart]" class="form-control tk-select"> 
-                    <option value="off">DAY OFF</option>
-                    @for ($j = 1; $j <= 24; $j++)
-                      @if($dept['employees'][$i]['manskeddtl']['timestart'] == date('G:i', strtotime( $j .':00')))
-                        <option selected value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
-                      @else
-                        <option value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
-                      @endif
-                    @endfor
-                  </select>
-                </td>
-                -->
 
-                <td class="text-right">-</td>
-                <td class="text-right">-</td>
-                <td class="text-right">-</td>
-                <td class="text-right">-</td>
+                      @if($dept['employees'][$i]['manskeddtl']['timestart'] == date('G:i', strtotime( $j .':30')))
+                        <option selected value="{{ $j }}:30">{{ date('g:i A', strtotime( $j .':30')) }}</option>
+                      @else
+                        <option value="{{ $j }}:30">{{ date('g:i A', strtotime( $j .':30')) }}</option>
+                      @endif
+                    @endfor
+                  </select>
+                </td>
+                <td class="text-right text-input">
+                  <select name="manskeddtls[{{ $ctr }}][breakstart]" class="frm-ctrl tk-select breakstart" disabled> 
+                    <option value="off">-</option>
+                    @for ($j = 1; $j <= 24; $j++)
+                      @if($dept['employees'][$i]['manskeddtl']['breakstart'] == date('G:i', strtotime( $j .':00')))
+                        <option selected value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
+                      @else
+                        <option value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
+                      @endif
+
+                      @if($dept['employees'][$i]['manskeddtl']['breakstart'] == date('G:i', strtotime( $j .':30')))
+                        <option selected value="{{ $j }}:30">{{ date('g:i A', strtotime( $j .':30')) }}</option>
+                      @else
+                        <option value="{{ $j }}:30">{{ date('g:i A', strtotime( $j .':30')) }}</option>
+                      @endif
+                    @endfor
+                  </select>
+                </td>
+                <td class="text-right text-input">
+                  <select name="manskeddtls[{{ $ctr }}][breakend]" class="frm-ctrl tk-select breakend" disabled> 
+                    <option value="off">-</option>
+                    @for ($j = 1; $j <= 24; $j++)
+                      @if($dept['employees'][$i]['manskeddtl']['breakend'] == date('G:i', strtotime( $j .':00')))
+                        <option selected value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
+                      @else
+                        <option value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
+                      @endif
+                      
+                      @if($dept['employees'][$i]['manskeddtl']['breakend'] == date('G:i', strtotime( $j .':30')))
+                        <option selected value="{{ $j }}:30">{{ date('g:i A', strtotime( $j .':30')) }}</option>
+                      @else
+                        <option value="{{ $j }}:30">{{ date('g:i A', strtotime( $j .':30')) }}</option>
+                      @endif
+                    @endfor
+                  </select>
+                </td>
+                <td class="text-right text-input">
+                  <select name="manskeddtls[{{ $ctr }}][timeend]" class="frm-ctrl tk-select timeend" disabled> 
+                    <option value="off">-</option>
+                    @for ($j = 1; $j <= 24; $j++)
+                      @if($dept['employees'][$i]['manskeddtl']['timeend'] == date('G:i', strtotime( $j .':00')))
+                        <option selected value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
+                      @else
+                        <option value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
+                      @endif
+
+                      @if($dept['employees'][$i]['manskeddtl']['timeend'] == date('G:i', strtotime( $j .':30')))
+                        <option selected value="{{ $j }}:30">{{ date('g:i A', strtotime( $j .':30')) }}</option>
+                      @else
+                        <option value="{{ $j }}:30">{{ date('g:i A', strtotime( $j .':30')) }}</option>
+                      @endif
+                    @endfor
+                  </select>
+                </td>
+              
+                <!--
+                <td class="text-input"><input type="text" class="frm-ctrl"></td>
+                <td class="text-input"><input type="text" class="frm-ctrl"></td>
+                <td class="text-input"><input type="text" class="frm-ctrl"></td>
+                <td class="text-input"><input type="text" class="frm-ctrl"></td>
+                -->
 
                 <td class="text-right">-</td>
                 <td class="text-right">-</td>
@@ -220,6 +244,15 @@
         @endforeach
       </tbody>
     </table>
+
+
+    <div class="row button-container">
+      <div class="col-md-6">
+        <a href="{{ URL::previous() }}" class="btn btn-default">Cancel</a>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+    </form>
 
     
     
@@ -243,10 +276,31 @@
 
    // $('#date').datepicker({'format':'yyyy-mm-dd'})
 
-    $('select.form-control').on('change', function(e){
-      //console.log(e);
+   $('select.timestart').on('change', function(e){
+      
       var x = ($(this)[0].value=='off') ? 0:1; 
-     $(this).parent().children('.daytype').val(x);
+      console.log(x);
+      if(x==0){  
+        var d = true;
+      } else {
+        var d = false;
+      }
+
+      $(this).parent().siblings('td').children('.frm-ctrl').each(function(el){
+        //console.log($(this)[0].value);
+        if(d)
+          $(this)[0].value = 'off'
+        $(this)[0].disabled = d;
+      });
+
+      
+    });
+
+    $('select.breakstart').on('change', function(e){
+      
+      var x = ($(this)[0].value=='off') ? 0:1; 
+      console.log(x);
+      //$(this).parent().children('.daytype').val(x);
     });
 
 
