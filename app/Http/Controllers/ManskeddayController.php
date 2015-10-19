@@ -111,12 +111,48 @@ class ManskeddayController extends Controller {
 
 	public function makeListView(Request $request, $param1, $param2) {
 		$weeks = Mansked::paginateWeeks($request, '2015', 5);
+		//return $weeks;
 		return view('task.mansked.list')->with('weeks', $weeks);
 	}
 
 
 	public function makeSingleView(Request $request, $param1){
-		return view('task.manday.view')->with('depts', $this->empGrpByDept());
+		$manday = Manday::find($param1);
+		//return $manday;
+		if(count($manday) > 0){ // check if the $id 
+			$depts = $this->empGrpByDept(); // get array of dept w/ emp grouped by department e.g. dining, kitchen
+			for($h=0; $h<count($depts); $h++){
+				$arr = $depts[$h]['employees']->toArray(); // extract emp on each dept
+				for($i=0; $i<count($arr); $i++){
+					$mandtl = Mandtl::where('employeeid', $depts[$h]['employees'][$i]->id)
+													->where('mandayid', $param1)->get()->first();
+					$depts[$h]['employees'][$i]['manskeddtl'] = count($mandtl) > 0 ?
+						['daytype'=> $mandtl->daytype, 
+						'timestart'=>$mandtl->timestart,
+						'breakstart'=>$mandtl->breakstart,
+						'breakend'=>$mandtl->breakend,
+						'timeend'=>$mandtl->timeend,
+						'workhrs'=>$mandtl->workhrs,
+						'breakhrs'=>$mandtl->breakhrs,
+						'loading'=>$mandtl->loading, 
+						'id'=>$mandtl->id]: 
+						['daytype'=> 0, 
+						'timestart'=>'off',
+						'breakstart'=>'',
+						'breakend'=>'',
+						'timeend'=>'',
+						'workhrs'=>'',
+						'breakhrs'=>'',
+						'loading'=>'', 
+						'id'=>''];
+						//['daytype'=>'0', 'starttime'=>'off', 'id'=>''];
+				}
+			}
+		} else {
+			return redirect(URL::previous());
+		}
+		return view('task.manday.view')->with('depts', $depts)
+																	->with('manday', $manday);
 	}
 
 

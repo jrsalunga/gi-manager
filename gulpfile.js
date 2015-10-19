@@ -67,6 +67,16 @@ gulp.task('concat-common-js', function() {
     .pipe(gulp.dest('./public/js/'));
 });
 
+gulp.task('concat-highcharts', function() {
+  return gulp.src([
+      './public/js/vendors/highcharts.4.1.9.min.js',
+      './public/js/vendors/highcharts-data.4.1.9.min.js',
+      './public/js/vendors/highcharts-exporting.4.1.9.min.js',
+    ])
+    .pipe(concat('vendor-highcharts.js'))
+    .pipe(gulp.dest('./public/js/'));
+});
+
 
 gulp.task('compress-js', function() {
   return gulp.src('./public/js/*.js')

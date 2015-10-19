@@ -52,7 +52,20 @@ Route::put('t/manskedday/{id}', ['as'=>'manday.put', 'uses'=>'ManskeddayControll
 
 
 
+get('csv/{year}/week/{weekno}', function($year, $weekno){
+	$manskeds = App\Models\Manskedhdr::with('manskeddays')->where('weekno', $weekno)->get()->first();
 
+	echo 'Date,Customers,Head Spend,Crew';
+  echo PHP_EOL;
+	foreach ($manskeds->manskeddays as $manday) {
+		echo $manday->date.',';
+		echo $manday->custcount.',';
+		echo $manday->headspend.',';
+		echo $manday->empcount;
+		echo PHP_EOL;
+	}
+
+});
 
 
 
@@ -74,3 +87,4 @@ get('flush-sessions', function(){
 	Session::flush();
 	return redirect('sessions');
 });
+

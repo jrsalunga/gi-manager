@@ -23,7 +23,7 @@
               <span class="glyphicon glyphicon-th-list"></span>
             </button>
             <a href="/task/mansked/week/{{ str_pad(date('W',strtotime('now')),2,'0', STR_PAD_LEFT) }}" class="btn btn-default">
-              <span class="glyphicon glyphicon-calendar"></span>
+              <span class="gly gly-table"></span>
             </a>   
           </div>
 
@@ -47,6 +47,15 @@
               Week {{ $mansked->weekno }}
             </a>
 
+            <span style="margin-left: 100px;">
+              {{ date('D, M j',strtotime($mansked['manskeddays'][0]->date)) }} - 
+              {{ date('D, M j',strtotime($mansked['manskeddays'][6]->date)) }}
+            </span>
+
+            <span style="margin-left: 100px;">
+              {{ $mansked->refno }}
+            </span>
+
             <a href="/task/mansked/week/{{$mansked->weekno}}" class="pull-right"><span class="gly gly-table"></span></a>
             
           </h4>
@@ -55,7 +64,7 @@
           <div class="panel-body">
             
             @foreach($mansked->manskeddays as $manday)
-              <a href="/task/manday/{{$manday->lid()}}/edit" class="btn alert-success"><i class="fa fa-calendar-o"></i> {{ date('D, M j',strtotime($manday->date)) }}</a>
+              <a href="/task/manday/{{$manday->lid()}}" class="btn alert-success"><i class="fa fa-calendar-o"></i> {{ date('D, M j',strtotime($manday->date)) }}</a>
             @endforeach
             
           </div>

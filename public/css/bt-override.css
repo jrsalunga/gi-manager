@@ -44,41 +44,43 @@ a, a:hover {
 /* Medium devices (desktops, 992px and up) */
 @media (min-width: 768px) { 
 
-.input-group select.form-control {
-  width: 25%;
-}
-.input-group select.form-control:not(:first-child) {
-      border-left: 0;
+  .input-group select.form-control {
+    width: 25%;
+  }
+  .input-group select.form-control:not(:first-child) {
+        border-left: 0;
+  }
+
 }
 
 
 /* Medium devices (desktops, 992px and up) */
 @media (min-width: 992px) { 
 
-.input-group select.form-control {
-  width: 25%;
-}
-.input-group select.form-control:not(:first-child) {
-      border-left: 0;
-}
+  .input-group select.form-control {
+    width: 25%;
+  }
+  .input-group select.form-control:not(:first-child) {
+        border-left: 0;
+  }
 
 
 
-/* centered columns styles */
-.row-centered {
-    text-align:center;
-}
-.col-centered {
-    display:inline-block;
-    float:none;
-    /* reset the text-align */
-    text-align:left;
-    /* inline-block space fix */
-    margin-right:-4px;
-    vertical-align: top;
+  /* centered columns styles */
+  .row-centered {
+      text-align:center;
+  }
+  .col-centered {
+      display:inline-block;
+      float:none;
+      /* reset the text-align */
+      text-align:left;
+      /* inline-block space fix */
+      margin-right:-4px;
+      vertical-align: top;
 
 
-} 
+  } 
 
 }
 /* end Medium devices (desktops, 992px and up) */

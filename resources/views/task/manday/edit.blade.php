@@ -4,12 +4,17 @@
 
 @section('body-class', 'mansked-create')
 
+<?php
+  $wn = Carbon\Carbon::parse($manday->date)->weekOfYear;
+?>
+
 @section('container-body')
 <div class="container-fluid">
 
   <ol class="breadcrumb">
     <li><span class="gly gly-shop"></span> <a href="/">{{ $branch }}</a></li>
     <li><a href="/task/mansked">Manpower Schedule</a></li>
+    <li><a href="/task/mansked/week/{{$wn}}">Week {{$wn}}</a></li>
     <li><a href="/task/manday/{{strtolower($manday->id)}}">{{ date('D, M j',strtotime($manday->date)) }}</a></li>
     <li class="active">Edit</li>
   </ol>
@@ -21,14 +26,22 @@
       <div class="container-fluid">
         <div class="navbar-form">
           <div class="btn-group" role="group">
-            <a href="{{ URL::previous() }}" class="btn btn-default">
+            <a href="/task/mansked" class="btn btn-default">
               <span class="glyphicon glyphicon-th-list"></span>
             </a>
+            <a href="/task/mansked/week/{{$wn}}" class="btn btn-default">
+              <span class="gly gly-table"></span>
+            </a>
+            <a href="/task/manday/{{$manday->id}}" class="btn btn-default">
+              <span class="fa fa-calendar-o"></span>
+            </a>   
+          </div><!-- end btn-grp -->
+          <div class="btn-group" role="group">
             <button type="button" class="btn btn-default active">
-              <span class="glyphicon glyphicon-file"></span>
-            </button>   
-          </div>
-      </div><!-- end btn-grp -->
+              <span class="glyphicon glyphicon-edit"></span>
+            </button>  
+          </div><!-- end btn-grp -->
+        </div>
       </div>
     </nav>
 

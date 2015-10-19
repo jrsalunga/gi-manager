@@ -61,7 +61,7 @@ class ManskedController extends Controller {
 		//return dd(app());
 		$manskeds = Mansked::with('manskeddays')->where('branchid', $this->branchid)
 																			->orderBy('weekno', 'DESC')->paginate('10');
-		//return $pages;
+		//return $manskeds[0]['manskeddays'][0]->date;
 		return view('task.mansked.list2')->with('manskeds', $manskeds);
 
 		$weeks = Mansked::paginateWeeks($request, '2015', 5);

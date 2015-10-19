@@ -25,7 +25,7 @@
               <span class="glyphicon glyphicon-th-list"></span>
             </a> 
             <button type="button" class="btn btn-default active">
-              <span class="glyphicon glyphicon-calendar"></span>
+              <span class="gly gly-table"></span>
             </button>
             <!--
             <a href="/masterfiles/employee/" class="btn btn-default">
@@ -33,15 +33,38 @@
             </a>   
           -->
           </div>
-
+          <!--
           <div class="btn-group" role="group">
             <a href="/task/mansked/add" class="btn btn-default">
               <span class="glyphicon glyphicon-plus"></span>
             </a>
           </div>
+        -->
       </div><!-- end btn-grp -->
       </div>
     </nav>
+
+
+    <table class="table table-bordered">
+      <tbody>
+        <tr>
+          <td rowspan="2">Week {{ $mansked->weekno }}</td>
+
+          <td>Date</td>
+          <td>Man Cost</td>
+          <td>Notes</td>
+        </tr>
+        <tr>
+          <td>{{ date('F j, Y', strtotime($mansked->date)) }}</td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    <table>
+
+    <div class="graph" style="height: 250px">
+
+    </div>
 
     <table class="table tb-mansked-week table-responsive">
       <tbody>
@@ -74,12 +97,16 @@
             continue;
           else if($i==7 && $j!=0)
             if($manday[$j]['created']=='true')
-              echo '<td><a class="btn btn-default" href="/task/manday/'.strtolower($manday[$j]['id']).'/edit"><i class="fa fa-calendar-o"></i>
-</a></td>';
+              echo '<td class="text-center"><a class="btn btn-default" href="/task/manday/'.strtolower($manday[$j]['id']).'"><i class="fa fa-calendar-o"></i></a></td>';
             else
-              echo '<td><a href="#">'. $manday[$j]['created'] .'</a></td>';
+              continue;
+              //echo '<td><a href="#">'. $manday[$j]['created'] .'</a></td>';
           else if($i==0 && $j!=0)
-                echo '<td>'. date('M j',strtotime($manday[$j][$i])) .'</td>';
+                echo '<td class="text-center">'. date('M j',strtotime($manday[$j][$i])) .'</td>';
+          else if(($i==3 || $i==5) && $j!=0)
+                echo '<td style="text-align: right">'. number_format($manday[$j][$i], 0) .'</td>';
+          else if($i==4 && $j!=0)
+                echo '<td style="text-align: right">'. number_format($manday[$j][$i], 2) .'</td>';
           else 
             echo '<td>'. $manday[$j][$i] .'</td>';
       }
@@ -98,6 +125,72 @@
 
 <!-- end main -->
 </div>
+@endsection
+
+
+@section('js-external')
+  
+ @parent
+  
+  @include('_partials.js-vendor-highcharts')
+
+<script>
+$(function () {
+
+  $.get('/csv/2015/week/42', function (csv) {
+    //console.log(csv);
+    $('.graph').highcharts({
+        chart: {
+          type: 'line',
+          style: {
+            fontFamily: "Helvetica"
+          }
+        },
+        data: {
+                csv: csv
+            },
+        title: {
+            text: null
+        },
+        yAxis: {
+            title: {
+                text: null
+            }
+        },
+        legend: {
+            align: 'left',
+            verticalAlign: 'top',
+            y: -5,
+            x: 30,
+            floating: true,
+            borderWidth: 0
+        },
+        plotOptions: {
+          series: {
+            cursor: 'pointer',
+            point: {
+              events: {
+                click: function (e) {
+                  console.log(Highcharts.dateFormat('%Y-%m-%d', this.x));
+                }
+              }
+            },
+            marker: {
+              lineWidth: 1,
+              symbol: 'circle'
+            }
+          }
+        }
+      })
+    });
+});
+</script>
+
+
+
+
+
+  
 @endsection
 
 

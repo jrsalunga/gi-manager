@@ -4,138 +4,208 @@
 
 @section('body-class', 'mansked-create')
 
+<?php
+  $wn = Carbon\Carbon::parse($manday->date)->weekOfYear;
+?>
+
 @section('container-body')
 <div class="container-fluid">
 
-  <div>
-    
-    <ol class="breadcrumb">
-      <li><a href="/">Home</a></li>
-      <li><a href="/branch">Branch</a></li>
-      <li><a href="/branch/manday">Daily Man Schedule</a></li>
-      <li class="active">Add</li>
-    </ol>
+  <ol class="breadcrumb">
+    <li><span class="gly gly-shop"></span> <a href="/">{{ $branch }}</a></li>
+    <li><a href="/task/mansked">Manpower Schedule</a></li>
+    <li><a href="/task/mansked/week/{{$wn}}">Week {{$wn}}</a></li>
+    <li class="active">{{ date('D, M j',strtotime($manday->date)) }}</li>
+  </ol>
 
+  <div>
     <nav id="nav-action" class="navbar navbar-default">
       <div class="container-fluid">
         <div class="navbar-form">
           <div class="btn-group" role="group">
-            <a href="/branch/manday" class="btn btn-default">
+            <a href="/task/mansked" class="btn btn-default">
               <span class="glyphicon glyphicon-th-list"></span>
             </a>
+            <a href="/task/mansked/week/{{$wn}}" class="btn btn-default">
+              <span class="gly gly-table"></span>
+            </a>
             <button type="button" class="btn btn-default active">
-              <span class="glyphicon glyphicon-file"></span>
+              <span class="fa fa-calendar-o"></span>
             </button>   
           </div>
-      </div><!-- end btn-grp -->
+          <div class="btn-group" role="group">
+            <a href="/task/manday/{{$manday->id}}/edit" class="btn btn-default">
+              <span class="glyphicon glyphicon-edit"></span>
+            </a>
+          </div><!-- end btn-grp -->
+        </div>
       </div>
     </nav>
 
 
+    <table class="table table-bordered">
+      <tbody>
+        <tr>
+          <td rowspan="2" colspan="2">
+            {{ date('F j, Y', strtotime($manday->date)) }}
+          </td>
+          <td>
+            Forecast Pax
+          </td>
+          <td>
+            Head Spend
+          </td>
+          <td>
+            Emp Count
+          </td>
+          <td>
+            Man Cost
+          </td>
+          <td colspan="2">
+            Total Work Hrs
+          </td>
+          <td>
+            Over Load
+          </td>
+          <td>
+            Under Load
+          </td>
+        </tr>
+        <tr>
+          <td class="text-right">
+            {{ number_format($manday->custcount,0) }}
+          </td>
+          <td class="text-right">
+            &#8369; {{ number_format($manday->headspend, 2) }}
+          </td>
+          <td class="text-right">
+            {{ $manday->empcount }}
+          </td>
+          <td class="text-right">
+           {{ $manday->mancost }} %
+          </td>
+          <td colspan="2" class="text-right">
+            {{ $manday->workhrs }}
+          </td>
+          <td class="text-right">
+            {{ $manday->overload }}
+          </td>
+          <td class="text-right">
+            {{ $manday->underload }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table class="table table-bordered">
+      <tbody>
+        <tr>
+          <td>
+            Dept
+          </td>
+          <td >
+            Employee
+          </td>
+          <td>
+            Time Start
+          </td>
+          <td>
+            Break Start
+          </td>
+          <td>
+            Break End
+          </td>
+          <td>
+            Time End
+          </td>
+          <td>
+            Work Hrs
+          </td>
+          <td>
+            Loading
+          </td>
+        </tr>
+        <?php $ctr=1 ?>
+        @foreach($depts as $dept)
+          @for($i = 0; $i < count($dept['employees']); $i++)
+            <tr>
+              <td><?=strtolower($dept['name'])=='dining'?'DIN':'KIT';?></td>
+              <td>{{ $ctr }}. {{ $dept['employees'][$i]->lastname }}, {{ $dept['employees'][$i]->firstname }} <span class="label label-default pull-right">{{ $dept['employees'][$i]->position->code }}</span></td>
+              @if($dept['employees'][$i]['manskeddtl']['daytype']==1)
+                <td class="text-right">{{ $dept['employees'][$i]['manskeddtl']['timestart'] }}</td>
+                <td class="text-right">{{ $dept['employees'][$i]['manskeddtl']['breakstart'] }}</td>
+                <td class="text-right">{{ $dept['employees'][$i]['manskeddtl']['breakend'] }}</td>
+                <td class="text-right">{{ $dept['employees'][$i]['manskeddtl']['timeend'] }}</td>
+                <td class="text-right">{{ $dept['employees'][$i]['manskeddtl']['workhrs'] }}</td>
+                <td class="text-right">{{ $dept['employees'][$i]['manskeddtl']['loading'] }}</td>
+              @else
+                <!--
+                <td class="text-right">
+                  <select name="manskeddtls[{{ $ctr }}][timestart]" class="form-control tk-select"> 
+                    <option value="off">DAY OFF</option>
+                    @for ($j = 1; $j <= 24; $j++)
+                      @if($dept['employees'][$i]['manskeddtl']['timestart'] == date('G:i', strtotime( $j .':00')))
+                        <option selected value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
+                      @else
+                        <option value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
+                      @endif
+                    @endfor
+                  </select>
+                </td>
+                <td class="text-right">
+                  <select name="manskeddtls[{{ $ctr }}][timestart]" class="form-control tk-select"> 
+                    <option value="off">DAY OFF</option>
+                    @for ($j = 1; $j <= 24; $j++)
+                      @if($dept['employees'][$i]['manskeddtl']['timestart'] == date('G:i', strtotime( $j .':00')))
+                        <option selected value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
+                      @else
+                        <option value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
+                      @endif
+                    @endfor
+                  </select>
+                </td>
+                <td class="text-right">
+                  <select name="manskeddtls[{{ $ctr }}][timestart]" class="form-control tk-select"> 
+                    <option value="off">DAY OFF</option>
+                    @for ($j = 1; $j <= 24; $j++)
+                      @if($dept['employees'][$i]['manskeddtl']['timestart'] == date('G:i', strtotime( $j .':00')))
+                        <option selected value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
+                      @else
+                        <option value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
+                      @endif
+                    @endfor
+                  </select>
+                </td>
+                <td class="text-right">
+                  <select name="manskeddtls[{{ $ctr }}][timestart]" class="form-control tk-select"> 
+                    <option value="off">DAY OFF</option>
+                    @for ($j = 1; $j <= 24; $j++)
+                      @if($dept['employees'][$i]['manskeddtl']['timestart'] == date('G:i', strtotime( $j .':00')))
+                        <option selected value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
+                      @else
+                        <option value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
+                      @endif
+                    @endfor
+                  </select>
+                </td>
+                -->
+
+                <td class="text-right">-</td>
+                <td class="text-right">-</td>
+                <td class="text-right">-</td>
+                <td class="text-right">-</td>
+
+                <td class="text-right">-</td>
+                <td class="text-right">-</td>
+              @endif
+            </tr>
+            <?php $ctr++ ?>
+          @endfor
+        @endforeach
+      </tbody>
+    </table>
+
     
-
-    {!! Form::open(['url' => 'api/t/manskedday', 'action'=>'PUT', 'accept-charset'=>'utf-8', 'id'=>'frm-manskedday', 'name'=>'frm-manskedday', 'class'=>'table-manskedday']) !!}
-    <div class="panel panel-default">
-        <div class="panel-heading">Forecasted  Information</div>
-        <div class="panel-body row">
-        <div class="col-md-3">
-          <div class="form-group">
-            <label for="date" class="control-label">Date</label>
-            <input type="text" class="form-control" id="date" name="date" placeholder="YYYY-MM-DD">
-          </div>
-        </div>   
-        <div class="col-md-3">
-          <div class="form-group">
-            <label for="custcount" class="control-label">Forecasted No. of Customers</label>
-            <input type="text" class="form-control" id="custcount" name="custcount" placeholder="No. of Customers" >
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="form-group">
-            <label for="empcount" class="control-label">Total Crew on Duty</label>
-            <input type="text" class="form-control text-right" id="empcount" name="empcount" placeholder="0" readonly>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="form-group">
-            <label for="manpower" class="control-label">Manpower - Short/(Over)</label>
-            <input type="text" class="form-control text-right" id="manpower" placeholder="0" readonly>
-          </div>
-        </div>  
-
-        <div class="col-md-3 col-md-offset-3">
-          <div class="form-group">
-            <label for="headspend" class="control-label">Forecasted Average Spending</label>
-            <input type="text" class="form-control" id="headspend" name="headspend" placeholder="Spending" >
-          </div>
-        </div>  
-        <div class="col-md-3">
-          <div class="form-group">
-            <label for="mancost" class="control-label">Manpower Cost %</label>
-            <div class="input-group">
-              <input type="text" class="form-control text-right" id="mancost" placeholder="0" readonly>
-              <span class="input-group-addon">%</span>
-            </div>
-          </div>
-        </div>   
-        <div class="col-md-3">
-          <div class="form-group">
-            <label for="comment" class="control-label">Comment</label>
-            <input type="text" class="form-control" id="comment" placeholder="Ok, Over, High, Too High" readonly>
-          </div>
-        </div>  
-        
-      </div>
-    </div>
-
-    <div class="row">
-      <?php
-        $ctr=0;
-      ?>
-      @foreach($depts as $dept)
-        <div class="col-md-6">
-          <div class="panel panel-default">
-            <div class="panel-heading">{{ $dept['name'] }} Schedule</div>
-            <div class="panel-body row">
-              <table class="table tb-manday">
-              @for ($i = 0; $i < count($dept['employees']); $i++)
-                <tr>
-                  <td>{{ $dept['employees'][$i]->lastname }}, {{ $dept['employees'][$i]->firstname }}</td>
-                  <td>{{ $dept['employees'][$i]->position->code }}</td>
-                  <td>
-                    <div>
-                      <input type="hidden" id="manskeddtl.{{ $ctr }}.daytype" name="manskeddtl[{{ $ctr }}][daytype]" class="daytype" value="0">
-                      <input type="hidden" id="manskeddtl.{{ $ctr }}.employeeid" name="manskeddtl[{{ $ctr }}][employeeid]" value="{{ $dept['employees'][$i]->id }}">
-                      <select name="manskeddtl[{{ $ctr }}][starttime]" class="form-control"> 
-                        <option value="off">DAY OFF</option>
-                        @for ($j = 1; $j <= 24; $j++)
-                          <option value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
-                        @endfor
-                      </select>
-                    </div>
-                  </td>
-                </tr>
-                <?php
-                  $ctr++;
-                ?>
-              @endfor
-              </table>
-            </div>  
-          </div>
-        </div>
-      @endforeach
-      
-      
-    </div>
-
-    <div class="row">
-      <div class="col-md-6">
-        <a href="{{ isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'/branch/manday' }}" class="btn btn-default">Cancel</a>
-        <button type="submit" class="btn btn-primary">Save</button>
-      </div>
-    </div>
-
-    {!! Form::close() !!}
     
       
   </div>
