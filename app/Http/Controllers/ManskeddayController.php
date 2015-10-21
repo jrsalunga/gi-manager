@@ -48,6 +48,8 @@ class ManskeddayController extends Controller {
 									->where('branchid', $this->branchid)
 									->whereIn('deptid', $depts[$i]['deptid'])
 					       	->orderBy('position.ordinal', 'ASC')
+					       	->orderBy('employee.lastname', 'ASC')
+					       	->orderBy('employee.firstname', 'ASC')
 					       	->get();
 			$depts[$i]['employees'] = $employees;
 
@@ -86,10 +88,16 @@ class ManskeddayController extends Controller {
 		return $depts;
 	}
 
+
+
+
+
+
+
 	public function makeEditView(Request $request, $param1) {
 		$manday = Manday::find($param1);
 		if(strtotime($manday->date) < strtotime('now')){
-			return redirect(URL::previous())->withErrors(['message' => 'Editing is disabled! ']);
+			return redirect(URL::previous())->with(['alert-warning' => 'Editing is disabled! Date already passed...']);
 		}
 		if(count($manday) > 0){ // check if the $id 
 			$depts = $this->empGrpByDeptWithManday($param1);			
@@ -147,6 +155,8 @@ class ManskeddayController extends Controller {
 
 
 
+
+
 	public function post(Request $request){
 		return $request->all();
 	}
@@ -163,7 +173,7 @@ class ManskeddayController extends Controller {
 				$manday->workhrs 		= $request->input('workhrs');
 				$manday->breakhrs 	= $request->input('breakhrs');
 				$manday->overload 	= $request->input('overload');
-				$manday->underload 	= $request->input('overload');
+				$manday->underload 	= $request->input('underload');
 
 				\DB::beginTransaction(); //Start transaction!
 		    try {
@@ -172,6 +182,7 @@ class ManskeddayController extends Controller {
 		          foreach($request->input('manskeddtls') as $mandtl){
 								$n = Mandtl::find($mandtl['id']);
 								if(count($n) > 0){
+									//dd(count($n));
 									foreach ($mandtl as $key => $value) {
 										if($mandtl['timestart']=='off'){
 											$n->breakstart = 'off';
@@ -182,7 +193,9 @@ class ManskeddayController extends Controller {
 									}
 									$n->save();
 								} else {
+									
 									$m = new Mandtl;
+									dd($mandtl);
 									foreach ($mandtl as $key => $value) {
 										if($key=='id')
 											$m->id = $m->get_uid();
@@ -210,7 +223,7 @@ class ManskeddayController extends Controller {
 				//return $request->input('manskeddtls');
 			}
 		}
-		return redirect(URL::previous());
+		return redirect('/task/manday/'.$manday->lid())->with('alert-success', 'Record saved!');
 		
 		//return ['iid' => $request->input('id'),  'rid'=>$id];
 	}

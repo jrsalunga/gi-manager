@@ -48,66 +48,44 @@
       </div>
     </nav>
 
-    @foreach($errors->all() as $message) 
-      <div class="alert alert-danger" role="alert">
-      {{ $message }}
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      </div>
-    @endforeach
-
+    @include('_partials.alerts')
 
     <table class="table table-bordered">
       <tbody>
         <tr>
           <td rowspan="2" colspan="2">
+            <div>
             {{ date('F j, Y', strtotime($manday->date)) }}
+            </div>
+            @if(strtotime($manday->date) < strtotime('now'))
+              <span class="label label-warning">[ readonly ]</span>
+            @endif
           </td>
-          <td>
-            Forecast Pax
-          </td>
-          <td>
-            Head Spend
-          </td>
-          <td>
-            Emp Count
-          </td>
-          <td>
-            Man Cost
-          </td>
-          <td colspan="2">
-            Total Work Hrs
-          </td>
-          <td>
-            Over Load
-          </td>
-          <td>
-            Under Load
-          </td>
+          <td>Forecast Pax</td><td>Head Spend</td><td>Emp Count</td><td>Man Cost</td>
+          <td colspan="2">Total Work Hrs</td><td>Over Load</td><td>Under Load</td>
         </tr>
         <tr>
-          <td class="text-right">
+          <td class="text-right text-input">
             
             {{ number_format($manday->custcount,0) }}
           </td>
-          <td class="text-right">
+          <td class="text-right text-input">
             &#8369; {{ number_format($manday->headspend, 2) }}
           </td>
           <td class="text-right">
-            {{ $manday->empcount }}
+            {{ $manday->empcount+0 }}
           </td>
           <td class="text-right">
-           {{ $manday->mancost }} %
+           {{ $manday->mancost+0 }} %
           </td>
           <td colspan="2" class="text-right">
-            {{ $manday->workhrs }}
+            {{ $manday->workhrs+0 }}
           </td>
           <td class="text-right">
-            {{ $manday->overload }}
+            {{ $manday->overload+0 }}
           </td>
           <td class="text-right">
-            {{ $manday->underload }}
+            {{ $manday->underload+0 }}
           </td>
         </tr>
       </tbody>
@@ -116,30 +94,8 @@
     <table class="table table-bordered">
       <tbody>
         <tr>
-          <td>
-            Dept
-          </td>
-          <td >
-            Employee
-          </td>
-          <td>
-            Time Start
-          </td>
-          <td>
-            Break Start
-          </td>
-          <td>
-            Break End
-          </td>
-          <td>
-            Time End
-          </td>
-          <td>
-            Work Hrs
-          </td>
-          <td>
-            Loading
-          </td>
+          <td>Dept</td><td>Employee</td><td>Time Start</td><td>Break Start</td>
+          <td>Break End</td><td>Time End</td><td>Work Hrs</td><td>Loading</td>
         </tr>
         <?php $ctr=1 ?>
         @foreach($depts as $dept)
@@ -148,64 +104,14 @@
               <td><?=strtolower($dept['name'])=='dining'?'DIN':'KIT';?></td>
               <td>{{ $ctr }}. {{ $dept['employees'][$i]->lastname }}, {{ $dept['employees'][$i]->firstname }} <span class="label label-default pull-right">{{ $dept['employees'][$i]->position->code }}</span></td>
               @if($dept['employees'][$i]['manskeddtl']['daytype']==1)
-                <td class="text-right">{{ $dept['employees'][$i]['manskeddtl']['timestart'] }}</td>
-                <td class="text-right">{{ $dept['employees'][$i]['manskeddtl']['breakstart'] }}</td>
-                <td class="text-right">{{ $dept['employees'][$i]['manskeddtl']['breakend'] }}</td>
-                <td class="text-right">{{ $dept['employees'][$i]['manskeddtl']['timeend'] }}</td>
-                <td class="text-right">{{ $dept['employees'][$i]['manskeddtl']['workhrs'] }}</td>
-                <td class="text-right">{{ $dept['employees'][$i]['manskeddtl']['loading'] }}</td>
+                <td class="text-right">{{ date('g:i A', strtotime($dept['employees'][$i]['manskeddtl']['timestart'])) }}</td>
+                <td class="text-right">{{ date('g:i A', strtotime($dept['employees'][$i]['manskeddtl']['breakstart'])) }}</td>
+                <td class="text-right">{{ date('g:i A', strtotime($dept['employees'][$i]['manskeddtl']['breakend'])) }}</td>
+                <td class="text-right">{{ date('g:i A', strtotime($dept['employees'][$i]['manskeddtl']['timeend'])) }}</td>
+                <td class="text-right">{{ $dept['employees'][$i]['manskeddtl']['workhrs'] + 0 }}</td>
+                <?php $l = $dept['employees'][$i]['manskeddtl']['loading'] ?>
+                <td class="text-right{{ ($l >= 0) ? '':' text-danger' }}">{{ ($l == 0) ? '-':$l+0 }}</td>
               @else
-                <!--
-                <td class="text-right">
-                  <select name="manskeddtls[{{ $ctr }}][timestart]" class="form-control tk-select"> 
-                    <option value="off">DAY OFF</option>
-                    @for ($j = 1; $j <= 24; $j++)
-                      @if($dept['employees'][$i]['manskeddtl']['timestart'] == date('G:i', strtotime( $j .':00')))
-                        <option selected value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
-                      @else
-                        <option value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
-                      @endif
-                    @endfor
-                  </select>
-                </td>
-                <td class="text-right">
-                  <select name="manskeddtls[{{ $ctr }}][timestart]" class="form-control tk-select"> 
-                    <option value="off">DAY OFF</option>
-                    @for ($j = 1; $j <= 24; $j++)
-                      @if($dept['employees'][$i]['manskeddtl']['timestart'] == date('G:i', strtotime( $j .':00')))
-                        <option selected value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
-                      @else
-                        <option value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
-                      @endif
-                    @endfor
-                  </select>
-                </td>
-                <td class="text-right">
-                  <select name="manskeddtls[{{ $ctr }}][timestart]" class="form-control tk-select"> 
-                    <option value="off">DAY OFF</option>
-                    @for ($j = 1; $j <= 24; $j++)
-                      @if($dept['employees'][$i]['manskeddtl']['timestart'] == date('G:i', strtotime( $j .':00')))
-                        <option selected value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
-                      @else
-                        <option value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
-                      @endif
-                    @endfor
-                  </select>
-                </td>
-                <td class="text-right">
-                  <select name="manskeddtls[{{ $ctr }}][timestart]" class="form-control tk-select"> 
-                    <option value="off">DAY OFF</option>
-                    @for ($j = 1; $j <= 24; $j++)
-                      @if($dept['employees'][$i]['manskeddtl']['timestart'] == date('G:i', strtotime( $j .':00')))
-                        <option selected value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
-                      @else
-                        <option value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
-                      @endif
-                    @endfor
-                  </select>
-                </td>
-                -->
-
                 <td class="text-right">-</td>
                 <td class="text-right">-</td>
                 <td class="text-right">-</td>
@@ -252,6 +158,7 @@
 
 
      $("#date").datepicker({ minDate: 1, dateFormat: 'yy-mm-dd',});
+     $('.alert').not('.alert-important').delay(5000).slideUp(300);
   });
 </script>
 @endsection

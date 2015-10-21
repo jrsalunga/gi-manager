@@ -120,12 +120,18 @@ a, a:hover {
 }
 
 
-#tb-mandtl td.text-input {
+#tb-mandtl td.text-input,
+#tb-manday td.text-input {
   padding: 0px;
   vertical-align: middle;
 }
 
-#tb-mandtl td.text-input .frm-ctrl {
+#tb-mandtl td.text-input.disabled {
+  background-color: #f8f8f8;
+}
+
+#tb-mandtl td.text-input .frm-ctrl,
+td.text-input .frm-ctrl {
   border: none;
   width: 100%;
   height: 100%;
@@ -135,7 +141,11 @@ a, a:hover {
   line-height: 1.42857143;
   color: #555;
   display: block;
- 
+  background-color: transparent;
+}
+
+[disabled].frm-ctrl {
+  cursor: not-allowed;
 }
 
 
