@@ -161,9 +161,9 @@
                 <input type="hidden" id="manskeddtl{{ $ctr }}id" name="manskeddtls[{{ $ctr }}][id]" value="{{ $dept['employees'][$i]['manskeddtl']['id'] }}">
                 <input type="hidden" id="manskeddtl{{ $ctr }}daytype" name="manskeddtls[{{ $ctr }}][daytype]" class="daytype" value="{{ $dept['employees'][$i]['manskeddtl']['daytype'] }}">
                 <input type="hidden" id="manskeddtl{{ $ctr }}employeeid" name="manskeddtls[{{ $ctr }}][employeeid]" value="{{ $dept['employees'][$i]->id }}">
-                <input type="hidden" id="manskeddtl{{ $ctr }}workhrs" name="manskeddtls[{{ $ctr }}][workhrs]" value="{{ $dept['employees'][$i]['manskeddtl']['workhrs'] }}" class="workhrs">
-                <input type="hidden" id="manskeddtl{{ $ctr }}breakhrs" name="manskeddtls[{{ $ctr }}][breakhrs]" value="{{ $dept['employees'][$i]['manskeddtl']['breakhrs'] }}" class="breakhrs">
-                <input type="hidden" id="manskeddtl{{ $ctr }}loading" name="manskeddtls[{{ $ctr }}][loading]" value="{{ $dept['employees'][$i]['manskeddtl']['loading'] }}" class="loading">  
+                <input type="hidden" id="manskeddtl{{ $ctr }}workhrs" name="manskeddtls[{{ $ctr }}][workhrs]" value="{{ empty($dept['employees'][$i]['manskeddtl']['workhrs']) ? 0:$dept['employees'][$i]['manskeddtl']['workhrs'] }}" class="workhrs">
+                <input type="hidden" id="manskeddtl{{ $ctr }}breakhrs" name="manskeddtls[{{ $ctr }}][breakhrs]" value="{{ empty($dept['employees'][$i]['manskeddtl']['breakhrs']) ? 0:$dept['employees'][$i]['manskeddtl']['breakhrs'] }}" class="breakhrs">
+                <input type="hidden" id="manskeddtl{{ $ctr }}loading" name="manskeddtls[{{ $ctr }}][loading]" value="{{ empty($dept['employees'][$i]['manskeddtl']['loading']) ? 0:$dept['employees'][$i]['manskeddtl']['loading'] }}" class="loading">  
               </td>
               <td>{{ $ctr }}. {{ $dept['employees'][$i]->lastname }}, {{ $dept['employees'][$i]->firstname }} <span class="label label-default pull-right">{{ $dept['employees'][$i]->position->code }}</span></td>
               @if($dept['employees'][$i]['manskeddtl']['daytype']==2)

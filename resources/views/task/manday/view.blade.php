@@ -110,7 +110,7 @@
               @if($dept['employees'][$i]['manskeddtl']['daytype']==1)
                 <td class="text-right">{{ date('g:i A', strtotime($dept['employees'][$i]['manskeddtl']['timestart'])) }}</td>
                 <td class="text-right">{{ date('g:i A', strtotime($dept['employees'][$i]['manskeddtl']['breakstart'])) }}</td>
-                <td class="text-right">{{ date('g:i A', strtotime($dept['employees'][$i]['manskeddtl']['breakend'])) }}</td>
+                <td class="text-right">{{ $dept['employees'][$i]['manskeddtl']['breakend'] }}</td>
                 <td class="text-right">{{ date('g:i A', strtotime($dept['employees'][$i]['manskeddtl']['timeend'])) }}</td>
                 <td class="text-right">{{ $dept['employees'][$i]['manskeddtl']['workhrs'] + 0 }}</td>
                 <?php $l = $dept['employees'][$i]['manskeddtl']['loading'] ?>
