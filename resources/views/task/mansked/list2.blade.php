@@ -36,6 +36,22 @@
       </div>
     </nav>
     <div class="panel-group" id="accordion-week-days" role="tablist" aria-multiselectable="true">
+      <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingOne">
+          <h4 class="panel-title">
+            <span class="glyphicon glyphicon-option-vertical"></span> Week {{ $manskeds->first()->weekno+1 }}
+
+            <span style="margin-left: 100px;">
+              {{ date('D, M j',strtotime($manskeds[0]->getDaysByWeekNo($manskeds->first()->weekno+1)[0])) }} - 
+              {{ date('D, M j',strtotime($manskeds[0]->getDaysByWeekNo($manskeds->first()->weekno+1)[6])) }}
+            </span>
+
+            <a href="" class="pull-right"><span class="glyphicon glyphicon-duplicate"></span></a>
+
+            <a href="#" class="pull-right" style="margin-right:100px;"><span class="glyphicon glyphicon-plus"></span> create</a>
+          </h4>
+        </div>
+      </div>
     @foreach($manskeds as $mansked)
       <div class="panel panel-default">
         <div class="panel-heading" role="tab" id="week{{ $mansked->weekno }}">
@@ -52,12 +68,11 @@
               {{ date('D, M j',strtotime($mansked['manskeddays'][6]->date)) }}
             </span>
 
-            <span style="margin-left: 100px;">
+            <a href="/task/mansked/week/{{$mansked->weekno}}" class="pull-right"><span class="gly gly-table"></span></a>
+
+            <span class="pull-right" style="margin-right:100px;">
               {{ $mansked->refno }}
             </span>
-
-            <a href="/task/mansked/week/{{$mansked->weekno}}" class="pull-right"><span class="gly gly-table"></span></a>
-            
           </h4>
         </div>
         <div id="collapse-week{{ $mansked->weekno }}" class="panel-collapse collapse {{ (session('weekno')==$mansked->weekno) ? 'in':'' }}" role="tabpanel" aria-labelledby="week{{ $mansked->weekno }}">
@@ -72,6 +87,7 @@
       </div>
     @endforeach
      </div>
+      {{ session()->forget('weekno') }}
       
       
 

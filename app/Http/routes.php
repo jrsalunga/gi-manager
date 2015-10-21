@@ -90,3 +90,10 @@ get('flush-sessions', function(){
 	return redirect('sessions');
 });
 
+
+
+get('week-days', function(){
+	Session::flush();
+	return redirect('sessions');
+});
+
