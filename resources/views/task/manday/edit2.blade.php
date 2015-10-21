@@ -316,44 +316,7 @@ var calc = function (fr, to) {
   return breakstart.diff(timestart, 'hours', true);
 }
 
-var updateWorkhrs = function(el){
 
-  var tr = el.parent().parent();
-  var ts = tr.children('td').children('.timestart');
-  var bs = tr.children('td').children('.breakstart');
-  var be = tr.children('td').children('.breakend');
-  var te = tr.children('td').children('.timeend');
-
-  var time1 = 0;
-  var time2 = 0;
-  
-  if(ts.val()!='off' && bs.val()!='off'){
-    //console.log('time1 on');
-    time1 = calc(ts.val(), bs.val());
-  }
-  if(be.val()!='off' && te.val()!='off'){
-    //console.log('time2 on');
-    time2 = calc(be.val(), te.val());
-  }
-  var workhrs = parseFloat(time1) + parseFloat(time2);
-  //console.log('workhrs: '+ workhrs);
-  $('#manskeddtl'+el.data('index')+'workhrs').val(workhrs);
-  var d = (workhrs==0) ? '-':workhrs;
-  el.parent().siblings('.td-workhrs').text(d); 
-  var l = parseFloat(workhrs) - 8;
-  $('#manskeddtl'+el.data('index')+'loading').val(l);
-  if(l < 0){
-    el.parent().siblings('.td-loading').addClass('text-danger');
-  } else {
-    el.parent().siblings('.td-loading').removeClass('text-danger');
-  }
-  l = (l==0) ? '-':l;
-  el.parent().siblings('.td-loading').text(l);
-
-  updateTotWorkhrs();
-  updateLoads();
-  updateMancost();
-}
 
 
 var updateBreakhrs = function(el){
@@ -406,6 +369,46 @@ var updateLoads = function(){
   $('.tb-overload').text(o);
   $('#underload').val(u);
   $('.tb-underload').text(u);
+}
+
+
+var updateWorkhrs = function(el){
+
+  var tr = el.parent().parent();
+  var ts = tr.children('td').children('.timestart');
+  var bs = tr.children('td').children('.breakstart');
+  var be = tr.children('td').children('.breakend');
+  var te = tr.children('td').children('.timeend');
+
+  var time1 = 0;
+  var time2 = 0;
+  
+  if(ts.val()!='off' && bs.val()!='off'){
+    //console.log('time1 on');
+    time1 = calc(ts.val(), bs.val());
+  }
+  if(be.val()!='off' && te.val()!='off'){
+    //console.log('time2 on');
+    time2 = calc(be.val(), te.val());
+  }
+  var workhrs = parseFloat(time1) + parseFloat(time2);
+  //console.log('workhrs: '+ workhrs);
+  $('#manskeddtl'+el.data('index')+'workhrs').val(workhrs);
+  var d = (workhrs==0) ? '-':workhrs;
+  el.parent().siblings('.td-workhrs').text(d); 
+  var l = parseFloat(workhrs) - 8;
+  $('#manskeddtl'+el.data('index')+'loading').val(l);
+  if(l < 0){
+    el.parent().siblings('.td-loading').addClass('text-danger');
+  } else {
+    el.parent().siblings('.td-loading').removeClass('text-danger');
+  }
+  l = (l==0) ? '-':l;
+  el.parent().siblings('.td-loading').text(l);
+
+  updateTotWorkhrs();
+  updateLoads();
+  updateMancost();
 }
 
 
@@ -470,6 +473,33 @@ var updateLoads = function(){
     $('#headspend').on('keypress blur change keyup', function(e){
       updateMancost();
     })
+
+
+    $('.label').on('dblclick', function(){
+      var tr = $(this).parent().parent();
+      var ts = tr.children('td').children('.timestart');
+      var bs = tr.children('td').children('.breakstart');
+      var be = tr.children('td').children('.breakend');
+      var te = tr.children('td').children('.timeend');
+
+      $('#manskeddtl'+tr.index()+'daytype').val(1); 
+      ts[0].value = '8:00';
+      bs[0].value = '12:00';
+      bs[0].disabled = false;
+      bs[0].readonly = false;
+      bs.parent().removeClass('disabled');
+      be[0].value = '13:00';
+      be[0].disabled = false;
+      be[0].readonly = false;
+      be.parent().removeClass('disabled');
+      te[0].value = '17:00';
+      te[0].disabled = false;
+      te[0].readonly = false;
+      te.parent().removeClass('disabled');
+
+      updateWorkhrs(ts);
+      updateEmpcount();
+    });
   });
 
 </script>
