@@ -195,7 +195,6 @@ class ManskeddayController extends Controller {
 								} else {
 									
 									$m = new Mandtl;
-									dd($mandtl);
 									foreach ($mandtl as $key => $value) {
 										if($key=='id')
 											$m->id = $m->get_uid();
