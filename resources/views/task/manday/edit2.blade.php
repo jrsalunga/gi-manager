@@ -65,7 +65,6 @@
             {{ date('F j, Y', strtotime($manday->date)) }}
             
             <input type="hidden" name="empcount" id="empcount" value="{{ $manday->empcount }}">
-            <input type="hidden" name="custcount" id="custcount" value="{{ $manday->custcount }}">
             <input type="hidden" name="workhrs" id="workhrs" value="{{ $manday->workhrs }}">
             <input type="hidden" name="breakhrs" id="breakhrs" value="{{ $manday->breakhrs }}">
             <input type="hidden" name="overload" id="overload" value="{{ $manday->overload }}">
@@ -96,7 +95,7 @@
         <tr>
           <td class="text-right text-input">
             
-            <input type="text" name="custcount" id="custcount" class="frm-ctrl text-right" value="{{ $manday->custcount }}">
+            <input type="text" name="custcount" id="custcount" class="frm-ctrl text-right" value="{{ $manday->custcount }}" autofocus onfocus="this.value = this.value">
           </td>
           <td class="text-right text-input">
             
@@ -105,7 +104,7 @@
           <td class="text-right tb-empcount">
             {{ $manday->empcount }}
           </td>
-          <td class="text-right">
+          <td class="text-right tb-mancost">
            {{ $manday->mancost }} %
           </td>
           <td colspan="2" class="text-right tb-workhrs">
@@ -297,16 +296,126 @@
   
 
 <script>
+var today = moment().format("YYYY-MM-D");
+
+var updateMancost = function(){
+  //console.log('mancost');
+  var m = 0;
+  var e = (isNaN($('#empcount')[0].value)) ? 0: parseFloat($('#empcount')[0].value);
+  var m = 500;
+  var c = (isNaN($('#custcount')[0].value)) ? 0: parseFloat($('#custcount')[0].value);
+  var h = (isNaN($('#headspend')[0].value)) ? 0: parseFloat($('#headspend')[0].value);
+  var mancost = ((e*m)/(c*h)*100);
+  mancost = (isNaN(mancost) || !isFinite(mancost)) ? 0 : mancost;
+  $('.tb-mancost').text(mancost.toFixed(2)+' %');
+}
+
+var calc = function (fr, to) {
+  var timestart = moment(today+' '+fr);
+  var breakstart = moment(today+' '+to);
+  return breakstart.diff(timestart, 'hours', true);
+}
+
+var updateWorkhrs = function(el){
+
+  var tr = el.parent().parent();
+  var ts = tr.children('td').children('.timestart');
+  var bs = tr.children('td').children('.breakstart');
+  var be = tr.children('td').children('.breakend');
+  var te = tr.children('td').children('.timeend');
+
+  var time1 = 0;
+  var time2 = 0;
+  
+  if(ts.val()!='off' && bs.val()!='off'){
+    //console.log('time1 on');
+    time1 = calc(ts.val(), bs.val());
+  }
+  if(be.val()!='off' && te.val()!='off'){
+    //console.log('time2 on');
+    time2 = calc(be.val(), te.val());
+  }
+  var workhrs = parseFloat(time1) + parseFloat(time2);
+  //console.log('workhrs: '+ workhrs);
+  $('#manskeddtl'+el.data('index')+'workhrs').val(workhrs);
+  var d = (workhrs==0) ? '-':workhrs;
+  el.parent().siblings('.td-workhrs').text(d); 
+  var l = parseFloat(workhrs) - 8;
+  $('#manskeddtl'+el.data('index')+'loading').val(l);
+  if(l < 0){
+    el.parent().siblings('.td-loading').addClass('text-danger');
+  } else {
+    el.parent().siblings('.td-loading').removeClass('text-danger');
+  }
+  l = (l==0) ? '-':l;
+  el.parent().siblings('.td-loading').text(l);
+
+  updateTotWorkhrs();
+  updateLoads();
+  updateMancost();
+}
+
+
+var updateBreakhrs = function(el){
+
+  var tr = el.parent().parent();
+  var be = tr.children('td').children('.breakend');
+  var bs = tr.children('td').children('.breakstart');
+  var bh = 0;
+  if(bs.val()!='off' && be.val()!='off'){
+    bh = calc(bs.val(), be.val());
+  }
+  $('#manskeddtl'+el.data('index')+'breakhrs').val(bh);
+}
+
+
+var updateEmpcount = function() {
+  var ins = 0;
+  for(i=0; i<$('.daytype').length; i++){
+    if($('.daytype')[i].value == 1)
+      ins++;
+  }
+  $('#empcount').val(ins);
+  $('.tb-empcount').text(ins);
+}
+
+var updateTotWorkhrs = function() {
+
+  var ins = 0;
+  for(i=0; i<$('.workhrs').length; i++)
+    ins += (isNaN($('.workhrs')[i].value)) ? 0: parseFloat($('.workhrs')[i].value);
+  //console.log('tot workhrs: '+ ins);
+  $('#workhrs').val(ins);
+  $('.tb-workhrs').text(ins);
+}
+
+var updateLoads = function(){
+  var ins = 0,
+      o = 0,
+      u = 0;
+  for(i=0; i<$('.loading').length; i++){
+    ins = (isNaN($('.loading')[i].value)) ? 0: parseFloat($('.loading')[i].value);
+    if(ins < 0)
+      u++;
+    else if(ins > 0)
+      o++;
+    else 
+      console.log('loading: '+ ins +' zero'); 
+  }
+  $('#overload').val(o);
+  $('.tb-overload').text(o);
+  $('#underload').val(u);
+  $('.tb-underload').text(u);
+}
+
+
+
+
   $('document').ready(function(){
 
-   // $('#date').datepicker({'format':'yyyy-mm-dd'})
+    updateMancost();
 
-
-
-
-   var today = moment().format("YYYY-MM-D");
-
-   $('select.timestart').on('change', function(e){
+    $('select.timestart').on('change', function(e){
       //console.log();
       var x = ($(this)[0].value=='off') ? 0:1; 
       $('#manskeddtl'+$(this).data('index')+'daytype').val(x); 
@@ -354,112 +463,15 @@
       updateEmpcount();
     });
 
+    $('#custcount').on('keypress blur change keyup', function(e){
+      updateMancost();
+    })
 
-
-      
-
-
-    var calc = function (fr, to) {
-      var timestart = moment(today+' '+fr);
-      var breakstart = moment(today+' '+to);
-      return breakstart.diff(timestart, 'hours', true);
-    }
-
-    var updateWorkhrs = function(el){
-
-      var tr = el.parent().parent();
-      var ts = tr.children('td').children('.timestart');
-      var bs = tr.children('td').children('.breakstart');
-      var be = tr.children('td').children('.breakend');
-      var te = tr.children('td').children('.timeend');
-
-      var time1 = 0;
-      var time2 = 0;
-      
-      if(ts.val()!='off' && bs.val()!='off'){
-        //console.log('time1 on');
-        time1 = calc(ts.val(), bs.val());
-      }
-      if(be.val()!='off' && te.val()!='off'){
-        //console.log('time2 on');
-        time2 = calc(be.val(), te.val());
-      }
-      var workhrs = parseFloat(time1) + parseFloat(time2);
-      //console.log('workhrs: '+ workhrs);
-      $('#manskeddtl'+el.data('index')+'workhrs').val(workhrs);
-      var d = (workhrs==0) ? '-':workhrs;
-      el.parent().siblings('.td-workhrs').text(d); 
-      var l = parseFloat(workhrs) - 8;
-      $('#manskeddtl'+el.data('index')+'loading').val(l);
-      if(l < 0){
-        el.parent().siblings('.td-loading').addClass('text-danger');
-      } else {
-        el.parent().siblings('.td-loading').removeClass('text-danger');
-      }
-      l = (l==0) ? '-':l;
-      el.parent().siblings('.td-loading').text(l);
-
-      updateTotWorkhrs();
-      updateLoads();
-    }
-
-
-    var updateBreakhrs = function(el){
-
-      var tr = el.parent().parent();
-      var be = tr.children('td').children('.breakend');
-      var bs = tr.children('td').children('.breakstart');
-      var bh = 0;
-      if(bs.val()!='off' && be.val()!='off'){
-        bh = calc(bs.val(), be.val());
-      }
-      $('#manskeddtl'+el.data('index')+'breakhrs').val(bh);
-    }
-
-
-    var updateEmpcount = function() {
-      var ins = 0;
-      for(i=0; i<$('.daytype').length; i++){
-        if($('.daytype')[i].value == 1)
-          ins++;
-      }
-      $('#empcount').val(ins);
-      $('.tb-empcount').text(ins);
-    }
-
-    var updateTotWorkhrs = function() {
-
-      var ins = 0;
-      for(i=0; i<$('.workhrs').length; i++)
-        ins += (isNaN($('.workhrs')[i].value)) ? 0: parseFloat($('.workhrs')[i].value);
-      //console.log('tot workhrs: '+ ins);
-      $('#workhrs').val(ins);
-      $('.tb-workhrs').text(ins);
-    }
-
-    var updateLoads = function(){
-      var ins = 0,
-          o = 0,
-          u = 0;
-      for(i=0; i<$('.loading').length; i++){
-        ins = (isNaN($('.loading')[i].value)) ? 0: parseFloat($('.loading')[i].value);
-        if(ins < 0)
-          u++;
-        else if(ins > 0)
-          o++;
-        else 
-          console.log('loading: '+ ins +' zero'); 
-      }
-      $('#overload').val(o);
-      $('.tb-overload').text(o);
-      $('#underload').val(u);
-      $('.tb-underload').text(u);
-    }
-
-
-
-     $("#date").datepicker({ minDate: 1, dateFormat: 'yy-mm-dd',});
+    $('#headspend').on('keypress blur change keyup', function(e){
+      updateMancost();
+    })
   });
+
 </script>
 @endsection
 

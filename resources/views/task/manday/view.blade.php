@@ -76,7 +76,7 @@
             {{ $manday->empcount+0 }}
           </td>
           <td class="text-right">
-           {{ $manday->mancost+0 }} %
+            {{ number_format((($manday->empcount*500)/($manday->custcount*$manday->headspend)*100),2) }} %
           </td>
           <td colspan="2" class="text-right">
             {{ $manday->workhrs+0 }}

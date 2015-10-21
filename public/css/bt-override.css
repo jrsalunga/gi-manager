@@ -130,6 +130,10 @@ a, a:hover {
   background-color: #f8f8f8;
 }
 
+#tb-mandtl td.text-input select.frm-ctrl {
+  content: "V";
+}
+
 #tb-mandtl td.text-input .frm-ctrl,
 td.text-input .frm-ctrl {
   border: none;
