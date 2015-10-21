@@ -11,6 +11,7 @@ use App\Models\Manskedday as Manday;
 use App\Models\Manskeddtl as Mandtl;
 use Auth;
 use URL;
+use Carbon\Carbon;
 
 class ManskeddayController extends Controller {
 
@@ -126,12 +127,13 @@ class ManskeddayController extends Controller {
 		return view('task.mansked.list')->with('weeks', $weeks);
 	}
 
-
+	//task/manday/{id}
 	public function makeSingleView(Request $request, $param1){
 		$manday = Manday::find($param1);
 		//return $manday;
 		if(count($manday) > 0){ // check if the $id 
-			$depts = $this->empGrpByDeptWithManday($param1);			
+			$depts = $this->empGrpByDeptWithManday($param1);	
+			session(['weekno'=>Carbon::parse($manday->date)->weekOfYear])	;	
 		} else {
 			return redirect(URL::previous());
 		}

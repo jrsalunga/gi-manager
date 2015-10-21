@@ -60,7 +60,7 @@
             
           </h4>
         </div>
-        <div id="collapse-week{{ $mansked->weekno }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="week{{ $mansked->weekno }}">
+        <div id="collapse-week{{ $mansked->weekno }}" class="panel-collapse collapse {{ (session('weekno')==$mansked->weekno) ? 'in':'' }}" role="tabpanel" aria-labelledby="week{{ $mansked->weekno }}">
           <div class="panel-body">
             
             @foreach($mansked->manskeddays as $manday)
