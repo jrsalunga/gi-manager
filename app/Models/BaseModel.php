@@ -73,7 +73,7 @@ class BaseModel extends Model {
 
 
 	public function getDaysByWeekNo($weekno='', $year=''){
-  	$weekno = (empty($weekno) || $ > $this->lastWeekOfYear()) ? date('W', strtotime('now')) : $weekno;
+  	$weekno = (empty($weekno) || $weekno > $this->lastWeekOfYear()) ? date('W', strtotime('now')) : $weekno;
   	$year = empty($year) ?  $this->year : $year;
 		for($day=1; $day<=7; $day++) {
 		    $arr[$day-1] = date('Y-m-d', strtotime($year."W".str_pad($weekno,2,'0',STR_PAD_LEFT).$day));
