@@ -195,7 +195,7 @@ class ManskeddayController extends Controller {
 									}
 									$n->save();
 								} else {
-									
+									//dd($mandtl);
 									$m = new Mandtl;
 									foreach ($mandtl as $key => $value) {
 										if($key=='id')

@@ -60,7 +60,7 @@ class ManskedController extends Controller {
 	public function makeListView(Request $request, $param1, $param2) {
 		//return dd(app());
 		$manskeds = Mansked::with('manskeddays')->where('branchid', $this->branchid)
-																			->orderBy('weekno', 'DESC')->paginate('10');
+																			->orderBy('weekno', 'DESC')->paginate('5');
 		//return $manskeds[0]['manskeddays'][0]->date;
 		return view('task.mansked.list2')->with('manskeds', $manskeds);
 
@@ -139,7 +139,7 @@ class ManskedController extends Controller {
 
     \DB::commit();
 
-    return redirect('/task/mansked/week/'. $mansked->weekno);
+    return redirect('/task/mansked')->with(['new'=>true]);
 
 		//$mansked->id
     //return $id;

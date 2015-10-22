@@ -44,6 +44,23 @@
             </button>
             @endif
           </div><!-- end btn-grp -->
+          
+          <div class="btn-group pull-right" role="group">
+            @if($manday->previousByField('date')==='false')
+              <a href="/task/manday/" class="btn btn-default disabled">
+            @else
+              <a href="/task/manday/{{ strtolower($manday->previousByField('date')->id) }}" class="btn btn-default">
+            @endif
+              <span class="glyphicon glyphicon-chevron-left"></span>
+            </a>
+            @if($manday->nextByField('date')==='false')
+              <a href="/task/manday/" class="btn btn-default disabled">
+            @else
+              <a href="/task/manday/{{ strtolower($manday->nextByField('date')->id) }}" class="btn btn-default">
+            @endif  
+              <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+          </div>
         </div>
       </div>
     </nav>

@@ -359,9 +359,9 @@ var updateLoads = function(){
   for(i=0; i<$('.loading').length; i++){
     ins = (isNaN($('.loading')[i].value)) ? 0: parseFloat($('.loading')[i].value);
     if(ins < 0)
-      u++;
+      u += ins;//u++; 
     else if(ins > 0)
-      o++;
+      o += ins;//o++;
     else 
       console.log('loading: '+ ins +' zero'); 
   }

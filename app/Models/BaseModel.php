@@ -5,6 +5,13 @@ use Illuminate\Database\Eloquent\Model;
 class BaseModel extends Model {
 
 	public $timestamps = false;
+	public $year = '';
+	public $weekno = '';
+
+	public function __construct(){
+		$this->year = date('Y', strtotime('now'));
+		$this->weekno = date('W', strtotime('now'));
+	}
 
 	public static function get_uid(){
 		$id = \DB::select('SELECT UUID() as id');
@@ -34,11 +41,51 @@ class BaseModel extends Model {
 	}
 
 	public function nextByField($field = 'id'){
-		return $this->query()->where($field, '>', $this->{$field})->orderBy($field, 'ASC')->get()->first();
+		$res = $this->query()->where($field, '>', $this->{$field})->orderBy($field, 'ASC')->get()->first();
+		return $res==null ? 'false':$res;
 	}
 
 	public function previousByField($field = 'id'){
-		return $this->query()->where($field, '<', $this->{$field})->orderBy($field, 'DESC')->get()->first();
+		$res = $this->query()->where($field, '<', $this->{$field})->orderBy($field, 'DESC')->get()->first();
+		return $res==null ? 'false':$res;
+	}
+
+	public function firstRecord($field = 'id'){
+		$res = $this->query()->orderBy($field, 'ASC')->get()->first();
+		return $res==null ? 'false':$res;
+	}
+
+	public function lastRecord($field = 'id'){
+		$res = $this->query()->orderBy($field, 'DESC')->get()->first();
+		return $res==null ? 'false':$res;
+	}
+
+	public function newWeek(){
+		if($this->lastRecord('weekno')->weekno < $this->lastWeekOfYear()){
+			$arr['weekno'] = $this->lastRecord('weekno')->weekno + 1;
+			$arr['days'] = $this->getDaysByWeekNo();
+		} else {
+			$arr['weekno'] = 1;
+			$arr['days'] = $this->getDaysByWeekNo(1, 2016);
+		}
+		return $arr; 
+	}
+
+
+	public function getDaysByWeekNo($weekno='', $year=''){
+  	$weekno = (empty($weekno) || $weekno > $this->lastWeekOfYear()) ? $this->weekno : $weekno;
+  	$year = empty($year) ?  $this->year : $year;
+		for($day=1; $day<=7; $day++) {
+		    $arr[$day-1] = date('Y-m-d', strtotime($year."W".str_pad($weekno,2,'0',STR_PAD_LEFT).$day));
+		}
+		return $arr;
+  }
+
+	public function lastWeekOfYear($year='') {
+		$year = empty($year) ? date('Y', strtotime('now')):$year;
+    $date = new \DateTime;
+    $date->setISODate($year, 53);
+    return ($date->format("W") === "53" ? 53 : 52);
 	}
 
 
