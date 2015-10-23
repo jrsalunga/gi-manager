@@ -60,16 +60,10 @@ class BaseModel extends Model {
 		return $res==null ? 'false':$res;
 	}
 
-	public function newWeek(){
-		if($this->lastRecord('weekno')->weekno < $this->lastWeekOfYear()){
-			$arr['weekno'] = $this->lastRecord('weekno')->weekno + 1;
-			$arr['days'] = $this->getDaysByWeekNo();
-		} else {
-			$arr['weekno'] = 1;
-			$arr['days'] = $this->getDaysByWeekNo(1, 2016);
-		}
-		return $arr; 
-	}
+
+	
+
+	
 
 
 	public function getDaysByWeekNo($weekno='', $year=''){

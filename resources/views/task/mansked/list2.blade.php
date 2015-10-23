@@ -39,28 +39,29 @@
       <div class="panel panel-default panel-warning">
         <div class="panel-heading" role="tab" id="headingOne">
           <h4 class="panel-title">
-            <a role="button" data-toggle="collapse" data-parent="#accordion-week-days" href="#collapse-week{{ $manskeds->first()->weekno+1 }}" aria-expanded="false" aria-controls="collapse-week{{ $manskeds->first()->weekno+1 }}" class="collapsed">
+            <a role="button" data-toggle="collapse" data-parent="#accordion-week-days" href="#collapse-week{{ $new['weekno'] }}" aria-expanded="false" aria-controls="collapse-week{{ $new['weekno'] }}" class="collapsed">
               <span class="glyphicon glyphicon-option-vertical"></span>
             </a>
-            <a role="button" data-toggle="collapse" data-parent="#accordion-week-days" href="#collapse-week{{ $manskeds->first()->weekno+1 }}" aria-expanded="false" aria-controls="collapse-week{{ $manskeds->first()->weekno+1 }}" class="collapsed">
-              Week {{ $manskeds[0]->newWeek()['weekno'] }}
+            <a role="button" data-toggle="collapse" data-parent="#accordion-week-days" href="#collapse-week{{ $new['weekno'] }}" aria-expanded="false" aria-controls="collapse-week{{ $new['weekno'] }}" class="collapsed">
+              Week {{ $new['weekno'] }}
             </a>
             <span style="margin-left: 100px;">
-              {{ date('D, M j',strtotime($manskeds[0]->newWeek()['days'][0])) }} - 
-              {{ date('D, M j',strtotime($manskeds[0]->newWeek()['days'][6])) }}
+              {{ $new['weekdays'][0]->format('D, M d') }} - 
+              {{ $new['weekdays'][6]->format('D, M d') }}
             </span>
             <a href="" class="pull-right"><span class="glyphicon glyphicon-duplicate"></span></a>
             <a href="#" class="pull-right" style="margin-right:100px;"><span class="glyphicon glyphicon-plus"></span> create</a>
           </h4>
         </div>
-        <div id="collapse-week{{ $manskeds->first()->weekno+1 }}" class="panel-collapse collapse " role="tabpanel" aria-labelledby="week{{ $manskeds->first()->weekno+1 }}">
+        <div id="collapse-week{{ $new['weekno'] }}" class="panel-collapse collapse " role="tabpanel" aria-labelledby="week{{ $new['weekno'] }}">
           <div class="panel-body">
             @for($i=0; $i<6; $i++)
-            <button class="btn btn-default" disabled><i class="fa fa-calendar-o"></i> {{ date('D, M j',strtotime($manskeds[0]->getDaysByWeekNo($manskeds->first()->weekno+1)[$i])) }}</button>
+            <button class="btn btn-default" disabled><i class="fa fa-calendar-o"></i> {{ $new['weekdays'][$i]->format('D, M d') }}</button>
             @endfor
           </div>
         </div>
       </div>
+      @if(count($manskeds) >= 1)
       @foreach($manskeds as $mansked)
       <div class="panel panel-default">
         <div class="panel-heading {{ session('new') ? 'new':'' }}" role="tab" id="week{{ $mansked->weekno }}">
@@ -96,12 +97,12 @@
         </div>
       </div>
       @endforeach
-    </div>
-      {{ session()->forget('weekno') }}
-      
-
-    {!! $manskeds->render() !!}
-      
+        {{ session()->forget('weekno') }}
+      </div>
+      {!! $manskeds->render() !!}
+     @else 
+      </div>
+     @endif
       
 
     

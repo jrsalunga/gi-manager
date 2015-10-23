@@ -1,6 +1,7 @@
 <?php namespace App\Models;
 
 use App\Models\BaseModel;
+use Carbon\Carbon;
 
 class Manskeddtl extends BaseModel {
 
@@ -17,5 +18,27 @@ class Manskeddtl extends BaseModel {
   public function employee() {
     return $this->belongsTo('App\Models\Employee', 'employeeid');
   }
+
+
+
+  /***************** mutators *****************************************************/
+  /*
+  public function getTimestartAttribute($value){
+  		$value = $value=='off' ? '00:00':$value;
+      return Carbon::parse(date('Y-m-d', strtotime('now')).' '.$value);
+  }
+
+   public function getBreakstartAttribute($value){
+      return Carbon::parse(date('Y-m-d', strtotime('now')).' '.$value);
+  }
+
+  public function getBreakendAttribute($value){
+      return Carbon::parse(date('Y-m-d', strtotime('now')).' '.$value);
+  }
+
+  public function getTimeendAttribute($value){
+      return Carbon::parse(date('Y-m-d', strtotime('now')).' '.$value);
+  }
+  */
   
 }

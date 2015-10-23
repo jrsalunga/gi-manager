@@ -59,22 +59,69 @@ class ManskedController extends Controller {
 
 	public function makeListView(Request $request, $param1, $param2) {
 		//return dd(app());
-		$manskeds = Mansked::with('manskeddays')->where('branchid', $this->branchid)
-																			->orderBy('weekno', 'DESC')->paginate('5');
-		//return $manskeds[0]['manskeddays'][0]->date;
-		return view('task.mansked.list2')->with('manskeds', $manskeds);
+		$manskeds = Mansked::with('manskeddays')
+													->where('branchid', $this->branchid)
+													->orderBy('weekno', 'DESC')->paginate('5');
+		if(count($manskeds) <= 0){
+			$manskeds = new Mansked;
+			$new = $manskeds->newWeek($this->branchid);
+		} else {
+			$new = $manskeds[0]->newWeek($this->branchid);
+		}
+		
+		
+		//return count($manskeds);
+		//return $manskeds->newWeek($this->branchid);
+		return view('task.mansked.list2')->with('manskeds', $manskeds)->with('new', $new);
 
-		$weeks = Mansked::paginateWeeks($request, '2015', 5);
-		return view('task.mansked.list')->with('weeks', $weeks);
+		//$weeks = Mansked::paginateWeeks($request, '2015', 5);
+		//return view('task.mansked.list')->with('weeks', $weeks);
 	}
 
 
 	public function makeViewWeek($weekno){
-		$manday = Mansked::getManskedday('2015', $weekno);
-		$mansked = Mansked::whereWeekno($weekno)->get()->first();
-		//return $mansked->nextByField('weekno');
-		//return $mansked->previousByField('weekno');
-		return view('task.mansked.week')->with('manday', $manday)->with('mansked', $mansked);
+
+		$depts = $this->empGrpByDept();
+
+
+		$mansked = Mansked::with('manskeddays')
+  												->where('weekno', $weekno)
+  												->where('branchid', Auth::user()->branchid)
+  												->get()->first();
+
+  	
+
+  	$days = $mansked->manskeddays;
+
+		//return $days[0]->date;
+
+  	$manskeddays = [];
+		for($h=0; $h<count($depts); $h++){
+				$arr = $depts[$h]['employees']->toArray(); // extract emp on each dept
+				for($i=0; $i<count($arr); $i++){
+					for($j=0; $j<count($days); $j++){
+						//echo $days[$j].'<br>';
+						//$depts[$h]['employees'][$i]['manskeddays'] = $days[$j];
+						$manskeddays[$j]['date'] = $days[$j]->date;
+
+						$mandtl = Mandtl::where('employeeid', $depts[$h]['employees'][$i]->id)
+													->where('mandayid', $days[$j]->id)->get()->first();
+						$manskeddays[$j]['mandtl'] = count($mandtl) > 0 ? $mandtl:
+								['timestart'=>0, 'timeend'=>0, 'loading'=>0];
+					}
+
+					$depts[$h]['employees'][$i]['manskeddays'] = $manskeddays;
+				}
+			}
+
+  	//return $depts;
+			
+
+
+  	return view('task.mansked.week2')->with('depts', $depts)->with('mansked', $mansked);
+		//$manday = Mansked::getManskedday('2015', $weekno);
+		//$mansked = Mansked::whereWeekno($weekno)->get()->first();
+		//return view('task.mansked.week')->with('manday', $manday)->with('mansked', $mansked);
 	}
 
 

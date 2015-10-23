@@ -38,7 +38,7 @@ class ManskeddayController extends Controller {
 
 
 
-	private function empGrpByDept() {
+	public function empGrpByDept() {
 		$depts = [['name'=>'Dining', 'employees'=>[], 'deptid'=>['75B34178674011E596ECDA40B3C0AA12', '201E68D4674111E596ECDA40B3C0AA12']],
 					['name'=>'Kitchen', 'employees'=>[], 'deptid'=>['71B0A2D2674011E596ECDA40B3C0AA12']]];
 

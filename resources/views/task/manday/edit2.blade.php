@@ -392,11 +392,15 @@ var updateWorkhrs = function(el){
     time2 = calc(be.val(), te.val());
   }
   var workhrs = parseFloat(time1) + parseFloat(time2);
+  if(ts.val()=='off')
+    workhrs = 0;
   //console.log('workhrs: '+ workhrs);
   $('#manskeddtl'+el.data('index')+'workhrs').val(workhrs);
   var d = (workhrs==0) ? '-':workhrs;
   el.parent().siblings('.td-workhrs').text(d); 
   var l = parseFloat(workhrs) - 8;
+  if(ts.val()=='off')
+    l = 0;
   $('#manskeddtl'+el.data('index')+'loading').val(l);
   if(l < 0){
     el.parent().siblings('.td-loading').addClass('text-danger');
@@ -424,6 +428,7 @@ var updateWorkhrs = function(el){
       $('#manskeddtl'+$(this).data('index')+'daytype').val(x); 
       if(x==0){  
         var d = true;
+        $('#manskeddtl'+$(this).data('index')+'breakhrs').val(x); 
       } else {
         var d = false;
       }

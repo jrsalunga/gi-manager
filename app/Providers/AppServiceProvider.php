@@ -22,12 +22,12 @@ class AppServiceProvider extends ServiceProvider
 
             if(strtolower($id)!==strtolower(session('user.id'))){
                 $emp = Employee::with(['branch'=>function($query){
-                                $query->select('code', 'addr1', 'id');
+                                $query->select('code', 'descriptor', 'id');
                             }])->where('id', Auth::user()->id)
                             ->get(['firstname', 'lastname', 'branchid', 'id'])->first();
                 session(['user' => ['fullname'=>$emp->firstname.' '.$emp->lastname, 
                         'id'=>$emp->id, 'branchid'=>$emp->branchid, 
-                        'branch'=>$emp->branch->addr1, 
+                        'branch'=>$emp->branch->descriptor, 
                         'branchcode'=>$emp->branch->code]]);
             }
             

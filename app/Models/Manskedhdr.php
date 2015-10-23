@@ -6,25 +6,27 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use App\Models\Manskedhdr;
 use Auth;
+use Carbon\Carbon;
 
 
 class Manskedhdr extends BaseModel {
 
-	
-
-	public function __construct(){
-		
-	}
-
 	protected $table = 'manskedhdr';
 	public $incrementing = false;
 	public $timestamps = false;	
- 	protected $fillable = ['refno', 'date', 'branchid', 'managerid', 'mancost', 'weekno', 'notes', 'createdate'];
+ 	protected $fillable = ['refno', 'date', 'branchid', 'managerid', 'mancost', 'weekno', 'notes'];
  	
  	//public static $header = ['code', 'descriptor'];
 
- 	
+ 
 
+
+  public function __construct(){
+    
+  }
+
+ 	
+  /***************** relations *****************************************************/
  	public function manskeddays() {
  		return $this->hasMany('App\Models\Manskedday', 'manskedid');
  	}
@@ -38,11 +40,51 @@ class Manskedhdr extends BaseModel {
   }
 
 
+  /***************** mutators *****************************************************/
+  public function getDateAttribute($value){
+      return Carbon::parse($value);
+  }
+
+
+  /***************** over ride base model *****************************************************/
+  public function nextByField($field = 'id'){
+    $res = $this->query()->where('branchid', $this->branchid)->where($field, '>', $this->{$field})->orderBy($field, 'ASC')->get()->first();
+    return $res==null ? 'false':$res;
+  }
+
+  public function previousByField($field = 'id'){
+    $res = $this->query()->where('branchid', $this->branchid)->where($field, '<', $this->{$field})->orderBy($field, 'DESC')->get()->first();
+    return $res==null ? 'false':$res;
+  }
+
+
+
+
+
+
+
+  /*
+    get new week for branch
+    function for route: /task/mansked
+  */
+  public function newWeek($branchid = null){
+    $arr = [];
+    $obj = $this->query()->where('branchid', $branchid)->orderBy('createdate', 'DESC')->get()->first();
+    if(count($obj) <= 0){
+      $arr['weekno'] = date('W', strtotime('now'));
+      $arr['weekdays'] = $this->getDaysByWeekNo($this->new_weekno);
+    } else {
+      $arr['weekno'] = $obj->weekno+1;
+      $arr['weekdays'] = $this->getDaysByWeekNo($obj->weekno+1);
+    }
+    return $arr;
+  }
+
   public function getDaysByWeekNo($weekno='', $year=''){
   	$weekno = (empty($weekno) || $weekno > 53) ? date('W', strtotime('now')) : $weekno;
   	$year = empty($year) ?  date('Y', strtotime('now')) : $year;
 		for($day=1; $day<=7; $day++) {
-		    $arr[$day-1] = date('Y-m-d', strtotime($year."W".str_pad($weekno,2,'0',STR_PAD_LEFT).$day));
+		    $arr[$day-1] = Carbon::parse(date('Y-m-d', strtotime($year."W".str_pad($weekno,2,'0',STR_PAD_LEFT).$day)));
 		}
 		return $arr;
   }
@@ -62,10 +104,12 @@ class Manskedhdr extends BaseModel {
 
   public static function getManskedday($year, $weekno){
 
-  	$mansked = Manskedhdr::with('manskeddays')->select('id')
+  	$mansked = Manskedhdr::with('manskeddays')
   												->where('weekno', $weekno)
   												->where('branchid', Auth::user()->branchid)
   												->get()->first();
+
+    
 
 		$days = isset($mansked) ? $mansked->manskeddays->keyBy('date')->toArray():[];
 	
