@@ -83,13 +83,13 @@ class ManskedController extends Controller {
 
 		$depts = $this->empGrpByDept();
 
-
 		$mansked = Mansked::with('manskeddays')
   												->where('weekno', $weekno)
   												->where('branchid', Auth::user()->branchid)
   												->get()->first();
-
   	
+  	if(count($mansked) <= 0)
+  		return redirect('/task/mansked');
 
   	$days = $mansked->manskeddays;
 
