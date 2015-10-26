@@ -62,15 +62,13 @@ class ManskedController extends Controller {
 		$manskeds = Mansked::with('manskeddays')
 													->where('branchid', $this->branchid)
 													->orderBy('weekno', 'DESC')->paginate('5');
-		if(count($manskeds) <= 0){
+		if($manskeds->count() <= 0){
 			$manskeds = new Mansked;
 			$new = $manskeds->newWeek($this->branchid);
 		} else {
 			$new = $manskeds[0]->newWeek($this->branchid);
 		}
-		
-		
-		//return count($manskeds);
+		// /return dd(count($manskeds)>=1);
 		//return $manskeds->newWeek($this->branchid);
 		return view('task.mansked.list2')->with('manskeds', $manskeds)->with('new', $new);
 

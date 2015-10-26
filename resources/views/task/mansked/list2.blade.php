@@ -63,7 +63,11 @@
           </div>
         </div>
       </div>
-      @if(count($manskeds) > 1)
+      @if($manskeds[0] == null)
+
+      </div>
+      @else 
+
       @foreach($manskeds as $mansked)
       <div class="panel panel-default">
         <div class="panel-heading {{ session('new') ? 'new':'' }}" role="tab" id="week{{ $mansked->weekno }}">
@@ -100,8 +104,7 @@
       @endforeach
       </div>
       {!! $manskeds->render() !!}
-     @else 
-      </div>
+     
      @endif
       
 
