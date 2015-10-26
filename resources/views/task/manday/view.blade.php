@@ -114,6 +114,21 @@
 
     <table class="table table-bordered">
       <tbody>
+          <tr>
+          @foreach ($hours as $key => $value) 
+            <td title="{{ $key }}"> {{ date('g:i A', strtotime($key.'.00')) }}</td>
+          @endforeach
+          </tr>
+          <tr>
+          @foreach ($hours as $key => $value)  
+            <td class="text-right">{{ $value }}</td>
+          @endforeach
+          </tr>
+      </tbody>
+    </table>
+
+    <table class="table table-bordered">
+      <tbody>
         <tr>
           <td>Dept</td><td>Employee</td><td>Time Start</td><td>Break Start</td>
           <td>Break End</td><td>Time End</td><td>Work Hrs</td><td>Loading</td>

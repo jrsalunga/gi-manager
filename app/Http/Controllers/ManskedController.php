@@ -100,9 +100,9 @@ class ManskedController extends Controller {
 				$arr = $depts[$h]['employees']->toArray(); // extract emp on each dept
 				for($i=0; $i<count($arr); $i++){
 					for($j=0; $j<count($days); $j++){
-						//echo $days[$j].'<br>';
-						//$depts[$h]['employees'][$i]['manskeddays'] = $days[$j];
+						
 						$manskeddays[$j]['date'] = $days[$j]->date;
+						$manskeddays[$j]['id'] = strtolower($days[$j]->id);
 
 						$mandtl = Mandtl::where('employeeid', $depts[$h]['employees'][$i]->id)
 													->where('mandayid', $days[$j]->id)->get()->first();

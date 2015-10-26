@@ -39,12 +39,14 @@
       <div class="panel panel-default panel-warning">
         <div class="panel-heading" role="tab" id="headingOne">
           <h4 class="panel-title">
+            <!--
             <a role="button" data-toggle="collapse" data-parent="#accordion-week-days" href="#collapse-week{{ $new['weekno'] }}" aria-expanded="false" aria-controls="collapse-week{{ $new['weekno'] }}" class="collapsed">
               <span class="glyphicon glyphicon-option-vertical"></span>
             </a>
             <a role="button" data-toggle="collapse" data-parent="#accordion-week-days" href="#collapse-week{{ $new['weekno'] }}" aria-expanded="false" aria-controls="collapse-week{{ $new['weekno'] }}" class="collapsed">
               Week {{ $new['weekno'] }}
-            </a>
+            </a-->
+            Week {{ $new['weekno'] }}
             <span style="margin-left: 100px;">
               {{ $new['weekdays'][0]->format('D, M d') }} - 
               {{ $new['weekdays'][6]->format('D, M d') }}
@@ -67,10 +69,8 @@
         <div class="panel-heading {{ session('new') ? 'new':'' }}" role="tab" id="week{{ $mansked->weekno }}">
           {{ session()->forget('new') }}
           <h4 class="panel-title">
-            <a role="button" data-toggle="collapse" data-parent="#accordion-week-days" href="#collapse-week{{ $mansked->weekno }}" aria-expanded="false" aria-controls="collapse-week{{ $mansked->weekno }}" class="collapsed">
-              <span class="glyphicon glyphicon-option-vertical"></span>
-            </a>
-            <a role="button" data-toggle="collapse" data-parent="#accordion-week-days" href="#collapse-week{{ $mansked->weekno }}" aria-expanded="false" aria-controls="collapse-week{{ $mansked->weekno }}" class="collapsed">
+            
+            <a href="/task/mansked/week/{{ $mansked->weekno }}">
               Week {{ $mansked->weekno }}
             </a>
 
@@ -79,14 +79,15 @@
               {{ date('D, M j',strtotime($mansked['manskeddays'][6]->date)) }}
             </span>
 
-            <a href="/task/mansked/week/{{$mansked->weekno}}" class="pull-right"><span class="gly gly-table"></span></a>
-
+            <a role="button" data-toggle="collapse" data-parent="#accordion-week-days" href="#collapse-week{{ $mansked->weekno }}" aria-expanded="false" aria-controls="collapse-week{{ $mansked->weekno }}" class="collapsed pull-right">
+              <span class="glyphicon glyphicon-option-vertical"></span>
+            </a>
             <span class="pull-right" style="margin-right:100px;">
               {{ $mansked->refno }}
             </span>
           </h4>
         </div>
-        <div id="collapse-week{{ $mansked->weekno }}" class="panel-collapse collapse {{ (session('weekno')==$mansked->weekno) ? 'in':'' }}" role="tabpanel" aria-labelledby="week{{ $mansked->weekno }}">
+        <div id="collapse-week{{ $mansked->weekno }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="week{{ $mansked->weekno }}">
           <div class="panel-body">
             
             @foreach($mansked->manskeddays as $manday)
@@ -97,7 +98,6 @@
         </div>
       </div>
       @endforeach
-        {{ session()->forget('weekno') }}
       </div>
       {!! $manskeds->render() !!}
      @else 

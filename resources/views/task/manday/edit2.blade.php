@@ -120,6 +120,21 @@
       </tbody>
     </table>
 
+    <table class="table table-bordered">
+      <tbody id="tb-houlryman">
+          <tr class="t1">
+          @foreach ($hours as $key => $value) 
+            <td title="{{ $key }}"> {{ date('g:i A', strtotime($key.'.00')) }}</td>
+          @endforeach
+          </tr>
+          <tr class="t2">
+          @foreach ($hours as $key => $value)  
+            <td class="text-right">{{ $value }}</td>
+          @endforeach
+          </tr>
+      </tbody>
+    </table>
+
     <table id="tb-mandtl" class="table table-bordered">
       <tbody>
         <tr>
@@ -298,6 +313,8 @@
 <script>
 var today = moment().format("YYYY-MM-D");
 
+var arr = [];
+
 var updateMancost = function(){
   //console.log('mancost');
   var m = 0;
@@ -310,9 +327,22 @@ var updateMancost = function(){
   $('.tb-mancost').text(mancost.toFixed(2)+' %');
 }
 
+var getHour = function(s, e){
+  s = parseInt(s, 10);
+  var arr = [];
+  for(i = s; i <= e; i++){
+    arr.push(i);
+  }
+  return arr;
+}
+
 var calc = function (fr, to) {
   var timestart = moment(today+' '+fr);
   var breakstart = moment(today+' '+to);
+  
+  //console.log(getHour(fr.split(':')[0], to.split(':')[0]));
+  //console.log(arr);
+
   return breakstart.diff(timestart, 'hours', true);
 }
 
@@ -363,12 +393,66 @@ var updateLoads = function(){
     else if(ins > 0)
       o += ins;//o++;
     else 
-      console.log('loading: '+ ins +' zero'); 
+      continue; //console.log('loading: '+ ins +' zero'); 
   }
   $('#overload').val(o);
   $('.tb-overload').text(o);
   $('#underload').val(u);
   $('.tb-underload').text(u);
+}
+
+
+var updateManPerHour = function(el){
+  var arr = [];
+
+  var tb = el.parent().parent().parent();
+  tb.children('tr').each(function(idx) {
+    if(idx!=0){
+      var tr = $(this);
+      var ts = tr.children('td').children('.timestart').val();
+      var bs = tr.children('td').children('.breakstart').val();
+      var be = tr.children('td').children('.breakend').val();
+      var te = tr.children('td').children('.timeend').val();
+
+      if(ts=='off'){
+        be='0.00';
+        te='0.00';
+      }
+
+      if(ts!='off' && bs!='0.00'){
+        var i = getHour(ts.split(':')[0], bs.split(':')[0]);
+        i.forEach(function(el, idx, array) {
+            if(arr.hasOwnProperty(el)){
+              arr[el] += 1;
+            } else {
+              arr[el] = 1;
+            }
+        });
+      }
+
+      if(be!='0.00' && te!='0.00'){
+        var j = getHour(be.split(':')[0], te.split(':')[0]);
+        j.forEach(function(el, idx, array) {
+            if(arr.hasOwnProperty(el)){
+              arr[el] += 1;
+            } else {
+              arr[el] = 1;
+            }
+        });
+      }
+        
+    }
+  })
+
+  console.log(arr);
+  $('.t1').html('');
+  $('.t2').html('');
+  arr.forEach(function(el, idx, array) {
+    $('.t1').append('<td>'+ moment('2015-10-15  '+ idx+':00').format("h:00 A") + '</td>');
+    $('.t2').append('<td>'+ el + '</td>');
+  });
+  
+
 }
 
 
@@ -386,21 +470,30 @@ var updateWorkhrs = function(el){
   if(ts.val()!='off' && bs.val()!='off'){
     //console.log('time1 on');
     time1 = calc(ts.val(), bs.val());
+    updateManPerHour(el);
+
   }
   if(be.val()!='off' && te.val()!='off'){
     //console.log('time2 on');
     time2 = calc(be.val(), te.val());
+    updateManPerHour(el);
   }
   var workhrs = parseFloat(time1) + parseFloat(time2);
-  if(ts.val()=='off')
+  if(ts.val()=='off'){
     workhrs = 0;
+    updateManPerHour(el);
+  }
+    
   //console.log('workhrs: '+ workhrs);
   $('#manskeddtl'+el.data('index')+'workhrs').val(workhrs);
   var d = (workhrs==0) ? '-':workhrs;
   el.parent().siblings('.td-workhrs').text(d); 
   var l = parseFloat(workhrs) - 8;
-  if(ts.val()=='off')
+  if(ts.val()=='off'){
+    updateManPerHour(el);
     l = 0;
+  }
+    
   $('#manskeddtl'+el.data('index')+'loading').val(l);
   if(l < 0){
     el.parent().siblings('.td-loading').addClass('text-danger');

@@ -37,7 +37,7 @@ class ManskeddayController extends Controller {
 	}
 
 
-
+	// for $this->empGrpByDeptWithManday
 	public function empGrpByDept() {
 		$depts = [['name'=>'Dining', 'employees'=>[], 'deptid'=>['75B34178674011E596ECDA40B3C0AA12', '201E68D4674111E596ECDA40B3C0AA12']],
 					['name'=>'Kitchen', 'employees'=>[], 'deptid'=>['71B0A2D2674011E596ECDA40B3C0AA12']]];
@@ -58,6 +58,7 @@ class ManskeddayController extends Controller {
 		 return  $depts;
 	}
 
+	// fot $this->makeEditView and $this->makeSingleView
 	private function empGrpByDeptWithManday($id){
 		$depts = $this->empGrpByDept(); // get array of dept w/ emp grouped by department e.g. dining, kitchen
 			for($h=0; $h<count($depts); $h++){
@@ -89,6 +90,62 @@ class ManskeddayController extends Controller {
 		return $depts;
 	}
 
+	// for $this->makeSingleView
+	private function hourlyDuty($depts){
+
+		$arr = [];
+		$sorted = [];
+
+		foreach($depts as $dept){
+			for($i = 0; $i < count($dept['employees']); $i++){
+      	if($dept['employees'][$i]['manskeddtl']['daytype'] == 1){
+
+      		$hrs = $this->getHour($dept['employees'][$i]['manskeddtl']['timestart'], $dept['employees'][$i]['manskeddtl']['breakstart']);
+      		foreach ($hrs as $hr) {
+      			if(array_key_exists('hr_'.$hr, $arr)) {
+      				$arr['hr_'.$hr] += 1;
+						} else {
+							$arr['hr_'.$hr] = 1;
+						}
+      		}
+      		
+      		$hrs = $this->getHour($dept['employees'][$i]['manskeddtl']['breakend'], $dept['employees'][$i]['manskeddtl']['timeend']);
+      		foreach ($hrs as $hr) {
+      			if(array_key_exists('hr_'.$hr, $arr)) {
+      				$arr['hr_'.$hr] += 1;
+						} else {
+							$arr['hr_'.$hr] = 1;
+						}
+      		}
+      	
+      	}
+      }
+    } 
+   
+    foreach($arr as $key => $value){ 
+      $x = explode('_', $key);
+      $sorted[$x[1]] = $value;
+    }
+    ksort($sorted);
+
+    return $sorted;
+	}
+
+	// for $this->hourlyDuty
+	private function getHour($start, $end){
+		$arr = [];
+		if($start!='off' || $start!='0.00' || !empty($start) || $end!='0.00' || !empty($end)){
+			$s = explode(':', $start);
+			$e = explode(':', $end);
+
+			for($i = $s[0]; $i <= $e[0]; $i++){
+				$arr[] = $i;
+			}
+		}
+
+		return $arr;
+	}
+
 
 
 
@@ -105,10 +162,28 @@ class ManskeddayController extends Controller {
 		} else {
 			return redirect(URL::previous());
 		}
-		//return $depts;
+		
 		//return view('task.manday.edit')->with('depts', $depts)->with('manday', $manday);
-		return view('task.manday.edit2')->with('depts', $depts)->with('manday', $manday);
+		return view('task.manday.edit2')->with('depts', $depts)
+																		->with('manday', $manday)
+																		->with('hours', $this->hourlyDuty($depts));
+
 	}
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	public function makeAddView(Request $request) {
 
@@ -133,12 +208,14 @@ class ManskeddayController extends Controller {
 		//return $manday;
 		if(count($manday) > 0){ // check if the $id 
 			$depts = $this->empGrpByDeptWithManday($param1);	
-			session(['weekno'=>Carbon::parse($manday->date)->weekOfYear])	;	
+			//session(['weekno'=>Carbon::parse($manday->date)->weekOfYear])	;	
 		} else {
 			return redirect(URL::previous());
 		}
+		//return $this->hourlyDuty($depts);
 		return view('task.manday.view')->with('depts', $depts)
-																	->with('manday', $manday);
+																	->with('manday', $manday)
+																	->with('hours', $this->hourlyDuty($depts));
 	}
 
 
