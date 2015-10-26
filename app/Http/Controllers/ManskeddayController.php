@@ -154,13 +154,14 @@ class ManskeddayController extends Controller {
 
 	public function makeEditView(Request $request, $param1) {
 		$manday = Manday::find($param1);
-		if(strtotime($manday->date) < strtotime('now')){
-			return redirect(URL::previous())->with(['alert-warning' => 'Editing is disabled! Date already passed...']);
-		}
+		
 		if(count($manday) > 0){ // check if the $id 
+			if(strtotime($manday->date) < strtotime('now')){
+				return redirect(URL::previous())->with(['alert-warning' => 'Editing is disabled! Date already passed...']);
+			}
 			$depts = $this->empGrpByDeptWithManday($param1);			
 		} else {
-			return redirect(URL::previous());
+			return redirect('task/mansked');
 		}
 		
 		//return view('task.manday.edit')->with('depts', $depts)->with('manday', $manday);

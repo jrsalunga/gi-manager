@@ -323,6 +323,8 @@ var updateMancost = function(){
   var c = (isNaN($('#custcount')[0].value)) ? 0: parseFloat($('#custcount')[0].value);
   var h = (isNaN($('#headspend')[0].value)) ? 0: parseFloat($('#headspend')[0].value);
   var mancost = ((e*m)/(c*h)*100);
+  console.log((e*m));
+  console.log((c*h));
   mancost = (isNaN(mancost) || !isFinite(mancost)) ? 0 : mancost;
   $('.tb-mancost').text(mancost.toFixed(2)+' %');
 }

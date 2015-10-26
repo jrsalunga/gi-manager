@@ -63,7 +63,7 @@
           </div>
         </div>
       </div>
-      @if(count($manskeds) >= 1)
+      @if(count($manskeds) > 1)
       @foreach($manskeds as $mansked)
       <div class="panel panel-default">
         <div class="panel-heading {{ session('new') ? 'new':'' }}" role="tab" id="week{{ $mansked->weekno }}">
