@@ -54,12 +54,44 @@
     <table class="table table-bordered">
       <tbody>
         <tr>
+          <td colspan="2" rowspan="5"></td>
+          @for($i=0;$i<7;$i++)
+          <td>
+            <a href="/task/manday/{{  $mansked->manskeddays[$i]->lid() }}">
+              {{ $mansked->manskeddays[$i]->date->format('D, M d') }}
+            </a>
+          </td>
+          @endfor
+        </tr>
+        <tr>
+          @for($i=0;$i<7;$i++)
+          <td class="text-right">{{ $mansked->manskeddays[$i]->custCount() }}</td>
+          @endfor
+        </tr>
+        <tr>
+          @for($i=0;$i<7;$i++)
+          <td class="text-right">{{ $mansked->manskeddays[$i]->headSpend() }}</td>
+          @endfor
+        </tr>
+        <tr>
+          @for($i=0;$i<7;$i++)
+          <td class="text-right">{{ $mansked->manskeddays[$i]->empcount }}</td>
+          @endfor
+        </tr>
+        <tr>
+          @for($i=0;$i<7;$i++)
+          <td class="text-right">{{ $mansked->manskeddays[$i]->computeMancost($mansked->mancost, true) }}</td>
+          @endfor
+        </tr>
+        <tr>
+          <td colspan="9" style="border-left: 1px solid #fff; border-right: 1px solid #fff;">&nbsp;</td>
+        </tr>
+        <tr>
           <td>Dept</td><td>Employee</td>
-          @foreach($depts[0]['employees'][0]['manskeddays'] as $manday)
-
+          @foreach($mansked->manskeddays as $manday)
             <td>
-              <a href="/task/manday/{{ $manday['id'] }}">
-                {{ $manday['date']->format('D, M d') }}
+              <a href="/task/manday/{{ $manday->lid() }}">
+                {{ $manday->date->format('D, M d') }}
               </a>
             </td>
           @endforeach

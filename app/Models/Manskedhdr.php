@@ -45,6 +45,8 @@ class Manskedhdr extends BaseModel {
       return Carbon::parse($value);
   }
 
+  
+
 
   /***************** over ride base model *****************************************************/
   public function nextByField($field = 'id'){

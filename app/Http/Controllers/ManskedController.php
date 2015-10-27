@@ -1,6 +1,4 @@
-<?php
-
-namespace App\Http\Controllers;
+<?php namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -25,38 +23,36 @@ class ManskedController extends Controller {
 															->get();
 	}
 
-
-
 	public function getIndex(Request $request, $param1=null, $param2=null){
-		
-		if(strtolower($param1)==='add'){
+		if(strtolower($param1)==='add')
 			return $this->makeAddView($request);
-		} else if((strtolower($param1)==='week') && preg_match('/^[0-9]+$/', $param2)) {
+		else if((strtolower($param1)==='week') && preg_match('/^[0-9]+$/', $param2)) 
 			return $this->makeViewWeek($param2);
-		} else if(preg_match('/^[A-Fa-f0-9]{32}+$/', $param1) && strtolower($param2)==='edit') {
+		else if(preg_match('/^[A-Fa-f0-9]{32}+$/', $param1) && strtolower($param2)==='edit')
 			return $this->makeEditView($request, $param1);
-		} else if(preg_match('/^[A-Fa-f0-9]{32}+$/', $param1)) {   //preg_match('/^[A-Fa-f0-9]{32}+$/',$action))
+		else if(preg_match('/^[A-Fa-f0-9]{32}+$/', $param1))   //preg_match('/^[A-Fa-f0-9]{32}+$/',$action))
 			return $this->makeSingleView($request, $param1);
-		} else {
+		else
 			return $this->makeListView($request, $param1, $param2);
-		}
-		
 	}
 
-
-
+	//task/mansked/add
 	public function makeAddView(Request $request) {
-		$lastday = Mansked::getLastDayLastWeekOfYear();
+		$mansked = new Mansked;
 		$branch = Branch::find(Auth::user()->branchid);
+		$new = $mansked->newWeek($branch->id);
 		$data = [
-			'branch' => $branch->code.' - ' .$branch->addr1,
+			'branch' => $branch->code.' - ' .$branch->descriptor,
 			'branchid' => $branch->id,
 			'manager' => Auth::user()->name,
-			'managerid' => Auth::user()->id
-			];
-		return view('task.mansked.add')->with('lastday', $lastday)->with('data', $data);
+			'managerid' => Auth::user()->id,
+			'mancost' => $branch->mancost,
+			'weekno' => $new['weekno']
+		];
+		return view('task.mansked.add')->with('data', $data);
 	}
 
+	//task/mansked
 	public function makeListView(Request $request, $param1, $param2) {
 		//return dd(app());
 		$manskeds = Mansked::with('manskeddays')
@@ -76,23 +72,19 @@ class ManskedController extends Controller {
 		//return view('task.mansked.list')->with('weeks', $weeks);
 	}
 
-
+	//task/mansked/week/{weekno}
 	public function makeViewWeek($weekno){
 
 		$depts = $this->empGrpByDept();
 
-		$mansked = Mansked::with('manskeddays')
-  												->where('weekno', $weekno)
+		$mansked = Mansked::with('manskeddays')->where('weekno', $weekno)
   												->where('branchid', Auth::user()->branchid)
   												->get()->first();
-  	
+  	//return $mansked->manskeddays;					
   	if(count($mansked) <= 0)
   		return redirect('/task/mansked');
 
   	$days = $mansked->manskeddays;
-
-		//return $days[0]->date;
-
   	$manskeddays = [];
 		for($h=0; $h<count($depts); $h++){
 				$arr = $depts[$h]['employees']->toArray(); // extract emp on each dept
@@ -107,32 +99,22 @@ class ManskedController extends Controller {
 						$manskeddays[$j]['mandtl'] = count($mandtl) > 0 ? $mandtl:
 								['timestart'=>0, 'timeend'=>0, 'loading'=>0];
 					}
-
 					$depts[$h]['employees'][$i]['manskeddays'] = $manskeddays;
 				}
 			}
-
   	//return $depts;
-			
-
-
   	return view('task.mansked.week2')->with('depts', $depts)->with('mansked', $mansked);
 		//$manday = Mansked::getManskedday('2015', $weekno);
 		//$mansked = Mansked::whereWeekno($weekno)->get()->first();
 		//return view('task.mansked.week')->with('manday', $manday)->with('mansked', $mansked);
 	}
 
-
 	public function testWeeks(Request $request) {
 		$weeks = Mansked::paginateWeeks($request, '2015');
 		return view('task.mansked.list')->with('weeks', $weeks);
 	}
 
-
-
 	public function post(Request $request){
-
-		//
 
 		 $this->validate($request, [
         'date' => 'required|date|max:10',
@@ -201,8 +183,8 @@ class ManskedController extends Controller {
 			}
 		}
 
-		return $mansked;
-
+		//return $mansked;
+		return redirect('/task/mansked')->with(['new'=>true]);
 				
 	}
 

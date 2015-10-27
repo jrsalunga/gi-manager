@@ -45,7 +45,7 @@
 
     {!! Form::open(['url' => 'api/t/mansked', 'accept-charset'=>'utf-8', 'id'=>'frm-manskedhdr', 'name'=>'frm-manskedhdr', 'class'=>'table-manskedhdr']) !!}
     <div class="panel panel-success">
-        <div class="panel-heading">Manpower Schedule</div>
+        <div class="panel-heading">Manpower Schedule Header</div>
         <div class="panel-body row">
         <div class="col-md-3 col-sm-3">
           <div class="form-group">
@@ -63,11 +63,7 @@
         <div class="col-md-2 col-sm-3">
           <div class="form-group">
             <label for="weekno" class="control-label">Week No</label>
-            <select name="weekno" id="weekno" class="form-control"> 
-              @for($i = date("W", strtotime('now')); $i<=$lastday['weekno']; $i++)
-                <option>{{ $i }}</option>
-              @endfor
-            </select>
+            <input type="text" class="form-control" name="weekno" id="weekno" value="{{ $data['weekno'] }}" placeholder="Week No" readonly>
           </div>
         </div>
         <div class="col-md-3 col-sm-3">
@@ -75,7 +71,7 @@
             <label for="mancost" class="control-label">Man Cost</label>
             <div class="input-group">
               <span class="input-group-addon">&#8369;</span>
-              <input type="text" class="form-control text-right" name="mancost" id="mancost" placeholder="0" maxlength="10" >
+              <input type="text" class="form-control text-right" name="mancost" id="mancost" value="{{ $data['mancost'] }}" placeholder="0" maxlength="10" >
             </div>
           </div>
         </div>

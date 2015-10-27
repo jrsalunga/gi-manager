@@ -52,7 +52,7 @@
               {{ $new['weekdays'][6]->format('D, M d') }}
             </span>
             <a href="" class="pull-right"><span class="glyphicon glyphicon-duplicate"></span></a>
-            <a href="#" class="pull-right" style="margin-right:100px;"><span class="glyphicon glyphicon-plus"></span> create</a>
+            <a href="/task/mansked/add" class="pull-right" style="margin-right:100px;"><span class="glyphicon glyphicon-plus"></span> create</a>
           </h4>
         </div>
         <div id="collapse-week{{ $new['weekno'] }}" class="panel-collapse collapse " role="tabpanel" aria-labelledby="week{{ $new['weekno'] }}">

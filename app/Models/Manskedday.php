@@ -26,5 +26,35 @@ class Manskedday extends BaseModel {
   public function getDateAttribute($value){
       return Carbon::parse($value);
   }
-  
+
+  /***************** misc func *****************************************************/
+  public function custCount(){
+    if($this->custcount=='0' || $this->custcount=='0.00' || empty($this->custcount))
+      return '-';
+    else 
+      return number_format($this->custcount, 0);
+  }
+
+  public function headSpend(){
+    if($this->headspend=='0' || $this->headspend=='0.00' || empty($this->headspend))
+      return '-';
+    else 
+      return '&#8369; '. number_format($this->headspend, 2);
+  }
+
+ 
+
+  public function computeMancost($branch_mancost=0, $formated=false){
+    if(($this->custcount*$this->headspend) != 0){
+      if($formated)
+        return number_format((($this->empcount*$branch_mancost)/($this->custcount*$this->headspend)*100),2).' %'; 
+      else
+        return ($this->empcount*$branch_mancost)/($this->custcount*$this->headspend)*100;
+    } else {
+      if($formated)
+        return '-';
+      else
+        return 0;
+    }
+  }
 }
