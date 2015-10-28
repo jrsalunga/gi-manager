@@ -25,9 +25,9 @@ Route::get('logout', ['as'=>'auth.getlogout', 'uses'=>'Auth\AuthController@getLo
 
 
 Route::get('task/mansked/{param1?}/{param2?}/{param3?}', ['uses'=>'ManskedController@getIndex',  'middleware' => 'auth'])
-	->where(['param1'=>'add|week|[0-9]{2}+', 
-					'param2'=>'[0-9]+', 
-					'param3'=>'edit|[A-Fa-f0-9]{32}+']);
+	->where(['param1'=>'add|[0-9]{4}+', 
+					'param2'=>'week|[0-9]+', 
+					'param3'=>'edit|[0-9]+|[A-Fa-f0-9]{32}+']);
 
 Route::get('task/manday/{param1?}/{param2?}/{param3?}', ['uses'=>'ManskeddayController@getIndex',  'middleware' => 'auth'])
 	->where(['param1'=>'add|[A-Fa-f0-9]{32}+', 

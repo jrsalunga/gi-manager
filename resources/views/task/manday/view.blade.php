@@ -4,9 +4,6 @@
 
 @section('body-class', 'mansked-create')
 
-<?php
-  $wn = Carbon\Carbon::parse($manday->date)->weekOfYear;
-?>
 
 @section('container-body')
 <div class="container-fluid">
@@ -14,8 +11,8 @@
   <ol class="breadcrumb">
     <li><span class="gly gly-shop"></span> <a href="/">{{ $branch }}</a></li>
     <li><a href="/task/mansked">Manpower Schedule</a></li>
-    <li><a href="/task/mansked/week/{{$wn}}">Week {{$wn}}</a></li>
-    <li class="active">{{ date('D, M j',strtotime($manday->date)) }}</li>
+    <li><a href="/task/mansked/{{$manday->date->year}}/week/{{$manday->date->weekOfYear}}">Week {{$manday->date->weekOfYear}}</a></li>
+    <li class="active">{{ $manday->date->format('D, M j') }}</li>
   </ol>
 
   <div>
@@ -26,7 +23,7 @@
             <a href="/task/mansked" class="btn btn-default">
               <span class="glyphicon glyphicon-th-list"></span>
             </a>
-            <a href="/task/mansked/week/{{$wn}}" class="btn btn-default">
+            <a href="/task/mansked/week/{{$manday->date->weekOfYear}}" class="btn btn-default">
               <span class="gly gly-table"></span>
             </a>
             <button type="button" class="btn btn-default active">
@@ -46,17 +43,17 @@
           </div><!-- end btn-grp -->
           
           <div class="btn-group pull-right" role="group">
-            @if($manday->previousByField('date')==='false')
+            @if($manday->previous()==='false')
               <a href="/task/manday/" class="btn btn-default disabled">
             @else
-              <a href="/task/manday/{{ strtolower($manday->previousByField('date')->id) }}" class="btn btn-default">
+              <a href="/task/manday/{{$manday->previous()->lid()}}" class="btn btn-default">
             @endif
               <span class="glyphicon glyphicon-chevron-left"></span>
             </a>
-            @if($manday->nextByField('date')==='false')
+            @if($manday->next()==='false')
               <a href="/task/manday/" class="btn btn-default disabled">
             @else
-              <a href="/task/manday/{{ strtolower($manday->nextByField('date')->id) }}" class="btn btn-default">
+              <a href="/task/manday/{{$manday->next()->lid()}}" class="btn btn-default">
             @endif  
               <span class="glyphicon glyphicon-chevron-right"></span>
             </a>
@@ -72,7 +69,7 @@
         <tr>
           <td rowspan="2" colspan="2">
             <div>
-            {{ date('F j, Y', strtotime($manday->date)) }}
+            {{ $manday->date->format('F j, Y') }}
             </div>
             @if(strtotime($manday->date) < strtotime('now'))
               <span class="label label-warning">[ readonly ]</span>

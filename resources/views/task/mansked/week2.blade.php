@@ -28,17 +28,17 @@
           </div>
           
           <div class="btn-group pull-right" role="group">
-            @if($mansked->previousByField('weekno')==='false')
+            @if($mansked->previous()==='false')
               <a href="/task/mansked/week/" class="btn btn-default disabled">
             @else
-              <a href="/task/mansked/week/{{ strtolower($mansked->previousByField('weekno')->weekno) }}" class="btn btn-default">
+              <a href="/task/mansked/{{$mansked->previous()->year}}/week/{{$mansked->previous()->weekno}}" class="btn btn-default">
             @endif
               <span class="glyphicon glyphicon-chevron-left"></span>
             </a>
-            @if($mansked->nextByField('weekno')==='false')
+            @if($mansked->next()==='false')
               <a href="/task/mansked/week/" class="btn btn-default disabled">
             @else
-              <a href="/task/mansked/week/{{ strtolower($mansked->nextByField('weekno')->weekno) }}" class="btn btn-default">
+              <a href="/task/mansked/{{$mansked->next()->year}}/week/{{$mansked->next()->weekno}}" class="btn btn-default">
             @endif  
               <span class="glyphicon glyphicon-chevron-right"></span>
             </a>

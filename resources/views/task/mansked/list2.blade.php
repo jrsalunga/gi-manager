@@ -74,9 +74,8 @@
           {{ session()->forget('new') }}
           <h4 class="panel-title">
             
-            <a href="/task/mansked/week/{{ $mansked->weekno }}">
-              Week {{ $mansked->weekno }}
-            </a>
+            <a href="/task/mansked/{{ $mansked->year }}/week/{{ $mansked->weekno }}">
+              Week {{ $mansked->weekno }}</a>
 
             <span style="margin-left: 100px;">
               {{ date('D, M j',strtotime($mansked['manskeddays'][0]->date)) }} - 

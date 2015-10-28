@@ -27,6 +27,36 @@ class Manskedday extends BaseModel {
       return Carbon::parse($value);
   }
 
+  /***************** over ride base model ******************************************/
+  public function next($branchid=null){
+    
+    $res = $this->query()
+      ->select('manskedday.*')
+      ->join('manskedhdr', function($join){
+                            $join->on('manskedday.manskedid', '=', 'manskedhdr.id')
+                                ->where('manskedhdr.branchid', '=', session('user.branchid'));
+                            })
+      ->where('manskedday.date', '>', $this->date)
+      ->orderBy('manskedday.date', 'ASC')->get()->first();
+
+    return $res==null ? 'false':$res;
+  }
+
+  public function previous($branchid=null){
+    
+    $res = $this->query()
+      ->select('manskedday.*')
+      ->join('manskedhdr', function($join){
+                            $join->on('manskedday.manskedid', '=', 'manskedhdr.id')
+                                ->where('manskedhdr.branchid', '=', session('user.branchid'));
+                            })
+      ->where('manskedday.date', '<', $this->date)
+      ->orderBy('manskedday.date', 'DESC')->get()->first();
+
+    return $res==null ? 'false':$res;
+  }
+
+
   /***************** misc func *****************************************************/
   public function custCount(){
     if($this->custcount=='0' || $this->custcount=='0.00' || empty($this->custcount))

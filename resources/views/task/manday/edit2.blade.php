@@ -4,18 +4,14 @@
 
 @section('body-class', 'mansked-create')
 
-<?php
-  $wn = Carbon\Carbon::parse($manday->date)->weekOfYear;
-?>
-
 @section('container-body')
 <div class="container-fluid">
 
   <ol class="breadcrumb">
     <li><span class="gly gly-shop"></span> <a href="/">{{ $branch }}</a></li>
     <li><a href="/task/mansked">Manpower Schedule</a></li>
-    <li><a href="/task/mansked/week/{{$wn}}">Week {{$wn}}</a></li>
-    <li class="active">{{ date('D, M j',strtotime($manday->date)) }}</li>
+    <li><a href="/task/mansked/week/{{$manday->date->year}}/week/{{$manday->date->weekOfYear}}">Week {{$manday->date->weekOfYear}}</a></li>
+    <li class="active">{{ $manday->date->format('D, M j') }}</li>
   </ol>
 
   <div>
@@ -26,10 +22,10 @@
             <a href="/task/mansked" class="btn btn-default">
               <span class="glyphicon glyphicon-th-list"></span>
             </a>
-            <a href="/task/mansked/week/{{$wn}}" class="btn btn-default">
+            <a href="/task/mansked/week/{{$manday->date->weekOfYear}}" class="btn btn-default">
               <span class="gly gly-table"></span>
             </a>
-            <a href="/task/manday/{{strtolower($manday->id)}}" class="btn btn-default">
+            <a href="/task/manday/{{$manday->lid()}}" class="btn btn-default">
               <span class="fa fa-calendar-o"></span>
             </a>   
           </div>
@@ -54,7 +50,7 @@
     @endforeach
 
 
-    <form method="post" action="/api/t/manskedday/{{strtolower($manday->id)}}" id="frm-manskedday" name="frm-manskedday" role="form" data-table="manskedday">
+    <form method="post" action="/api/t/manskedday/{{$manday->lid()}}" id="frm-manskedday" name="frm-manskedday" role="form" data-table="manskedday">
     <input type="hidden" name="_method" value="PUT">
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
     <input type="hidden" id="id" name="id" value="{{ $manday->id }}">
@@ -69,6 +65,7 @@
             <input type="hidden" name="breakhrs" id="breakhrs" value="{{ $manday->breakhrs }}">
             <input type="hidden" name="overload" id="overload" value="{{ $manday->overload }}">
             <input type="hidden" name="underload" id="underload" value="{{ $manday->underload }}">
+            <input type="hidden" id="brmancost" value="{{ session('user.branchmancost') }}">
           </td>
           <td>
             Forecast Pax
@@ -317,15 +314,15 @@ var arr = [];
 
 var updateMancost = function(){
   //console.log('mancost');
-  var m = 0;
   var e = (isNaN($('#empcount')[0].value)) ? 0: parseFloat($('#empcount')[0].value);
-  var m = 500;
+  var m = (isNaN($('#brmancost')[0].value)) ? 0: parseFloat($('#brmancost')[0].value);;
   var c = (isNaN($('#custcount')[0].value)) ? 0: parseFloat($('#custcount')[0].value);
   var h = (isNaN($('#headspend')[0].value)) ? 0: parseFloat($('#headspend')[0].value);
   var mancost = ((e*m)/(c*h)*100);
   console.log((e*m));
   console.log((c*h));
   mancost = (isNaN(mancost) || !isFinite(mancost)) ? 0 : mancost;
+  console.log('mancost: '+ mancost);
   $('.tb-mancost').text(mancost.toFixed(2)+' %');
 }
 
@@ -341,15 +338,8 @@ var getHour = function(s, e){
 var calc = function (fr, to) {
   var timestart = moment(today+' '+fr);
   var breakstart = moment(today+' '+to);
-  
-  //console.log(getHour(fr.split(':')[0], to.split(':')[0]));
-  //console.log(arr);
-
   return breakstart.diff(timestart, 'hours', true);
 }
-
-
-
 
 var updateBreakhrs = function(el){
 
@@ -362,7 +352,6 @@ var updateBreakhrs = function(el){
   }
   $('#manskeddtl'+el.data('index')+'breakhrs').val(bh);
 }
-
 
 var updateEmpcount = function() {
   var ins = 0;
@@ -403,10 +392,8 @@ var updateLoads = function(){
   $('.tb-underload').text(u);
 }
 
-
 var updateManPerHour = function(el){
   var arr = [];
-
   var tb = el.parent().parent().parent();
   tb.children('tr').each(function(idx) {
     if(idx!=0){
@@ -453,8 +440,6 @@ var updateManPerHour = function(el){
     $('.t1').append('<td>'+ moment('2015-10-15  '+ idx+':00').format("h:00 A") + '</td>');
     $('.t2').append('<td>'+ el + '</td>');
   });
-  
-
 }
 
 
@@ -544,6 +529,7 @@ var updateWorkhrs = function(el){
 
       
       updateEmpcount();
+      updateMancost();
     });
 
 
@@ -599,6 +585,7 @@ var updateWorkhrs = function(el){
 
       updateWorkhrs(ts);
       updateEmpcount();
+      updateMancost();
     });
   });
 

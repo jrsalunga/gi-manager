@@ -206,7 +206,7 @@ class ManskeddayController extends Controller {
 	//task/manday/{id}
 	public function makeSingleView(Request $request, $param1){
 		$manday = Manday::find($param1);
-		//return $manday;
+		//return $manday->next();
 		if(count($manday) > 0){ // check if the $id 
 			$depts = $this->empGrpByDeptWithManday($param1);	
 			//session(['weekno'=>Carbon::parse($manday->date)->weekOfYear])	;	

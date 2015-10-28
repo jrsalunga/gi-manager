@@ -5,11 +5,11 @@ use Illuminate\Database\Eloquent\Model;
 class BaseModel extends Model {
 
 	public $timestamps = false;
-	public $year = '';
+	
 	
 
 	public function __construct(){
-		$this->year = date('Y', strtotime('now'));
+		
 		
 	}
 
@@ -68,7 +68,7 @@ class BaseModel extends Model {
 
 	public function getDaysByWeekNo($weekno='', $year=''){
   	$weekno = (empty($weekno) || $weekno > $this->lastWeekOfYear()) ? date('W', strtotime('now')) : $weekno;
-  	$year = empty($year) ?  $this->year : $year;
+  	$year = empty($year) ?  date('Y', strtotime('now')) : $year;
 		for($day=1; $day<=7; $day++) {
 		    $arr[$day-1] = date('Y-m-d', strtotime($year."W".str_pad($weekno,2,'0',STR_PAD_LEFT).$day));
 		}

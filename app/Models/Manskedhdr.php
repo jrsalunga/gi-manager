@@ -14,7 +14,7 @@ class Manskedhdr extends BaseModel {
 	protected $table = 'manskedhdr';
 	public $incrementing = false;
 	public $timestamps = false;	
- 	protected $fillable = ['refno', 'date', 'branchid', 'managerid', 'mancost', 'weekno', 'notes'];
+ 	protected $fillable = ['refno', 'date', 'branchid', 'managerid', 'mancost', 'year', 'weekno', 'notes'];
  	
  	//public static $header = ['code', 'descriptor'];
 
@@ -49,18 +49,43 @@ class Manskedhdr extends BaseModel {
 
 
   /***************** over ride base model *****************************************************/
-  public function nextByField($field = 'id'){
-    $res = $this->query()->where('branchid', $this->branchid)->where($field, '>', $this->{$field})->orderBy($field, 'ASC')->get()->first();
+  public function next($field=null){
+    if($this->lastWeekOfYear() > $this->weekno){
+      $res = $this->query()->where('branchid', $this->branchid)
+                        ->where('weekno', '>', $this->weekno)
+                        ->where('year', '=', $this->year)
+                        ->orderBy('year', 'ASC')
+                        ->orderBy('weekno', 'ASC')->get()->first();
+    } else {
+      $res = $this->query()->where('branchid', $this->branchid)
+                        ->where('year', '>', $this->year)
+                        ->orderBy('year', 'ASC')
+                        ->orderBy('weekno', 'ASC')->get()->first();
+    }
     return $res==null ? 'false':$res;
   }
 
-  public function previousByField($field = 'id'){
-    $res = $this->query()->where('branchid', $this->branchid)->where($field, '<', $this->{$field})->orderBy($field, 'DESC')->get()->first();
+  public function previous($field=null){
+    if(1 < $this->weekno){
+      $res = $this->query()->where('branchid', $this->branchid)
+                        ->where('weekno', '<', $this->weekno)
+                        ->where('year', '=', $this->year)
+                        ->orderBy('year', 'DESC')
+                        ->orderBy('weekno', 'DESC')->get()->first();
+    } else {
+      $res = $this->query()->where('branchid', $this->branchid)
+                        ->where('weekno', '>', $this->weekno)
+                        ->where('year', '<', $this->year)
+                        ->orderBy('year', 'DESC')
+                        ->orderBy('weekno', 'DESC')->get()->first();
+    }
     return $res==null ? 'false':$res;
   }
 
-
-
+  /***************** misc func *****************************************************/
+  public function weekNo(){
+    return str_pad($this->$weekno,2,'0',STR_PAD_LEFT);
+  }
 
 
 
@@ -72,12 +97,21 @@ class Manskedhdr extends BaseModel {
   public function newWeek($branchid = null){
     $arr = [];
     $obj = $this->query()->where('branchid', $branchid)->orderBy('createdate', 'DESC')->get()->first();
+    //return dd($obj->toJson());
     if(count($obj) <= 0){
       $arr['weekno'] = date('W', strtotime('now'));
-      $arr['weekdays'] = $this->getDaysByWeekNo($this->new_weekno);
+      $arr['year'] = date('Y', strtotime('now'));
+      $arr['weekdays'] = $this->getDaysByWeekNo($arr['weekno']);
     } else {
-      $arr['weekno'] = $obj->weekno+1;
-      $arr['weekdays'] = $this->getDaysByWeekNo($obj->weekno+1);
+      if($this->lastWeekOfYear() > $obj->weekno){
+        $arr['weekno'] = $obj->weekno+1;
+        $arr['year'] = $obj->year;
+        $arr['weekdays'] = $this->getDaysByWeekNo($obj->weekno+1);
+      } else {
+        $arr['weekno'] = 1;
+        $arr['year'] = Carbon::now()->addYear()->year;
+        $arr['weekdays'] = $this->getDaysByWeekNo(1, $arr['year']);
+      }
     }
     return $arr;
   }

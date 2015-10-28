@@ -23,11 +23,11 @@ class ManskedController extends Controller {
 															->get();
 	}
 
-	public function getIndex(Request $request, $param1=null, $param2=null){
+	public function getIndex(Request $request, $param1=null, $param2=null, $param3=null){
 		if(strtolower($param1)==='add')
 			return $this->makeAddView($request);
-		else if((strtolower($param1)==='week') && preg_match('/^[0-9]+$/', $param2)) 
-			return $this->makeViewWeek($param2);
+		else if(preg_match('/(20[0-9][0-9])/', $param1) && (strtolower($param2)==='week') && preg_match('/^[0-9]+$/', $param3)) //((strtolower($param1)==='week') && preg_match('/^[0-9]+$/', $param2)) 
+			return $this->makeViewWeek($param1, $param3);
 		else if(preg_match('/^[A-Fa-f0-9]{32}+$/', $param1) && strtolower($param2)==='edit')
 			return $this->makeEditView($request, $param1);
 		else if(preg_match('/^[A-Fa-f0-9]{32}+$/', $param1))   //preg_match('/^[A-Fa-f0-9]{32}+$/',$action))
@@ -47,7 +47,8 @@ class ManskedController extends Controller {
 			'manager' => Auth::user()->name,
 			'managerid' => Auth::user()->id,
 			'mancost' => $branch->mancost,
-			'weekno' => $new['weekno']
+			'weekno' => $new['weekno'],
+			'year' => $new['year']
 		];
 		return view('task.mansked.add')->with('data', $data);
 	}
@@ -57,7 +58,9 @@ class ManskedController extends Controller {
 		//return dd(app());
 		$manskeds = Mansked::with('manskeddays')
 													->where('branchid', $this->branchid)
+													->orderBy('year', 'DESC')
 													->orderBy('weekno', 'DESC')->paginate('5');
+		//return Carbon::now()->addYear()->year;
 		if($manskeds->count() <= 0){
 			$manskeds = new Mansked;
 			$new = $manskeds->newWeek($this->branchid);
@@ -73,14 +76,15 @@ class ManskedController extends Controller {
 	}
 
 	//task/mansked/week/{weekno}
-	public function makeViewWeek($weekno){
+	public function makeViewWeek($year, $weekno){
 
 		$depts = $this->empGrpByDept();
 
 		$mansked = Mansked::with('manskeddays')->where('weekno', $weekno)
+													->where('year', $year)
   												->where('branchid', Auth::user()->branchid)
   												->get()->first();
-  	//return $mansked->manskeddays;					
+  	//return $mansked;		
   	if(count($mansked) <= 0)
   		return redirect('/task/mansked');
 
@@ -135,6 +139,7 @@ class ManskedController extends Controller {
 		$mansked->refno 		= $mansked->getRefno();
 		$mansked->date 			= $request->input('date');
 		$mansked->weekno		= $request->input('weekno');
+		$mansked->year			= $request->input('year');
 		$mansked->branchid 	= $request->input('branchid');
 		$mansked->managerid = $request->input('managerid');
 		$mansked->mancost 	= $request->input('mancost');

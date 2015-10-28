@@ -58,6 +58,7 @@
           <div class="form-group">
             <label for="date" class="control-label">Date</label>
             <input type="text" class="form-control" name="date" id="date" placeholder="YYYY-MM-DD" value="{{ date('Y-m-d', strtotime('now')) }}" maxlength="10" >
+            <input type="hidden" id="year" name="year" value="{{ $data['year'] }}" >
           </div>
         </div>
         <div class="col-md-2 col-sm-3">
