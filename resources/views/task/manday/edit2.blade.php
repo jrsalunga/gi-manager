@@ -11,7 +11,8 @@
     <li><span class="gly gly-shop"></span> <a href="/">{{ $branch }}</a></li>
     <li><a href="/task/mansked">Manpower Schedule</a></li>
     <li><a href="/task/mansked/week/{{$manday->date->year}}/week/{{$manday->date->weekOfYear}}">Week {{$manday->date->weekOfYear}}</a></li>
-    <li class="active">{{ $manday->date->format('D, M j') }}</li>
+    <li><a href="/task/manday/{{$manday->lid()}}">{{ $manday->date->format('D, M j') }}</a></li>
+    <li class="active">Edit</li>
   </ol>
 
   <div>
@@ -22,7 +23,7 @@
             <a href="/task/mansked" class="btn btn-default">
               <span class="glyphicon glyphicon-th-list"></span>
             </a>
-            <a href="/task/mansked/week/{{$manday->date->weekOfYear}}" class="btn btn-default">
+            <a href="/task/mansked/{{$manday->date->year}}/week/{{$manday->date->weekOfYear}}" class="btn btn-default">
               <span class="gly gly-table"></span>
             </a>
             <a href="/task/manday/{{$manday->lid()}}" class="btn btn-default">

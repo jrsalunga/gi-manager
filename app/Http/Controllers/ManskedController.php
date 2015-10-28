@@ -67,7 +67,7 @@ class ManskedController extends Controller {
 		} else {
 			$new = $manskeds[0]->newWeek($this->branchid);
 		}
-		// /return dd(count($manskeds)>=1);
+		
 		//return $manskeds->newWeek($this->branchid);
 		return view('task.mansked.list2')->with('manskeds', $manskeds)->with('new', $new);
 

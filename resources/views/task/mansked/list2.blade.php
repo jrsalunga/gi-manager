@@ -22,9 +22,12 @@
             <button type="button" class="btn btn-default active">
               <span class="glyphicon glyphicon-th-list"></span>
             </button>
-            <a href="/task/mansked/week/{{ str_pad(date('W',strtotime('now')),2,'0', STR_PAD_LEFT) }}" class="btn btn-default">
+            
+            @if(count($manskeds) > 1)
+            <a href="/task/mansked/{{date('Y',strtotime('now'))}}/week/{{date('W',strtotime('now'))}}" class="btn btn-default">
               <span class="gly gly-table"></span>
-            </a>   
+            </a>                 
+            @endif
           </div>
 
           <div class="btn-group" role="group">

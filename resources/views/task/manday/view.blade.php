@@ -23,7 +23,7 @@
             <a href="/task/mansked" class="btn btn-default">
               <span class="glyphicon glyphicon-th-list"></span>
             </a>
-            <a href="/task/mansked/week/{{$manday->date->weekOfYear}}" class="btn btn-default">
+            <a href="/task/mansked/{{$manday->date->year}}/week/{{$manday->date->weekOfYear}}" class="btn btn-default">
               <span class="gly gly-table"></span>
             </a>
             <button type="button" class="btn btn-default active">
