@@ -109,3 +109,26 @@ get('last-day-yr/{year}', function($year){
 	return $dt->weekOfYear;
 });
 
+get('week', function(){
+	
+	$dt = Carbon\Carbon::now();
+	for ($i=0; $i<7 ; $i++) { 
+		$dt->add;
+	}
+	return $dt->weekOfYear;
+});
+
+
+get('email', function(){
+		$data = [];
+	 return Mail::send('emails.welcome', $data, function ($message) {
+	 	$message->subject('Test Email');
+    $message->from('no-replay@giligansrestaurant.com', 'Giligan\'s');
+
+    $message->to('freakyash_02@yahoo.com');
+	});
+});
+
+
+ 
+

@@ -200,8 +200,8 @@ class ManskedController extends Controller {
 				
 	}
 
+
 	public function copyMansked(Request $request){
-		
 
 		$this->validate($request, [
         'lweekno' => 'required',
@@ -290,10 +290,6 @@ class ManskedController extends Controller {
         array_push($new_mandays, $new_manday);
     }
 
-
-   
-
-    
     try {
        	$new_mansked->save();
         try {

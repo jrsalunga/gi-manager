@@ -132,16 +132,16 @@
         <h4 class="modal-title" id="myModalLabel">Copy Manpower Schedule</h4>
       </div>
       <div class="modal-body">
-      
+      <h4>Are you sure you want to copy Week {{ $new['weekno'] }} from Week {{ $manskeds[0]->weekno }} ? </h4>
 
-      <input type="text" name="nweekno" id="nweekno" value="{{ $new['weekno'] }}">
-      <input type="text" name="lweekno" id="lweekno" value="{{ $manskeds[0]->weekno }}">
-      <input type="text" name="year" id="year" value="{{ $new['year'] }}">
-      <input type="text" name="lmanskedid" id="lmanskedid" value="{{ $new['lmanskedid'] }}">
+      <input type="hidden" name="nweekno" id="nweekno" value="{{ $new['weekno'] }}">
+      <input type="hidden" name="lweekno" id="lweekno" value="{{ $manskeds[0]->weekno }}">
+      <input type="hidden" name="year" id="year" value="{{ $new['year'] }}">
+      <input type="hidden" name="lmanskedid" id="lmanskedid" value="{{ $new['lmanskedid'] }}">
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save</button>
       </div>
       {!! Form::close() !!}
     </div>

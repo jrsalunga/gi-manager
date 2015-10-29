@@ -86,6 +86,23 @@ class Manskedday extends BaseModel {
       return number_format($this->empcount, 2) + 0;
   }
 
+  public function loadings(){
+    if($this->overload=='0' || $this->overload=='0.00' || empty($this->overload))
+      $o = '-';
+    else {
+      $o = number_format($this->overload, 2) + 0;
+      $o = '+'.$o;
+    }
+      
+
+    if($this->underload=='0' || $this->underload=='0.00' || empty($this->underload))
+      $u = '-';
+    else 
+      $u = number_format($this->underload, 2) + 0;
+
+    return $o.' / '.$u;
+  }
+
  
 
   public function computeMancost($branch_mancost=0, $formated=false){
