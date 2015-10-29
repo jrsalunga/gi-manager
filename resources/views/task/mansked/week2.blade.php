@@ -54,7 +54,7 @@
     <table class="table table-bordered">
       <tbody>
         <tr>
-          <td colspan="2" rowspan="5"></td>
+          <td colspan="2" rowspan="6"></td>
           @for($i=0;$i<7;$i++)
           <td>
             <a href="/task/manday/{{  $mansked->manskeddays[$i]->lid() }}">
@@ -75,7 +75,12 @@
         </tr>
         <tr>
           @for($i=0;$i<7;$i++)
-          <td class="text-right">{{ $mansked->manskeddays[$i]->empcount }}</td>
+          <td class="text-right">{{ $mansked->manskeddays[$i]->empCount() }}</td>
+          @endfor
+        </tr>
+        <tr>
+          @for($i=0;$i<7;$i++)
+          <td class="text-right">{{ $mansked->manskeddays[$i]->workHrs() }}</td>
           @endfor
         </tr>
         <tr>

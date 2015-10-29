@@ -38,6 +38,9 @@
       </div><!-- end btn-grp -->
       </div>
     </nav>
+
+    @include('_partials.alerts')
+
     <div class="panel-group" id="accordion-week-days" role="tablist" aria-multiselectable="true">
       <div class="panel panel-default panel-warning">
         <div class="panel-heading" role="tab" id="headingOne">
@@ -50,12 +53,14 @@
               Week {{ $new['weekno'] }}
             </a-->
             Week {{ $new['weekno'] }}
-            <span style="margin-left: 100px;">
+            <span style="margin-left: 10%;">
               {{ $new['weekdays'][0]->format('D, M d') }} - 
               {{ $new['weekdays'][6]->format('D, M d') }}
             </span>
-            <a href="" class="pull-right"><span class="glyphicon glyphicon-duplicate"></span></a>
-            <a href="/task/mansked/add" class="pull-right" style="margin-right:100px;"><span class="glyphicon glyphicon-plus"></span> create</a>
+            @if(count($manskeds) > 1)
+            <a href="#myModal" class="pull-right" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-duplicate"></span></a>
+            @endif
+            <a href="/task/mansked/add" class="pull-right" style="margin-right:10%;"><span class="glyphicon glyphicon-plus"></span> create</a>
           </h4>
         </div>
         <div id="collapse-week{{ $new['weekno'] }}" class="panel-collapse collapse " role="tabpanel" aria-labelledby="week{{ $new['weekno'] }}">
@@ -80,7 +85,7 @@
             <a href="/task/mansked/{{ $mansked->year }}/week/{{ $mansked->weekno }}">
               Week {{ $mansked->weekno }}</a>
 
-            <span style="margin-left: 100px;">
+            <span style="margin-left: 10%;">
               {{ date('D, M j',strtotime($mansked['manskeddays'][0]->date)) }} - 
               {{ date('D, M j',strtotime($mansked['manskeddays'][6]->date)) }}
             </span>
@@ -88,7 +93,7 @@
             <a role="button" data-toggle="collapse" data-parent="#accordion-week-days" href="#collapse-week{{ $mansked->weekno }}" aria-expanded="false" aria-controls="collapse-week{{ $mansked->weekno }}" class="collapsed pull-right">
               <span class="glyphicon glyphicon-option-vertical"></span>
             </a>
-            <span class="pull-right" style="margin-right:100px;">
+            <span class="pull-right" style="margin-right:10%;">
               {{ $mansked->refno }}
             </span>
           </h4>
@@ -117,6 +122,32 @@
 
 <!-- end main -->
 </div>
+@if(count($manskeds) > 1)
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      {!! Form::open(['url' => 'api/c/mansked', 'accept-charset'=>'utf-8']) !!}
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Copy Manpower Schedule</h4>
+      </div>
+      <div class="modal-body">
+      
+
+      <input type="text" name="nweekno" id="nweekno" value="{{ $new['weekno'] }}">
+      <input type="text" name="lweekno" id="lweekno" value="{{ $manskeds[0]->weekno }}">
+      <input type="text" name="year" id="year" value="{{ $new['year'] }}">
+      <input type="text" name="lmanskedid" id="lmanskedid" value="{{ $new['lmanskedid'] }}">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save changes</button>
+      </div>
+      {!! Form::close() !!}
+    </div>
+  </div>
+</div>
+@endif
 @endsection
 
 
@@ -125,5 +156,6 @@
 
   <script>
     $(".panel-heading.new").effect("highlight", {}, 2000);
+    $('.alert').not('.alert-important').delay(5000).slideUp(300);
   </script>
 @endsection

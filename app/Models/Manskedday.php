@@ -72,6 +72,20 @@ class Manskedday extends BaseModel {
       return '&#8369; '. number_format($this->headspend, 2);
   }
 
+  public function workHrs(){
+    if($this->workhrs=='0' || $this->workhrs=='0.00' || empty($this->workhrs))
+      return '-';
+    else 
+      return number_format($this->workhrs, 2) + 0;
+  }
+
+  public function empCount(){
+    if($this->empcount=='0' || $this->empcount=='0.00' || empty($this->empcount))
+      return '-';
+    else 
+      return number_format($this->empcount, 2) + 0;
+  }
+
  
 
   public function computeMancost($branch_mancost=0, $formated=false){

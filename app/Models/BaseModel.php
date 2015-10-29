@@ -1,6 +1,7 @@
 <?php namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class BaseModel extends Model {
 
@@ -81,6 +82,19 @@ class BaseModel extends Model {
     $date->setISODate($year, 53);
     return ($date->format("W") === "53" ? 53 : 52);
 	}
+
+	public function firstDayOfWeek($weekno='', $year=''){
+		$weekno = empty($weekno) ? date('W', strtotime('now')) : $weekno;
+		$year = empty($year) ? date('Y', strtotime('now')) : $year;
+		$dt = new DateTime();
+		$dt->setISODate($year, $weekno);
+		return $dt;
+	}
+
+	public function carbonDate($date=''){
+		return Carbon::parse(date('Y-m-d', strtotime($date)));
+	}
+	
 
 
 

@@ -83,21 +83,25 @@ class Manskedhdr extends BaseModel {
   }
 
   /***************** misc func *****************************************************/
-  public function weekNo(){
-    return str_pad($this->$weekno,2,'0',STR_PAD_LEFT);
+  public function weekNo($weekno=null){
+    if(empty($weekno) || $weekno==null)
+      return str_pad($this->$weekno,2,'0',STR_PAD_LEFT);
+    else 
+      return str_pad($weekno,2,'0',STR_PAD_LEFT);
   }
 
 
 
 
-  /*
-    get new week for branch
-    function for route: /task/mansked
-  */
+/*
+  generate new week info for branch
+  function for route: /task/mansked
+  @param: branch id
+  @return: array 
+*/
   public function newWeek($branchid = null){
     $arr = [];
     $obj = $this->query()->where('branchid', $branchid)->orderBy('createdate', 'DESC')->get()->first();
-    //return dd($obj->toJson());
     if(count($obj) <= 0){
       $arr['weekno'] = date('W', strtotime('now'));
       $arr['year'] = date('Y', strtotime('now'));
@@ -107,20 +111,27 @@ class Manskedhdr extends BaseModel {
         $arr['weekno'] = $obj->weekno+1;
         $arr['year'] = $obj->year;
         $arr['weekdays'] = $this->getDaysByWeekNo($obj->weekno+1);
+        $arr['lmanskedid'] = $obj->id;
       } else {
         $arr['weekno'] = 1;
         $arr['year'] = Carbon::now()->addYear()->year;
         $arr['weekdays'] = $this->getDaysByWeekNo(1, $arr['year']);
+        $arr['lmanskedid'] = $obj->id;
       }
     }
     return $arr;
   }
 
+/*
+  get days of the week
+  @param: week number, year
+  @return: array of days of week in Carbon instance
+*/
   public function getDaysByWeekNo($weekno='', $year=''){
   	$weekno = (empty($weekno) || $weekno > 53) ? date('W', strtotime('now')) : $weekno;
   	$year = empty($year) ?  date('Y', strtotime('now')) : $year;
 		for($day=1; $day<=7; $day++) {
-		    $arr[$day-1] = Carbon::parse(date('Y-m-d', strtotime($year."W".str_pad($weekno,2,'0',STR_PAD_LEFT).$day)));
+		    $arr[$day-1] = Carbon::parse(date('Y-m-d', strtotime($year."W".$this->weekNo($weekno).$day)));
 		}
 		return $arr;
   }

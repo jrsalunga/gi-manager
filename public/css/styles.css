@@ -267,8 +267,10 @@
 }
 
 .modal-dialog {
+	/*
     margin: 100px auto;
     width: 700px;
+    */
 }
 
 .modal-footer {

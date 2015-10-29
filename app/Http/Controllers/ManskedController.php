@@ -118,9 +118,16 @@ class ManskedController extends Controller {
 		return view('task.mansked.list')->with('weeks', $weeks);
 	}
 
+	
+
+
+
+
+
+
 	public function post(Request $request){
 
-		 $this->validate($request, [
+		$this->validate($request, [
         'date' => 'required|date|max:10',
         'weekno' => 'required',
     ]);
@@ -191,6 +198,128 @@ class ManskedController extends Controller {
 		//return $mansked;
 		return redirect('/task/mansked')->with(['new'=>true]);
 				
+	}
+
+	public function copyMansked(Request $request){
+		
+
+		$this->validate($request, [
+        'lweekno' => 'required',
+        'nweekno' => 'required',
+        'year' => 'required',
+        'lmanskedid' => 'required',
+    ]);
+
+    $mansked1 = Mansked::whereWeekno($request->input('nweekno'))
+    								->where('year', $request->input('year'))->get();
+    if(count($mansked1) > 0){
+			return redirect('/task/mansked')
+                        ->withErrors(['message' => 'Manpower Schedule Week '. $request->input('nweekno') .' already exist!'])
+                        ->withInput();
+		}
+    $mansked = Mansked::find($request->input('lmanskedid'));
+		if(count($mansked) <= 0){
+			return redirect('/task/mansked')
+                        ->withErrors(['message' => 'Pointer Week '. $request->input('lweekno') .' not found!'])
+                        ->withInput();
+		}
+
+		$mansked->load('manskeddays');
+		$mandays = $mansked->manskeddays; 
+
+    foreach ($mandays as $manday) {
+    	$manday->load('manskeddtls');
+    }
+
+
+
+    $new_mansked = new Mansked;
+		//return $mansked->getRefno();
+		$new_mansked->refno 		= $new_mansked->getRefno();
+		$new_mansked->date 			= $mansked->date->format('Y-m-d');
+		$new_mansked->weekno		= $request->input('nweekno');
+		$new_mansked->year			= $request->input('year');
+		$new_mansked->branchid 	= $mansked->branchid;
+		$new_mansked->managerid = $mansked->managerid;
+		$new_mansked->mancost 	= $mansked->mancost;
+		$new_mansked->notes 		= $mansked->notes;
+		$new_mansked->id 				= $mansked->get_uid();
+
+	
+
+
+		\DB::beginTransaction(); //Start transaction!
+
+		$new_mandays = [];
+    foreach ($new_mansked->getDaysByWeekNo($request->input('nweekno'), $request->input('year')) as $key => $date) {
+    		$new_manday 						= new Manday;
+    		$new_manday->date 			= $date->format('Y-m-d');
+    		$new_manday->custcount 	= $mandays[$key]->custcount;
+    		$new_manday->headspend	= $mandays[$key]->headspend;
+    		$new_manday->empcount		= $mandays[$key]->empcount;
+    		$new_manday->workhrs		= $mandays[$key]->workhrs;
+    		$new_manday->breakhrs		= $mandays[$key]->breakhrs;
+    		$new_manday->overload   = $mandays[$key]->overload;
+    		$new_manday->underload  = $mandays[$key]->underload;
+    		$new_manday->id 				= $new_manday->get_uid();
+        
+        $new_mandtls = [];
+        foreach ($mandays[$key]->manskeddtls as $mandtl) {
+        	$new_mandtl 						= new Mandtl;
+        	$new_mandtl->employeeid = $mandtl->employeeid;
+        	$new_mandtl->daytype 		= $mandtl->daytype;
+        	$new_mandtl->timestart 	= $mandtl->timestart;
+        	$new_mandtl->breakstart = $mandtl->breakstart;
+        	$new_mandtl->breakend 	= $mandtl->breakend;
+        	$new_mandtl->timeend 		= $mandtl->timeend;
+        	$new_mandtl->workhrs 		= $mandtl->workhrs;
+        	$new_mandtl->breakhrs 	= $mandtl->breakhrs;
+        	$new_mandtl->loading 		= $mandtl->loading;
+        	$new_mandtl->id 				= $new_mandtl->get_uid();
+
+        	array_push($new_mandtls, $new_mandtl);
+        }
+
+        try {
+        		$new_manday->manskeddtls()->saveMany($new_mandtls);
+        } catch(\Exception $e) {
+          \DB::rollback();
+          throw $e;
+        }
+
+        array_push($new_mandays, $new_manday);
+    }
+
+
+   
+
+    
+    try {
+       	$new_mansked->save();
+        try {
+           	$new_mansked->manskeddays()->saveMany($new_mandays);
+        } catch(\Exception $e) {
+          \DB::rollback();
+          throw $e;
+        }
+    } catch(\Exception $e) {
+      \DB::rollback();
+      throw $e;
+    }
+
+    \DB::commit();
+
+    return redirect('/task/mansked')->with(['new'=>true])
+    				->with('alert-success', 'Week '.$request->input('lweekno').' successfully copied!');
+
+    $new_mansked->load('manskeddays');
+
+    $new_mandays = $new_mansked->manskeddays; 
+    foreach ($new_mandays as $new_manday) {
+    	$new_manday->load('manskeddtls');
+    }
+
+     return $new_mansked;
 	}
 
 

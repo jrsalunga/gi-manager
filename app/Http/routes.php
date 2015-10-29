@@ -44,6 +44,7 @@ Route::post('timelog', ['as'=>'timelog.post', 'uses'=>'TimelogController@post'])
 
 
 Route::post('t/mansked', ['as'=>'mansked.post', 'uses'=>'ManskedController@post']);	
+Route::post('c/mansked', ['as'=>'mansked.copy', 'uses'=>'ManskedController@copyMansked']);	
 
 Route::post('t/manskedday', ['as'=>'manday.post', 'uses'=>'ManskeddayController@post']);
 Route::put('t/manskedday/{id}', ['as'=>'manday.put', 'uses'=>'ManskeddayController@put']);
@@ -92,8 +93,19 @@ get('flush-sessions', function(){
 
 
 
-get('week-days', function(){
-	Session::flush();
-	return redirect('sessions');
+get('week/{weekno}', function($weekno){
+	
+	echo $weekno.'<br>';
+	$week_start = new DateTime();
+	$week_start->setISODate('2015',$weekno);
+	echo $week_start->format('Y-m-d');
+});
+
+
+
+get('last-day-yr/{year}', function($year){
+	
+	$dt = Carbon\Carbon::parse($year.'-12-31');
+	return $dt->weekOfYear;
 });
 

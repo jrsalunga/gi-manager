@@ -320,17 +320,17 @@ var updateMancost = function(){
   var c = (isNaN($('#custcount')[0].value)) ? 0: parseFloat($('#custcount')[0].value);
   var h = (isNaN($('#headspend')[0].value)) ? 0: parseFloat($('#headspend')[0].value);
   var mancost = ((e*m)/(c*h)*100);
-  console.log((e*m));
-  console.log((c*h));
+  //console.log((e*m));
+  //console.log((c*h));
   mancost = (isNaN(mancost) || !isFinite(mancost)) ? 0 : mancost;
-  console.log('mancost: '+ mancost);
+  //console.log('mancost: '+ mancost);
   $('.tb-mancost').text(mancost.toFixed(2)+' %');
 }
 
 var getHour = function(s, e){
   s = parseInt(s, 10);
   var arr = [];
-  for(i = s; i <= e; i++){
+  for(i = s; i < e; i++){
     arr.push(i);
   }
   return arr;
@@ -430,11 +430,24 @@ var updateManPerHour = function(el){
             }
         });
       }
+
+
+      if(ts!='0.00' && te!='0.00' && bs=='0.00' && bs=='0.00'){
+        console.log('pasok')
+        var j = getHour(ts.split(':')[0], te.split(':')[0]);
+        j.forEach(function(el, idx, array) {
+            if(arr.hasOwnProperty(el)){
+              arr[el] += 1;
+            } else {
+              arr[el] = 1;
+            }
+        });
+      }
         
     }
   })
 
-  console.log(arr);
+  //console.log(arr);
   $('.t1').html('');
   $('.t2').html('');
   arr.forEach(function(el, idx, array) {
@@ -451,28 +464,44 @@ var updateWorkhrs = function(el){
   var bs = tr.children('td').children('.breakstart');
   var be = tr.children('td').children('.breakend');
   var te = tr.children('td').children('.timeend');
-
+  var workhrs = 0;
   var time1 = 0;
   var time2 = 0;
+  var time3 = 0;
+
   
   if(ts.val()!='off' && bs.val()!='off'){
-    //console.log('time1 on');
+    console.log('time1 on');
     time1 = calc(ts.val(), bs.val());
     updateManPerHour(el);
-
   }
   if(be.val()!='off' && te.val()!='off'){
-    //console.log('time2 on');
+    console.log('time2 on');
     time2 = calc(be.val(), te.val());
     updateManPerHour(el);
   }
-  var workhrs = parseFloat(time1) + parseFloat(time2);
+  if(ts.val()!='off' && te.val()!='off' && bs.val()=='off' && bs.val()=='off'){
+    console.log('time3 on');
+    time3 = calc(ts.val(), te.val());
+    //workhrs = calc(ts.val(), te.val());
+    console.log(workhrs);
+    updateManPerHour(el);
+  }
+
+  if(time3==0){
+    console.log('pasok')
+    workhrs = parseFloat(time1) + parseFloat(time2);
+  } else {
+    workhrs = time3;
+  }
+    
+  
   if(ts.val()=='off'){
     workhrs = 0;
     updateManPerHour(el);
   }
     
-  //console.log('workhrs: '+ workhrs);
+  console.log('workhrs: '+ workhrs);
   $('#manskeddtl'+el.data('index')+'workhrs').val(workhrs);
   var d = (workhrs==0) ? '-':workhrs;
   el.parent().siblings('.td-workhrs').text(d); 
