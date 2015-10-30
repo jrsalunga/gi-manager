@@ -678,3 +678,10 @@ background-position: -48px -192px;
 	/* border-bottom: 1px  solid #fff; */
 
 }
+
+
+.table td.nbtl {
+	border-top: 1px solid #fff;
+	border-left: 1px solid #fff;
+	border-bottom: 1px solid #fff;
+}

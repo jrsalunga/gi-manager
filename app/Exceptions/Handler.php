@@ -46,6 +46,14 @@ class Handler extends ExceptionHandler
             $e = new NotFoundHttpException($e->getMessage(), $e);
         }
 
+
+        if(app()->environment()=='production'){
+          if($e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
+            return redirect('/');
+          }
+        }
+        
+
         return parent::render($request, $e);
     }
 }

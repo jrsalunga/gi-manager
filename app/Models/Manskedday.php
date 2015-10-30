@@ -91,7 +91,7 @@ class Manskedday extends BaseModel {
       $o = '-';
     else {
       $o = number_format($this->overload, 2) + 0;
-      $o = '+'.$o;
+      $o = '+'.$o.'</span>';
     }
       
 
@@ -100,7 +100,7 @@ class Manskedday extends BaseModel {
     else 
       $u = number_format($this->underload, 2) + 0;
 
-    return $o.' / '.$u;
+    return '<span style="color:blue">'.$o.'</span> / <span style="color:red;">'.$u.'</span>';
   }
 
  

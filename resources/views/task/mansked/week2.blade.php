@@ -52,7 +52,7 @@
     <table class="table table-bordered">
       <tbody>
         <tr>
-          <td colspan="2" rowspan="7"></td>
+          <td colspan="2" class="nbtl"><i class="fa fa-calendar"></i> {{ $mansked->year }} - Week {{ $mansked->weekno }}</td>
           @for($i=0;$i<7;$i++)
           <td>
             <a href="/task/manday/{{  $mansked->manskeddays[$i]->lid() }}">
@@ -62,33 +62,40 @@
           @endfor
         </tr>
         <tr>
+          <td colspan="2" class="text-right nbtl">Forecasted Customer</td>
           @for($i=0;$i<7;$i++)
           <td class="text-right">{{ $mansked->manskeddays[$i]->custCount() }}</td>
           @endfor
         </tr>
         <tr>
+          <td colspan="2" class="text-right nbtl">Forecasted Ave Spending</td>
           @for($i=0;$i<7;$i++)
           <td class="text-right">{{ $mansked->manskeddays[$i]->headSpend() }}</td>
           @endfor
         </tr>
         <tr>
+          <td colspan="2" class="text-right nbtl">Total Crew On-duty</td>
           @for($i=0;$i<7;$i++)
           <td class="text-right">{{ $mansked->manskeddays[$i]->empCount() }}</td>
           @endfor
         </tr>
         <tr>
+          <td colspan="2" class="text-right nbtl">Total Work Hours</td>
           @for($i=0;$i<7;$i++)
           <td class="text-right">{{ $mansked->manskeddays[$i]->workHrs() }}</td>
           @endfor
         </tr>
         <tr>
+          <td colspan="2" class="text-right nbtl">
+            <abbr title="{{ session('user.branch') }} - &#8369 {{ session('user.branchmancost') }}">Manpower Cost</abbr> %</td>
           @for($i=0;$i<7;$i++)
           <td class="text-right">{{ $mansked->manskeddays[$i]->computeMancost($mansked->mancost, true) }}</td>
           @endfor
         </tr>
         <tr>
+          <td colspan="2" class="text-right nbtl">Loading</td>
           @for($i=0;$i<7;$i++)
-          <td class="text-right">{{ $mansked->manskeddays[$i]->loadings() }}</td>
+          <td class="text-right">{!! $mansked->manskeddays[$i]->loadings() !!}</td>
           @endfor
         </tr>
         <tr>
