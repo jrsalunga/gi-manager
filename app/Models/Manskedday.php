@@ -122,9 +122,9 @@ class Manskedday extends BaseModel {
   public function computeHourcost($branch_mancost=0, $formated=false){
     if(($this->custcount*$this->headspend) != 0){
       if($formated)
-        return number_format((($this->workhrs*$branch_mancost)/($this->custcount*$this->headspend)*100),2).' %'; 
+        return number_format((($this->workhrs*($branch_mancost/8))/($this->custcount*$this->headspend)*100),2).' %'; 
       else
-        return ($this->workhrs*$branch_mancost)/($this->custcount*$this->headspend)*100;
+        return ($this->workhrs*($branch_mancost/8))/($this->custcount*$this->headspend)*100;
     } else {
       if($formated)
         return '-';

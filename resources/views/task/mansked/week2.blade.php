@@ -96,7 +96,7 @@
         </tr>
         <tr>
           <td colspan="2" class="text-right nbtl">
-            <abbr title="{{ session('user.branch') }} - &#8369 {{ session('user.branchmancost') }}">Manpower Hour Cost</abbr> %</td>
+            <abbr title="{{ session('user.branch') }} - &#8369 {{ session('user.branchmancost') }}/8">Work Hour Cost</abbr> %</td>
           @for($i=0;$i<7;$i++)
           <td class="text-right">{{ $mansked->manskeddays[$i]->computeHourcost($mansked->mancost, true) }}</td>
           @endfor
