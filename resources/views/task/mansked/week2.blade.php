@@ -52,7 +52,9 @@
     <table class="table table-bordered">
       <tbody>
         <tr>
-          <td colspan="2" class="nbtl"><i class="fa fa-calendar"></i> {{ $mansked->year }} - Week {{ $mansked->weekno }}</td>
+          <td colspan="2" class="nbtl">
+            <i class="fa fa-calendar"></i> {{ $mansked->year }} - Week {{ $mansked->weekno }}
+          </td>
           @for($i=0;$i<7;$i++)
           <td>
             <a href="/task/manday/{{  $mansked->manskeddays[$i]->lid() }}">
@@ -90,6 +92,13 @@
             <abbr title="{{ session('user.branch') }} - &#8369 {{ session('user.branchmancost') }}">Manpower Cost</abbr> %</td>
           @for($i=0;$i<7;$i++)
           <td class="text-right">{{ $mansked->manskeddays[$i]->computeMancost($mansked->mancost, true) }}</td>
+          @endfor
+        </tr>
+        <tr>
+          <td colspan="2" class="text-right nbtl">
+            <abbr title="{{ session('user.branch') }} - &#8369 {{ session('user.branchmancost') }}">Manpower Hour Cost</abbr> %</td>
+          @for($i=0;$i<7;$i++)
+          <td class="text-right">{{ $mansked->manskeddays[$i]->computeHourcost($mansked->mancost, true) }}</td>
           @endfor
         </tr>
         <tr>
