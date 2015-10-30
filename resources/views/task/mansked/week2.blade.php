@@ -94,6 +94,7 @@
           <td class="text-right">{{ $mansked->manskeddays[$i]->computeMancost($mansked->mancost, true) }}</td>
           @endfor
         </tr>
+        <!--
         <tr>
           <td colspan="2" class="text-right nbtl">
             <abbr title="{{ session('user.branch') }} - &#8369 {{ session('user.branchmancost') }}/8">Work Hour Cost</abbr> %</td>
@@ -101,6 +102,7 @@
           <td class="text-right">{{ $mansked->manskeddays[$i]->computeHourcost($mansked->mancost, true) }}</td>
           @endfor
         </tr>
+      -->
         <tr>
           <td colspan="2" class="text-right nbtl">Loading</td>
           @for($i=0;$i<7;$i++)
