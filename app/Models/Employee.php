@@ -43,9 +43,23 @@ class Employee extends BaseModel {
      *
      */
    // Employee::Branchid('1')->get()
-    public function scopeBranchid($query, $id)
-    {
-        return $query->where('branchid', $id);
+    public function scopeBranchid($query, $id){
+      return $query->where('branchid', $id);
     }
+
+
+
+  /***************** mutators *****************************************************/
+  public function getLastnameAttribute($value){
+    return ucwords(strtolower($value));
+  }
+
+  public function getFirstnameAttribute($value){
+    return ucwords(strtolower($value));
+  }
+
+  public function getMiddlenameAttribute($value){
+    return ucwords(strtolower($value));
+  }
 	
 }

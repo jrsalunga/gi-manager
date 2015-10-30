@@ -11,5 +11,14 @@ class Branch extends BaseModel {
 	public function employee() {
     return $this->hasMany('App\Models\Employee', 'employeeid');
   }
+
+
+
+
+
+  /***************** mutators *****************************************************/
+  public function getDescriptorAttribute($value){
+      return ucwords(strtolower($value));
+  }
   
 }

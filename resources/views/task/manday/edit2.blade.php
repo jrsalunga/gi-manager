@@ -431,9 +431,12 @@ var updateManPerHour = function(el){
         });
       }
 
-
-      if(ts!='0.00' && te!='0.00' && bs=='0.00' && bs=='0.00'){
-        console.log('pasok')
+      //console.log('ts '+ts);
+      //console.log('te '+te);
+      //console.log('bs '+bs);
+      //console.log('be '+be);
+      if(ts!='0.00' && te!='0.00' && bs=='off' && bs=='off'){
+        //console.log('pasok d2');
         var j = getHour(ts.split(':')[0], te.split(':')[0]);
         j.forEach(function(el, idx, array) {
             if(arr.hasOwnProperty(el)){
@@ -471,17 +474,17 @@ var updateWorkhrs = function(el){
 
   
   if(ts.val()!='off' && bs.val()!='off'){
-    console.log('time1 on');
+    //console.log('time1 on');
     time1 = calc(ts.val(), bs.val());
     updateManPerHour(el);
   }
   if(be.val()!='off' && te.val()!='off'){
-    console.log('time2 on');
+    //console.log('time2 on');
     time2 = calc(be.val(), te.val());
     updateManPerHour(el);
   }
   if(ts.val()!='off' && te.val()!='off' && bs.val()=='off' && bs.val()=='off'){
-    console.log('time3 on');
+    //console.log('time3 on');
     time3 = calc(ts.val(), te.val());
     //workhrs = calc(ts.val(), te.val());
     console.log(workhrs);
@@ -489,7 +492,7 @@ var updateWorkhrs = function(el){
   }
 
   if(time3==0){
-    console.log('pasok')
+    //console.log('pasok')
     workhrs = parseFloat(time1) + parseFloat(time2);
   } else {
     workhrs = time3;

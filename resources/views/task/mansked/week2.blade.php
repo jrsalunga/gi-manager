@@ -29,19 +29,17 @@
           
           <div class="btn-group pull-right" role="group">
             @if($mansked->previous()==='false')
-              <a href="/task/mansked/week/" class="btn btn-default disabled">
+              <button class="btn btn-default" disabled="disabled"><span class="glyphicon glyphicon-chevron-left"></span></button>
             @else
-              <a href="/task/mansked/{{$mansked->previous()->year}}/week/{{$mansked->previous()->weekno}}" class="btn btn-default">
+              <a href="/task/mansked/{{$mansked->previous()->year}}/week/{{$mansked->previous()->weekno}}" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span></a>
             @endif
-              <span class="glyphicon glyphicon-chevron-left"></span>
-            </a>
+            
             @if($mansked->next()==='false')
-              <a href="/task/mansked/week/" class="btn btn-default disabled">
+              <button class="btn btn-default" disabled="disabled"><span class="glyphicon glyphicon-chevron-right"></span></button>
             @else
-              <a href="/task/mansked/{{$mansked->next()->year}}/week/{{$mansked->next()->weekno}}" class="btn btn-default">
+              <a href="/task/mansked/{{$mansked->next()->year}}/week/{{$mansked->next()->weekno}}" class="btn btn-default"><span class="glyphicon glyphicon-chevron-right"></span></a>
             @endif  
-              <span class="glyphicon glyphicon-chevron-right"></span>
-            </a>
+             
           </div>
         </div>
       </div>

@@ -106,14 +106,16 @@ get('week/{weekno}', function($weekno){
 get('last-day-yr/{year}', function($year){
 	
 	$dt = Carbon\Carbon::parse($year.'-12-31');
-	return $dt->weekOfYear;
+	echo $dt->format('Y-m-d').'<br>';
+	echo $dt->toRfc822String().'<br>';
+	echo $dt->weekOfYear.'<br>';
 });
 
 get('week', function(){
 	
 	$dt = Carbon\Carbon::now();
 	for ($i=0; $i<7 ; $i++) { 
-		$dt->add;
+		$dt->addDay();
 	}
 	return $dt->weekOfYear;
 });
