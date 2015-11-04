@@ -95,7 +95,9 @@
             </a>
             <span class="pull-right" style="margin-right:10%;">
               {{ $mansked->refno }}
-             <span class="badge" style="background-color:#999">{{ $mansked->filledManday() }}</span>  
+              @if($mansked->filledManday() > 0)
+                <span class="badge" style="background-color:#999">{{ $mansked->filledManday() }}</span>  
+              @endif
             </span>
           </h4>
         </div>
