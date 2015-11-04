@@ -59,7 +59,9 @@ class ManskedController extends Controller {
 		$manskeds = Mansked::with('manskeddays')
 													->where('branchid', $this->branchid)
 													->orderBy('year', 'DESC')
-													->orderBy('weekno', 'DESC')->paginate('5');
+													->orderBy('weekno', 'DESC')
+													->paginate('5');
+													//->get();
 		//return Carbon::now()->addYear()->year;
 		if($manskeds->count() <= 0){
 			$manskeds = new Mansked;
@@ -67,7 +69,7 @@ class ManskedController extends Controller {
 		} else {
 			$new = $manskeds[0]->newWeek($this->branchid);
 		}
-		
+		//return $manskeds[0]->filledManday();
 		//return $manskeds->newWeek($this->branchid);
 		return view('task.mansked.list2')->with('manskeds', $manskeds)->with('new', $new);
 

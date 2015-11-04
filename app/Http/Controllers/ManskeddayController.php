@@ -195,7 +195,7 @@ class ManskeddayController extends Controller {
 
 	public function makeEditView(Request $request, $param1) {
 		$manday = Manday::find($param1);
-		
+		//return dd($manday->date > $manday->date->isToday;
 		if(count($manday) > 0){ // check if the $id 
 			if(strtotime($manday->date) < strtotime('now')){
 				return redirect(URL::previous())->with(['alert-warning' => 'Editing is disabled! Date already passed...']);

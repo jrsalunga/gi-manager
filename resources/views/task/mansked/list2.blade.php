@@ -83,7 +83,7 @@
           <h4 class="panel-title">
             
             <a href="/task/mansked/{{ $mansked->year }}/week/{{ $mansked->weekno }}">
-              Week {{ $mansked->weekno }}</a>
+              Week {{ $mansked->weekno }}</a> 
 
             <span style="margin-left: 10%;">
               {{ date('D, M j',strtotime($mansked['manskeddays'][0]->date)) }} - 
@@ -95,6 +95,7 @@
             </a>
             <span class="pull-right" style="margin-right:10%;">
               {{ $mansked->refno }}
+             <span class="badge" style="background-color:#999">{{ $mansked->filledManday() }}</span>  
             </span>
           </h4>
         </div>
@@ -102,7 +103,7 @@
           <div class="panel-body">
             
             @foreach($mansked->manskeddays as $manday)
-              <a href="/task/manday/{{$manday->lid()}}" class="btn alert-success"><i class="fa fa-calendar-o"></i> {{ date('D, M j',strtotime($manday->date)) }}</a>
+              <a href="/task/manday/{{$manday->lid()}}" class="btn alert-success"><i class="fa fa-calendar-o"></i> {{ date('D, M j',strtotime($manday->date)) }}  </a>
             @endforeach
             
           </div>

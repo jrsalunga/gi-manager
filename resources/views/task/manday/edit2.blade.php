@@ -20,12 +20,14 @@
       <div class="container-fluid">
         <div class="navbar-form">
           <div class="btn-group" role="group">
+            <!--
             <a href="/task/mansked" class="btn btn-default">
               <span class="glyphicon glyphicon-th-list"></span>
             </a>
             <a href="/task/mansked/{{$manday->date->year}}/week/{{$manday->date->weekOfYear}}" class="btn btn-default">
               <span class="gly gly-table"></span>
             </a>
+            -->
             <a href="/task/manday/{{$manday->lid()}}" class="btn btn-default">
               <span class="fa fa-calendar-o"></span>
             </a>   

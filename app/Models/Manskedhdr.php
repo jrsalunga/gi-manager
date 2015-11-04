@@ -65,6 +65,18 @@ class Manskedhdr extends BaseModel {
     return $res==null ? 'false':$res;
   }
 
+
+
+  public function filledManday(){
+    $res = $this->query()->select(\DB::raw('count(manskedday.empcount) as filled'))
+                          ->join('manskedday', function($join){
+                            $join->on('manskedday.manskedid', '=', 'manskedhdr.id')
+                                ->where('manskedhdr.branchid', '=', session('user.branchid'));
+                            })
+                            ->where('manskedhdr.id', $this->id)->get()->first();
+    return $res==null ? 0:$res->filled;
+  }
+
   public function previous($field=null){
     if(1 < $this->weekno){
       $res = $this->query()->where('branchid', $this->branchid)
