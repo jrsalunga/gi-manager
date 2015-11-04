@@ -10,7 +10,7 @@
   <ol class="breadcrumb">
     <li><span class="gly gly-shop"></span> <a href="/">{{ $branch }}</a></li>
     <li><a href="/task/mansked">Manpower Schedule</a></li>
-    <li><a href="/task/mansked/week/{{$manday->date->year}}/week/{{$manday->date->weekOfYear}}">Week {{$manday->date->weekOfYear}}</a></li>
+    <li><a href="/task/mansked/{{$manday->date->year}}/week/{{$manday->date->weekOfYear}}">Week {{$manday->date->weekOfYear}}</a></li>
     <li><a href="/task/manday/{{$manday->lid()}}">{{ $manday->date->format('D, M j') }}</a></li>
     <li class="active">Edit</li>
   </ol>
