@@ -105,47 +105,29 @@ class ManskeddayController extends Controller {
       		$be = $dept['employees'][$i]['manskeddtl']['breakend'];
       		$te = $dept['employees'][$i]['manskeddtl']['timeend'];
 
-      		if($ts!='off' && $bs!='off'){
-      			$this->consoHours($ts, $bs, $arr);
-      			/*
-      			$hrs = $this->getHour($ts, $bs);
+      		
+
+      		if($ts!='off' && $bs!='off' && $be!='off' && $te!='off'){
+      			$hrs = $this->getHour($ts, $te);
 	      		foreach ($hrs as $hr) {
 	      			if(array_key_exists('hr_'.$hr, $arr)) {
-	      				$arr['hr_'.$hr] += 1;
+	      				$arr['hr_'.$hr] += 0;
 							} else {
-								$arr['hr_'.$hr] = 1;
+								$arr['hr_'.$hr] = 0;
 							}
 	      		}
-	      		*/
+      		}
+
+      		if($ts!='off' && $bs!='off'){
+      			$this->consoHours($ts, $bs, $arr);
       		}
       		
       		if($be!='off' && $te!='off'){
       			$this->consoHours($be, $te, $arr);
-      			/*
-	      		$hrs = $this->getHour($be, $te);
-	      		foreach ($hrs as $hr) {
-	      			if(array_key_exists('hr_'.$hr, $arr)) {
-	      				$arr['hr_'.$hr] += 1;
-							} else {
-								$arr['hr_'.$hr] = 1;
-							}
-	      		}
-	      		*/
 	      	}
 
 	      	if($ts!='off' && $te!='off' && $bs=='off' && $be=='off'){
-	      		
 	      		$this->consoHours($ts, $te, $arr);
-	      		/*
-	      		$hrs = $this->getHour($ts, $te);
-	      		foreach ($hrs as $hr) {
-	      			if(array_key_exists('hr_'.$hr, $arr)) {
-	      				$arr['hr_'.$hr] += 1;
-							} else {
-								$arr['hr_'.$hr] = 1;
-							}
-	      		}
-	      		*/
 	      	}
       	
       	}
@@ -195,7 +177,6 @@ class ManskeddayController extends Controller {
 
 	public function makeEditView(Request $request, $param1) {
 		$manday = Manday::find($param1);
-		//return dd($manday->date > $manday->date->isToday;
 		if(count($manday) > 0){ // check if the $id 
 			if(strtotime($manday->date) < strtotime('now')){
 				return redirect(URL::previous())->with(['alert-warning' => 'Editing is disabled! Date already passed...']);

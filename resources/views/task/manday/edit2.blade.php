@@ -437,7 +437,7 @@ var updateManPerHour = function(el){
       //console.log('te '+te);
       //console.log('bs '+bs);
       //console.log('be '+be);
-      if(ts!='0.00' && te!='0.00' && bs=='off' && bs=='off'){
+      if(ts!='0.00' && te!='0.00' && bs=='off' && be=='off'){
         //console.log('pasok d2');
         var j = getHour(ts.split(':')[0], te.split(':')[0]);
         j.forEach(function(el, idx, array) {
@@ -445,6 +445,18 @@ var updateManPerHour = function(el){
               arr[el] += 1;
             } else {
               arr[el] = 1;
+            }
+        });
+      }
+
+
+      if(ts!='0.00' && te!='0.00' && bs!='0.00' && be!='0.00'){
+        var j = getHour(bs.split(':')[0], be.split(':')[0]);
+        j.forEach(function(el, idx, array) {
+            if(arr.hasOwnProperty(el)){
+              arr[el] += 0;
+            } else {
+              arr[el] = 0;
             }
         });
       }
