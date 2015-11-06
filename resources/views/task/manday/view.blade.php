@@ -126,7 +126,7 @@
       </tbody>
     </table>
 
-    <table class="table table-bordered">
+    <table id="tb-mandtl" class="table table-bordered">
       <tbody>
         <tr>
           <td>Dept</td><td>Employee</td><td>Time Start</td><td>Break Start</td>
@@ -177,7 +177,14 @@
                 </td>
                 <td class="text-right">{{ $dept['employees'][$i]['manskeddtl']['workhrs'] + 0 }}</td>
                 <?php $l = $dept['employees'][$i]['manskeddtl']['loading'] ?>
-                <td class="text-right{{ ($l >= 0) ? '':' text-danger' }}">{{ ($l == 0) ? '-':$l+0 }}</td>
+                @if($l < 0)
+                  <td class="text-right text-danger">{{ $l+0 }}</td>
+                @elseif($l > 0)
+                  <td class="text-right text-info">{{ $l+0 }}</td>
+                @else
+                  <td class="text-right">-</td>
+                @endif
+
               @else
                 <td class="text-right">-</td>
                 <td class="text-right">-</td>

@@ -49,7 +49,7 @@
 
     
 
-    <table class="table table-bordered">
+    <table class="table table-bordered table-responsive">
       <tbody>
         <tr>
           <td colspan="2" class="nbtl">

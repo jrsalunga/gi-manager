@@ -23,23 +23,28 @@ Route::get('login', ['as'=>'auth.getlogin', 'uses'=>'Auth\AuthController@getLogi
 Route::post('login', ['as'=>'auth.postlogin', 'uses'=>'Auth\AuthController@postLogin']);
 Route::get('logout', ['as'=>'auth.getlogout', 'uses'=>'Auth\AuthController@getLogout']);
 
+Route::group(['middleware' => 'auth'], function(){
 
-Route::get('task/mansked/{param1?}/{param2?}/{param3?}', ['uses'=>'ManskedController@getIndex',  'middleware' => 'auth'])
+Route::get('task/mansked/{param1?}/{param2?}/{param3?}', ['uses'=>'ManskedController@getIndex'])
 	->where(['param1'=>'add|[0-9]{4}+', 
 					'param2'=>'week|[0-9]+', 
 					'param3'=>'edit|[0-9]+|[A-Fa-f0-9]{32}+']);
 
-Route::get('task/manday/{param1?}/{param2?}/{param3?}', ['uses'=>'ManskeddayController@getIndex',  'middleware' => 'auth'])
+Route::get('task/manday/{param1?}/{param2?}/{param3?}', ['uses'=>'ManskeddayController@getIndex'])
 	->where(['param1'=>'add|[A-Fa-f0-9]{32}+', 
 					'param2'=>'edit|branch|[0-9]+', 
 					'param3'=>'edit|[A-Fa-f0-9]{32}+']);
 
-	/******************* API  *************************************************/
+
+
+Route::get('tk', ['as'=>'tk.index','uses'=>'TimelogController@getIndex']);
+
+/******************* API  *************************************************/
 Route::group(['prefix'=>'api'], function(){
 
 Route::post('t/employee', ['as'=>'employee.post', 'uses'=>'EmployeeController@post']);
 Route::put('t/employee', ['as'=>'employee.put', 'uses'=>'EmployeeController@put']);
-Route::get('employee/{field?}/{value?}', ['as'=>'employee.getbyfield', 'uses'=>'EmployeeController@getByField']);
+
 Route::post('timelog', ['as'=>'timelog.post', 'uses'=>'TimelogController@post']);
 
 
@@ -49,7 +54,17 @@ Route::post('c/mansked', ['as'=>'mansked.copy', 'uses'=>'ManskedController@copyM
 Route::post('t/manskedday', ['as'=>'manday.post', 'uses'=>'ManskeddayController@post']);
 Route::put('t/manskedday/{id}', ['as'=>'manday.put', 'uses'=>'ManskeddayController@put']);
 
-});
+});/******* end prefix:api ********/
+
+
+}); /******* end middeware:auth ********/
+
+Route::get('api/employee/{field?}/{value?}', ['as'=>'employee.getbyfield', 'uses'=>'EmployeeController@getByField']);
+
+
+
+
+
 
 
 
@@ -77,6 +92,12 @@ get('csv/{year}/week/{weekno}', function($year, $weekno){
 
 
 
+
+
+get('slug/branch/{id}', function($id){
+	$branch = App\Models\Branch::find($id);
+	return str_slug($branch->address);
+});
 
 get('const', function(){
 	return view('index');

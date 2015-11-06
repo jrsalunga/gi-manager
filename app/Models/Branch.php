@@ -20,5 +20,11 @@ class Branch extends BaseModel {
   public function getDescriptorAttribute($value){
       return ucwords(strtolower($value));
   }
+
+
+  public function getRouteKey()
+{
+    return $this->slug;
+}
   
 }

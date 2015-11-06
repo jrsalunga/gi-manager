@@ -22,6 +22,10 @@ a, a:hover {
   max-height: 46px;
 }
 
+
+
+
+
 @media (max-width: 768px) {
 
 .navbar {
@@ -148,8 +152,20 @@ td.text-input .frm-ctrl {
   background-color: transparent;
 }
 
+#tb-mandtl td.text-danger {
+  color: red;
+} 
+
+#tb-mandtl td.text-info {
+  color: blue;
+} 
+
+
+
 [disabled].frm-ctrl {
   cursor: not-allowed;
 }
+
+
 
 

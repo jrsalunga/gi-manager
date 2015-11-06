@@ -433,12 +433,7 @@ var updateManPerHour = function(el){
         });
       }
 
-      //console.log('ts '+ts);
-      //console.log('te '+te);
-      //console.log('bs '+bs);
-      //console.log('be '+be);
       if(ts!='0.00' && te!='0.00' && bs=='off' && be=='off'){
-        //console.log('pasok d2');
         var j = getHour(ts.split(':')[0], te.split(':')[0]);
         j.forEach(function(el, idx, array) {
             if(arr.hasOwnProperty(el)){
@@ -448,7 +443,6 @@ var updateManPerHour = function(el){
             }
         });
       }
-
 
       if(ts!='0.00' && te!='0.00' && bs!='0.00' && be!='0.00'){
         var j = getHour(bs.split(':')[0], be.split(':')[0]);
@@ -468,7 +462,7 @@ var updateManPerHour = function(el){
   $('.t1').html('');
   $('.t2').html('');
   arr.forEach(function(el, idx, array) {
-    $('.t1').append('<td>'+ moment('2015-10-15  '+ idx+':00').format("h:00 A") + '</td>');
+    $('.t1').append('<td>'+ moment('{{ $manday->date->format("Y-m-d") }} '+idx+':00').format("h:00 A") + '</td>');
     $('.t2').append('<td>'+ el + '</td>');
   });
 }
@@ -530,9 +524,14 @@ var updateWorkhrs = function(el){
     
   $('#manskeddtl'+el.data('index')+'loading').val(l);
   if(l < 0){
+    el.parent().siblings('.td-loading').removeClass('text-info');
     el.parent().siblings('.td-loading').addClass('text-danger');
+  } else if(l > 0){
+    el.parent().siblings('.td-loading').removeClass('text-danger');
+    el.parent().siblings('.td-loading').addClass('text-info');
   } else {
     el.parent().siblings('.td-loading').removeClass('text-danger');
+    el.parent().siblings('.td-loading').removeClass('text-info');
   }
   l = (l==0) ? '-':l;
   el.parent().siblings('.td-loading').text(l);

@@ -307,11 +307,13 @@
 #TimelogModal .modal-dialog {
 	margin: 30px auto;
 }
-.emp-tk-list .ti {
+.emp-tk-list .ti,
+.emp-tk-list .txncode1 {
 	background-color: #dff0d8;
 }
 
-.emp-tk-list .to {
+.emp-tk-list .to,
+.emp-tk-list .txncode0 {
 	background-color: #f2dede;
 }
 

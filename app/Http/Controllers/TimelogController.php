@@ -17,6 +17,7 @@ class TimelogController extends Controller {
 		
 		$timelogs = Timelog::with('employee.branch')
 											->orderBy('datetime', 'DESC')
+											->take(20)
 											->get();
     return view('tk.index')->with('timelogs', $timelogs);		
 	}
@@ -47,10 +48,10 @@ class TimelogController extends Controller {
 					//'data'=> $validator
 			);
 		} else {
-			$employee = Employee::with('branch')->where('rfid', '=', $request->input('rfid'))->get();
+			$employee = Employee::with('branch', 'position')->where('rfid', '=', $request->input('rfid'))->get()->first();
 			
 			
-			if(!isset($employee[0])){ // employee does not exist having the RFID submitted
+			if(!isset($employee)){ // employee does not exist having the RFID submitted
 				$respone = array(
 						'code'=>'401',
 						'status'=>'error',
@@ -61,7 +62,7 @@ class TimelogController extends Controller {
 			
 				$timelog = new Timelog;
 				//$timelog->employeeid	= $request->get('employeeid');
-				$timelog->employeeid    = $employee[0]->id;
+				$timelog->employeeid    = $employee->id;
 				$timelog->datetime 		= $request->input('datetime');
 				$timelog->txncode 	 	= $request->input('txncode');
 				$timelog->entrytype  	= $request->input('entrytype');
@@ -80,19 +81,20 @@ class TimelogController extends Controller {
 
 
 					$datetime = explode(' ',$timelog->datetime);
-					$txncode = $timelog->txncode=='to' ? 'Time Out':'Time In';
+					$txncode = $timelog->txncode=='0' ? 'Time Out':'Time In';
 				
 					$data = array(
-						'empno'		=> $employee[0]->code,
-						'lastname'	=> $employee[0]->lastname,
-						'firstname'	=> $employee[0]->firstname,
-						'middlename'=> $employee[0]->middlename,
-						'position'	=> $employee[0]->position ,
+						'empno'		=> $employee->code,
+						'lastname'	=> $employee->lastname,
+						'firstname'	=> $employee->firstname,
+						'middlename'=> $employee->middlename,
+
+						'position'	=> $employee->position->descriptor,
 						'date'		=> $datetime[0] ,
 						'time'		=> $datetime[1] ,
 						'txncode'	=> $timelog->txncode,
 						'txnname'	=> $txncode,
-						'branch' => $employee[0]->branch->code,
+						'branch' => $employee->branch->code,
 						'timelogid' => $timelog->id
 						
 					);

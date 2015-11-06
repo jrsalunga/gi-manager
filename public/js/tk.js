@@ -109,9 +109,9 @@ var htmlEmployeeTimelogs = function(data){
 var appendToTkList = function(data){
 	
 	var d = moment(data.data.date+' '+data.data.time).format('hh:mm:ss A');
-	var c = moment(data.data.date+' '+data.data.time).format('MMM D');
+	var c = moment(data.data.date+' '+data.data.time).format('MMM DD');
 	
-		var html = '<tr class="'+ data.data.txncode +'"><td>'+ data.data.empno +'</td>';
+		var html = '<tr class="txncode'+ data.data.txncode +'"><td>'+ data.data.empno +'</td>';
 			html += '<td>'+ data.data.lastname +', '+ data.data.firstname +'</td>'
 			html += '<td><span> '+ c +' </span>&nbsp; '+ d +' </td>'
 			html += '<td>'+ data.data.txnname;
@@ -406,7 +406,7 @@ var keypressInit = function(){
 				//console.log('Time In: '+ empno);
 				//postTimelog(empno,'ti');
 
-				postTimelog(preparePostTimelogData(empno,'ti'), 'local')
+				postTimelog(preparePostTimelogData(empno,'1'), 'local')
 				.done(function(data){
 					updateTK(data); //update when socket emit
 					console.log('emit');
@@ -430,7 +430,7 @@ var keypressInit = function(){
 				//console.log('Time Out: '+ empno);
 				//postTimelog(empno,'to');
 				
-				postTimelog(preparePostTimelogData(empno,'to'), 'local')
+				postTimelog(preparePostTimelogData(empno,'0'), 'local')
 				.done(function(data){
 					updateTK(data); //update when socket emit
 					console.log('emit');
