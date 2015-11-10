@@ -549,18 +549,29 @@ var InitClock = function(){
 	
 	
 	setInterval( function() {
-		$('.ts').html(moment().format('hh:mm:ss'));
+		//$('.ts').html(moment().format('hh:mm:ss'));
+		var sec = moment().format('ss');
+		var min = moment().format('mm');
+		var hr = moment().format('hh');
+		$('.tsg-sec .tsg-l .tsg-img').attr('src', '/images/tk/'+sec[0]+'.png');
+		$('.tsg-sec .tsg-r .tsg-img').attr('src', '/images/tk/'+sec[1]+'.png');
+
+		$('.ts-min .tsg-l .tsg-img').attr('src', '/images/tk/'+min[0]+'.png');
+		$('.ts-min .tsg-r .tsg-img').attr('src', '/images/tk/'+min[1]+'.png');
+
+		$('.ts-hr .tsg-l .tsg-img').attr('src', '/images/tk/'+hr[0]+'.png');
+		$('.ts-hr .tsg-r .tsg-img').attr('src', '/images/tk/'+hr[1]+'.png');
 	},1000);
 	
 	setInterval( function() {
-		$('.am').html(moment().format('a'));
+		$('#am').attr('src', '/images/tk/'+moment().format('a')+'.png')  //.html(moment().format('a'));
 	},1000);
 	//},64000); // 1 min
 	
 	setInterval( function() {
-		$('.day').html(moment().format('dddd'));
+		$('.day').html(moment().format('ddd'));
 		//$('.day').html(moment().format('MMM D'));
-		$('#date time').html(moment().format("MMMM D, YYYY"));
+		$('#date time').html(moment().format("MMM D YYYY"));
 	},1000);
 	//},3600000); 
 	

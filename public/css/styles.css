@@ -129,15 +129,19 @@
 }
 
 .date-group {
-	margin-top: 20px;
+	margin-top: 0px;
 	font-size: 45px;
 	font-weight:bold;
-	color: #505F6F;
-	
+	color: #1D1D1D;
+	background-color: #dfdacc;
 	font-family: 'Hammersmith One', sans-serif;
 	text-align: center;
-	
+
+	border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
 }
+
+
 
 .date-group .glyphicon-calendar {
 	font-size: 35px;
@@ -146,7 +150,7 @@
 
 .date-group .day {
 	font-size: 50px;
-	color: #95A5A6;
+	color: #505F6F;
 }
 
 
@@ -251,6 +255,114 @@
 	margin-top: 20px;
 	
 }
+
+/**************** TS 2  ****************/
+.ts-group2 {
+	position: relative;
+	margin-top: 50px;
+	background-color: #dfdacc;
+	padding: 10px;
+
+	border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+}
+
+.tsg-container {
+	position: relative;
+	width: 350px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.tsg {
+	background-image: url('/images/tk/bg1pane.png');
+	background-repeat: no-repeat;
+	background-size: 120px 140px;
+	height: 140px;
+	width: 120px;
+	display: inline-block;
+	vertical-align: top;
+	position: relative;
+}
+
+.ts-am {
+	display: inline-block;
+	vertical-align: top;
+}
+
+.tsg-l {
+	left: 9px;
+}
+
+.tsg-r {
+	right: 9px;
+
+}
+
+.tsg-l, .tsg-r {
+	top: 14px;
+	width: 50px;
+	height: 75%;
+	display: inline-block;
+	position: absolute;
+}
+
+.tsg-img {
+	height: 100%;
+	width: 100%;
+}
+
+.tsg-sec {
+	margin-top: 4px;
+	background-image: url('/images/tk/bg1pane.png');
+	background-repeat: no-repeat;
+	background-size: 100px 90px;
+	height: 90px;
+	width: 100px;
+	display: inline-block;
+	vertical-align: top;
+	position: relative;
+}
+
+.tsg-sec .tsg-l {
+	left: 9px;
+}
+
+.tsg-sec .tsg-r {
+	right: 9px;
+
+}
+
+.tsg-sec .tsg-l, .tsg-sec .tsg-r {
+	top: 8px;
+	width: 40px;
+	height: 75%;
+	display: inline-block;
+	position: absolute;
+}
+
+.tsg-container ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	display: inline-block;
+}
+
+.tsg-container ul li{
+	margin: 0;
+	padding: 0;
+}
+
+.ts-am img{
+	height: 30px;
+	width: 50px;
+	margin-top: 5px;
+	margin-left: 20px;
+}
+
+
+
+
 
 
 

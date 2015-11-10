@@ -42,26 +42,59 @@
 <div class="container-fluid">
 	<div class="tk-block row">
 		<div class="l-pane col-sm-5">
-      
+      <!--
       <div class="ts-group">
-              
         <div class="ts">{{  strftime('%I:%M:%S', strtotime('now')) }}</div>
         <div class="am">{{  strftime('%p', strtotime('now')) }}</div>
         <div style="clear: both;"></div>
-               
       </div>
-      
+      -->
+      <div class="ts-group2">
+        <div class="tsg-container">
+
+          <div class="tsg ts-hr">
+            <div class="tsg-l">
+              <img src="/images/tk/0.png" class="tsg-img">
+            </div>
+            <div class="tsg-r">
+              <img src="/images/tk/0.png" class="tsg-img">
+            </div>
+          </div>
+
+          <div class="tsg ts-min">
+            <div class="tsg-l">
+              <img src="/images/tk/0.png" class="tsg-img">
+            </div>
+            <div class="tsg-r">
+              <img src="/images/tk/0.png" class="tsg-img">
+            </div>
+          </div>
+
+          <ul>
+            <li>
+              <div class="tsg-sec">
+                <div class="tsg-l">
+                  <img src="/images/tk/0.png" class="tsg-img">
+                </div>
+                <div class="tsg-r">
+                  <img src="/images/tk/0.png" class="tsg-img">
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="ts-am">
+                <img src="/images/tk/am.png" id="am">
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
       <div class="date-group">
         <div id="date">
-          <span class="glyphicon glyphicon-calendar"> </span>       
-          <time>{{  date('F j, Y', strtotime('now')) }}</time>
-          
+          <time>{{  date('M j Y', strtotime('now')) }}</time>
+          <span class="day">{{  date('D', strtotime('now')) }}</span>
         </div>
-        <div>
-          <span>
-            <span class="day">{{  date('l', strtotime('now')) }}</span>
-          </span>
-        </div>
+        
       </div>
 
       <div class="emp-group">
@@ -69,9 +102,13 @@
           <img  id="emp-img" src="/images/employees/{{ $timelogs[0]->employee->code }}.jpg" >
         </div>
         <div class="emp-cont">
+          @if(count($timelogs) > 0)
           <p id="emp-code">{{ $timelogs[0]->employee->code }}</p>
           <h1 id="emp-name">{{ $timelogs[0]->employee->lastname }}, {{ $timelogs[0]->employee->firstname }}</h1>
           <p id="emp-pos">{{ $timelogs[0]->employee->position->descriptor }}</p>
+          @else 
+
+          @endif
         </div>
         <div style="clear: both;"></div>
       </div>
@@ -90,6 +127,7 @@
             </tr>
           </thead>
           <tbody class="emp-tk-list">
+          @if(count($timelogs) > 0)
             @foreach($timelogs as $timelog)
             <tr class="txncode{{ $timelog->txncode }}">
               <td>{{ $timelog->employee->code }}</td>
@@ -109,6 +147,7 @@
               </td>
             </tr>
             @endforeach
+          @endif
           </tbody>
         </table>
       </div>

@@ -13,16 +13,22 @@ use Illuminate\Http\Response;
 
 class TimelogController extends Controller {
 
+	private $_branchid = '';
 
-	public function getIndex() {
+
+	public function getIndex(Request $request) {
+
+		$this->_branchid = is_null(session('user.branchid')) ? $request->cookie('branchid') : session('user.branchid');
 		
-		$timelogss = Timelog::with('employee.branch')
+		if(gethostname() === 'server01'){
+			
+			$timelogs = Timelog::with('employee.branch')
 											->orderBy('datetime', 'DESC')
 											->take(20)
 											->get();
+		} else {
 
-		
-		$timelogs = Timelog::with(['employee'=>function($query){
+			$timelogs = Timelog::with(['employee'=>function($query){
 													$query->with([
 															'branch'=>function($query){
 																$query->select('code', 'descriptor', 'id');
@@ -35,15 +41,18 @@ class TimelogController extends Controller {
 											->select('timelog.employeeid', 'timelog.rfid', 'timelog.datetime', 'timelog.txncode', 'timelog.entrytype', 'timelog.terminalid', 'timelog.createdate', 'timelog.id')
 											->join('employee', function($join){
                             $join->on('timelog.employeeid', '=', 'employee.id')
-                                ->where('employee.branchid', '=', session('user.branchid'));
+                                ->where('employee.branchid', '=', $this->_branchid);
                             })
 											->orderBy('datetime', 'DESC')
 											->take(20)
 											->get();
+		}
 
-		//return $timelogs;
+		if(count($timelogs) <= 0)
+			return redirect()->route('auth.getlogin');
+		
 		$response = new Response(view('tk.index')->with('timelogs', $timelogs));
-		$response->withCookie(cookie('branchcode', session('user.branchcode'), 45000));
+		$response->withCookie(cookie('branchid', $this->_branchid, -1));
 		return $response;
 
     return view('tk.index')->with('timelogs', $timelogs);		
