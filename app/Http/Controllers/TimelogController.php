@@ -13,14 +13,18 @@ use Illuminate\Http\Response;
 
 class TimelogController extends Controller {
 
-	private $_branchid = '';
+	private $_branchid;
+
+	public function __construct(Request $request){
+		$this->_branchid = is_null(session('user.branchid')) ? $request->cookie('branchid') : session('user.branchid');
+	}
 
 
 	public function getIndex(Request $request) {
 
-		$this->_branchid = is_null(session('user.branchid')) ? $request->cookie('branchid') : session('user.branchid');
 		
-		if(gethostname() === 'server01'){
+		
+		if(gethostname()==='server01'){
 			
 			$timelogs = Timelog::with('employee.branch')
 											->orderBy('datetime', 'DESC')
@@ -84,7 +88,7 @@ class TimelogController extends Controller {
 					//'data'=> $validator
 			);
 		} else {
-			$employee = Employee::with('branch', 'position')->where('rfid', '=', $request->input('rfid'))->get()->first();
+			$employee = Employee::with('branch', 'position')->where('rfid', '=', $request->input('rfid'))->first();
 			
 			
 			if(!isset($employee)){ // employee does not exist having the RFID submitted
@@ -98,10 +102,11 @@ class TimelogController extends Controller {
 			
 				$timelog = new Timelog;
 				//$timelog->employeeid	= $request->get('employeeid');
-				$timelog->employeeid    = $employee->id;
+				$timelog->employeeid  = $employee->id;
 				$timelog->datetime 		= $request->input('datetime');
-				$timelog->txncode 	 	= $request->input('txncode');
+				$timelog->txncode 	 	= (strtolower($employee->branchid) == strtolower($this->_branchid)) ? $request->input('txncode'):'9';
 				$timelog->entrytype  	= $request->input('entrytype');
+				$timelog->rfid				= $employee->rfid;
 				$timelog->terminalid 	= $request->cookie('branchcode')!==null ? $request->cookie('branchcode'):$_SERVER["REMOTE_ADDR"];
 				//$timelog->terminal 	= gethostname();
 				$timelog->id 	 	 			= strtoupper(Timelog::get_uid());
@@ -114,25 +119,21 @@ class TimelogController extends Controller {
 						'message'=>'Record saved!',
 					);	
 
-
-
 					$datetime = explode(' ',$timelog->datetime);
-					
 				
 					$data = array(
-						'empno'		=> $employee->code,
+						'empno'			=> $employee->code,
 						'lastname'	=> $employee->lastname,
 						'firstname'	=> $employee->firstname,
 						'middlename'=> $employee->middlename,
-
-						'position'	=> $employee->position->descriptor,
-						'date'		=> $datetime[0] ,
-						'time'		=> $datetime[1] ,
-						'txncode'	=> $timelog->txncode,
-						'txnname'	=> $timelog->getTxnCode(),
-						'branch' => $employee->branch->code,
-						'timelogid' => $timelog->id
 						
+						'position'	=> $employee->position->descriptor,
+						'date'			=> $datetime[0] ,
+						'time'			=> $datetime[1] ,
+						'txncode'		=> $timelog->txncode,
+						'txnname'		=> $timelog->getTxnCode(),
+						'branch' 		=> $employee->branch->code,
+						'timelogid' => $timelog->id,
 					);
 				
 					$respone['data'] = $data;
