@@ -66,7 +66,7 @@
 
       <div class="emp-group">
         <div class="img-cont">
-          <img  id="emp-img" src="/images/employees/{{ $timelogs[0]->employee->code }}.jpg" height="140px" width="140px" >
+          <img  id="emp-img" src="/images/employees/{{ $timelogs[0]->employee->code }}.jpg" >
         </div>
         <div class="emp-cont">
           <p id="emp-code">{{ $timelogs[0]->employee->code }}</p>
@@ -102,7 +102,7 @@
                 {{ strftime('%I:%M:%S %p', strtotime($timelog->datetime)) }}
               </td>
               <td>
-                {{ $timelog->txncode == '1' ? 'Time In ': 'Time Out ' }}   
+                {{ $timelog->getTxnCode() }}   
               </td>
               <td>
                 {{ $timelog->employee->branch->code }}
@@ -128,7 +128,7 @@
       <div class="modal-body">
         <div class="emp-group">
         <div class="img-cont">
-          <img  id="mdl-emp-img" src="" height="140px" width="140px" >
+          <img  id="mdl-emp-img" src="">
         </div>
         <div class="emp-cont">
           <p id="mdl-emp-code"></p>
@@ -139,15 +139,25 @@
       </div>
       </div>
       <div class="modal-footer">
-        <button type="button" id="btn-time-in" class="btn btn-primary" data-dismiss="modal">
-          press <strong>F</strong> for Time In
+        <button type="button" id="btn-time-in" class="btn btn-success btn-tk" data-dismiss="modal">
+          press <strong>I</strong> for Time In
         </button>
-        <button type="button" id="btn-time-out" class="btn btn-warning" data-dismiss="modal">press <strong>J</strong> for Time Out</button>
+        <button type="button" id="btn-break-start" class="btn btn-info btn-tk" data-dismiss="modal">
+          press <strong>B</strong> for Break Start
+        </button>
+        <button type="button" id="btn-break-end" class="btn btn-warning btn-tk" data-dismiss="modal">
+          press <strong>N</strong> for Break End
+        </button>
+        <button type="button" id="btn-time-out" class="btn btn-primary btn-tk" data-dismiss="modal">
+          press <strong>O</strong> for Time Out
+        </button>
         
       </div>
         <div class="mdl-f-options">
+          <!--
           <p>Options:</p>
-          <button type="button" class="btn btn-info btn-xs">press <strong>T</strong> to view timelog for the current month</button>
+          <button type="button" class="btn btn-default btn-xs">press <strong>T</strong> to view timelog for the current month</button>
+          -->
         <button type="button" class="btn btn-default btn-xs">press <strong>Esc</strong> to escape</button>
         </div>
     </div>

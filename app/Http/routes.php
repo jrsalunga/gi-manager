@@ -1,5 +1,7 @@
 <?php
 
+
+
 Route::get('/', ['middleware' => 'auth', function () {
 
 	return view('index');
@@ -37,7 +39,7 @@ Route::get('task/manday/{param1?}/{param2?}/{param3?}', ['uses'=>'ManskeddayCont
 
 
 
-Route::get('tk', ['as'=>'tk.index','uses'=>'TimelogController@getIndex']);
+
 
 /******************* API  *************************************************/
 Route::group(['prefix'=>'api'], function(){
@@ -45,7 +47,7 @@ Route::group(['prefix'=>'api'], function(){
 Route::post('t/employee', ['as'=>'employee.post', 'uses'=>'EmployeeController@post']);
 Route::put('t/employee', ['as'=>'employee.put', 'uses'=>'EmployeeController@put']);
 
-Route::post('timelog', ['as'=>'timelog.post', 'uses'=>'TimelogController@post']);
+
 
 
 Route::post('t/mansked', ['as'=>'mansked.post', 'uses'=>'ManskedController@post']);	
@@ -59,6 +61,9 @@ Route::put('t/manskedday/{id}', ['as'=>'manday.put', 'uses'=>'ManskeddayControll
 
 }); /******* end middeware:auth ********/
 
+// for TK
+Route::post('api/timelog', ['as'=>'timelog.post', 'uses'=>'TimelogController@post']);
+Route::get('tk', ['as'=>'tk.index','uses'=>'TimelogController@getIndex']);
 Route::get('api/employee/{field?}/{value?}', ['as'=>'employee.getbyfield', 'uses'=>'EmployeeController@getByField']);
 
 

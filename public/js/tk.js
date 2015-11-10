@@ -136,7 +136,7 @@ var updateEmpView = function(data){
 	$('#emp-img').attr('src', 'images/employees/'+ data.data.empno +'.jpg');
 	$('#emp-code').text(data.data.empno);
 	$('#emp-name').text(data.data.lastname +', '+ data.data.firstname);
-	$('#emp-pos').text(data.data.position);
+	$('#emp-pos').text(data.data.position.descriptor);
 
 }
 
@@ -144,7 +144,7 @@ var updateEmpViewModal = function(data){
 	$('#mdl-emp-img').attr('src', 'images/employees/'+ data.data.code +'.jpg');
 	$('#mdl-emp-code').text(data.data.code);
 	$('#mdl-emp-name').text(data.data.lastname +', '+ data.data.firstname);
-	$('#mdl-emp-pos').text(data.data.position);
+	$('#mdl-emp-pos').text(data.data.position.descriptor);
 	
 }
 
@@ -213,6 +213,16 @@ var validateEmpno = function(empno){
 		},3000);
 		return false;
 	}
+}
+
+var saveEmpTimelog = function(empno, txncode, location){
+	if(validateEmpno(empno)){
+		postTimelog(preparePostTimelogData(empno, txncode), location)
+		.done(function(data){
+			updateTK(data);
+			$('#TKModal').modal('hide');
+		});
+	}		
 }
 
 // send a curl request 
@@ -358,6 +368,8 @@ var keypressInit = function(){
 	var arr = [];
 	var last_empno = '';
 	var empData = {};
+
+
 	
 	
 	$('#TKModal').on('hidden.bs.modal', function (e) {
@@ -367,13 +379,30 @@ var keypressInit = function(){
 		last_empno = '';
 		empData = {};
 	});
+
+	/****** button functions ******/
+	$('#btn-time-in').on('click', function(){
+		saveEmpTimelog(empno, 1, 'local');
+	});
+
+	$('#btn-break-start').on('click', function(){
+		saveEmpTimelog(empno, 2, 'local');
+	});
+
+	$('#btn-break-end').on('click', function(){
+		saveEmpTimelog(empno, 3, 'local');
+	});
+
+	$('#btn-time-out').on('click', function(){
+		saveEmpTimelog(empno, 4, 'local');
+	});
 	
 	
 	$(this).bind('keypress', function(e){
 		var code = e.which || e.keyCode;
 		$('.empno').text('');
 		//console.log('keypress');
-		//console.log(code);		
+		console.log(code);		
 		
 		if(code == 13) { //Enter keycode
 
@@ -423,14 +452,32 @@ var keypressInit = function(){
 			endCapture = false;
 			arr = [];
 			last_empno = '';
-			*/                                         // capslock jenn pc
+			*/               
+		} else if((code == 98 || code == 66) && endCapture){ // break start
+			if(validateEmpno(empno)){
+				postTimelog(preparePostTimelogData(empno,'2'), 'local')
+				.done(function(data){
+					updateTK(data); //update when socket emit
+					$('#TKModal').modal('hide');
+				});
+			}
+		} else if((code == 110 || code == 78) && endCapture){ // break end
+			
+			if(validateEmpno(empno)){
+				postTimelog(preparePostTimelogData(empno,'3'), 'local')
+				.done(function(data){
+					updateTK(data); //update when socket emit
+					$('#TKModal').modal('hide');
+				});
+			}
+			                          // capslock jenn pc
 		} else if((code == 111 || code == 106 || code == 74) && endCapture){ // timeout	50="2"	or 48 ="0"
 			
 			if(validateEmpno(empno)){
 				//console.log('Time Out: '+ empno);
 				//postTimelog(empno,'to');
 				
-				postTimelog(preparePostTimelogData(empno,'0'), 'local')
+				postTimelog(preparePostTimelogData(empno,'4'), 'local')
 				.done(function(data){
 					updateTK(data); //update when socket emit
 					console.log('emit');

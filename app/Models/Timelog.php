@@ -12,5 +12,24 @@ class Timelog extends BaseModel {
  	public function employee() {
     return $this->belongsTo('App\Models\Employee', 'employeeid');
   }
-	
+
+  public function getTxnCode(){
+  	switch ($this->txncode) {
+			case 1:
+				return 'Time In';
+				break;
+			case 2:
+				return 'Break Start';
+				break;
+			case 3:
+				return 'Break End';
+				break;
+			case 4:
+				return 'Time Out';
+				break;
+			default:
+				return '-';
+				break;
+		}
+	}
 }

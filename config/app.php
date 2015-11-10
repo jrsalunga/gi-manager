@@ -147,6 +147,7 @@ return [
 
         Chumper\Zipper\ZipperServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
+        Vinkla\Pusher\PusherServiceProvider::class,
 
     ],
 
@@ -200,6 +201,7 @@ return [
         'Zipper' => Chumper\Zipper\Zipper::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
+        'Pusher' => Vinkla\Pusher\Facades\Pusher::class,
 
     ],
 

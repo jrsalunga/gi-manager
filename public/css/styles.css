@@ -87,8 +87,6 @@
 	float:left;
 }
 
-
-
 .am {
 	margin-top: 20px;
 	color: #16A085;
@@ -99,6 +97,31 @@
 	float:left;
 /*	margin-left:10px; */
 }
+
+@media (max-width: 1300px) {
+  .ts {
+  	font-size: 7em;
+  	
+  }
+
+  .am {
+  	font-size: 5em;
+  }
+}
+
+@media (max-width: 1150px) {
+  .ts {
+  	font-size: 6em;
+  	
+  }
+
+  .am {
+  	font-size: 4em;
+  }
+}
+
+
+
 
 .empno{
 	font-family: 'DS-DIGII', 'Codystar', cursive; 
@@ -140,6 +163,20 @@
 	
 }
 
+@media (max-width: 1150px) {
+  .date-group {
+		font-size: 35px;
+	}
+
+	.date-group .glyphicon-calendar {
+		font-size: 30px;
+	}
+
+	.date-group .day {
+		font-size: 35px;
+	}
+}
+
 .img-cont {
 	float:left;
 	height: 140px;
@@ -173,6 +210,41 @@
 #mdl-emp-name {
 	margin-top: 10px;
 	font-size: 2em;
+}
+
+@media (max-width: 1150px) {
+  .img-cont {
+		height: 100px;
+		width: 100px;
+		margin: 10px;
+	}
+
+	.img-cont img.emp-img {
+		height: 100px;
+		width: 100px;
+	}
+
+	.emp-cont {
+		margin: 10px 0;
+		height: auto;
+	}
+
+	.emp-cont * {
+		margin: 0px;
+		padding: 0px;
+		font-weight: bold;
+	}
+
+	.emp-cont p {
+		margin-top: 0px;
+		font-size: 1.3em;
+	}
+
+	#emp-name,
+	#mdl-emp-name {
+		margin: 3px 0;
+		font-size: 1.5em;
+}
 }
 
 .message-group {
@@ -278,12 +350,6 @@
 	text-align: center;
 }
 
-.modal-footer > #btn-time-out,
-.modal-footer > #btn-time-in  {
-	font-size: 1.5em;
-	margin: 0 20px;
-}
-
 .modal-footer > .btn > strong {
 	color: #C0392B;
 	font-size: 1.5em;
@@ -307,13 +373,23 @@
 #TimelogModal .modal-dialog {
 	margin: 30px auto;
 }
+
 .emp-tk-list .ti,
 .emp-tk-list .txncode1 {
 	background-color: #dff0d8;
 }
 
+
+.emp-tk-list .txncode3 {
+	background-color: #fcf8e3;
+}
+
 .emp-tk-list .to,
-.emp-tk-list .txncode0 {
+.emp-tk-list .txncode2 {
+	background-color: #d9edf7;
+}
+
+.emp-tk-list .txncode4  {
 	background-color: #f2dede;
 }
 
@@ -321,6 +397,16 @@
 	opacity: .5;
 	cursor: pointer;
 	top: 4px;
+}
+
+.btn-tk {
+	width: 230px;
+	font-size: 1.3em;
+	margin: 5px;
+}
+
+#btn-break-start {
+	margin-bottom: 5px;
 }
 
 

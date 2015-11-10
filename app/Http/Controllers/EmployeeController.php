@@ -80,7 +80,7 @@ class EmployeeController extends Controller {
 
 	public function getByField($field, $value){
 		
-		$employee = Employee::where($field, '=', $value)->first();
+		$employee = Employee::with('position')->where($field, '=', $value)->first();
 		
 		if($employee){
 			$respone = array(

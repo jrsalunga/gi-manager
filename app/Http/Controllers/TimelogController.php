@@ -7,6 +7,7 @@ use App\Models\Timelog;
 use Validator;
 use Illuminate\Http\Request;
 use App\Models\Employee;
+use Illuminate\Http\Response;
 
 
 
@@ -15,10 +16,36 @@ class TimelogController extends Controller {
 
 	public function getIndex() {
 		
-		$timelogs = Timelog::with('employee.branch')
+		$timelogss = Timelog::with('employee.branch')
 											->orderBy('datetime', 'DESC')
 											->take(20)
 											->get();
+
+		
+		$timelogs = Timelog::with(['employee'=>function($query){
+													$query->with([
+															'branch'=>function($query){
+																$query->select('code', 'descriptor', 'id');
+															}, 
+															'position'=>function($query){
+																$query->select('code', 'descriptor', 'id');
+															}])->select('code', 'lastname', 'firstname', 'branchid', 'positionid', 'id');
+														
+												}])
+											->select('timelog.employeeid', 'timelog.rfid', 'timelog.datetime', 'timelog.txncode', 'timelog.entrytype', 'timelog.terminalid', 'timelog.createdate', 'timelog.id')
+											->join('employee', function($join){
+                            $join->on('timelog.employeeid', '=', 'employee.id')
+                                ->where('employee.branchid', '=', session('user.branchid'));
+                            })
+											->orderBy('datetime', 'DESC')
+											->take(20)
+											->get();
+
+		//return $timelogs;
+		$response = new Response(view('tk.index')->with('timelogs', $timelogs));
+		$response->withCookie(cookie('branchcode', session('user.branchcode'), 45000));
+		return $response;
+
     return view('tk.index')->with('timelogs', $timelogs);		
 	}
 
@@ -66,9 +93,9 @@ class TimelogController extends Controller {
 				$timelog->datetime 		= $request->input('datetime');
 				$timelog->txncode 	 	= $request->input('txncode');
 				$timelog->entrytype  	= $request->input('entrytype');
-				//$timelog->terminalid 	= $request->get('terminalid');
-				$timelog->terminal 	= gethostname();
-				$timelog->id 	 	 	= strtoupper(Timelog::get_uid());
+				$timelog->terminalid 	= $request->cookie('branchcode')!==null ? $request->cookie('branchcode'):$_SERVER["REMOTE_ADDR"];
+				//$timelog->terminal 	= gethostname();
+				$timelog->id 	 	 			= strtoupper(Timelog::get_uid());
 				
 				if($timelog->save()){
 
@@ -81,7 +108,7 @@ class TimelogController extends Controller {
 
 
 					$datetime = explode(' ',$timelog->datetime);
-					$txncode = $timelog->txncode=='0' ? 'Time Out':'Time In';
+					
 				
 					$data = array(
 						'empno'		=> $employee->code,
@@ -93,7 +120,7 @@ class TimelogController extends Controller {
 						'date'		=> $datetime[0] ,
 						'time'		=> $datetime[1] ,
 						'txncode'	=> $timelog->txncode,
-						'txnname'	=> $txncode,
+						'txnname'	=> $timelog->getTxnCode(),
 						'branch' => $employee->branch->code,
 						'timelogid' => $timelog->id
 						

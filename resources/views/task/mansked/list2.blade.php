@@ -19,15 +19,14 @@
       <div class="container-fluid">
         <div class="navbar-form">
           <div class="btn-group" role="group">
+            <a href="/dashboard" class="btn btn-default" title="Back to Main Menu">
+              <span class="gly gly-unshare"></span>
+            </a> 
             <button type="button" class="btn btn-default active">
               <span class="glyphicon glyphicon-th-list"></span>
             </button>
             
-            @if(count($manskeds) > 1)
-            <a href="/task/mansked/{{date('Y',strtotime('now'))}}/week/{{date('W',strtotime('now'))}}" class="btn btn-default">
-              <span class="gly gly-table"></span>
-            </a>                 
-            @endif
+            
           </div>
 
           <div class="btn-group" role="group">
