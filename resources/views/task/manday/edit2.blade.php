@@ -194,17 +194,21 @@
                   <select name="manskeddtls[{{ $ctr }}][timestart]" class="frm-ctrl tk-select timestart" data-index="{{$ctr}}"> 
                     <option value="off">-</option>
                     @for ($j = 1; $j <= 24; $j++)
-                      @if($dept['employees'][$i]['manskeddtl']['timestart'] == date('G:i', strtotime( $j .':00')))
-                        <option selected value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
+                      <?php $p = str_pad($j,2,'0',STR_PAD_LEFT)  ?>
+                      @if($dept['employees'][$i]['manskeddtl']['timestart'] == date('H:i', strtotime( $j .':00')))
+                        <option selected value="{{ $p }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
                       @else
-                        <option value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
+                        <option value="{{ $p }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
                       @endif
 
+                      <?php 
+                      /*
                       @if($dept['employees'][$i]['manskeddtl']['timestart'] == date('G:i', strtotime( $j .':30')))
                         <option selected value="{{ $j }}:30">{{ date('g:i A', strtotime( $j .':30')) }}</option>
                       @else
                         <option value="{{ $j }}:30">{{ date('g:i A', strtotime( $j .':30')) }}</option>
                       @endif
+                      */?>
                     @endfor
                   </select>
                 </td>
@@ -212,17 +216,21 @@
                   <select name="manskeddtls[{{ $ctr }}][breakstart]" class="frm-ctrl tk-select breakstart" data-index="{{$ctr}}" {{ $disabled }}> 
                     <option value="off">-</option>
                     @for ($j = 1; $j <= 24; $j++)
-                      @if($dept['employees'][$i]['manskeddtl']['breakstart'] == date('G:i', strtotime( $j .':00')))
-                        <option selected value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
+                      <?php $p = str_pad($j,2,'0',STR_PAD_LEFT)  ?>
+                      @if($dept['employees'][$i]['manskeddtl']['breakstart'] == date('H:i', strtotime( $p .':00')))
+                        <option selected value="{{ $p }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
                       @else
-                        <option value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
+                        <option value="{{ $p }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
                       @endif
 
+                      <?php 
+                      /*
                       @if($dept['employees'][$i]['manskeddtl']['breakstart'] == date('G:i', strtotime( $j .':30')))
                         <option selected value="{{ $j }}:30">{{ date('g:i A', strtotime( $j .':30')) }}</option>
                       @else
                         <option value="{{ $j }}:30">{{ date('g:i A', strtotime( $j .':30')) }}</option>
                       @endif
+                      */?>
                     @endfor
                   </select>
                 </td>
@@ -230,17 +238,21 @@
                   <select name="manskeddtls[{{ $ctr }}][breakend]" class="frm-ctrl tk-select breakend" data-index="{{$ctr}}" {{ $disabled }}> 
                     <option value="off">-</option>
                     @for ($j = 1; $j <= 24; $j++)
-                      @if($dept['employees'][$i]['manskeddtl']['breakend'] == date('G:i', strtotime( $j .':00')))
-                        <option selected value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
+                      <?php $p = str_pad($j,2,'0',STR_PAD_LEFT)  ?>
+                      @if($dept['employees'][$i]['manskeddtl']['breakend'] == date('H:i', strtotime( $p .':00')))
+                        <option selected value="{{ $p }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
                       @else
-                        <option value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
+                        <option value="{{ $p }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
                       @endif
                       
+                      <?php 
+                      /*
                       @if($dept['employees'][$i]['manskeddtl']['breakend'] == date('G:i', strtotime( $j .':30')))
                         <option selected value="{{ $j }}:30">{{ date('g:i A', strtotime( $j .':30')) }}</option>
                       @else
                         <option value="{{ $j }}:30">{{ date('g:i A', strtotime( $j .':30')) }}</option>
                       @endif
+                      */?>
                     @endfor
                   </select>
                 </td>
@@ -248,17 +260,20 @@
                   <select name="manskeddtls[{{ $ctr }}][timeend]" class="frm-ctrl tk-select timeend" data-index="{{$ctr}}" {{ $disabled }}> 
                     <option value="off">-</option>
                     @for ($j = 1; $j <= 24; $j++)
-                      @if($dept['employees'][$i]['manskeddtl']['timeend'] == date('G:i', strtotime( $j .':00')))
+                      @if($dept['employees'][$i]['manskeddtl']['timeend'] == date('H:i', strtotime( $j .':00')))
                         <option selected value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
                       @else
                         <option value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
                       @endif
-
+                      
+                      <?php 
+                      /*
                       @if($dept['employees'][$i]['manskeddtl']['timeend'] == date('G:i', strtotime( $j .':30')))
                         <option selected value="{{ $j }}:30">{{ date('g:i A', strtotime( $j .':30')) }}</option>
                       @else
                         <option value="{{ $j }}:30">{{ date('g:i A', strtotime( $j .':30')) }}</option>
                       @endif
+                      */?>
                     @endfor
                   </select>
                 </td>
@@ -338,10 +353,28 @@ var getHour = function(s, e){
   return arr;
 }
 
+var getHour2 = function(s, e){
+  s = parseInt(s, 10);
+  e = parseInt(e, 10);
+  e = e < s ? e+24:e; 
+  var arr = [];
+  for(i = s; i < e; i++){
+    arr.push(i);
+  }
+  return arr;
+}
+
 var calc = function (fr, to) {
   var timestart = moment(today+' '+fr);
   var breakstart = moment(today+' '+to);
   return breakstart.diff(timestart, 'hours', true);
+}
+
+var calc2 = function (fr, to) {
+  var ts = moment(today+' '+fr);
+  var te = moment(today+' '+to);
+  var diff = te.diff(ts, 'hours', true);
+  return parseInt(diff,0)>0?diff:parseInt(diff,0)+24;
 }
 
 var updateBreakhrs = function(el){
@@ -423,7 +456,7 @@ var updateManPerHour = function(el){
       }
 
       if(be!='0.00' && te!='0.00'){
-        var j = getHour(be.split(':')[0], te.split(':')[0]);
+        var j = getHour2(be.split(':')[0], te.split(':')[0]);
         j.forEach(function(el, idx, array) {
             if(arr.hasOwnProperty(el)){
               arr[el] += 1;
@@ -434,7 +467,7 @@ var updateManPerHour = function(el){
       }
 
       if(ts!='0.00' && te!='0.00' && bs=='off' && be=='off'){
-        var j = getHour(ts.split(':')[0], te.split(':')[0]);
+        var j = getHour2(ts.split(':')[0], te.split(':')[0]);
         j.forEach(function(el, idx, array) {
             if(arr.hasOwnProperty(el)){
               arr[el] += 1;
@@ -458,10 +491,12 @@ var updateManPerHour = function(el){
     }
   })
 
-  //console.log(arr);
+  console.log(arr);
   $('.t1').html('');
   $('.t2').html('');
   arr.forEach(function(el, idx, array) {
+    if(parseInt(idx,10)>=24)
+      idx = parseInt(idx,10)-24;
     $('.t1').append('<td>'+ moment('{{ $manday->date->format("Y-m-d") }} '+idx+':00').format("h:00 A") + '</td>');
     $('.t2').append('<td>'+ el + '</td>');
   });
@@ -486,14 +521,17 @@ var updateWorkhrs = function(el){
     time1 = calc(ts.val(), bs.val());
     updateManPerHour(el);
   }
+  
   if(be.val()!='off' && te.val()!='off'){
     //console.log('time2 on');
-    time2 = calc(be.val(), te.val());
+
+    
+    time2 = calc2(be.val(), te.val());
     updateManPerHour(el);
   }
   if(ts.val()!='off' && te.val()!='off' && bs.val()=='off' && bs.val()=='off'){
     //console.log('time3 on');
-    time3 = calc(ts.val(), te.val());
+    time3 = calc2(ts.val(), te.val());
     //workhrs = calc(ts.val(), te.val());
     console.log(workhrs);
     updateManPerHour(el);
@@ -615,7 +653,7 @@ var updateWorkhrs = function(el){
       var te = tr.children('td').children('.timeend');
 
       $('#manskeddtl'+tr.index()+'daytype').val(1); 
-      ts[0].value = '8:00';
+      ts[0].value = '08:00';
       bs[0].value = '12:00';
       bs[0].disabled = false;
       bs[0].readonly = false;

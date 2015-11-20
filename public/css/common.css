@@ -19,3 +19,19 @@
     font-weight: normal;
     color: #3B5998;
 }
+
+@media (min-width: 767px) {
+.dtr-daterange {
+	text-align: center;
+}
+
+.dtr-daterange .col-centered {
+      display:inline-block;
+      float:none;
+      /* reset the text-align */
+      text-align:left;
+      /* inline-block space fix */
+      margin-right:-4px;
+      vertical-align: top;
+  } 
+ }

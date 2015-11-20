@@ -40,5 +40,24 @@ class Manskeddtl extends BaseModel {
       return Carbon::parse(date('Y-m-d', strtotime('now')).' '.$value);
   }
   */
+
+  /*
+  * query scope for filtering mandtl where date on manday
+  * Manskeddtl::whereEmployeeid($employeeid)->date($date);
+  */
+  public function scopeDate($query, $date){
+    //$this->first()->manskedday()->where('date', '2015-11-13')->first();
+    $query->leftJoin('manskedday','manskedday.id','=','manskeddtl.mandayid')
+          ->select('manskeddtl.*', 'manskedday.date')
+          ->where('manskedday.date','=', $date);
+  }
+
+
+  /*********   http://laravel.com/docs/eloquent#query-scopes    *******************/
+  public function scopeEmployeeid($query, $employeeid) {
+    return $query->whereEmployeeid($employeeid);
+  }
+
+  
   
 }

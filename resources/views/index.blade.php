@@ -36,7 +36,7 @@
 			  <div class="panel-body">
 			    <div class="list-group">
 					  <a href="/task/mansked" class="list-group-item">Manpower Scheduling</a>
-					  <a href="/const" class="list-group-item">Daily Time Record Generation</a>
+					  <a href="/dtr/generate" class="list-group-item">Daily Time Record Generation</a>
 					</div>
 			  </div>
 			</div>

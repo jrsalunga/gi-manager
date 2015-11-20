@@ -185,7 +185,7 @@ class ManskeddayController extends Controller {
 		} else {
 			return redirect('task/mansked');
 		}
-		
+		//return date('H:i', strtotime('08:00'));
 		//return view('task.manday.edit')->with('depts', $depts)->with('manday', $manday);
 		return view('task.manday.edit2')->with('depts', $depts)
 																		->with('manday', $manday)

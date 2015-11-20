@@ -1,11 +1,12 @@
 <?php namespace App\Models;
 
 use App\Models\BaseModel;
+use Carbon\Carbon;
 
 class Timelog extends BaseModel {
 
 	protected $table = 'timelog';
- 	protected $fillable = ['employeeid', 'datetime', 'txncode', 'entrytype', 'terminal'];
+ 	protected $fillable = ['employeeid', 'rfid', 'datetime', 'txncode', 'entrytype', 'terminal', 'createdate'];
  	public static $header = ['code', 'lastname'];
 
 
@@ -13,6 +14,29 @@ class Timelog extends BaseModel {
     return $this->belongsTo('App\Models\Employee', 'employeeid');
   }
 
+
+
+
+
+
+
+
+/***************** query scope *****************************************************/
+	
+
+
+
+/***************** mutators *****************************************************/
+  public function getDatetimeAttribute($value){
+    return Carbon::parse($value);
+  }
+
+  public function getCreatedateAttribute($value){
+    return Carbon::parse($value);
+  }
+
+
+/***************** misc functions *****************************************************/
   public function getTxnCode(){
   	switch ($this->txncode) {
 			case 1:
@@ -32,4 +56,30 @@ class Timelog extends BaseModel {
 				break;
 		}
 	}
+
+	
+
+	/*********   http://laravel.com/docs/eloquent#query-scopes    *******************/
+	
+	public function scopeEmployeeid($query, $employeeid) {
+		return $query->whereEmployeeid($employeeid);
+  }
+
+  public function scopeDate($query, $date) {
+  	$date = $date instanceof Carbon ? $date->format('Y-m-d') : $date;
+    return $query->where('datetime', 'like', $date.'%');
+  }
+	
+	public function scopeTxncode($query, $txncode) {
+		return $query->whereTxncode($txncode);
+  }
+	
+	public function scopeEntrytype($query, $entrytype) {
+		return $query->whereEntrytype($entrytype);
+  }
+	
+	public function scopeTerminalid($query, $terminalid) { 	
+		return $query->whereTerminalid($terminalid);
+  }
+  
 }

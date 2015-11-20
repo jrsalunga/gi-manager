@@ -16,14 +16,15 @@ class TimelogController extends Controller {
 	private $_branchid;
 
 	public function __construct(Request $request){
-		$this->_branchid = is_null(session('user.branchid')) ? $request->cookie('branchid') : session('user.branchid');
+		if(is_null(session('user.branchid')) && is_null($request->cookie('branchid')))
+			return redirect()->route('auth.getlogin');
+		else
+			$this->_branchid = is_null(session('user.branchid')) ? $request->cookie('branchid') : session('user.branchid');
 	}
 
 
 	public function getIndex(Request $request) {
 
-		
-		
 		if(gethostname()==='server01'){
 			
 			$timelogs = Timelog::with('employee.branch')
@@ -42,7 +43,7 @@ class TimelogController extends Controller {
 															}])->select('code', 'lastname', 'firstname', 'branchid', 'positionid', 'id');
 														
 												}])
-											->select('timelog.employeeid', 'timelog.rfid', 'timelog.datetime', 'timelog.txncode', 'timelog.entrytype', 'timelog.terminalid', 'timelog.createdate', 'timelog.id')
+											->select('timelog.*')
 											->join('employee', function($join){
                             $join->on('timelog.employeeid', '=', 'employee.id')
                                 ->where('employee.branchid', '=', $this->_branchid);
@@ -52,14 +53,15 @@ class TimelogController extends Controller {
 											->get();
 		}
 
-		if(count($timelogs) <= 0)
-			return redirect()->route('auth.getlogin');
+		//return $timelogs;
+		//if(count($timelogs) <= 0)
+		//	return redirect()->route('auth.getlogin');
 		
-		$response = new Response(view('tk.index')->with('timelogs', $timelogs));
-		$response->withCookie(cookie('branchid', $this->_branchid, -1));
+		$response = new Response(view('tk.index', compact('timelogs')));//->with('timelogs', $timelogs));
+		$response->withCookie(cookie('branchid', $this->_branchid, 45000));
 		return $response;
 
-    return view('tk.index')->with('timelogs', $timelogs);		
+    //return view('tk.index', compact($timelogs));//->with('timelogs', $timelogs);		
 	}
 
 

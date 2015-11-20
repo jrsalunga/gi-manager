@@ -45,6 +45,15 @@ class Manskedhdr extends BaseModel {
       return Carbon::parse($value);
   }
 
+
+  /*********   http://laravel.com/docs/eloquent#query-scopes    *******************/
+  public function scopeBranchid($query, $branchid) {
+    return $query->whereBranchid($branchid);
+  }
+
+  public function scopeWeekno($query, $weekno) {
+    return $query->whereWeekno($weekno);
+  }
   
 
 

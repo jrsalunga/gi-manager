@@ -1,4 +1,3 @@
-
 var gulp = require('gulp'),
 	connect = require('gulp-connect'),
 	open = require('gulp-open'),
@@ -112,60 +111,3 @@ gulp.task('minify-css', function() {
 
 gulp.task('default', ['concat-js', 'minify-css']);
 gulp.task('serve', ['concat-js', 'minify-css', 'connect', 'open', 'watch']);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-var elixir = require('laravel-elixir');
-
-/*
- |--------------------------------------------------------------------------
- | Elixir Asset Management
- |--------------------------------------------------------------------------
- |
- | Elixir provides a clean, fluent API for defining some basic Gulp tasks
- | for your Laravel application. By default, we are compiling the Sass
- | file for our application, as well as publishing vendor resources.
- |
- */
-/*
-elixir(function(mix) {
-    mix.sass('app.scss');
-});
-
-
-
-elixir(function(mix) {
-
-    mix.styles([
-    '../../../bower_components/bootstrap/dist/css/bootstrap.css',
-    ],'public/css/bootstrap.css');
-});
-*/

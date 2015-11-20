@@ -120,7 +120,7 @@ var appendToTkList = function(data){
 			html += '<td>'+ data.data.branch +'</td>'
 			html += '</td></tr>';
 			
-		if($('.emp-tk-list tr').length== 20){
+		if($('.emp-tk-list tr').length >= 15){
 			$('.emp-tk-list tr:last-child').empty();
 			$('.emp-tk-list tr:last-child').remove();
 		}
@@ -132,11 +132,11 @@ var appendToTkList = function(data){
 }
 
 var updateEmpView = function(data){
-	
+
 	$('#emp-img').attr('src', 'images/employees/'+ data.data.empno +'.jpg');
 	$('#emp-code').text(data.data.empno);
 	$('#emp-name').text(data.data.lastname +', '+ data.data.firstname);
-	$('#emp-pos').text(data.data.position.descriptor);
+	$('#emp-pos').text(data.data.position);
 
 }
 

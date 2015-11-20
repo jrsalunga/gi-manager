@@ -35,6 +35,10 @@ class Employee extends BaseModel {
     return $this->hasMany('App\Models\Manskedhdr', 'managerid');
   }
 
+  public function dtrs() {
+    return $this->hasMany('App\Models\Dtr', 'employeeid');
+  }
+
 
 
 
@@ -43,9 +47,13 @@ class Employee extends BaseModel {
      *
      */
    // Employee::Branchid('1')->get()
-    public function scopeBranchid($query, $id){
-      return $query->where('branchid', $id);
-    }
+  public function scopeBranchid($query, $id){
+    return $query->where('branchid', $id);
+  }
+
+  public function scopeProcessing($query, $x='1'){
+    return $query->where('processing', $x);
+  }
 
 
 

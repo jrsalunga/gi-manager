@@ -2,10 +2,15 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
+use Event;
 use Auth;
+use Illuminate\Support\ServiceProvider;
 use Illuminate\Http\Request;
 use App\Models\Employee;
+use App\Models\Manskedhdr as Mansked;
+use App\Events\ManskedhdrCreated as ManskedCreated;
+use App\Events\ManskedhdrUpdated as ManskedUpdated;
+use App\Events\ManskedhdrDeleted as ManskedDeleted;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -34,6 +39,19 @@ class AppServiceProvider extends ServiceProvider
             
             $view->with('name', session('user.fullname'))->with('branch',  session('user.branch'));
         });
+
+
+        Mansked::created(function ($mansked) {
+            Event::fire(new ManskedCreated($mansked));
+        });
+
+        Mansked::updated(function ($mansked) {
+           event(new ManskedUpdated($mansked)); // using the global event 
+        });
+
+        Mansked::deleted(function ($mansked) {
+            Event::fire(new ManskedDeleted($mansked));
+        });
     }
 
     /**
@@ -44,6 +62,6 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         //$
-        $br = 'mar';
+        //$br = 'mar';
     }
 }

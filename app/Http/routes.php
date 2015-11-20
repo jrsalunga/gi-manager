@@ -38,7 +38,9 @@ Route::get('task/manday/{param1?}/{param2?}/{param3?}', ['uses'=>'ManskeddayCont
 					'param3'=>'edit|[A-Fa-f0-9]{32}+']);
 
 
-
+Route::get('dtr/generate', ['uses'=>'DtrController@index']);
+Route::get('/reports/dtr/{date}', ['uses'=>'DtrController@getDtrReports']);
+Route::post('dtr/generate', ['uses'=>'DtrController@postGenerate']);
 
 
 /******************* API  *************************************************/
@@ -96,7 +98,7 @@ get('csv/{year}/week/{weekno}', function($year, $weekno){
 
 
 
-
+get('dtr-repo/{date}', ['uses'=>'DtrController@date']);
 
 
 get('slug/branch/{id}', function($id){
@@ -116,6 +118,43 @@ get('flush-sessions', function(){
 	Session::flush();
 	return redirect('sessions');
 });
+
+
+get('mandtl-scope/{employeeid}/{date}', function($employeeid, $date){
+	$branch = App\Models\Manskeddtl::with('employee')->whereEmployeeid($employeeid)->date($date)->get();
+	//$branch = App\Models\Manskeddtl::whereEmployeeid($employeeid)->first()->manskedday()->where('date', '2015-11-13')->first();
+	return $branch;
+});
+
+get('timelogs/{employeeid}/{date}', function($employeeid, $date){
+	//$timelogs = App\Models\Timelog::employeeid($employeeid)->date($date)->get();
+	//$branch = App\Models\Manskeddtl::whereEmployeeid($employeeid)->first()->manskedday()->where('date', '2015-11-13')->first();
+	$date = Carbon\Carbon::parse($date);
+	$timelogs = App\Models\Timelog::employeeid($employeeid)
+									//->whereBetween(\DB::raw('DATE(datetime)'), 
+
+										->whereBetween('datetime',[
+											$date, 
+											$date->copy()->addDay()->format('Y-m-d'). ' 06:00:00'
+										])
+                  //->date($date)
+                  //->txncode(1)
+                  ->orderBy('txncode', 'ASC')
+                  ->orderBy('datetime', 'ASC')
+                  ->get();
+
+	return $timelogs;
+
+
+
+});
+
+get('holidate/{date}', function($date){
+	
+	$h = App\Models\Holidate::with('holiday.holidaydtls')->date($date)->first();
+	return $h;
+});
+
 
 
 
@@ -151,11 +190,18 @@ get('email', function(){
 		$data = [];
 	 return Mail::send('emails.welcome', $data, function ($message) {
 	 	$message->subject('Test Email');
-    $message->from('no-replay@giligansrestaurant.com', 'Giligan\'s');
+    $message->from('no-reply@giligansrestaurant.com', 'Giligan\'s');
 
     $message->to('freakyash_02@yahoo.com');
 	});
 });
+
+
+
+
+
+
+
 
 
  

@@ -56,6 +56,8 @@ class Manskedday extends BaseModel {
     return $res==null ? 'false':$res;
   }
 
+  
+
 
   /***************** misc func *****************************************************/
   public function custCount(){

@@ -98,18 +98,25 @@
       </div>
 
       <div class="emp-group">
-        <div class="img-cont">
-          <img  id="emp-img" src="/images/employees/{{ $timelogs[0]->employee->code }}.jpg" >
-        </div>
-        <div class="emp-cont">
-          @if(count($timelogs) > 0)
-          <p id="emp-code">{{ $timelogs[0]->employee->code }}</p>
-          <h1 id="emp-name">{{ $timelogs[0]->employee->lastname }}, {{ $timelogs[0]->employee->firstname }}</h1>
-          <p id="emp-pos">{{ $timelogs[0]->employee->position->descriptor }}</p>
-          @else 
-
-          @endif
-        </div>
+        @if(count($timelogs)>0)
+          <div class="img-cont">
+            <img  id="emp-img" src="/images/employees/{{ $timelogs[0]->employee->code }}.jpg" >
+          </div>
+          <div class="emp-cont">
+            <p id="emp-code">{{ $timelogs[0]->employee->code }}</p>
+            <h1 id="emp-name">{{ $timelogs[0]->employee->lastname }}, {{ $timelogs[0]->employee->firstname }}</h1>
+            <p id="emp-pos">{{ $timelogs[0]->employee->position->descriptor }}</p>
+          </div>
+        @else 
+          <div class="img-cont">
+          <img  id="emp-img" src="/images/login-avatar.png" height="100%" width="100%">
+          </div>
+          <div class="emp-cont">
+            <p id="emp-code"></p>
+            <h1 id="emp-name"></h1>
+            <p id="emp-pos"></p>
+          </div>
+        @endif
         <div style="clear: both;"></div>
       </div>
       
@@ -127,7 +134,7 @@
             </tr>
           </thead>
           <tbody class="emp-tk-list">
-          @if(count($timelogs) > 0)
+          @if(count($timelogs)>0)
             @foreach($timelogs as $timelog)
             <tr class="txncode{{ $timelog->txncode }}">
               <td>{{ $timelog->employee->code }}</td>
@@ -147,6 +154,9 @@
               </td>
             </tr>
             @endforeach
+          @else
+            <tr>
+            </tr>
           @endif
           </tbody>
         </table>

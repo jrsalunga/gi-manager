@@ -128,14 +128,16 @@ class ManskedController extends Controller {
 
 
 	public function post(Request $request){
-
+		
 		$this->validate($request, [
         'date' => 'required|date|max:10',
         'weekno' => 'required',
     ]);
 
 		 // check weekno if exist
-		$mansked = Mansked::whereWeekno($request->input('weekno'))->get();
+		$mansked = Mansked::whereWeekno($request->input('weekno'))
+												->branchid(Auth::user()->branchid)
+												->get();
 		if(count($mansked) > 0){
 			return redirect('/task/mansked/add')
                         ->withErrors(['message' => 'Week '. $request->input('weekno') .' already created!'])
