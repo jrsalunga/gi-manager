@@ -94,6 +94,8 @@ $debugbarRenderer = $debugbar->getJavascriptRenderer();
   ga('send', 'pageview');
 </script>
 @endif
+@if(app()->environment() == 'local')
 <?php echo $debugbarRenderer->render() ?>
+@endif
 </body>
 </html>
