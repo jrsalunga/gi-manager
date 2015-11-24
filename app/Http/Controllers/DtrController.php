@@ -35,9 +35,9 @@ class DtrController extends Controller {
     else if(is_year($param1) && is_month($param2) && is_null($param3)) 
       return $this->makeListView($request, $param1, $param2, $param3);
     else if(is_year($param1) && is_month($param2) && is_day($param3)) 
-      return 'make day';
+      return $this->makeDayView($request, $param1, $param2, $param3);
     else
-      return redirect('/dtr/'.now('year').'/'.now('month'));//return $this->makeListView($request, $param1, $param2, $param3);
+      return redirect('/dtr/'.now('year')); //.'/'.now('month'));//return $this->makeListView($request, $param1, $param2, $param3);
   }
 
   public function makeListView(Request $request, $param1, $param2, $param3){
@@ -66,6 +66,10 @@ class DtrController extends Controller {
     }
     
     return view('dtr.months')->with('months', $arr)->with('year', $param1);
+  }
+
+  public function makeDayView(Request $request, $param1, $param2, $param3){
+    return view('dtr.view')->with('dtrs', $this->dtrs->branchByDate($request->user(), $param1.'-'.$param2.'-'.$param3)); 
   }
 
 

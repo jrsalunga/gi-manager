@@ -17,11 +17,11 @@
       <div class="container-fluid">
         <div class="navbar-form">
           <div class="btn-group" role="group">
-            <a href="/dashboard" class="btn btn-default" title="Back to Main Menu">
-              <span class="gly gly-unshare"></span>
+            <a href="/dtr" class="btn btn-default" title="Back to Main Menu">
+              <span class="glyphicon glyphicon-th-list"></span>
             </a> 
             <button type="button" class="btn btn-default active">
-              <span class="glyphicon glyphicon-th-list"></span>
+              <span class="gly gly-table"></span>
             </button>
           </div> <!-- end btn-grp -->
           <div class="btn-group" role="group">
@@ -48,7 +48,7 @@
           <td>{{ $dtr['date']->format('M d, Y D') }}</td>
           <td>
             @if(count($dtr['dtrs'])>0)
-              <a href="/reports/dtr/{{ strtolower($dtr['date']->format('Y-m-d')) }}">{{ count($dtr['dtrs']) }}</a>
+              <a href="/dtr/{{$dtr['date']->year}}/{{pad($dtr['date']->month)}}/{{pad($dtr['date']->day)}}">{{ count($dtr['dtrs']) }}</a>
             @else
               -
             @endif

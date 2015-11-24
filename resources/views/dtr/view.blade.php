@@ -18,8 +18,8 @@
       <div class="container-fluid">
         <div class="navbar-form">
           <div class="btn-group" role="group">
-            <a href="/dtr" class="btn btn-default">
-              <span class="glyphicon glyphicon-th-list"></span>
+            <a href="{{ URL::previous() }}" class="btn btn-default">
+              <span class="gly gly-table"></span>
             </a> 
             <button type="button" class="btn btn-default active">
               <span class="fa fa-calendar-o"></span>
