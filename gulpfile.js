@@ -54,13 +54,20 @@ gulp.task('watch', function() {
 	gulp.watch('public/js/**/*.js', ['browserify']);
 });
 
+gulp.task('minify-common-js', function() {
+  return gulp.src('./public/js/common.js')
+    .pipe(uglify())
+    .pipe(rename({ extname: '.min.js' }))
+    .pipe(gulp.dest('./public/js/'));
+});
 
 gulp.task('concat-common-js', function() {
   return gulp.src([
   		'./public/js/vendors/jquery-1.11.3.min.js',
   		'./public/js/vendors/jquery-ui-1.11.3.min.js',
   		'./public/js/vendors/bootstrap-3.3.5.min.js',
-  		'./public/js/vendors/moment-2.10.6.min.js'
+  		'./public/js/vendors/moment-2.10.6.min.js',
+      './public/js/common.min.js'
   	])
     .pipe(concat('vendors-common.min.js'))
     .pipe(gulp.dest('./public/js/'));
@@ -85,6 +92,8 @@ gulp.task('compress-js', function() {
     .pipe(gulp.dest('./public/js/'));
 });
 
+
+
 gulp.task('minify-css', function() {
   return gulp.src([
   		'./public/css/normalize-3.0.3.min.css',
@@ -105,7 +114,6 @@ gulp.task('minify-css', function() {
     .pipe(rename({ extname: '.min.css' }))
     .pipe(gulp.dest('./public/css/'));
 });
-
 
 
 

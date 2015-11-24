@@ -1,11 +1,3 @@
-$.ajaxSetup({
-	headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-  },
-	beforeSend: function(jqXHR, obj) {
-  	$('.notify').css('display', 'block');
-	}
-});
 
 var buildEmployeesTimelogs = function(data){
 	/*	

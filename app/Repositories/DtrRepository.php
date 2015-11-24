@@ -26,4 +26,19 @@ class DtrRepository
                     ->orderBy('employee.firstname', 'ASC')->get();
       
     }
+
+
+    public function countByYearMonth(User $user, $year, $month)
+    {
+        return Dtr::select(\DB::raw('COUNT(dtr.id) as total'))
+                    ->leftJoin('employee', function($join){
+                        $join->on('dtr.employeeid', '=', 'employee.id');
+                    })
+                    ->where('employee.branchid', '=', $user->branchid)
+                    ->where(\DB::raw('YEAR(dtr.date)'), $year)
+                    ->where(\DB::raw('MONTH(dtr.date)'), $month)->first();
+    }
+
+
+    
 }

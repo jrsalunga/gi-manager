@@ -7,5 +7,6 @@ Homestead.json
 /public/uploads
 /public/files
 /public/data
+/public/Resources
 /logs
 *.env

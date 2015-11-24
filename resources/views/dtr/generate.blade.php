@@ -9,7 +9,8 @@
 
   <ol class="breadcrumb">
     <li><span class="gly gly-shop"></span> <a href="/">{{ $branch }}</a></li>
-    <li class="active">DTR Generation</li>
+    <li><a href="/dtr">Daily Time Record</a></li>
+    <li class="active">Generation</li>
   </ol>
 
   <div>
@@ -20,8 +21,13 @@
             <a href="/dashboard" class="btn btn-default" title="Back to Main Menu">
               <span class="gly gly-unshare"></span>
             </a> 
-            <button type="button" class="btn btn-default active">
+            <a href="/dtr" class="btn btn-default" title="Back to Main Menu">
               <span class="glyphicon glyphicon-th-list"></span>
+            </a>
+          </div> <!-- end btn-grp -->
+          <div class="btn-group" role="group">
+            <button type="button" class="btn btn-default active">
+              <span class="gly gly-history"></span>
             </button>
           </div> <!-- end btn-grp -->
         </div>
@@ -77,19 +83,6 @@
 @section('js-external')
   @parent
   <script>
-    $.ajaxSetup({
-      headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      },
-      beforeSend: function(jqXHR, obj) {
-        
-      }
-    });
-
-
-    $(".panel-heading.new").effect("highlight", {}, 2000);
-    $('.alert').not('.alert-important').delay(5000).slideUp(300);
-
 
   $(document).ready(function(){
     $('#btn-dtr-generate').on('click', function (e) {
@@ -154,6 +147,40 @@
             console.log(jqXHR);
       }); 
     });
+
+
+
+    $("#fr").datepicker({ 
+      defaultDate: -1,
+      dateFormat: 'yy-mm-dd', 
+      numberOfMonths: 2, 
+      maxDate: -1,
+      onClose: function( selectedDate ) {
+        console.log(selectedDate);
+        $( "#to" ).datepicker( "option", "minDate", selectedDate );
+      },
+      beforeShow: function() {
+        setTimeout(function(){
+          $('.ui-datepicker').css('z-index', 3);
+        }, 0);
+      }
+    });
+
+    $("#to").datepicker({ defaultDate: -1,
+      dateFormat: 'yy-mm-dd', 
+      numberOfMonths: 2, 
+      maxDate: -1,
+      onClose: function( selectedDate ) {
+        //$("#fr").datepicker( "option", "minDate", selectedDate );
+      },  
+      beforeShow: function() {
+        setTimeout(function(){
+            $('.ui-datepicker').css('z-index', 3);
+        }, 0);
+      }
+    });
+
+    
 
 
   })

@@ -612,7 +612,7 @@
 
 /************ jquery ui date picker*******/
 .ui-widget-content:before {
-	z-index: 1000;
+		/*z-index: 1000; */
 	  content: '';
     display: inline-block;
     border-left: 7px solid transparent;

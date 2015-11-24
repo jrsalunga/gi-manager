@@ -37,9 +37,14 @@ Route::get('task/manday/{param1?}/{param2?}/{param3?}', ['uses'=>'ManskeddayCont
 					'param2'=>'edit|branch|[0-9]+', 
 					'param3'=>'edit|[A-Fa-f0-9]{32}+']);
 
+Route::get('dtr/{param1?}/{param2?}/{param3?}', ['uses'=>'DtrController@getIndex'])
+->where(['param1'=>'generate|[0-9]{4}+', 
+				'param2'=>'[0-9]{02}+', 
+				'param3'=>'edit|[A-Fa-f0-9]{32}|[0-9]{02}+']);
+
 
 Route::get('dtr/generate', ['uses'=>'DtrController@index']);
-Route::get('/reports/dtr/{date}', ['uses'=>'DtrController@getDtrReports']);
+Route::get('reports/dtr/{date}', ['uses'=>'DtrController@getDtrReports']);
 Route::post('dtr/generate', ['uses'=>'DtrController@postGenerate']);
 
 
@@ -99,7 +104,7 @@ get('csv/{year}/week/{weekno}', function($year, $weekno){
 
 
 get('dtr-repo/{date}', ['uses'=>'DtrController@date']);
-
+get('dtl-repo/{date}', ['uses'=>'DtrController@date']);
 
 get('slug/branch/{id}', function($id){
 	$branch = App\Models\Branch::find($id);

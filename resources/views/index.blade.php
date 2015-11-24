@@ -49,7 +49,7 @@
 			  <div class="panel-body">
 			    <div class="list-group">
 					  <a href="/const" class="list-group-item">Projected vs Actual Man-Hours</a>
-					  <a href="/const" class="list-group-item">DTR Summary</a>
+					  <a href="/dtr" class="list-group-item">DTR Summary</a>
 					  <a href="/const" class="list-group-item">Absences</a>
 					  <a href="/const" class="list-group-item">Tardiness</a>
 					  <a href="/const" class="list-group-item">Overloads</a>

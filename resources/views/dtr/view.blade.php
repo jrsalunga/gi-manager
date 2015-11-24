@@ -9,7 +9,8 @@
 
   <ol class="breadcrumb">
     <li><span class="gly gly-shop"></span> <a href="/">{{ $branch }}</a></li>
-    <li class="active">DTR Generation</li>
+    <li><a href="/dtr">Daily Time Record</a></li>
+    <li class="active">{{ Carbon\Carbon::parse($dtrs[0]->date)->format('D, M d') }}</li>
   </ol>
 
   <div>
@@ -17,11 +18,11 @@
       <div class="container-fluid">
         <div class="navbar-form">
           <div class="btn-group" role="group">
-            <a href="/dashboard" class="btn btn-default" title="Back to Main Menu">
-              <span class="gly gly-unshare"></span>
+            <a href="/dtr" class="btn btn-default">
+              <span class="glyphicon glyphicon-th-list"></span>
             </a> 
             <button type="button" class="btn btn-default active">
-              <span class="glyphicon glyphicon-th-list"></span>
+              <span class="fa fa-calendar-o"></span>
             </button>
           </div> <!-- end btn-grp -->
         </div>
@@ -41,7 +42,8 @@
           <td class="text-right">
             {{ number_format($dtr->totworkhrs(),2) }}<br>
             {{ number_format($dtr->workhrs(),2) }}<br>
-            {{ number_format($dtr->othrs(),2) }}
+            {{ number_format($dtr->othrs(),2) }}<br>
+            {{ number_format($dtr->tardyhrs,2) }}
           </td>
           <td class="text-right">
             {{ $dtr->timestart->format('H:i') == '00:00' ? '-': $dtr->timestart->format('h:i A') }}<br>
@@ -64,7 +66,7 @@
       </tbody>
       </table>
     @else 
-      fsdjfja
+      no record(s) found!
     @endif
 
    

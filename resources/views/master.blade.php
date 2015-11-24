@@ -1,6 +1,13 @@
+@if(app()->environment() == 'local')
+<?php
+$debugbar = new DebugBar\StandardDebugBar();
+$debugbarRenderer = $debugbar->getJavascriptRenderer();
+?>
+@endif
 <!doctype html>
 <html lang="en">
 <head>
+  
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/> 
@@ -18,11 +25,23 @@
   <link rel="stylesheet" href="/css/bt-override.css">
   <link rel="stylesheet" href="/css/styles.css">
   <link rel="stylesheet" href="/css/common.css">
+
+  <link rel="stylesheet" type="text/css" href="/Resources/vendor/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="/Resources/vendor/highlightjs/styles/github.css">
+  <link rel="stylesheet" type="text/css" href="/Resources/debugbar.css">
+  <link rel="stylesheet" type="text/css" href="/Resources/widgets.css">
+  <link rel="stylesheet" type="text/css" href="/Resources/openhandler.css">
+  <script type="text/javascript" src="/Resources/vendor/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="/Resources/vendor/highlightjs/highlight.pack.js"></script>
+  <script type="text/javascript" src="/Resources/debugbar.js"></script>
+  <script type="text/javascript" src="/Resources/widgets.js"></script>
+  <script type="text/javascript" src="/Resources/openhandler.js"></script>
+  <script type="text/javascript">jQuery.noConflict(true);</script>
 @else 
   <link rel="stylesheet" href="/css/styles-all.min.css">
 @endif
 
-
+  
 </head>
 <body class="@yield('body-class')">
 <!-- Fixed navbar -->
@@ -75,5 +94,6 @@
   ga('send', 'pageview');
 </script>
 @endif
+<?php echo $debugbarRenderer->render() ?>
 </body>
 </html>

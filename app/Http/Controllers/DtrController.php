@@ -12,6 +12,7 @@ use App\Models\Holidate;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Repositories\DtrRepository;
+use App\Repositories\ManskeddtlRepository as MandtlRepo;
 
 class DtrController extends Controller {
 
@@ -22,11 +23,67 @@ class DtrController extends Controller {
     $this->dtrs = $dtrs;
   }
 
-  public function getDtrReports(Request $request, $date){
-    return view('dtr.view')->with('dtrs', $this->dtrs->branchByDate($request->user(), $date)); 
+  public function date($date, MandtlRepo $mandtls, Request $request) {
+    return $mandtls->branchByDate($request->user(), $date);
   }
 
-  public function index(Request $request) {
+  public function getIndex(Request $request, $param1=null, $param2=null, $param3=null){
+    if(strtolower($param1)==='generate')
+      return $this->getGenerate($request);
+    else if(is_year($param1) && is_null($param2) && is_null($param3)) 
+      return $this->makeMonthsView($request, $param1);
+    else if(is_year($param1) && is_month($param2) && is_null($param3)) 
+      return $this->makeListView($request, $param1, $param2, $param3);
+    else if(is_year($param1) && is_month($param2) && is_day($param3)) 
+      return 'make day';
+    else
+      return redirect('/dtr/'.now('year').'/'.now('month'));//return $this->makeListView($request, $param1, $param2, $param3);
+  }
+
+  public function makeListView(Request $request, $param1, $param2, $param3){
+    $mandtls_repo = new MandtlRepo;
+    $fr = Carbon::create($param1, $param2, 1, 0, 0, 0);
+    $to = Carbon::parse($fr->format('Y-m').'-'.$fr->daysInMonth);
+    $arr = [];
+    foreach($this->getDates($fr, $to) as $date){
+      $arr[$date->format("Y-m-d")]['date'] = $date;
+      $arr[$date->format("Y-m-d")]['mandtls'] = $mandtls_repo->branchByDate($request->user(), $date->format("Y-m-d"));
+      $arr[$date->format("Y-m-d")]['dtrs'] = $this->dtrs->branchByDate($request->user(), $date->format("Y-m-d"));
+    }
+
+    return view('dtr.list')->with('dtrs', $arr);
+  }
+
+  public function makeMonthsView(Request $request, $param1) {
+
+    $arr = [];
+    for ($i=1; $i < 13; $i++) { 
+      $date = $param1.'-'.pad($i,2).'-01';
+      $arr[$i]['month'] = date('F', strtotime($date));
+      $x = $this->dtrs->countByYearMonth($request->user(), $param1, $i);
+
+     $arr[$i]['total'] = $x['total'];
+    }
+    
+    return view('dtr.months')->with('months', $arr)->with('year', $param1);
+  }
+
+
+
+
+
+  public function getDtrReports(Request $request, $date){
+    try { 
+      $dt = Carbon::parse($date); 
+    } catch(\Exception $x) { 
+      $dt = Carbon::now(); 
+      return redirect('/reports/dtr/'.$dt->format('Y-m-d'));
+    }
+
+    return view('dtr.view')->with('dtrs', $this->dtrs->branchByDate($request->user(), $dt->format('Y-m-d'))); 
+  }
+
+  public function getGenerate(Request $request) {
     return view('dtr.generate');
   }
 
