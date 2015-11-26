@@ -40,42 +40,41 @@ class Dtr extends BaseModel {
   }
 
   public function getTimestartAttribute($value){
-      return Carbon::parse($this->date.' '.$value);
+      return Carbon::parse($this->date->format('Y-m-d').' '.$value);
   }
 
   public function getBreakstartAttribute($value){
-      return Carbon::parse($this->date.' '.$value);
+      return Carbon::parse($this->date->format('Y-m-d').' '.$value);
   }
 
   public function getBreakendAttribute($value){
-      return Carbon::parse($this->date.' '.$value);
+      return Carbon::parse($this->date->format('Y-m-d').' '.$value);
   }
 
   public function getTimeendAttribute($value){
-      return Carbon::parse($this->date.' '.$value);
+      return Carbon::parse($this->date->format('Y-m-d').' '.$value);
   }
 
   public function getTimeinAttribute($value){
-      return Carbon::parse($this->date.' '.$value);
+      return Carbon::parse($this->date->format('Y-m-d').' '.$value);
   }
 
   public function getBreakinAttribute($value){
-      return Carbon::parse($this->date.' '.$value);
+      return Carbon::parse($this->date->format('Y-m-d').' '.$value);
   }
 
   public function getBreakoutAttribute($value){
-      return Carbon::parse($this->date.' '.$value);
+      return Carbon::parse($this->date->format('Y-m-d').' '.$value);
   }
 
   public function getTimeoutAttribute($value){
-      return Carbon::parse($this->date.' '.$value);
+      return Carbon::parse($this->date->format('Y-m-d').' '.$value);
   }
-
-  /*
+  
   public function getDateAttribute($value){
-      return Carbon::parse($this->date.' 00:00:00');
+      return Carbon::parse($value.' 00:00:00');
   }
-  */
+  
 
 
 
@@ -90,6 +89,9 @@ class Dtr extends BaseModel {
     return $query->where('date', 'like', $date.'%');
   }
 
+  public function getDayType(){
+    return $this->daytype>6 || $this->daytype<1 ? '':config('gi-dtr.daytype')[$this->daytype];
+  }
 
 
   public function totworkhrs(){

@@ -2,11 +2,12 @@
 
 use App\User;
 use App\Models\Dtr;
+use App\Models\Employee;
 
 class DtrRepository
 {
     /**
-     * Get all of the tasks for a given user.
+     * Get all the DTR of all employee of a branch on a certain date
      *
      * @param  User  $user
      * @return Collection
@@ -24,7 +25,21 @@ class DtrRepository
                     ->where('dtr.date', '=', $date)
                     ->orderBy('employee.lastname', 'ASC')
                     ->orderBy('employee.firstname', 'ASC')->get();
-      
+    }
+
+
+    /**
+     * Get all the DTR of employee on a certain date
+     *
+     * @param  User  $user
+     * @return Collection
+     */
+    public function employeeByDate(Employee $employee, $date)
+    {
+        $res = Dtr::where('employeeid', $employee->id)
+                    ->where('date', $date)
+                    ->first();
+        return is_null($res) ? false:$res;
     }
 
 

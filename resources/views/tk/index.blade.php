@@ -33,7 +33,16 @@
         <img src="/images/giligans-logo.png" class="img-responsive header-logo" style="max-height: 44px;">
       </a>
     </div>
-    <div id="navbar" class="navbar-collapse collapse">
+    <div id="navbar">
+      <ul class="nav navbar-nav navbar-right"> 
+        <li>
+          <a href="/">
+            <span class="glyphicon glyphicon-dashboard"></span>
+            
+          </a>
+          
+        </li>
+      </ul>
       
     </div>
   </div>

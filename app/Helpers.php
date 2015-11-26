@@ -39,3 +39,8 @@ function pad($val, $len=2, $char='0', $direction=STR_PAD_LEFT){
 }
 
 
+function is_uuid($uuid=0) {
+	return preg_match('/^[A-Fa-f0-9]{32}+$/', $uuid);
+}
+
+

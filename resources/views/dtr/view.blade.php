@@ -9,8 +9,8 @@
 
   <ol class="breadcrumb">
     <li><span class="gly gly-shop"></span> <a href="/">{{ $branch }}</a></li>
-    <li><a href="/dtr">Daily Time Record</a></li>
-    <li class="active">{{ Carbon\Carbon::parse($dtrs[0]->date)->format('D, M d') }}</li>
+    <li><a href="/dtr/{{ $dtrs[0]->date->year }}/{{ pad($dtrs[0]->date->month) }}">Daily Time Record</a></li>
+    <li class="active">{{ $dtrs[0]->date->format('D, M d') }}</li>
   </ol>
 
   <div>
@@ -18,7 +18,7 @@
       <div class="container-fluid">
         <div class="navbar-form">
           <div class="btn-group" role="group">
-            <a href="{{ URL::previous() }}" class="btn btn-default">
+            <a href="/dtr/{{ $dtrs[0]->date->year }}/{{ pad($dtrs[0]->date->month) }}" class="btn btn-default">
               <span class="gly gly-table"></span>
             </a> 
             <button type="button" class="btn btn-default active">
@@ -31,6 +31,8 @@
 
     @include('_partials.alerts')
 
+
+
     
 
     @if(count($dtrs)>0)
@@ -38,7 +40,11 @@
       <tbody>
       @foreach($dtrs as $dtr)
         <tr>
-          <td>{{ $dtr->employee->lastname }}, {{ $dtr->employee->firstname }}</td>
+          <td>
+            <a href="/dtr/{{$dtr->date->year}}/{{pad($dtr->date->month)}}/{{pad($dtr->date->day)}}/{{$dtr->employee->lid()}}">
+              {{ $dtr->employee->lastname }}, {{ $dtr->employee->firstname }}
+            </a>
+          </td>
           <td class="text-right">
             {{ number_format($dtr->totworkhrs(),2) }}<br>
             {{ number_format($dtr->workhrs(),2) }}<br>

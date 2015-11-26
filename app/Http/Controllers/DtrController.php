@@ -13,33 +13,39 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Repositories\DtrRepository;
 use App\Repositories\ManskeddtlRepository as MandtlRepo;
+use App\Repositories\TimelogRepository as TimelogRepo;
 
 class DtrController extends Controller {
 
   public $dtr;
   public $dtrs;
+  public $timelogs;
     
-  public function __construct(DtrRepository $dtrs) {
+  public function __construct(DtrRepository $dtrs, TimelogRepo $timelogs) {
     $this->dtrs = $dtrs;
+    $this->timelogs = $timelogs;
   }
 
   public function date($date, MandtlRepo $mandtls, Request $request) {
     return $mandtls->branchByDate($request->user(), $date);
   }
 
-  public function getIndex(Request $request, $param1=null, $param2=null, $param3=null){
+  public function getIndex(Request $request, $param1=null, $param2=null, $param3=null, $param4=null){
     if(strtolower($param1)==='generate')
       return $this->getGenerate($request);
-    else if(is_year($param1) && is_null($param2) && is_null($param3)) 
+    else if(is_year($param1) && is_null($param2) && is_null($param3) && is_null($param4)) 
       return $this->makeMonthsView($request, $param1);
-    else if(is_year($param1) && is_month($param2) && is_null($param3)) 
+    else if(is_year($param1) && is_month($param2) && is_null($param3) && is_null($param4)) 
       return $this->makeListView($request, $param1, $param2, $param3);
-    else if(is_year($param1) && is_month($param2) && is_day($param3)) 
+    else if(is_year($param1) && is_month($param2) && is_day($param3) && is_null($param4)) 
       return $this->makeDayView($request, $param1, $param2, $param3);
+    else if(is_year($param1) && is_month($param2) && is_day($param3) ) 
+      return $this->makeDayEmployeeView($request, $param1, $param2, $param3, $param4);
     else
       return redirect('/dtr/'.now('year')); //.'/'.now('month'));//return $this->makeListView($request, $param1, $param2, $param3);
   }
 
+  //dtr/{year}/{month}
   public function makeListView(Request $request, $param1, $param2, $param3){
     $mandtls_repo = new MandtlRepo;
     $fr = Carbon::create($param1, $param2, 1, 0, 0, 0);
@@ -54,8 +60,8 @@ class DtrController extends Controller {
     return view('dtr.list')->with('dtrs', $arr);
   }
 
+  //dtr/{year}
   public function makeMonthsView(Request $request, $param1) {
-
     $arr = [];
     for ($i=1; $i < 13; $i++) { 
       $date = $param1.'-'.pad($i,2).'-01';
@@ -68,12 +74,22 @@ class DtrController extends Controller {
     return view('dtr.months')->with('months', $arr)->with('year', $param1);
   }
 
+  //dtr/{year}/{month}/{day}
   public function makeDayView(Request $request, $param1, $param2, $param3){
     return view('dtr.view')->with('dtrs', $this->dtrs->branchByDate($request->user(), $param1.'-'.$param2.'-'.$param3)); 
   }
 
+  public function makeDayEmployeeView(Request $request, $param1, $param2, $param3, $param4){
+    $employee = Employee::findOrFail($param4); // if fail -> 404
+    $date = Carbon::create($param1, $param2, $param3, 0, 0, 0);
 
+    $timelogs = $this->timelogs->employeeTimelogs($employee, $date);
+    $dtrs = $this->dtrs->employeeByDate($employee, $date->format('Y-m-d'));
 
+    return view('dtr.employee')->with('timelogs', $timelogs)
+                              ->with('dtrs', $dtrs)
+                              ->with('employee', $employee);
+  }
 
 
   public function getDtrReports(Request $request, $date){
@@ -336,7 +352,7 @@ class DtrController extends Controller {
 
   // for $this->postGenerate() 
   private function computeWorkHours(){
-    $who = Carbon::parse($this->dtr->date. '00:00:00');
+    $who = Carbon::parse($this->dtr->date->format('Y-m-d'). '00:00:00');
     $wh = $who->copy();
     $work = $who->copy()->addHours(8);
 
