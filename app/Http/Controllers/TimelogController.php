@@ -25,7 +25,7 @@ class TimelogController extends Controller {
 
 	public function getIndex(Request $request) {
 
-		if(gethostname()==='server01'){
+		if($_SERVER["REMOTE_ADDR"]==='127.0.0.1'){
 			
 			$timelogs = Timelog::with('employee.branch')
 											->orderBy('datetime', 'DESC')

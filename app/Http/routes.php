@@ -203,6 +203,13 @@ get('email', function(){
 });
 
 
+get('phpinfoko', function(){
+	
+
+	return phpinfo();
+});
+
+
 
 
 
