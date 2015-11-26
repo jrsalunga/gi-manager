@@ -24,7 +24,6 @@ class TimelogController extends Controller {
 
 
 	public function getIndex(Request $request) {
-		return $_SERVER['HTTP_X_FORWARDED_FOR'];
 		if($_SERVER['HTTP_X_FORWARDED_FOR']==='127.0.0.1'){
 			
 			$timelogs = Timelog::with('employee.branch')
