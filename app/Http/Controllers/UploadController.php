@@ -56,17 +56,11 @@ class UploadController extends Controller {
 		//$request->file('photo')->move($destinationPath);
 		$filename = $request->file('pic')->getClientOriginalName();
 		
-		if(app()->environment()=='local') {
-			$destinationPath = public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR;
-		} else {
-			$destinationPath = '/home/server-admin/Public/maindepot/';
-		}
-		
 		//$fs = new Filesystem;
-		if($this->fs->exists($destinationPath.$filename)){
-			return json_encode(['error'=>'400', 'message'=> 'File already exist!', 'dest'=>$destinationPath.$filename]); // $destinationPath.$filename.' exist!'
+		if($this->fs->exists($this->path['temp'].$filename)){
+			return json_encode(['error'=>'400', 'message'=> 'File already exist!'); // $destinationPath.$filename.' exist!'
 		} else {
-			$request->file('pic')->move($destinationPath, $filename);
+			$request->file('pic')->move($this->path['temp'], $filename);
 
 			$size = number_format(($request->file('pic')->getClientSize()/1000),0);
 			$line = implode(' ', [date('r'), 
