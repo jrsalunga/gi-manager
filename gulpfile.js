@@ -104,7 +104,7 @@ gulp.task('minify-css', function() {
   		'./public/css/bt-override.css',
   		'./public/css/dashboard.css',
   		'./public/css/styles.css',
-      './public/css/common.css'
+      './public/css/common.css',
       './public/css/dropbox.css'
   	])
   	.pipe(concat('styles-all.css'))
