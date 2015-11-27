@@ -15,11 +15,15 @@ $(function(){
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     },
 		uploadFinished:function(i,file,response){
-			$.data(file).addClass('done');
 			// response is the JSON object that post_file.php returns
 			console.log('done uploading!')
 			console.log(response);
-			$('#picfile').val(file.name);
+			//if(response.success){
+				$.data(file).addClass('done');
+				$('#filename').val(file.name);
+				$('#btn-upload')[0].disabled = false;
+			//}
+			
 		},
   	error: function(err, file) {
 		 switch(err) {
@@ -71,6 +75,9 @@ $(function(){
 		},
 		
 		uploadStarted:function(i, file, len){
+			console.log('started!');
+			$('#filename').val('attaching file...');
+			//$('#attached > span').removeClass('')
 			createImage(file);
 		},
 		

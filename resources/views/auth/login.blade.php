@@ -33,7 +33,7 @@
       
     
       <a class="navbar-brand" href="/">
-        <img src="/images/giligans-header.png" class="img-responsive header-logo" style="max-height: 44px;">
+        <img src="/images/giligans-header.png" class="img-responsive header-logo">
       </a>
     </div>
     <div id="navbar">

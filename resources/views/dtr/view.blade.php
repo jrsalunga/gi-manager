@@ -1,8 +1,8 @@
 @extends('index')
 
-@section('title', '- DTR')
+@section('title', '- DTR View')
 
-@section('body-class', 'branch-dtr')
+@section('body-class', 'view-dtr')
 
 @section('container-body')
 <div class="container-fluid">

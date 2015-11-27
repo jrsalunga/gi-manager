@@ -9,4 +9,5 @@ Homestead.json
 /public/data
 /public/Resources
 /logs
+/TEST_POS_BACKUP
 *.env

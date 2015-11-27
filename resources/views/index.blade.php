@@ -10,7 +10,9 @@
       <b class="caret"></b>
     </a>
     <ul class="dropdown-menu">
-      <li><a href="/logout">Log Out</a></li>     
+    	<li><a href="/tk"><span class="glyphicon glyphicon-dashboard"></span> TK Module</a></li>
+    	<li><a href="/upload/backup"><span class="glyphicon glyphicon-cloud-upload"></span> Upload Backup</a></li>
+      <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>     
     </ul>
   </li>
 </ul>

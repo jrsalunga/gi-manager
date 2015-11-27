@@ -19,10 +19,11 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(Request $request)
     {
+        
         view()->composer('*', function($view){
-
+            
             $id = empty(Auth::user()->id) ? '':Auth::user()->id;
 
             if(strtolower($id)!==strtolower(session('user.id'))){
@@ -37,8 +38,10 @@ class AppServiceProvider extends ServiceProvider
                         'branchmancost'=>$emp->branch->mancost]]);
             }
             
+            
             $view->with('name', session('user.fullname'))->with('branch',  session('user.branch'));
         });
+        
 
 
         Mansked::created(function ($mansked) {

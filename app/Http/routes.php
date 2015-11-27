@@ -48,6 +48,9 @@ Route::get('dtr/generate', ['uses'=>'DtrController@index']);
 Route::get('reports/dtr/{date}', ['uses'=>'DtrController@getDtrReports']);
 Route::post('dtr/generate', ['uses'=>'DtrController@postGenerate']);
 
+Route::get('upload/backup', ['uses'=>'UploadController@getBackup']);
+Route::post('upload/postfile', ['as'=>'upload.postfile', 'uses'=>'UploadController@postfile']);
+Route::put('upload/postfile', ['as'=>'upload.putfile', 'uses'=>'UploadController@putfile']);
 
 /******************* API  *************************************************/
 Route::group(['prefix'=>'api'], function(){

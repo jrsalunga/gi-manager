@@ -1,8 +1,8 @@
 @extends('index')
 
-@section('title', '- DTR')
+@section('title', '- Employee DTR')
 
-@section('body-class', 'branch-dtr')
+@section('body-class', 'employee-dtr')
 
 @section('container-body')
 <div class="container-fluid">
@@ -37,7 +37,7 @@
       <div class="page-header">
         <h3>{{ $employee->lastname }}, {{ $employee->firstname }} <small>{{ $employee->code }}</small></h3>
       </div>
-      <h4>{{ $dtrs->date->format('l, F d, Y') }} <span class="small">{{ $dtrs->getDayType() }}</span></h4>
+      <h4><span class=""></span> {{ $dtrs->date->format('l, F d, Y') }} <span class="small">{{ $dtrs->getDayType() }}</span></h4>
 
       <p>&nbsp;</p>
       <div class="row">

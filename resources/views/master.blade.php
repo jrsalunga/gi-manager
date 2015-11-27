@@ -25,6 +25,7 @@ $debugbarRenderer = $debugbar->getJavascriptRenderer();
   <link rel="stylesheet" href="/css/bt-override.css">
   <link rel="stylesheet" href="/css/styles.css">
   <link rel="stylesheet" href="/css/common.css">
+  <link rel="stylesheet" href="/css/dropbox.css">
 
   <link rel="stylesheet" type="text/css" href="/Resources/vendor/font-awesome/css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="/Resources/vendor/highlightjs/styles/github.css">

@@ -394,7 +394,7 @@ var keypressInit = function(){
 		var code = e.which || e.keyCode;
 		$('.empno').text('');
 		//console.log('keypress');
-		console.log(code);		
+		//console.log(code);		
 		
 		if(code == 13) { //Enter keycode
 

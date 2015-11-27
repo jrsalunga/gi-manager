@@ -30,7 +30,7 @@
   <div class="container-fluid">
     <div class="navbar-header">
       <a class="navbar-brand" href="/">
-        <img src="/images/giligans-logo.png" class="img-responsive header-logo" style="max-height: 44px;">
+        <img src="/images/giligans-header.png" class="img-responsive header-logo">
       </a>
     </div>
     <div id="navbar">
@@ -38,9 +38,7 @@
         <li>
           <a href="/">
             <span class="glyphicon glyphicon-dashboard"></span>
-            
           </a>
-          
         </li>
       </ul>
       
@@ -224,7 +222,8 @@
 
 
 <script src="/js/vendors-all.js"></script>
-  <script src="/js/tk.js"></script>
+<script src="/js/common.min.js"></script>
+<script src="/js/tk.js"></script>
 
 </div>
 
