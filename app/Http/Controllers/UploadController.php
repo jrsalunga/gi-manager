@@ -58,7 +58,7 @@ class UploadController extends Controller {
 		
 		//$fs = new Filesystem;
 		if($this->fs->exists($this->path['temp'].$filename)){
-			return json_encode(['error'=>'400', 'message'=> 'File already exist!'); // $destinationPath.$filename.' exist!'
+			return json_encode(['error'=>'400', 'message'=> 'File already exist!']); // $destinationPath.$filename.' exist!'
 		} else {
 			$request->file('pic')->move($this->path['temp'], $filename);
 
