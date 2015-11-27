@@ -44,7 +44,7 @@ class UploadController extends Controller {
 				return redirect('/upload/backup')->with('alert-success', 'File: '.$request->input('file_upload').' successfully uploaded!');
 			}
 		} else {
-			//return 'wala';
+			return redirect('/upload/backup')->with('alert-error', 'File: '.$request->input('file_upload').' do not exist! Try to upload again..');
 		}
 	} 
 
