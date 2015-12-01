@@ -35,25 +35,25 @@ class UploadController extends Controller {
 	
 		if($this->fs->exists($this->path['temp'].$request->input('filename'))){
 			if($this->fs->exists($this->path[app()->environment()].$request->input('filename'))){ 
-				$this->logAction('move:error', $request->input('filename').' message:file_exist');
-				return redirect('/upload/backup')->with('alert-error', 'File: '.$this->path[app()->environment()].$request->input('filename').' exist!');
+				$this->logAction('move:error', 'user:'.$request->user()->username.' '.$request->input('filename').' message:file_exist');
+				return redirect('/upload/backup')->with('alert-error', 'File: '.$request->input('filename').' exist!');
 			} else {
 
 				if(!is_dir($this->path[app()->environment()]))
-					mkdir($this->path[app()->environment()], 0755, true);
+					mkdir($this->path[app()->environment()], 0775, true);
 
 				try {
 					File::move($this->path['temp'].$request->input('filename'), $this->path[app()->environment()].$request->input('filename'));
 				}catch(\Exception $e){
-					$this->logAction('move:error', $request->input('filename').' message:'.$e->getMessage());
+					$this->logAction('move:error', 'user:'.$request->user()->username.' '.$request->input('filename').' message:'.$e->getMessage());
 					return redirect('/upload/backup')->with('alert-error', $e->getMessage());
 				}
 
-				$this->logAction('move:success', $request->input('filename'));
+				$this->logAction('move:success', 'user:'.$request->user()->username.' '.$request->input('filename'));
 				return redirect('/upload/backup')->with('alert-success', 'File: '.$request->input('filename').' successfully uploaded!');
 			}
 		} else {
-			$this->logAction('move:error', $request->input('filename').' message:try_again');
+			$this->logAction('move:error', 'user:'.$request->user()->username.' '.$request->input('filename').' message:try_again');
 			return redirect('/upload/backup')->with('alert-error', 'File: '.$request->input('filename').' do not exist! Try to upload again..');
 		}
 	} 
@@ -64,7 +64,7 @@ class UploadController extends Controller {
 		$new = file_exists($logfile) ? false : true;
 		if($new){
 			$handle = fopen($logfile, 'w');
-			chmod($logfile, 0755);
+			chmod($logfile, 0775);
 		} else
 			$handle = fopen($logfile, 'a');
 
