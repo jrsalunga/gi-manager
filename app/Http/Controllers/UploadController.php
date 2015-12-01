@@ -62,17 +62,18 @@ class UploadController extends Controller {
 	private function logAction($action, $log) {
 		$logfile = base_path().DIRECTORY_SEPARATOR.'logs'.DIRECTORY_SEPARATOR.now().'-log.txt';
 		$new = file_exists($logfile) ? false : true;
-	  if($handle = fopen($logfile, 'a')) { // append
+		if($new){
+			$handle = fopen($logfile, 'w');
+			chmod($logfile, 0755);
+		} else
+			$handle = fopen($logfile, 'a');
+
+		$ip = $_SERVER['REMOTE_ADDR'];
+		$brw = $_SERVER['HTTP_USER_AGENT'];
+		$content = date('r')." | {$ip} | {$action} | {$log} \t {$brw}\n";
+    fwrite($handle, $content);
+    fclose($handle);
 	   
-			$ip = $_SERVER['REMOTE_ADDR'];
-			$brw = $_SERVER['HTTP_USER_AGENT'];
-			$content = date('r')." | {$ip} | {$action} | {$log} \t {$brw}\n";
-	    fwrite($handle, $content);
-	    fclose($handle);
-	    if($new) { chmod($logfile, 0755); }
-	  } else {
-	    echo "Could not open log file for writing.";
-	  }
 	}	
 
 	public function postfile(Request $request) {
