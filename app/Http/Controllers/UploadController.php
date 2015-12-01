@@ -12,12 +12,14 @@ use Storage;
 
 class UploadController extends Controller {
 
-	public $fs;
-	public $path;
+	protected $fs;
+	protected $path = [];
 
 	public function __construct(){
 		$this->fs = new Filesystem;
-		$this->path = config('gi-dtr.upload_path');
+		//$this->path = config('gi-dtr.upload_path');
+		$this->path['temp'] = config('gi-dtr.upload_path')['temp'].now('year').DIRECTORY_SEPARATOR.session('user.branchcode').DIRECTORY_SEPARATOR;
+		$this->path[app()->environment()] = config('gi-dtr.upload_path')[app()->environment()].now('year').DIRECTORY_SEPARATOR.session('user.branchcode').DIRECTORY_SEPARATOR;
 	}
 
 
@@ -30,26 +32,50 @@ class UploadController extends Controller {
 	} 
 
 	public function putfile(Request $request) {
-		//return $request->all();
-		//$wp = config('gi-dtr.upload_path')['temp'];
-		if($this->fs->exists($this->path['temp'].$request->input('file_upload'))){
-			if($this->fs->exists($this->path[app()->environment()].$request->input('file_upload'))){ 
-				return redirect('/upload/backup')->with('alert-error', 'File: '.$request->input('file_upload').' exist!');
+	
+		if($this->fs->exists($this->path['temp'].$request->input('filename'))){
+			if($this->fs->exists($this->path[app()->environment()].$request->input('filename'))){ 
+				$this->logAction('move:error', $request->input('filename').' message:file_exist');
+				return redirect('/upload/backup')->with('alert-error', 'File: '.$this->path[app()->environment()].$request->input('filename').' exist!');
 			} else {
+
+				if(!is_dir($this->path[app()->environment()]))
+					mkdir($this->path[app()->environment()], 0755, true);
+
 				try {
-					File::move($this->path['temp'].$request->input('file_upload'), $this->path[app()->environment()].$request->input('file_upload'));
+					File::move($this->path['temp'].$request->input('filename'), $this->path[app()->environment()].$request->input('filename'));
 				}catch(\Exception $e){
+					$this->logAction('move:error', $request->input('filename').' message:'.$e->getMessage());
 					return redirect('/upload/backup')->with('alert-error', $e->getMessage());
 				}
-				return redirect('/upload/backup')->with('alert-success', 'File: '.$request->input('file_upload').' successfully uploaded!');
+
+				$this->logAction('move:success', $request->input('filename'));
+				return redirect('/upload/backup')->with('alert-success', 'File: '.$request->input('filename').' successfully uploaded!');
 			}
 		} else {
-			return redirect('/upload/backup')->with('alert-error', 'File: '.$request->input('file_upload').' do not exist! Try to upload again..');
+			$this->logAction('move:error', $request->input('filename').' message:try_again');
+			return redirect('/upload/backup')->with('alert-error', 'File: '.$request->input('filename').' do not exist! Try to upload again..');
 		}
 	} 
 
-	public function postfile(Request $request) {
 
+	private function logAction($action, $log) {
+		$logfile = base_path().DIRECTORY_SEPARATOR.'logs'.DIRECTORY_SEPARATOR.now().'-log.txt';
+		$new = file_exists($logfile) ? false : true;
+	  if($handle = fopen($logfile, 'a')) { // append
+	   
+			$ip = $_SERVER['REMOTE_ADDR'];
+			$brw = $_SERVER['HTTP_USER_AGENT'];
+			$content = date('r')." | {$ip} | {$action} | {$log} \t {$brw}\n";
+	    fwrite($handle, $content);
+	    fclose($handle);
+	    if($new) { chmod($logfile, 0755); }
+	  } else {
+	    echo "Could not open log file for writing.";
+	  }
+	}	
+
+	public function postfile(Request $request) {
 
 
 		//$request->file('pic');
@@ -58,22 +84,27 @@ class UploadController extends Controller {
 		
 		//$fs = new Filesystem;
 		if($this->fs->exists($this->path['temp'].$filename)){
-			return json_encode(['error'=>'400', 'message'=> 'File already exist!', 'dest'=>$this->path['temp'].$filename]); // $destinationPath.$filename.' exist!'
+			return json_encode(['status'=>'error', 'code'=>'400', 'message'=> 'File already exist!', 'dest'=>$this->path['temp'].$filename]); // $destinationPath.$filename.' exist!'
 		} else {
+
+
+			if(!is_dir($this->path['temp']))
+				mkdir($this->path['temp'], 0775, true);
+
 			$request->file('pic')->move($this->path['temp'], $filename);
 
 			$size = number_format(($request->file('pic')->getClientSize()/1000),0);
-			$line = implode(' ', [date('r'), 
-														$_SERVER['REMOTE_ADDR'], 
-														'user:'.$request->user()->username, 
-														$size.'KB', 
-														$filename]);
-			file_put_contents(base_path().'/logs/image-upload-log.txt', $line.PHP_EOL, FILE_APPEND);
+
+			$line = implode(' ', ['user:'.$request->user()->username, $filename.':'.$size.'KB']);
+			$this->logAction('upload:success', $line);
+		
+			return json_encode(['status'=>'success', 'code'=>'200']);
+			
 		}
 
 		
 
-		return json_encode(['success'=>'200']);
+		
 
 		$demo_mode = true;
 		$upload_dir = public_path().'/uploads/';

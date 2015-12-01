@@ -38,7 +38,7 @@
             <h3 class="panel-title"><span class="glyphicon glyphicon-cloud-upload"></span> Upload Backup</h3>
           </div>
           <div class="panel-body">
-            {!! Form::open(['method'=>'PUT', 'url'=>'upload/postfile', 'class'=>'form-horizontal']) !!}
+            {!! Form::open(['method'=>'PUT', 'url'=>'upload/postfile', 'class'=>'form-horizontal', 'enctype'=>'multipart/form-data']) !!}
             <div class="dropbox-container">
               <div id="dropbox" class="prod-image">
                 <span class="message">Drop images here to upload. <br />
@@ -56,7 +56,7 @@
                     <span class="input-group-btn">
                       <button id="attached" class="btn btn-default" type="button"><span class="glyphicon glyphicon-paperclip"></span></button>
                     </span>
-                    <input type="text" class="form-control" id="filename" readonly required>
+                    <input type="text" class="form-control" id="filename" name="filename" readonly required>
                   </div><!-- /input-group -->
                 </div><!-- /.col-lg-6 -->
               </div>

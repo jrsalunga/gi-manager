@@ -82,16 +82,16 @@ $(function(){
 		},
 		
 		progressUpdated: function(i, file, progress) {
-			console.log(progress);
+			console.log('update progress:'+ progress);
 			$.data(file).find('.progress').width(progress);
 		},
 		globalProgressUpdated: function(progress) {
-			console.log(progress);
+			console.log('progress:'+ progress);
         // progress for all the files uploaded on the current instance (percentage)
         // ex: $('#progress div').width(progress+"%");
     },
 		speedUpdated: function(i, file, speed) {
-        console.log(speed);
+        console.log('speed:'+ speed);
     },
     	 
 	});
