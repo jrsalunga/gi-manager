@@ -149,6 +149,7 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         Vinkla\Pusher\PusherServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
+        GrahamCampbell\Flysystem\FlysystemServiceProvider::class,
 
     ],
 
@@ -204,6 +205,7 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
         'Pusher' => Vinkla\Pusher\Facades\Pusher::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        'Flysystem' => GrahamCampbell\Flysystem\Facades\Flysystem::class,
 
     ],
 

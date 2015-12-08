@@ -6,10 +6,14 @@ $(function(){
 	dropbox.filedrop({
 		// The name of the $_FILES entry:
 		fallback_id: 'file_upload',
-		paramname:'pic',
+		paramname: 'pic', //['pic','year', 'month'],
+		data: {
+			'year': $('#year')[0].value,
+			'month': $('#month')[0].value,
+		},
 		maxfiles: 1,
     maxfilesize: 2, // max file size in MBs
-		url: 'postfile',
+		url: '/upload/postfile',
 		withCredentials: true, 
 		headers: {          // Send additional request headers
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -18,6 +22,7 @@ $(function(){
 			// response is the JSON object that post_file.php returns
 			console.log('done uploading!')
 			console.log(response);
+			console.log($('#month')[0].value);
 			//if(response.success){
 				$.data(file).addClass('done');
 				$('#filename').val(file.name);

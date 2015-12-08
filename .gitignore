@@ -10,4 +10,5 @@ Homestead.json
 /public/Resources
 /logs
 /TEST_POS_BACKUP
+/TEST_FILES_BACKUP
 *.env

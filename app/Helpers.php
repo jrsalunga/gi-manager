@@ -27,6 +27,15 @@ function now($val=null){
 		case 'day':
 			return date('d', strtotime('now'));
 			break;
+		case 'Y':
+			return date('Y', strtotime('now'));
+			break;
+		case 'M':
+			return date('m', strtotime('now'));
+			break;
+		case 'D':
+			return date('d', strtotime('now'));
+			break;
 		default:
 			return date('Y-m-d', strtotime('now'));
 			break;
@@ -41,6 +50,27 @@ function pad($val, $len=2, $char='0', $direction=STR_PAD_LEFT){
 
 function is_uuid($uuid=0) {
 	return preg_match('/^[A-Fa-f0-9]{32}+$/', $uuid);
+}
+
+
+/**
+ * Return sizes readable by humans
+ */
+function human_filesize($bytes, $decimals = 2)
+{
+  $size = ['B', 'kB', 'MB', 'GB', 'TB', 'PB'];
+  $factor = floor((strlen($bytes) - 1) / 3);
+
+  return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) .
+      @$size[$factor];
+}
+
+/**
+ * Is the mime type an image
+ */
+function is_image($mimeType)
+{
+    return starts_with($mimeType, 'image/');
 }
 
 

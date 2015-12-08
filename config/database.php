@@ -67,7 +67,7 @@ return [
         'mysql-hr' => [
             'driver'    => 'mysql',
             'host'      => '192.168.1.5:1686',
-            'database'  => 'gi-hr',
+            'database'  => 'hr',
             'username'  => 'server-admin',
             'password'  => 'b33rpr0m0',
             'charset'   => 'utf8',

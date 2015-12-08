@@ -39,13 +39,13 @@ class ManskedController extends Controller {
 	//task/mansked/add
 	public function makeAddView(Request $request) {
 		$mansked = new Mansked;
-		$branch = Branch::find(Auth::user()->branchid);
+		$branch = Branch::find($request->user()->branchid);
 		$new = $mansked->newWeek($branch->id);
 		$data = [
 			'branch' => $branch->code.' - ' .$branch->descriptor,
 			'branchid' => $branch->id,
-			'manager' => Auth::user()->name,
-			'managerid' => Auth::user()->id,
+			'manager' => $request->user()->name,
+			'managerid' => $request->user()->id,
 			'mancost' => $branch->mancost,
 			'weekno' => $new['weekno'],
 			'year' => $new['year']
@@ -57,7 +57,7 @@ class ManskedController extends Controller {
 	public function makeListView(Request $request, $param1, $param2) {
 		//return dd(app());
 		$manskeds = Mansked::with('manskeddays')
-													->where('branchid', $this->branchid)
+													->where('branchid', $request->user()->branchid)
 													->orderBy('year', 'DESC')
 													->orderBy('weekno', 'DESC')
 													->paginate('5');
@@ -82,10 +82,11 @@ class ManskedController extends Controller {
 
 		$depts = $this->empGrpByDept();
 
-		$mansked = Mansked::with('manskeddays')->where('weekno', $weekno)
-													->where('year', $year)
-  												->where('branchid', Auth::user()->branchid)
-  												->get()->first();
+		$mansked = Mansked::with('manskeddays')
+											->where('weekno', $weekno)
+											->where('year', $year)
+											->where('branchid', $request->user()->branchid)
+											->first();
   	//return $mansked;		
   	if(count($mansked) <= 0)
   		return redirect('/task/mansked');
@@ -136,7 +137,7 @@ class ManskedController extends Controller {
 
 		 // check weekno if exist
 		$mansked = Mansked::whereWeekno($request->input('weekno'))
-												->branchid(Auth::user()->branchid)
+												->branchid($request->user()->branchid)
 												->get();
 		if(count($mansked) > 0){
 			return redirect('/task/mansked/add')
@@ -215,7 +216,9 @@ class ManskedController extends Controller {
     ]);
 
     $mansked1 = Mansked::whereWeekno($request->input('nweekno'))
-    								->where('year', $request->input('year'))->get();
+    								->where('year', $request->input('year'))
+    								->where('branchid', $request->user()->branchid)
+    								->get();
     if(count($mansked1) > 0){
 			return redirect('/task/mansked')
                         ->withErrors(['message' => 'Manpower Schedule Week '. $request->input('nweekno') .' already exist!'])
@@ -248,7 +251,6 @@ class ManskedController extends Controller {
 		$new_mansked->mancost 	= $mansked->mancost;
 		$new_mansked->notes 		= $mansked->notes;
 		$new_mansked->id 				= $mansked->get_uid();
-
 	
 
 

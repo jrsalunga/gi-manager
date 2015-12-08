@@ -7,12 +7,14 @@ use Illuminate\Http\Request;
 use App\Models\Employee;
 use App\Models\Dtr;
 use App\Models\Manskeddtl as Mandtl;
+use App\Models\Manskedday as Manday;
 use App\Models\Timelog;
 use App\Models\Holidate;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Repositories\DtrRepository;
 use App\Repositories\ManskeddtlRepository as MandtlRepo;
+use App\Repositories\ManskeddayRepository as MandayRepo;
 use App\Repositories\TimelogRepository as TimelogRepo;
 
 class DtrController extends Controller {
@@ -48,13 +50,22 @@ class DtrController extends Controller {
   //dtr/{year}/{month}
   public function makeListView(Request $request, $param1, $param2, $param3){
     $mandtls_repo = new MandtlRepo;
+    //$manday_repo = new MandayRepo;
+
+    //return $manday_repo->countBranchMandtlByDate($request->user(), '2015-11-13');
+
     $fr = Carbon::create($param1, $param2, 1, 0, 0, 0);
     $to = Carbon::parse($fr->format('Y-m').'-'.$fr->daysInMonth);
     $arr = [];
     foreach($this->getDates($fr, $to) as $date){
+
       $arr[$date->format("Y-m-d")]['date'] = $date;
       $arr[$date->format("Y-m-d")]['mandtls'] = $mandtls_repo->branchByDate($request->user(), $date->format("Y-m-d"));
+      //$arr[$date->format("Y-m-d")]['dtrs'] = $this->dtrs->branchByDate($request->user(), $date->format("Y-m-d"));
+      //$arr[$date->format("Y-m-d")]['mandtls_count'] = $manday_repo->countBranchMandtlByDate($request->user(), $date->format("Y-m-d"));
       $arr[$date->format("Y-m-d")]['dtrs'] = $this->dtrs->branchByDate($request->user(), $date->format("Y-m-d"));
+      //$arr[$date->format("Y-m-d")]['mandtls'] = [];
+      //$arr[$date->format("Y-m-d")]['dtrs'] = [];
     }
 
     return view('dtr.list')->with('dtrs', $arr);
@@ -133,6 +144,7 @@ class DtrController extends Controller {
                           ->orderBy('firstname', 'ASC')
                           ->get();
 
+    $ctr=0;
     foreach($this->getDates($fr, $to) as $date){      
       foreach ($employees as $employee) {
         
@@ -147,10 +159,11 @@ class DtrController extends Controller {
         $this->computeWorkHours();        
         
         $this->dtr->save();
+        $ctr++;
       }
     }
 
-    return response()->json(['status'=>'success', 'code'=>200, 'data'=>['message'=>'DTR generated!'], 'alert'=>'alert-success'])
+    return response()->json(['status'=>'success', 'code'=>200, 'data'=>['message'=>'DTR generated!'], 'alert'=>'alert-success', 'count'=>$ctr])
                   ->setCallback($request->input('callback'));
   }
 
@@ -325,9 +338,10 @@ class DtrController extends Controller {
 
     $holidate = Holidate::with('holiday.holidaydtls')->date($date)->first();
 
+    //return dd($daytype);
     if(is_null($holidate) && $daytype == 1) // no holiday and work day
       return 1;
-    else if(is_null($holidate) && $daytype == 2) // no holiday and rest day
+    else if(is_null($holidate) && ($daytype == 0 || $daytype == 2)) // no holiday and rest day; 0 from db default; 2 from GDocs
       return 4;
     else
       return $this->checkHolidayType($holidate->holiday->type, $daytype); // holiday and check daytype
@@ -348,6 +362,8 @@ class DtrController extends Controller {
       return 5;
     else if($type == 2 && $daytype == 0) // is special holiday and rest day 
       return 6;
+    else 
+      return 0;
   }
 
   // for $this->postGenerate() 

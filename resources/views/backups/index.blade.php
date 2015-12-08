@@ -1,15 +1,15 @@
 @extends('index')
 
-@section('title', '- DTR Month List')
+@section('title', '- Backups')
 
-@section('body-class', 'month-dtr')
+@section('body-class', 'generate-dtr')
 
 @section('container-body')
 <div class="container-fluid">
 
   <ol class="breadcrumb">
     <li><span class="gly gly-shop"></span> <a href="/">{{ $branch }}</a></li>
-    <li class="active">Daily Time Record</li>
+    <li class="active">Backups</li>
   </ol>
 
   <div>
@@ -21,27 +21,21 @@
               <span class="gly gly-unshare"></span>
             </a> 
             <button type="button" class="btn btn-default active">
-              <span class="glyphicon glyphicon-th-list"></span>
+              <span class="glyphicon glyphicon-cloud"></span>
             </button>
-            
           </div> <!-- end btn-grp -->
           <div class="btn-group" role="group">
-            <a href="/dtr/generate" class="btn btn-default" title="Generate DTR">
-              <span class="gly gly-history"></span>
+            <a href="/backups/upload" class="btn btn-default">
+              <span class="glyphicon glyphicon-cloud-upload"></span>
             </a>
-          </div> <!-- end btn-grp -->
+          </div>
         </div>
       </div>
     </nav>
 
-    <h3>{{$year}}</h3>
-    @foreach($months as $key => $month)
-      <a href="/dtr/{{$year}}/{{pad($key)}}" class="btn alert-success" style="margin-bottom: 5px;">
-        <i class="fa fa-calendar-o"></i> {{ $month['month'] }}  
-        <span class="badge" style="background-color:#fff; color:green;">{{ number_format($month['total'],0) }}</span>
-      </a>
-      
-    @endforeach
+    @include('_partials.alerts')
+
+    
    
 
     
@@ -54,5 +48,10 @@
 
 @section('js-external')
   @parent
-
+  
+  <script>
+  
+    
+ 
+  </script>
 @endsection

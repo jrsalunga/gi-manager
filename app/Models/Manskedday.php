@@ -22,9 +22,29 @@ class Manskedday extends BaseModel {
     return $this->hasMany('App\Models\Manskeddtl', 'mandayid');
   }
 
+  // http://softonsofa.com/tweaking-eloquent-relations-how-to-get-hasmany-relation-count-efficiently/#comment-2063367593
+  public function countMandtls(){
+    //return $this->manskeddtls()
+    return $this->hasOne('App\Models\Manskeddtl', 'mandayid')
+      ->selectRaw('mandayid, count(*) as count')
+      ->groupBy('mandayid');
+  }
+
   /***************** mutators *****************************************************/
   public function getDateAttribute($value){
       return Carbon::parse($value);
+  }
+
+  public function getMandtlsCountAttribute() {
+    // if relation is not loaded already, let's do it first
+    //if ( ! array_key_exists('countMandtls', $this->relations)) 
+    if($this->relationLoaded('countMandtls'))
+      $this->load('countMandtls');
+   
+    $related = $this->getRelation('countMandtls');
+   
+    // then return the count directly
+    return ($related) ? (int) $related->count : 0;
   }
 
   /***************** over ride base model ******************************************/

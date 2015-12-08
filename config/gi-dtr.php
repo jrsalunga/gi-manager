@@ -16,8 +16,15 @@ return [
 
 	'upload_path' => [
 		'temp' => public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR,
-		'local' => base_path().DIRECTORY_SEPARATOR.'TEST_POS_BACKUP'.DIRECTORY_SEPARATOR,
-		'production' => '/home/server-admin/Public/maindepot/TEST_POS_BACKUP/'
+		'web' => public_path().DIRECTORY_SEPARATOR.'uploads'.DIRECTORY_SEPARATOR,
+		'pos' => [
+			'local' => base_path().DIRECTORY_SEPARATOR.'TEST_POS_BACKUP'.DIRECTORY_SEPARATOR,
+			'production' => '/home/server-admin/Public/maindepot/TEST_POS_BACKUP/'
+		],
+		'files' => [
+			'local' => base_path().DIRECTORY_SEPARATOR.'TEST_FILES_BACKUP'.DIRECTORY_SEPARATOR,
+			'production' => '/home/server-admin/Public/maindepot/TEST_FILES_BACKUP/'
+		]
 	]
 
 ];

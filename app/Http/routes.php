@@ -48,9 +48,16 @@ Route::get('dtr/generate', ['uses'=>'DtrController@index']);
 Route::get('reports/dtr/{date}', ['uses'=>'DtrController@getDtrReports']);
 Route::post('dtr/generate', ['uses'=>'DtrController@postGenerate']);
 
-Route::get('upload/backup', ['uses'=>'UploadController@getBackup']);
-Route::post('upload/postfile', ['as'=>'upload.postfile', 'uses'=>'UploadController@postfile']);
-Route::put('upload/postfile', ['as'=>'upload.putfile', 'uses'=>'UploadController@putfile']);
+
+Route::get('backups/web/{param1?}/{param2?}', ['uses'=>'UploadController@indexWeb']);
+Route::get('backups/pos/{param1?}/{param2?}', ['uses'=>'UploadController@indexPos']);
+Route::get('backups/files/{param1?}/{param2?}', ['uses'=>'UploadController@indexFiles']);
+Route::get('backups/upload', ['uses'=>'UploadController@getBackupUpload']);
+Route::get('backups', ['uses'=>'UploadController@index']);
+
+Route::post('upload/postfile', ['as'=>'upload.postfile', 'uses'=>'UploadController@postfile']); // upload to web
+Route::put('upload/postfile', ['as'=>'upload.putfile', 'uses'=>'UploadController@putfile']); // move from web to storage
+
 
 /******************* API  *************************************************/
 Route::group(['prefix'=>'api'], function(){
@@ -107,6 +114,40 @@ get('csv/{year}/week/{weekno}', function($year, $weekno){
 
 
 
+
+
+
+
+get('image/employee/{id}', function($id){
+	
+	$emp_photo = new App\Models\Empphoto;
+	$emp_photo->setConnection('mysql-hr');
+	$photo = $emp_photo->find($id);
+
+	echo '<img src="data:img/jpg;base64, '.base64_encode($photo->image).'" />';
+});
+
+
+get('doc/employee/{id}', function($id){
+	
+	$emp_doc = new App\Models\Empdoc;
+	$emp_doc->setConnection('mysql-hr');
+	$doc = $emp_doc->find($id);
+
+	//header("Content-Type: application/pdf");
+	//echo $doc->image;
+
+  $response = Response::make($doc->image, 200);
+  $response->header('Content-Type', 'application/pdf');
+  //$response->header('Content-Disposition', 'attachment; filename="downloaded.pdf"');
+
+  return $response;
+
+});
+
+
+
+
 get('dtr-repo/{date}', ['uses'=>'DtrController@date']);
 get('dtl-repo/{date}', ['uses'=>'DtrController@date']);
 
@@ -128,6 +169,20 @@ get('flush-sessions', function(){
 	return redirect('sessions');
 });
 
+
+get('manday-count', function(){
+	
+	//$manday = App\Models\Manskedday::with('countMandtls')->where('date', '2015-11-13')->first();
+	$manday = App\Models\Manskedday::with('countMandtls')->where('date', '2015-11-13')->first();
+	return $manday;
+
+});
+
+
+get('folder/{f}', function($f){
+	$f='.';
+	return '/' . trim(str_replace('..', '', $f), '/');
+});
 
 get('mandtl-scope/{employeeid}/{date}', function($employeeid, $date){
 	$branch = App\Models\Manskeddtl::with('employee')->whereEmployeeid($employeeid)->date($date)->get();
@@ -162,6 +217,13 @@ get('holidate/{date}', function($date){
 	
 	$h = App\Models\Holidate::with('holiday.holidaydtls')->date($date)->first();
 	return $h;
+});
+
+
+get('files', function(){
+	//return dd(Storage::disk(app()->environment()));
+	$directories = Storage::allDirectories(session('user.branchcode'));
+	return $directories;
 });
 
 
