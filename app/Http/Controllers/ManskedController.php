@@ -27,7 +27,7 @@ class ManskedController extends Controller {
 		if(strtolower($param1)==='add')
 			return $this->makeAddView($request);
 		else if(preg_match('/(20[0-9][0-9])/', $param1) && (strtolower($param2)==='week') && preg_match('/^[0-9]+$/', $param3)) //((strtolower($param1)==='week') && preg_match('/^[0-9]+$/', $param2)) 
-			return $this->makeViewWeek($param1, $param3);
+			return $this->makeViewWeek($request, $param1, $param3);
 		else if(preg_match('/^[A-Fa-f0-9]{32}+$/', $param1) && strtolower($param2)==='edit')
 			return $this->makeEditView($request, $param1);
 		else if(preg_match('/^[A-Fa-f0-9]{32}+$/', $param1))   //preg_match('/^[A-Fa-f0-9]{32}+$/',$action))
@@ -78,7 +78,7 @@ class ManskedController extends Controller {
 	}
 
 	//task/mansked/week/{weekno}
-	public function makeViewWeek($year, $weekno){
+	public function makeViewWeek($request, $year, $weekno){
 
 		$depts = $this->empGrpByDept();
 
