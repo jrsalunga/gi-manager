@@ -57,7 +57,7 @@ Route::get('backups', ['uses'=>'UploadController@index']);
 
 Route::post('upload/postfile', ['as'=>'upload.postfile', 'uses'=>'UploadController@postfile']); // upload to web
 Route::put('upload/postfile', ['as'=>'upload.putfile', 'uses'=>'UploadController@putfile']); // move from web to storage
-
+Route::get('download/{param1?}/{param2?}/{param3?}/{param4?}/{param5?}', ['uses'=>'UploadController@getDownload']);
 
 /******************* API  *************************************************/
 Route::group(['prefix'=>'api'], function(){

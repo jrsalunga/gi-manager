@@ -57,18 +57,35 @@
          
 
         <div>&nbsp</div>
+        <div class="navbar-form">
         @if(count($data['breadcrumbs'])>0)
-        <a href="/backups{{ endKey($data['breadcrumbs']) }}" class="btn btn-default" title="Back to Main Menu">
+        <a href="/backups{{ endKey($data['breadcrumbs']) }}" class="btn btn-default" title="Back">
           <span class="gly gly-unshare"></span>
-          {{ end($data['breadcrumbs']) }}
-        </a> 
+          backups{{ endKey($data['breadcrumbs']) }}
+        </a>
+        @else
+        <!--
+        <button class="btn btn-default" type="button">
+          <span class="glyphicon glyphicon-cloud"></span>
+          backups
+        </button> 
+        -->
         @endif
+        </div>
 
         <table id="tb-backups" class="table">
+          <!--
+          <thead>
+            <tr>
+              <th>File/Folder</th><th>Size</th><th>Type</th><th>Date Modified</th>
+            </tr>
+          </thead>
+        -->
+          <tbody>
           @if(count($data['subfolders'])>0)
             @foreach($data['subfolders'] as $path => $folder)
             <tr>
-              <td><a href="/backups{{ $path }}">{{ $folder }}</a></td>
+              <td colspan="4"><a href="/backups{{ $path }}"><span class="fa fa-folder-o"></span> {{ $folder }}</a></td>
             </tr>
             @endforeach
           @endif
@@ -77,14 +94,27 @@
           @if(count($data['files'])>0)
             @foreach($data['files'] as $path => $file)
             <tr>
-              <td>{{ $file['name'] }}</td>
+              <td>
+                @if($file['type']=='zip')
+                  <span class="fa fa-file-archive-o"></span>
+                @elseif($file['type']=='img')
+                  <span class="fa fa-file-image-o"></span>
+                @else
+                  <span class="fa file-o"></span>
+
+                @endif 
+
+                {{ $file['name'] }}</td>
+                <td><a href="/download/{{$tab}}/{{ $file['fullPath'] }}" target="_blank"><span class="glyphicon glyphicon-download-alt"></span></a></td>
+                <td>{{ human_filesize($file['size']) }}</td>
+                <td>{{ $file['mimeType'] or 'Unknown' }}</td>
+                <td>{{ $file['modified']->format('j-M-y g:ia') }}</td>
             </tr>
             @endforeach
           @endif
-
+          </tbody>
         </table>
       </div>
-      <div role="tabpanel" class="tab-pane" id="files">...</div>
     </div>
 
   </div>   

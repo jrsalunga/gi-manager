@@ -41,6 +41,7 @@ class StorageRepository {
 
     $folder2 = $this->cleanFolder($this->changeRoot($folder));
 
+    $type = $this->filetype($folder);
     $breadcrumbs = $this->breadcrumbs($folder);
     $slice = array_slice($breadcrumbs, -1);
     $folderName = current($slice);
@@ -125,6 +126,7 @@ class StorageRepository {
       'mimeType' => $this->fileMimeType($path),
       'size' => $this->fileSize($path),
       'modified' => $this->fileModified($path),
+      'type' => $this->filetype($path)
     ];
   }
 
@@ -150,6 +152,17 @@ class StorageRepository {
       return $this->mimeDetect->findType(
         strtolower(pathinfo($path, PATHINFO_EXTENSION))
       );
+  }
+
+  public function filetype($path){
+    if(strtolower(pathinfo($path, PATHINFO_EXTENSION))==='zip')
+      return 'zip';
+    if(strtolower(pathinfo($path, PATHINFO_EXTENSION))==='png' || 
+      strtolower(pathinfo($path, PATHINFO_EXTENSION))==='jpg'  || 
+      strtolower(pathinfo($path, PATHINFO_EXTENSION))==='jpeg' || 
+      strtolower(pathinfo($path, PATHINFO_EXTENSION))==='gif')
+      return 'img';
+    return 'file';
   }
 
   /**
@@ -269,6 +282,10 @@ class StorageRepository {
     }catch(\Exception $e){
       throw new \Exception("Error: ". $e->getMessage());    
     }
+  }
+
+  public function get($path){
+    return file_get_contents($this->realFullPath($path));
   }
 
   

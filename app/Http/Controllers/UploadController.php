@@ -243,5 +243,35 @@ class UploadController extends Controller {
 		
 	}
 
+	public function getDownload(Request $request, $p1=NULL, $p2=NULL, $p3=NULL, $p4=NULL, $p5=NULL){
+    
+
+    if(is_null($p2) || is_null($p2) || is_null($p3) || is_null($p4) || is_null($p5)){
+    	throw new Http404("Error Processing Request");
+    }
+    
+
+    //return 'tada!';
+
+    $path = $p2.'/'.$p3.'/'.$p4.'/'.$p5;
+
+		$storage = $this->getStorageType($path);
+
+		$file = $storage->get($path);
+		$mimetype = $storage->fileMimeType($path);
+
+		//return dd($file);
+
+		//return response()->download($pathToFile, $name, $headers);
+
+
+    $response = \Response::make($file, 200);
+	 	$response->header('Content-Type', $mimetype);
+  	$response->header('Content-Disposition', 'attachment; filename="'.$p5.'"');
+
+	  return $response;
+
+  }
+
 	
 }
