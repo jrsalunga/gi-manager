@@ -64,7 +64,7 @@ return [
             ],
             'production'=>[
                 'driver' => 'local',
-                'root'   => '/home/server-admin/Public/maindepot/TEST_POS_BACKUP/'
+                'root'   => '/home/server-admin/Public/maindepot/TEST_FILES_BACKUP/'
             ]
         ],
         'local' => [
