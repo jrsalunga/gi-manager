@@ -53,7 +53,7 @@ return [
                 'root'   => base_path('TEST_POS_BACKUP')
             ],
             'production'=>[
-                'driver' => 'production',
+                'driver' => 'local',
                 'root'   => '/home/server-admin/Public/maindepot/TEST_POS_BACKUP/'
             ]
         ],
@@ -63,7 +63,7 @@ return [
                 'root'   => base_path('TEST_FILES_BACKUP')
             ],
             'production'=>[
-                'driver' => 'production',
+                'driver' => 'local',
                 'root'   => '/home/server-admin/Public/maindepot/TEST_POS_BACKUP/'
             ]
         ],
