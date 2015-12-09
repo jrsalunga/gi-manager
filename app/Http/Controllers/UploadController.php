@@ -85,7 +85,7 @@ class UploadController extends Controller {
 
 		$folder = '/web'.$this->setUri($param1, $param2);
 		$data = $this->web->folderInfo($folder);
-		return $data;
+		return dd($data);
 	} 
 
 

@@ -38,6 +38,7 @@ class StorageRepository {
   public function folderInfo($folder)
   {
     $folder = $this->cleanFolder($folder);
+
     $folder2 = $this->cleanFolder($this->changeRoot($folder));
 
     $breadcrumbs = $this->breadcrumbs($folder);

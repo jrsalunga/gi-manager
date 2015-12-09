@@ -74,3 +74,9 @@ function is_image($mimeType)
 }
 
 
+function endKey($array){
+	end($array);
+	return key($array);
+}
+
+

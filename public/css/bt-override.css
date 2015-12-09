@@ -166,6 +166,16 @@ td.text-input .frm-ctrl {
   cursor: not-allowed;
 }
 
+.nav-tabs > li.active > a {
+  pointer-events: none;
+}
+
+.file-explorer.tab-content .tab-pane.active {
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+
 
 
 

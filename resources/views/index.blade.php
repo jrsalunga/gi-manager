@@ -39,6 +39,7 @@
 			    <div class="list-group">
 					  <a href="/task/mansked" class="list-group-item">Manpower Scheduling</a>
 					  <a href="/dtr/generate" class="list-group-item">Daily Time Record Generation</a>
+					  <a href="/backups/upload" class="list-group-item">Upload Backup</a>
 					</div>
 			  </div>
 			</div>

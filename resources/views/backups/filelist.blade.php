@@ -9,7 +9,14 @@
 
   <ol class="breadcrumb">
     <li><span class="gly gly-shop"></span> <a href="/">{{ $branch }}</a></li>
-    <li class="active">Backups</li>
+    <li><a href="/backups">Backups</a></li>
+    @if(count($data['breadcrumbs'])>0)
+      <?php array_shift($data['breadcrumbs']) ?>
+      @foreach($data['breadcrumbs'] as $path => $folder)
+        <li><a href="/backups{{ $path }}">{{ $folder }}</a></li>
+      @endforeach
+      <li class="active">{{ $data['folderName'] }}</li>
+    @endif
   </ol>
 
   <div>
@@ -18,7 +25,7 @@
         <div class="navbar-form">
           <div class="btn-group" role="group">
             <a href="/dashboard" class="btn btn-default" title="Back to Main Menu">
-              <span class="gly gly-unshare"></span>
+              <span class="glyphicon glyphicon-th-list"></span>
             </a> 
             <button type="button" class="btn btn-default active">
               <span class="glyphicon glyphicon-cloud"></span>
@@ -44,20 +51,18 @@
     </ul>
 
     <!-- Tab panes -->
-    <div class="tab-content">
+    <div class="file-explorer tab-content">
       <div role="tabpanel" class="tab-pane active" >
           
-          @if(count($data['breadcrumbs'])>0)
-            <?php array_shift($data['breadcrumbs']) ?>
-            <ol class="breadcrumb">
-            @foreach($data['breadcrumbs'] as $path => $folder)
-              <li><a href="/backups{{ $path }}">{{ $folder }}</a></li>
-            @endforeach
-            <li>{{ $data['folderName'] }}</li>
-            </ol>
-          @endif
+         
 
-
+        <div>&nbsp</div>
+        @if(count($data['breadcrumbs'])>0)
+        <a href="/backups{{ endKey($data['breadcrumbs']) }}" class="btn btn-default" title="Back to Main Menu">
+          <span class="gly gly-unshare"></span>
+          {{ end($data['breadcrumbs']) }}
+        </a> 
+        @endif
 
         <table id="tb-backups" class="table">
           @if(count($data['subfolders'])>0)
