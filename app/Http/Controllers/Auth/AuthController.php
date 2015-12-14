@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use App\Events\UserLoggedIn;
 
 class AuthController extends Controller
 {
@@ -117,6 +118,7 @@ class AuthController extends Controller
         //$credentials = $this->getCredentials($request);
 
         if (Auth::attempt($credentials, $request->has('remember'))) {
+            event(new UserLoggedIn($request));
             return $this->handleUserWasAuthenticated($request, $throttles);
         }
 
@@ -126,6 +128,8 @@ class AuthController extends Controller
         if ($throttles) {
             $this->incrementLoginAttempts($request);
         }
+
+
         //return $this->loginUsername();
         return redirect($this->loginPath())
             ->withInput($request->only($this->loginUsername(), 'remember'))

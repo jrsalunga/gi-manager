@@ -169,6 +169,8 @@ get('flush-sessions', function(){
 	return redirect('sessions');
 });
 
+get('test-event', ['uses'=>'UploadController@test']);
+
 
 get('manday-count', function(){
 	
@@ -261,7 +263,7 @@ get('email', function(){
 		$data = [];
 	 return Mail::send('emails.welcome', $data, function ($message) {
 	 	$message->subject('Test Email');
-    $message->from('no-reply@giligansrestaurant.com', 'Giligan\'s');
+    $message->from('no-reply@giligansrestaurant.com', 'Giligan\'s Web App');
 
     $message->to('freakyash_02@yahoo.com');
 	});

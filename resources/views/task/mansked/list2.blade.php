@@ -59,7 +59,7 @@
             @if(count($manskeds) > 1)
             <a href="#myModal" class="pull-right" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-duplicate"></span></a>
             @endif
-            <a href="/task/mansked/add" class="pull-right" style="margin-right:10%;"><span class="glyphicon glyphicon-plus"></span> create</a>
+            <a href="/task/mansked/add" class="pull-right hidden-xs" style="margin-right:10%;"><span class="glyphicon glyphicon-plus"></span> create</a>
           </h4>
         </div>
         <div id="collapse-week{{ $new['weekno'] }}" class="panel-collapse collapse " role="tabpanel" aria-labelledby="week{{ $new['weekno'] }}">
@@ -92,7 +92,7 @@
             <a role="button" data-toggle="collapse" data-parent="#accordion-week-days" href="#collapse-week{{ $mansked->weekno }}" aria-expanded="false" aria-controls="collapse-week{{ $mansked->weekno }}" class="collapsed pull-right">
               <span class="glyphicon glyphicon-option-vertical"></span>
             </a>
-            <span class="pull-right" style="margin-right:10%;">
+            <span class="pull-right hidden-xs" style="margin-right:10%;">
               {{ $mansked->refno }}
               @if($mansked->filledManday() > 0)
                 <span class="badge" style="background-color:#999">{{ $mansked->filledManday() }}</span>  

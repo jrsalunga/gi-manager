@@ -28,7 +28,7 @@ return [
     |
     */
 
-    'host' => env('MAIL_HOST', 'smtp.mandrillapp.com'),
+    'host' => env('MAIL_HOST', 'smtp.gmail.com'),
 
     /*
     |--------------------------------------------------------------------------
@@ -80,7 +80,7 @@ return [
     |
     */
 
-    'username' => env('MAIL_USERNAME', 'jefferson.salunga@yahoo.com'),
+    'username' => env('MAIL_USERNAME', 'giligans.app@gmail.com'),
 
     /*
     |--------------------------------------------------------------------------
@@ -93,7 +93,7 @@ return [
     |
     */
 
-    'password' => env('MAIL_PASSWORD', '83SEaPaCVNraRXKrQHFOyw'),
+    'password' => env('MAIL_PASSWORD', 'Dycp3drtmt'),
 
     /*
     |--------------------------------------------------------------------------

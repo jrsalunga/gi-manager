@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use Dflydev\ApacheMimeTypes\PhpRepository;
 use File;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException as Http404;
+use App\Events\UserLoggedIn;
 
 class UploadController extends Controller {
 
@@ -32,6 +33,10 @@ class UploadController extends Controller {
 		$this->path['web'] = config('gi-dtr.upload_path.web').strtolower(session('user.branchcode')).DIRECTORY_SEPARATOR.now('year').DIRECTORY_SEPARATOR;
 	
 		
+	}
+
+	public function test(Request $request){
+		event(new UserLoggedIn($request));
 	}
 
 
