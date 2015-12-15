@@ -30,7 +30,7 @@ class AuthLoginEventHandler
     {
         //dd($event->request->user()->id);
         $data = [
-            'ip' => $event->request->ip(),
+            'ip' => clientIP(),
             'user' => $event->request->user()->name
         ];
 
