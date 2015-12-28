@@ -88,3 +88,21 @@ function clientIP(){
 }
 
 
+
+
+function lastWeekOfYear($year='') {
+	$year = empty($year) ? date('Y', strtotime('now')):$year;
+  $date = new \DateTime;
+  $date->setISODate($year, 53);
+  return ($date->format("W") === "53" ? 53 : 52);
+}
+
+function firstDayOfWeek($weekno='', $year=''){
+	$weekno = empty($weekno) ? date('W', strtotime('now')) : $weekno;
+	$year = empty($year) ? date('Y', strtotime('now')) : $year;
+	$dt = new DateTime();
+	$dt->setISODate($year, $weekno);
+	return $dt;
+}
+
+

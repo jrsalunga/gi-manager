@@ -6,7 +6,7 @@ use Event;
 use Auth;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Http\Request;
-use App\Models\Employee;
+use App\User;
 use App\Models\Manskedhdr as Mansked;
 use App\Events\ManskedhdrCreated as ManskedCreated;
 use App\Events\ManskedhdrUpdated as ManskedUpdated;
@@ -27,11 +27,11 @@ class AppServiceProvider extends ServiceProvider
             $id = empty(Auth::user()->id) ? '':Auth::user()->id;
 
             if(strtolower($id)!==strtolower(session('user.id'))){
-                $emp = Employee::with(['branch'=>function($query){
+                $emp = User::with(['branch'=>function($query){
                                 $query->select('code', 'descriptor', 'mancost', 'id');
                             }])->where('id', Auth::user()->id)
-                            ->get(['firstname', 'lastname', 'branchid', 'id'])->first();
-                session(['user' => ['fullname'=>$emp->firstname.' '.$emp->lastname, 
+                            ->get(['name', 'branchid', 'id'])->first();
+                session(['user' => ['fullname'=>$emp->name, 
                         'id'=>$emp->id, 'branchid'=>$emp->branchid, 
                         'branch'=>$emp->branch->descriptor, 
                         'branchcode'=>$emp->branch->code,

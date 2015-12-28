@@ -9,18 +9,23 @@ use App\Models\Manskedday as Manday;
 use App\Models\Manskeddtl as Mandtl;
 use Auth;
 use Carbon\Carbon;
+use App\Repositories\ManskedhdrRepository as ManskedRepo;
+use App\Repositories\EmployeeRepository as EmployeeRepo;
+use App\Repositories\Filters\ByBranch;
+use App\Repositories\Filters\Regular;
+use App\Repositories\Filters\Male;
+use App\Repositories\Filters\Female;
 
 class ManskedController extends Controller {
 
 
-	protected $branchid = '';
-	protected $employees = [];
+	private $employees;
+	private $manskeds;
 
-	public function __construct(){
-		$this->branchid = Auth::user()->branchid;
-		$this->employees = Employee::select('id')->where('branchid', $this->branchid)
-															->where('empstatus','>','0')
-															->get();
+	public function __construct(ManskedRepo $manskeds, EmployeeRepo $employees){
+		$this->employees =  $employees;
+		$this->manskeds =  $manskeds;
+
 	}
 
 	public function getIndex(Request $request, $param1=null, $param2=null, $param3=null){
@@ -56,22 +61,35 @@ class ManskedController extends Controller {
 	//task/mansked
 	public function makeListView(Request $request, $param1, $param2) {
 		//return dd(app());
+		/*
 		$manskeds = Mansked::with('manskeddays')
 													->where('branchid', $request->user()->branchid)
 													->orderBy('year', 'DESC')
 													->orderBy('weekno', 'DESC')
 													->paginate('5');
+		*/
+		$manskeds = $this->manskeds->byBranchWithMandays($request);
+								
+		//return $this->manskeds->byBranch($request)->load('manskeddays');
 													//->get();
 		//return Carbon::now()->addYear()->year;
-		if($manskeds->count() <= 0){
-			$manskeds = new Mansked;
-			$new = $manskeds->newWeek($this->branchid);
+
+		//return $data->first();
+		$data = $manskeds->paginate('5');
+		$new = $this->manskeds->newWeek($request);
+
+		/*
+		if($data->count() <= 0){
+			return $this->manskeds->newWeek($request);
+			//return $this->$manskeds->test();
 		} else {
-			$new = $manskeds[0]->newWeek($this->branchid);
+			return $this->manskeds->newWeek($request);
+			
 		}
+		*/
 		//return $manskeds[0]->filledManday();
 		//return $manskeds->newWeek($this->branchid);
-		return view('task.mansked.list2')->with('manskeds', $manskeds)->with('new', $new);
+		return view('task.mansked.list2')->with('manskeds', $data)->with('new', $new);
 
 		//$weeks = Mansked::paginateWeeks($request, '2015', 5);
 		//return view('task.mansked.list')->with('weeks', $weeks);
@@ -79,8 +97,12 @@ class ManskedController extends Controller {
 
 	//task/mansked/week/{weekno}
 	public function makeViewWeek($request, $year, $weekno){
-
-		$depts = $this->empGrpByDept();
+		$this->employees->pushFilters(new ByBranch($request));
+		//$this->employees->pushFilters(new Regular($request));
+		//$this->employees->pushFilters(new Male($request));
+		//return $this->employees->with('position')->all(['code', 'firstname', 'positionid']);
+		//return $this->employees->paginate('5', ['code', 'firstname', 'positionid']);
+		$depts = $this->employees->byDepartment($request);
 
 		$mansked = Mansked::with('manskeddays')
 											->where('weekno', $weekno)
@@ -171,7 +193,7 @@ class ManskedController extends Controller {
     try {
       $mansked->save();
         try {
-           $mansked->manskeddays()->saveMany($mandays);
+          $mansked->manskeddays()->saveMany($mandays);
         } catch(\Exception $e) {
           \DB::rollback();
           throw $e;
