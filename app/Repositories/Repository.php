@@ -60,6 +60,7 @@ abstract class Repository implements RepositoryInterface, FiltersInterface {
      */
     public function all($columns = array('*')) {
         $this->applyFilters();
+        //$this->model->with('position');
         return $this->model->get($columns);
     }
 
@@ -218,6 +219,23 @@ abstract class Repository implements RepositoryInterface, FiltersInterface {
         return $model->get($columns);
     }
 
+
+    /**
+     * @param $attribute
+     * @param $value
+     * @param array $columns
+     * @return mixed
+     */
+    public function get_uid() {
+        return $this->model->get_uid();
+    }
+
+
+
+
+
+
+
     /**
      * @return \Illuminate\Database\Eloquent\Builder
      * @throws RepositoryException
@@ -230,6 +248,16 @@ abstract class Repository implements RepositoryInterface, FiltersInterface {
 
         return $this->model = $model;
     }
+
+    public function getModel(){
+        return $this->model;
+    }
+
+ 
+
+
+
+
 
     /**
      * @return $this

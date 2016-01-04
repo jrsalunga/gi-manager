@@ -3,13 +3,13 @@
 use App\User;
 use App\Models\Dtr;
 use App\Models\Employee;
+use App\Models\Department;
 use App\Repositories\Repository;
 use Illuminate\Http\Request;
 
 class EmployeeRepository extends Repository
 {
 
-    private $employees;
 
     public function model() {
         return 'App\Models\Employee';
@@ -39,7 +39,11 @@ class EmployeeRepository extends Repository
 
 
   public function byDepartment(Request $request) {
-      $depts = [['name'=>'Dining', 'employees'=>[], 'deptid'=>['75B34178674011E596ECDA40B3C0AA12', '201E68D4674111E596ECDA40B3C0AA12', 'D2E8E339A47B11E592E000FF59FBB323']],
+
+      $department = new Department;
+      $d1 = array_flatten($department->whereNotIn('code', ['KIT'])->orderBy('code', 'DESC')->get(['id'])->toArray());
+
+      $depts = [['name'=>'Dining', 'employees'=>[], 'deptid'=>$d1],
                   ['name'=>'Kitchen', 'employees'=>[], 'deptid'=>['71B0A2D2674011E596ECDA40B3C0AA12']]];
 
       for($i=0; $i<= 1; $i++) { 

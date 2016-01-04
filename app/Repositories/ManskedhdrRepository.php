@@ -9,39 +9,39 @@ use Carbon\Carbon;
 class ManskedhdrRepository
 {
 
-    private $manskedhdrs;
+  private $manskedhdrs;
 
 
 
-    /**
-     * Get all the DTR of all employee of a branch on a certain date
-     *
-     * @param  User  $user
-     * @return Collection
-     */
-    public function byBranchWithMandays(Request $request)
-    {
-        $this->manskedhdrs = Mansked::with('manskeddays')
-                                ->where('branchid', $request->user()->branchid)
-                                ->orderBy('year', 'DESC')
-                                ->orderBy('weekno', 'DESC');
-                                
-        return $this->manskedhdrs;
-    }
+  /**
+   * Get all the DTR of all employee of a branch on a certain date
+   *
+   * @param  User  $user
+   * @return Collection
+   */
+  public function byBranchWithMandays(Request $request)
+  {
+      $this->manskedhdrs = Mansked::with('manskeddays')
+                              ->where('branchid', $request->user()->branchid)
+                              ->orderBy('year', 'DESC')
+                              ->orderBy('weekno', 'DESC');
+                              
+      return $this->manskedhdrs;
+  }
 
-  public function weekNo($weekno=null){
+  private function weekNo($weekno=null){
     if(empty($weekno) || $weekno==null)
       return str_pad($this->$weekno,2,'0',STR_PAD_LEFT);
     else 
       return str_pad($weekno,2,'0',STR_PAD_LEFT);
   }
 
-    /*
+  /*
   generate new week info for branch
   function for route: /task/mansked
   @param: branch id
   @return: array 
-*/
+  */
 
 
   public function newWeek(Request $request){
@@ -71,14 +71,14 @@ class ManskedhdrRepository
   get days of the week
   @param: week number, year
   @return: array of days of week in Carbon instance
-*/
+  */
   public function getDaysByWeekNo($weekno='', $year=''){
     $weekno = (empty($weekno) || $weekno > 53) ? date('W', strtotime('now')) : $weekno;
     $year = empty($year) ?  date('Y', strtotime('now')) : $year;
         for($day=1; $day<=7; $day++) {
             $arr[$day-1] = Carbon::parse(date('Y-m-d', strtotime($year."W".$this->weekNo($weekno).$day)));
         }
-        return $arr;
+      return $arr;
   }
 
 

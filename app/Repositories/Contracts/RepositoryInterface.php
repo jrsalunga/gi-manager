@@ -74,4 +74,11 @@ interface RepositoryInterface {
      */
     public function findWhere($where, $columns = array('*'));
 
+    /**
+     * @param $where
+     * @param array $columns
+     * @return mixed
+     */
+    public function get_uid();
+
 }

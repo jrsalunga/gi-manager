@@ -4,7 +4,15 @@ use App\Repositories\Filters\Filters;
 use App\Repositories\Contracts\RepositoryInterface as Repository;
 use Illuminate\Http\Request;
 
-class Regular extends Filters {
+class WithPosition extends Filters {
+
+
+    private $columns;
+
+    public function __construct($columns = array('*')){
+        $this->columns = $columns;
+    }
+
 
     /**
      * @param $model
@@ -13,7 +21,9 @@ class Regular extends Filters {
      */
     public function apply($model, Repository $repository)
     {
-        $model = $model->where('empstatus', '3');
+        $model = $model->with(['position'=>function($query){
+            $query->select($this->columns);
+        }]);
         return $model;
     }
 }

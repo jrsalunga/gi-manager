@@ -1,4 +1,4 @@
-@extends('branch.master')
+@extends('index')
 
 @section('title', '- Create Daily Man Schedule')
 

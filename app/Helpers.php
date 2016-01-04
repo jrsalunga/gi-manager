@@ -105,4 +105,28 @@ function firstDayOfWeek($weekno='', $year=''){
 	return $dt;
 }
 
+function filename_to_date($filename, $type='l'){
+	$f = pathinfo($filename, PATHINFO_FILENAME);
+
+	$m = substr($f, 2, 2);
+	$d = substr($f, 4, 2);
+	$y = '20'.substr($f, 6, 2);
+
+	if($type==='l')
+		return $y.'-'.$m.'-'.$d;
+	if($type==='s')
+		return $m.'/'.$d.'/'.$y;
+	return $y.'-'.$m.'-'.$d;
+}
+
+function filename_to_date2($filename){
+	$f = pathinfo($filename, PATHINFO_FILENAME);
+
+	$m = substr($f, 2, 2);
+	$d = substr($f, 4, 2);
+	$y = '20'.substr($f, 6, 2);
+
+	return Carbon\Carbon::parse($y.'-'.$m.'-'.$d);
+}
+
 

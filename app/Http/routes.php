@@ -88,6 +88,13 @@ Route::get('api/employee/{field?}/{value?}', ['as'=>'employee.getbyfield', 'uses
 
 
 
+get('upload/process', ['uses'=>'UploadController@processPosBackup']); 
+get('upload/getdate', function(){	
+
+	return filename_to_date('GC113015', 's');
+
+}); 
+
 
 
 
@@ -152,8 +159,11 @@ get('dtr-repo/{date}', ['uses'=>'DtrController@date']);
 get('dtl-repo/{date}', ['uses'=>'DtrController@date']);
 
 get('slug/branch/{id}', function($id){
-	$branch = App\Models\Branch::find($id);
-	return str_slug($branch->address);
+	//$branch = App\Models\Branch::find($id);
+	//return str_slug($branch->address);
+	$branches = new App\Models\Department;
+	return array_flatten($branches->whereNotIn('code', ['KIT'])->get(['id'])->toArray());
+	
 });
 
 get('const', function(){
@@ -223,11 +233,15 @@ get('holidate/{date}', function($date){
 
 
 get('files', function(){
-	//return dd(Storage::disk(app()->environment()));
+	return dd(Storage::disk(app()->environment()));
 	$directories = Storage::allDirectories(session('user.branchcode'));
 	return $directories;
 });
 
+
+get('test', function(){
+	return realpath('.');
+});
 
 
 

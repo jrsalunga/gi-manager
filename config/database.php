@@ -76,6 +76,18 @@ return [
             'strict'    => false,
         ],
 
+        'boss' => [
+            'driver'    => 'mysql',
+            'host'      => '192.168.1.5:1686',
+            'database'  => 'boss',
+            'username'  => 'server-admin',
+            'password'  => 'b33rpr0m0',
+            'charset'   => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix'    => '',
+            'strict'    => false,
+        ],
+
         'pgsql' => [
             'driver'   => 'pgsql',
             'host'     => env('DB_HOST', 'localhost'),

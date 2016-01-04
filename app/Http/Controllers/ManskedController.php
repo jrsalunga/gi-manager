@@ -15,6 +15,7 @@ use App\Repositories\Filters\ByBranch;
 use App\Repositories\Filters\Regular;
 use App\Repositories\Filters\Male;
 use App\Repositories\Filters\Female;
+use App\Repositories\Filters\WithPosition;
 
 class ManskedController extends Controller {
 
@@ -97,10 +98,10 @@ class ManskedController extends Controller {
 
 	//task/mansked/week/{weekno}
 	public function makeViewWeek($request, $year, $weekno){
-		$this->employees->pushFilters(new ByBranch($request));
-		//$this->employees->pushFilters(new Regular($request));
-		//$this->employees->pushFilters(new Male($request));
-		//return $this->employees->with('position')->all(['code', 'firstname', 'positionid']);
+		//$this->employees->pushFilters(new ByBranch($request));
+		//$this->employees->pushFilters(new Regular());
+		//$this->employees->pushFilters(new Male());
+		//return $this->employees->all(['code', 'firstname', 'positionid']);
 		//return $this->employees->paginate('5', ['code', 'firstname', 'positionid']);
 		$depts = $this->employees->byDepartment($request);
 

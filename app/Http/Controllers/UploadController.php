@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Upload;
+use App\Models\PosUpload;
+use App\Models\DailySales;
 use Illuminate\Http\Request;
 use Illuminate\Filesystem\Filesystem;
 use App\Repositories\StorageRepository;
+use App\Repositories\PosUploadRepository;
 use Illuminate\Support\Facades\Storage;
 use Dflydev\ApacheMimeTypes\PhpRepository;
 use File;
@@ -20,17 +23,19 @@ class UploadController extends Controller {
 	protected $fs;
 	protected $branch;
 	protected $mime;
+	protected $backup;
 
-	public function __construct(PhpRepository $mimeDetect){
+	public function __construct(Request $request, PhpRepository $mimeDetect, PosUploadRepository $posuploadrepo){
 		$this->branch = session('user.branchcode');
 		$this->mime = $mimeDetect;
 		$this->fs = new Filesystem;
 		$this->files = new StorageRepository($mimeDetect, 'files.'.app()->environment());
 		$this->pos = new StorageRepository($mimeDetect, 'pos.'.app()->environment());
 		$this->web = new StorageRepository($mimeDetect, 'web');
+		$this->backup = $posuploadrepo;
 		
-		$this->path['temp'] = strtolower(session('user.branchcode')).DIRECTORY_SEPARATOR.now('year').DIRECTORY_SEPARATOR;
-		$this->path['web'] = config('gi-dtr.upload_path.web').strtolower(session('user.branchcode')).DIRECTORY_SEPARATOR.now('year').DIRECTORY_SEPARATOR;
+		$this->path['temp'] = strtolower(session('user.branchcode')).DS.now('year').DS;
+		$this->path['web'] = config('gi-dtr.upload_path.web').strtolower(session('user.branchcode')).DS.now('year').DS;
 	
 		
 	}
@@ -101,13 +106,18 @@ class UploadController extends Controller {
 		return $this->files;
 	}
 
+
+
+
+	/* move file from web to maindepot
+	*/
 	public function putfile(Request $request) {
 
 		$yr = empty($request->input('year')) ? now('Y'):$request->input('year');
 		$mon = empty($request->input('month')) ? now('M'):$request->input('month');
 
 		$filepath = $this->path['temp'].$request->input('filename');
-		$storage_path = $this->branch.DIRECTORY_SEPARATOR.$yr.DIRECTORY_SEPARATOR.$mon.DIRECTORY_SEPARATOR.$request->input('filename'); 
+		$storage_path = $this->branch.DS.$yr.DS.$mon.DS.$request->input('filename'); 
 
 		if($this->web->exists($filepath)){
 			$storage = $this->getStorageType($filepath);
@@ -117,6 +127,25 @@ class UploadController extends Controller {
 	    }catch(\Exception $e){
 					return redirect('/backups/upload')->with('alert-error', $e->getMessage());
 	    }
+
+	    
+
+
+
+	    
+	    $res = $this->createPosUpload($storage_path, $request);
+	    if(!$res)
+				return redirect('/backups/upload')->with('alert-error', 'File: '.$request->input('filename').' unable to create record');
+	    
+			
+
+			if(!$this->extract($storage_path, 'admate'))
+				return redirect('/backups/upload')->with('alert-error', 'File: '.$request->input('filename').' unable to extract');
+
+			
+
+			
+	   
 			
 			return redirect('/backups/upload')->with('alert-success', 'File: '.$request->input('filename').' successfully uploaded!');
 
@@ -159,7 +188,7 @@ class UploadController extends Controller {
 
 
 	private function logAction($action, $log) {
-		$logfile = base_path().DIRECTORY_SEPARATOR.'logs'.DIRECTORY_SEPARATOR.now().'-log.txt';
+		$logfile = base_path().DS.'logs'.DS.now().'-log.txt';
 		$new = file_exists($logfile) ? false : true;
 		if($new){
 			$handle = fopen($logfile, 'w');
@@ -177,11 +206,15 @@ class UploadController extends Controller {
  	// depricated
 	public function setPath($filename){
 		if(strtolower(pathinfo($filename, PATHINFO_EXTENSION))==='zip')
-				return 'pos'.DIRECTORY_SEPARATOR.$this->path['temp'].DIRECTORY_SEPARATOR;
+				return 'pos'.DS.$this->path['temp'].DS;
 		else
-				return 'files'.DIRECTORY_SEPARATOR.$this->path['temp'].DIRECTORY_SEPARATOR;
+				return 'files'.DS.$this->path['temp'].DS;
 	}
 
+
+
+	/* upload to web from ajax 
+	*/
 	public function postfile(Request $request) {
 		
 		if($request->file('pic')->isValid()) {
@@ -212,41 +245,16 @@ class UploadController extends Controller {
 													'month'=>$request->input('month')]);
 			}
 			
-			
-
-			/*
-			if($this->fs->exists($this->path['temp'].$filename))
-				return json_encode(['status'=>'error', 
-														'code'=>'400', 
-														'message'=> 'File already exist!', 
-														'dest'=>$this->path['temp'].$filename]); // $destinationPath.$filename.' exist!'
-
-
-			if(!is_dir($this->path['temp']))
-				mkdir($this->path['temp'], 0775, true);
-
-			$request->file('pic')->move($this->path['temp'], $filename);
-
-			//$size = number_format(($request->file('pic')->getClientSize()/1000),0);
-			$size = $this->web->fileSize(strtolower(session('user.branchcode')).DIRECTORY_SEPARATOR.now('year').DIRECTORY_SEPARATOR.$filename);
-
-			$line = implode(' ', ['user:'.$request->user()->username, $filename.':'.$size.'KB']);
-			$this->logAction('upload:success', $line);
-			
-		
-			return json_encode(['status'=>'success', 
-													'code'=>'200', 
-													'message'=>'', 
-													'year'=>$request->input('year'),
-													'month'=>$request->input('month')]);
-			*/	
-			
 
 		} else {
-			return redirect('/upload/backup')->with('alert-error', 'File: '.$request->input('filename').' corrupted! Try to upload again..');
+			return redirect('/upload/backup')
+								->with('alert-error', 'File: '.$request->input('filename').' corrupted! Try to upload again..');
 		}
 		
 	}
+
+
+
 
 	public function getDownload(Request $request, $p1=NULL, $p2=NULL, $p3=NULL, $p4=NULL, $p5=NULL){
     
@@ -276,6 +284,30 @@ class UploadController extends Controller {
 
 	  return $response;
 
+  }
+
+
+  // for /put/upload/postfile @ $this->putfile()
+  //public function processPosBackup($src, $ip){
+  public function createPosUpload($src, Request $request){
+
+	 	$data = [
+	 		'branchid' => session('user.branchid'),
+    	'filename' => $request->input('filename'),
+    	'year' => $request->input('year'),
+    	'month' => $request->input('month'),
+    	'size' => $this->pos->fileSize($src),
+    	'mimetype' => $this->pos->fileMimeType($src),
+    	'terminal' => $request->ip(),
+    	'remarks' => $src,
+    	'userid' => $request->user()->id
+    ];
+
+    return $this->backup->create($data)?:false;
+  }
+
+  public function extract($src, $pwd=NULL){
+  	return $this->backup->extract($src, $pwd);
   }
 
 	

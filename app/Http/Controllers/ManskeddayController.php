@@ -12,12 +12,15 @@ use App\Models\Manskeddtl as Mandtl;
 use Auth;
 use URL;
 use Carbon\Carbon;
+use App\Repositories\EmployeeRepository as EmployeeRepo;
 
 class ManskeddayController extends Controller {
 
 	protected $branchid = '';
+	private $employees;
 
-	public function __construct(){
+	public function __construct(EmployeeRepo $employees){
+		$this->employees = $employees;
 		$this->branchid = Auth::user()->branchid;
 	}
 
@@ -36,9 +39,9 @@ class ManskeddayController extends Controller {
 		}
 	}
 
-	// for $this->empGrpByDeptWithManday
+	// for $this->empGrpByDeptWithManday // deprecated
 	public function empGrpByDept() {
-		$depts = [['name'=>'Dining', 'employees'=>[], 'deptid'=>['75B34178674011E596ECDA40B3C0AA12', '201E68D4674111E596ECDA40B3C0AA12']],
+		$depts = [['name'=>'Dining', 'employees'=>[], 'deptid'=>['75B34178674011E596ECDA40B3C0AA12', '201E68D4674111E596ECDA40B3C0AA12', '20767330A25B11E583CA00FF59FBB323']],
 					['name'=>'Kitchen', 'employees'=>[], 'deptid'=>['71B0A2D2674011E596ECDA40B3C0AA12']]];
 
 		for($i=0; $i<= 1; $i++) { 
@@ -58,8 +61,9 @@ class ManskeddayController extends Controller {
 	}
 
 	// for $this->makeEditView and $this->makeSingleView
-	private function empGrpByDeptWithManday($id){
-		$depts = $this->empGrpByDept(); // get array of dept w/ emp grouped by department e.g. dining, kitchen
+	private function empGrpByDeptWithManday(Request $request, $id){
+		//$depts = $this->empGrpByDept(); // get array of dept w/ emp grouped by department e.g. dining, kitchen
+			$depts = $this->employees->byDepartment($request);
 			for($h=0; $h<count($depts); $h++){
 				$arr = $depts[$h]['employees']->toArray(); // extract emp on each dept
 				for($i=0; $i<count($arr); $i++){
@@ -181,7 +185,7 @@ class ManskeddayController extends Controller {
 			if(strtotime($manday->date) < strtotime('now')){
 				return redirect(URL::previous())->with(['alert-warning' => 'Editing is disabled! Date already passed...']);
 			}
-			$depts = $this->empGrpByDeptWithManday($param1);			
+			$depts = $this->empGrpByDeptWithManday($request, $param1);			
 		} else {
 			return redirect('task/mansked');
 		}
@@ -193,9 +197,11 @@ class ManskeddayController extends Controller {
 
 	}
 
+	// deprecated
 	public function makeAddView(Request $request) {
 
 		$depts = $this->empGrpByDept();
+		//return $depts = $this->employees->byDepartment($request);
 
 		$date = (!empty($request->input('date')) && strtotime('now') < strtotime($request->input('date')) ) ? $request->input('date'):date('Y-m-d', strtotime('now +1day'));
 		//exit;
@@ -215,7 +221,7 @@ class ManskeddayController extends Controller {
 		$manday = Manday::find($param1);
 		//return dd($request);
 		if(count($manday) > 0){ // check if the $id 
-			$depts = $this->empGrpByDeptWithManday($param1);	
+			$depts = $this->empGrpByDeptWithManday($request, $param1);	
 			//session(['weekno'=>Carbon::parse($manday->date)->weekOfYear])	;	
 		} else {
 			return redirect(URL::previous());
