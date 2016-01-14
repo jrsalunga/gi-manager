@@ -78,10 +78,10 @@ return [
 
         'boss' => [
             'driver'    => 'mysql',
-            'host'      => '192.168.1.5:1686',
+            'host'      => 'localhost',
             'database'  => 'boss',
-            'username'  => 'server-admin',
-            'password'  => 'b33rpr0m0',
+            'username'  => 'root',
+            'password'  => 'p@55w0rd',
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix'    => '',

@@ -7,15 +7,32 @@ use File;
 use App\Repositories\Repository;
 use App\Models\PosUpload;
 use App\Models\DailySales;
+use App\Repositories\DailySalesRepository;
 use ZipArchive;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
+use Illuminate\Support\Collection;
+use Illuminate\Container\Container as App;
 
 class PosUploadRepository extends Repository
 {
     
+    public $ds;
+    public $extracted_path;
+
     
+
+    /**
+     * @param App $app
+     * @param Collection $collection
+     * @throws \App\Repositories\Exceptions\RepositoryException
+     */
+    public function __construct(App $app, Collection $collection, DailySalesRepository $dailysales) {
+        parent::__construct($app, $collection);
+
+        $this->ds = $dailysales;
+    }
 
     public function model() {
         return 'App\Models\PosUpload';
@@ -35,7 +52,7 @@ class PosUploadRepository extends Repository
         
         $path = storage_path().DS.'backup'.DS.pathinfo($src, PATHINFO_FILENAME);
         
-        if(file_exists($path)) {
+        if(is_dir($path)) {
           $this->removeDir($path);
         }
         mkdir($path, 0777, true);
@@ -44,8 +61,9 @@ class PosUploadRepository extends Repository
         if(!$zip->extractTo($path))
           return false;
 
-        $this->postDailySales($path, filename_to_date2(pathinfo($src, PATHINFO_FILENAME)));
-        $this->removeDir($path);
+        $this->extracted_path = $path;
+        //$this->postDailySales($path, filename_to_date2(pathinfo($src, PATHINFO_FILENAME)));
+        //$this->removeDir($path);
 
         $zip->close();
 
@@ -55,39 +73,54 @@ class PosUploadRepository extends Repository
       }
     }
 
-    private function postDailySales($path, $date){
+    public function postDailySales(){
 
-      $db = dbase_open($path.DS.'CSH_AUDT.DBF', 0);
-      $header = dbase_get_header_info($db);
-      $record_numbers = dbase_numrecords($db);
-      for($i = 1; $i <= $record_numbers; $i++) {
+      $dbf_file = $this->extracted_path.DS.'CSH_AUDT.DBF';
 
-        $row = dbase_get_record_with_names($db, $i);
+      if (file_exists($dbf_file)) {
+        $db = dbase_open($dbf_file, 0);
+        $header = dbase_get_header_info($db);
+        $record_numbers = dbase_numrecords($db);
+        $last_ds = $this->ds->lastRecord();
+        for ($i = 1; $i <= $record_numbers; $i++) {
 
-
-
-        if(trim($row['TRANDATE'])==$date->format('Ymd')){
+          $row = dbase_get_record_with_names($db, $i);
+          $vfpdate = vfpdate_to_carbon(trim($row['TRANDATE']));
           
+          if(is_null($last_ds)) {
+            
+              $this->firstOrNewDailySales($attrs)
           
-
-          $ds = DailySales::firstOrNew(['date' => $date->format('Y-m-d'),
-                                        'branchid' => session('user.branchid')]);
-
-          //$ds->branchid = session('user.branchid');
-          //$ds->date = $date->format('Y-m-d');
-          $ds->managerid = session('user.id');
-          $ds->sales = $row['CSH_SALE'] + $row['CHG_SALE'];
-          $ds->tips = $row['TIP'];
-          $ds->custcount = $row['CUST_CNT'];
-          $ds->empcount = $row['CREW_KIT'] + $row['CREW_DIN'];
-          $ds->save();
-       }
-
+          } else {
+            
+            if($last_ds->date->lte($vfpdate)) {
+              
+              $this->firstOrNewDailySales($attrs)
+            }
+          }
+        }
+        dbase_close($db);
+        return true;
       }
 
-      dbase_close($db);
-
+      return false;
     }
+
+    private function firstOrNewDailySales($attrs) {
+      $attrs = [
+        //'date'      => $date->format('Y-m-d'),
+        'date'      => $vfpdate->format('Y-m-d'),
+        'branchid'  => session('user.branchid'),
+        'managerid' => session('user.id'),
+        'sales'     => ($row['CSH_SALE'] + $row['CHG_SALE']),
+        'tips'      => $row['TIP'],
+        'custcount' => $row['CUST_CNT'],
+        'empcount'  => ($row['CREW_KIT'] + $row['CREW_DIN'])
+      ];
+
+      return $this->ds->firstOrNew($attrs, ['date', 'branchid']);
+    }
+
 
 
 
@@ -104,6 +137,17 @@ class PosUploadRepository extends Repository
       }
       rmdir($dir);
     }
+
+
+    public function removeExtratedDir() {
+      return $this->removeDir($this->extracted_path);
+    }
+
+    public function lastRecord() {
+        $this->applyFilters();
+        return $this->model->orderBy('uploaddate', 'DESC')->first();
+    }
+
     
   
 

@@ -9,6 +9,8 @@ use App\Models\DailySales;
 use Illuminate\Http\Request;
 use Illuminate\Filesystem\Filesystem;
 use App\Repositories\StorageRepository;
+use App\Repositories\Filters\WithBranch;
+use App\Repositories\Filters\ByBranch;
 use App\Repositories\PosUploadRepository;
 use Illuminate\Support\Facades\Storage;
 use Dflydev\ApacheMimeTypes\PhpRepository;
@@ -33,6 +35,9 @@ class UploadController extends Controller {
 		$this->pos = new StorageRepository($mimeDetect, 'pos.'.app()->environment());
 		$this->web = new StorageRepository($mimeDetect, 'web');
 		$this->backup = $posuploadrepo;
+		//$this->backup->pushFilters(new WithBranch(['code', 'descriptor', 'id']));
+  	$this->backup->pushFilters(new ByBranch($request));
+
 		
 		$this->path['temp'] = strtolower(session('user.branchcode')).DS.now('year').DS;
 		$this->path['web'] = config('gi-dtr.upload_path.web').strtolower(session('user.branchcode')).DS.now('year').DS;
@@ -135,12 +140,14 @@ class UploadController extends Controller {
 	    
 	    $res = $this->createPosUpload($storage_path, $request);
 	    if(!$res)
-				return redirect('/backups/upload')->with('alert-error', 'File: '.$request->input('filename').' unable to create record');
+				return redirect('/backups/upload')
+								->with('alert-error', 'File: '.$request->input('filename').' unable to create record');
 	    
 			
 
-			if(!$this->extract($storage_path, 'admate'))
-				return redirect('/backups/upload')->with('alert-error', 'File: '.$request->input('filename').' unable to extract');
+			if(!$this->processDailySales($storage_path))
+				return redirect('/backups/upload')
+								->with('alert-error', 'File: '.$request->input('filename').' unable to extract');
 
 			
 
@@ -307,7 +314,22 @@ class UploadController extends Controller {
   }
 
   public function extract($src, $pwd=NULL){
+
   	return $this->backup->extract($src, $pwd);
+  }
+
+  public function ds(Request $request) {
+  	
+  	//return $this->backup->lastRecord();
+  	$this->backup->ds->pushFilters(new WithBranch(['code', 'descriptor', 'id']));
+  	return $this->backup->ds->lastRecord();
+  }
+
+  public function processDailySales($filepath){
+  	$this->backup->extract($filepath, 'admate');
+  	$res = $this->backup->postDailySales();
+  	$this->backup->removeExtratedDir();
+  	return $res;
   }
 
 	

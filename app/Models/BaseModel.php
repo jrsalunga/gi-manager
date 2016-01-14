@@ -4,14 +4,14 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 
-class BaseModel extends Model {
+abstract class BaseModel extends Model {
 
 	public $timestamps = false;
 	public $incrementing = false;
 
 
 
-	/**
+	/******* this is a substitute from Illuminate\Database\Eloquent\Model ******
      * Perform a model insert operation.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query

@@ -89,11 +89,9 @@ Route::get('api/employee/{field?}/{value?}', ['as'=>'employee.getbyfield', 'uses
 
 
 get('upload/process', ['uses'=>'UploadController@processPosBackup']); 
-get('upload/getdate', function(){	
+get('upload/ds', ['uses'=>'UploadController@ds']); 
 
-	return filename_to_date('GC113015', 's');
 
-}); 
 
 
 
@@ -240,7 +238,18 @@ get('files', function(){
 
 
 get('test', function(){
-	return realpath('.');
+
+	 $path = public_path('uploads'.DS.'mar'.DS.'2016');
+	 $to = $path.DS.'test';
+	 //if(!is_dir($to))
+	 	//mkdir($to, 0775, true);
+
+	//$zip = Zipper::make($path.DS.'GC120915.ZIP')->extractTo($to);
+	$zip = Zipper::make($path.DS.'GC120915.ZIP');
+
+	return dd($zip->contains('SALESMTDS.DBF'));
+
+
 });
 
 

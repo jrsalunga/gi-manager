@@ -220,15 +220,22 @@ abstract class Repository implements RepositoryInterface, FiltersInterface {
     }
 
 
-    /**
-     * @param $attribute
-     * @param $value
-     * @param array $columns
-     * @return mixed
-     */
+    /************************ custom  *************/
     public function get_uid() {
         return $this->model->get_uid();
     }
+
+    public function orderBy($field, $order='ASC') {
+        $this->applyFilters();
+
+        return $this->model->orderBy($field, $order)->get();
+    }
+
+    
+
+
+
+
 
 
 
@@ -252,6 +259,7 @@ abstract class Repository implements RepositoryInterface, FiltersInterface {
     public function getModel(){
         return $this->model;
     }
+
 
  
 

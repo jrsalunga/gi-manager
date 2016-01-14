@@ -16,6 +16,10 @@ class Branch extends BaseModel {
     return $this->hasMany('App\Models\Holidaydtl', 'branchid');
   }
 
+  public function dailysales() {
+    return $this->hasMany('App\Models\DailySales', 'branchid');
+  }
+
 
 
 

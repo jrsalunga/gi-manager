@@ -4,13 +4,13 @@ use App\Repositories\Filters\Filters;
 use App\Repositories\Contracts\RepositoryInterface as Repository;
 use Illuminate\Http\Request;
 
-class ByBranch extends Filters {
+class WithBranch extends Filters {
 
 
-    private $request;
+    private $columns;
 
-    public function __construct(Request $request){
-        $this->request = $request;
+    public function __construct($columns = array('*')){
+        $this->columns = $columns;
     }
 
 
@@ -21,7 +21,9 @@ class ByBranch extends Filters {
      */
     public function apply($model, Repository $repository)
     {
-        $model = $model->where('branchid', $this->request->user()->branchid);
+        $model = $model->with(['branch'=>function($query){
+            $query->select($this->columns);
+        }]);
         return $model;
     }
 }

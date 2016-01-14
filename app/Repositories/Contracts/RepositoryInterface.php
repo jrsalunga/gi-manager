@@ -2,7 +2,7 @@
 
 /**
  * Interface RepositoryInterface
- * @package Bosnadev\Repositories\Contracts
+ * @package App\Repositories\Contracts
  */
 interface RepositoryInterface {
 
