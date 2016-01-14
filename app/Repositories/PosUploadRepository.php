@@ -82,45 +82,51 @@ class PosUploadRepository extends Repository
         $header = dbase_get_header_info($db);
         $record_numbers = dbase_numrecords($db);
         $last_ds = $this->ds->lastRecord();
+        $update = 0;
         for ($i = 1; $i <= $record_numbers; $i++) {
 
           $row = dbase_get_record_with_names($db, $i);
           $vfpdate = vfpdate_to_carbon(trim($row['TRANDATE']));
           
           if(is_null($last_ds)) {
-            
-              $this->firstOrNewDailySales($attrs)
-          
+            $attrs = [
+              //'date'      => $date->format('Y-m-d'),
+              'date'      => $vfpdate->format('Y-m-d'),
+              'branchid'  => session('user.branchid'),
+              'managerid' => session('user.id'),
+              'sales'     => ($row['CSH_SALE'] + $row['CHG_SALE']),
+              'tips'      => $row['TIP'],
+              'custcount' => $row['CUST_CNT'],
+              'empcount'  => ($row['CREW_KIT'] + $row['CREW_DIN'])
+            ];
+
+            if ($this->ds->firstOrNew($attrs, ['date', 'branchid']));
+              $update++;
           } else {
-            
             if($last_ds->date->lte($vfpdate)) {
-              
-              $this->firstOrNewDailySales($attrs)
+              $attrs = [
+                //'date'      => $date->format('Y-m-d'),
+                'date'      => $vfpdate->format('Y-m-d'),
+                'branchid'  => session('user.branchid'),
+                'managerid' => session('user.id'),
+                'sales'     => ($row['CSH_SALE'] + $row['CHG_SALE']),
+                'tips'      => $row['TIP'],
+                'custcount' => $row['CUST_CNT'],
+                'empcount'  => ($row['CREW_KIT'] + $row['CREW_DIN'])
+              ];
+
+              if ($this->ds->firstOrNew($attrs, ['date', 'branchid']));
+                $update++;
+
             }
           }
         }
         dbase_close($db);
-        return true;
+        return count($update>0) ? true:false;
       }
 
       return false;
     }
-
-    private function firstOrNewDailySales($attrs) {
-      $attrs = [
-        //'date'      => $date->format('Y-m-d'),
-        'date'      => $vfpdate->format('Y-m-d'),
-        'branchid'  => session('user.branchid'),
-        'managerid' => session('user.id'),
-        'sales'     => ($row['CSH_SALE'] + $row['CHG_SALE']),
-        'tips'      => $row['TIP'],
-        'custcount' => $row['CUST_CNT'],
-        'empcount'  => ($row['CREW_KIT'] + $row['CREW_DIN'])
-      ];
-
-      return $this->ds->firstOrNew($attrs, ['date', 'branchid']);
-    }
-
 
 
 
@@ -148,6 +154,9 @@ class PosUploadRepository extends Repository
         return $this->model->orderBy('uploaddate', 'DESC')->first();
     }
 
+    public function ds(){
+      return $this->ds->all();
+    }
     
   
 

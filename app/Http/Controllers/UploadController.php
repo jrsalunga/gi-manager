@@ -26,6 +26,7 @@ class UploadController extends Controller {
 	protected $branch;
 	protected $mime;
 	protected $backup;
+	public $override = false;
 
 	public function __construct(Request $request, PhpRepository $mimeDetect, PosUploadRepository $posuploadrepo){
 		$this->branch = session('user.branchcode');
@@ -128,7 +129,7 @@ class UploadController extends Controller {
 			$storage = $this->getStorageType($filepath);
 
 			try {
-	      $storage->moveFile($this->web->realFullPath($filepath), $storage_path, true);
+	      $storage->moveFile($this->web->realFullPath($filepath), $storage_path, true); // false = override file!
 	    }catch(\Exception $e){
 					return redirect('/backups/upload')->with('alert-error', $e->getMessage());
 	    }
@@ -145,51 +146,15 @@ class UploadController extends Controller {
 	    
 			
 
-			if(!$this->processDailySales($storage_path))
+			if(!$this->processDailySales($storage_path, $res))
 				return redirect('/backups/upload')
 								->with('alert-error', 'File: '.$request->input('filename').' unable to extract');
 
-			
-
-			
-	   
-			
 			return redirect('/backups/upload')->with('alert-success', 'File: '.$request->input('filename').' successfully uploaded!');
-
-
-			
-			
-			
+		
 		} else {
 			$this->logAction('move:error', 'user:'.$request->user()->username.' '.$request->input('filename').' message:try_again');
 			return redirect('/backups/upload')->with('alert-error', 'File: '.$request->input('filename').' do not exist! Try to upload again..');
-		}
-
-
-
-
-		if($this->fs->exists($this->path['temp'].$request->input('filename'))){
-			if($this->fs->exists($this->path['storage'].$request->input('filename'))){ 
-				$this->logAction('move:error', 'user:'.$request->user()->username.' '.$request->input('filename').' message:file_exist');
-				return redirect('/upload/backup')->with('alert-error', 'File: '.$request->input('filename').' exist!');
-			} else {
-
-				if(!is_dir($this->path['storage']))
-					mkdir($this->path['storage'], 0775, true);
-
-				try {
-					File::move($this->path['temp'].$request->input('filename'), $this->path['storage'].$request->input('filename'));
-				}catch(\Exception $e){
-					$this->logAction('move:error', 'user:'.$request->user()->username.' '.$request->input('filename').' message:'.$e->getMessage());
-					return redirect('/upload/backup')->with('alert-error', $e->getMessage());
-				}
-
-				$this->logAction('move:success', 'user:'.$request->user()->username.' '.$request->input('filename'));
-				return redirect('/upload/backup')->with('alert-success', 'File: '.$request->input('filename').' successfully uploaded!');
-			}
-		} else {
-			$this->logAction('move:error', 'user:'.$request->user()->username.' '.$request->input('filename').' message:try_again');
-			return redirect('/upload/backup')->with('alert-error', 'File: '.$request->input('filename').' do not exist! Try to upload again..');
 		}
 	} 
 
@@ -325,9 +290,12 @@ class UploadController extends Controller {
   	return $this->backup->ds->lastRecord();
   }
 
-  public function processDailySales($filepath){
+  public function processDailySales($filepath, PosUpload $posupload){
   	$this->backup->extract($filepath, 'admate');
   	$res = $this->backup->postDailySales();
+  	if($res) 
+  		$this->backup->update(['processed'=>1], $posupload->id);
+  	
   	$this->backup->removeExtratedDir();
   	return $res;
   }

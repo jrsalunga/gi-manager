@@ -115,6 +115,12 @@ abstract class Repository implements RepositoryInterface, FiltersInterface {
         return $this->model->save();
     }
 
+    public function save()
+    {
+        
+        return $this->model->save();
+    }
+
     /**
      * @param array $data
      * @param $id
@@ -231,7 +237,7 @@ abstract class Repository implements RepositoryInterface, FiltersInterface {
         return $this->model->orderBy($field, $order)->get();
     }
 
-    
+
 
 
 
