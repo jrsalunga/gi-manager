@@ -128,29 +128,31 @@ class UploadController extends Controller {
 		if($this->web->exists($filepath)){
 			$storage = $this->getStorageType($filepath);
 
+			
+
 			try {
 	      $storage->moveFile($this->web->realFullPath($filepath), $storage_path, true); // false = override file!
 	    }catch(\Exception $e){
 					return redirect('/backups/upload')->with('alert-error', $e->getMessage());
 	    }
 
-	    
+	    /*** if backup file ****/
+	    if(starts_with($storage->getType(),'pos') && starts_with($request->input('filename'),'GC')) {
 
+		    $res = $this->createPosUpload($storage_path, $request);
+		    if(!$res)
+					return redirect('/backups/upload')
+									->with('alert-error', 'File: '.$request->input('filename').' unable to create record');
+		    
+				if(!$this->processDailySales($storage_path, $res))
+					return redirect('/backups/upload')
+									->with('alert-error', 'File: '.$request->input('filename').' unable to extract');
 
-
-	    
-	    $res = $this->createPosUpload($storage_path, $request);
-	    if(!$res)
-				return redirect('/backups/upload')
-								->with('alert-error', 'File: '.$request->input('filename').' unable to create record');
-	    
+				return redirect('/backups/upload')->with('alert-success', 'File: '.$request->input('filename').' successfully uploaded and processed daily sales!');
+	    } else {
+				return redirect('/backups/upload')->with('alert-success', 'File: '.$request->input('filename').' successfully uploaded!');
+	    }
 			
-
-			if(!$this->processDailySales($storage_path, $res))
-				return redirect('/backups/upload')
-								->with('alert-error', 'File: '.$request->input('filename').' unable to extract');
-
-			return redirect('/backups/upload')->with('alert-success', 'File: '.$request->input('filename').' successfully uploaded!');
 		
 		} else {
 			$this->logAction('move:error', 'user:'.$request->user()->username.' '.$request->input('filename').' message:try_again');

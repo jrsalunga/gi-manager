@@ -21,7 +21,7 @@ $(function(){
 		uploadFinished:function(i,file,response){
 			// response is the JSON object that post_file.php returns
 			console.log('done uploading!')
-			console.log(response);
+			//console.log(response);
 			console.log($('#month')[0].value);
 			//if(response.success){
 				$.data(file).addClass('done');

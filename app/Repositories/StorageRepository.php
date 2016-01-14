@@ -20,6 +20,9 @@ class StorageRepository {
     }
 
 
+    public function getType(){
+      return $this->type;
+    }
 
 
 
