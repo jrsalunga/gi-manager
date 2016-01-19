@@ -239,6 +239,7 @@ get('files', function(){
 
 get('test', function(){
 
+	/*
 	 $path = public_path('uploads'.DS.'mar'.DS.'2016');
 	 $to = $path.DS.'test';
 	 //if(!is_dir($to))
@@ -248,6 +249,10 @@ get('test', function(){
 	$zip = Zipper::make($path.DS.'GC120915.ZIP');
 
 	return dd($zip->contains('SALESMTDS.DBF'));
+	*/
+
+
+	return App\Models\Employee::where('branchid', '0C17FE2D78A711E587FA00FF59FBB323')->get();
 
 
 });

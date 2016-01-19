@@ -7,9 +7,14 @@ class Employee extends BaseModel {
   //protected $connection = 'mysql-hr';
 	protected $table = 'employee';
  	protected $fillable = ['code', 'lastname', 'firstname', 'middlename', 'positionid', 'branchid', 'punching', 'processing'];
- 	public static $header = ['code', 'lastname'];
   public $timestamps = false;
 
+  public function __construct(array $attributes = [])
+  {
+    parent::__construct($attributes);
+    if (app()->environment()==='production')
+      $this->setConnection('mysql-hr');
+  }
 
  	public function timelogs() {
     return $this->hasMany('App\Models\Timelog', 'employeeid');

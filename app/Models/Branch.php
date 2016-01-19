@@ -8,6 +8,13 @@ class Branch extends BaseModel {
  	protected $fillable = ['code', 'descriptor'];
  	public static $header = ['code', 'descriptor'];
 
+  public function __construct(array $attributes = [])
+  {
+    parent::__construct($attributes);
+    if (app()->environment()==='production')
+      $this->setConnection('mysql-hr');
+  }
+
 	public function employee() {
     return $this->hasMany('App\Models\Employee', 'employeeid');
   }
@@ -25,9 +32,11 @@ class Branch extends BaseModel {
 
 
   /***************** mutators *****************************************************/
+  /*
   public function getDescriptorAttribute($value){
       return ucwords(strtolower($value));
   }
+  */
 
 
   public function getRouteKey()
