@@ -132,7 +132,7 @@
           @for($i = 0; $i < count($dept['employees']); $i++)
             <tr>
               <td><?=strtolower($dept['name'])=='dining'?'DIN':'KIT';?></td>
-              <td>{{ $ctr }}. {{ $dept['employees'][$i]->lastname }}, {{ $dept['employees'][$i]->firstname }} <span class="label label-default pull-right">{{ $dept['employees'][$i]->position->code }}</span></td>
+              <td>{{ $ctr }}. {{ $dept['employees'][$i]->lastname }}, {{ $dept['employees'][$i]->firstname }} <span class="label label-default pull-right">{{ empty($dept['employees'][$i]->position->code) ? '':$dept['employees'][$i]->position->code }}</span></td>
               
                 @foreach($dept['employees'][$i]['manskeddays'] as $manday)
                   @if(!empty($manday['mandtl']['daytype']))
