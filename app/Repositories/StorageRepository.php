@@ -268,7 +268,7 @@ class StorageRepository {
     if($exist) {
       if ($this->disk->exists($path)) {
         //return "File already exists...";
-        throw new \Exception("File ".$dir['basename'].'.'.$dir['extension']." already exists on storage ".$this->type);        
+        throw new \Exception("File ".$dir['basename']." already exists on storage ".$this->type);        
       }
     }
 

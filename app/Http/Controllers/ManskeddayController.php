@@ -31,9 +31,9 @@ class ManskeddayController extends Controller {
 		} else if((strtolower($param1)==='week') && preg_match('/^[0-9]+$/', $param2)) {
 			return $this->makeViewWeek();
 		} else if(preg_match('/^[A-Fa-f0-9]{32}+$/', $param1) && strtolower($param2)==='edit') {
-			return $this->makeEditView($request, $param1);
+			return $this->makeEditView($request, $param1); //task/manday/{id}/edit
 		} else if(preg_match('/^[A-Fa-f0-9]{32}+$/', $param1)) {   //preg_match('/^[A-Fa-f0-9]{32}+$/',$action))
-			return $this->makeSingleView($request, $param1);
+			return $this->makeSingleView($request, $param1); //task/manday/{id}
 		} else {
 			return $this->makeListView($request, $param1, $param2);
 		}
@@ -180,7 +180,8 @@ class ManskeddayController extends Controller {
 
 
 	public function makeEditView(Request $request, $param1) {
-		$manday = Manday::find($param1);
+		$manday = Manday::with('manskedhdr')->find($param1);
+		//return $manday;
 		if(count($manday) > 0){ // check if the $id 
 			if(strtotime($manday->date) < strtotime('now')){
 				return redirect(URL::previous())->with(['alert-warning' => 'Editing is disabled! Date already passed...']);
@@ -228,7 +229,7 @@ class ManskeddayController extends Controller {
 		}
 		//return $this->hourlyDuty($depts);
 		return view('task.manday.view')->with('depts', $depts)
-																	->with('manday', $manday)
+																	->with('manday', $manday->load('manskedhdr'))
 																	->with('hours', $this->hourlyDuty($depts));
 	}
 

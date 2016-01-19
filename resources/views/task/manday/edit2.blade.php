@@ -68,7 +68,8 @@
             <input type="hidden" name="breakhrs" id="breakhrs" value="{{ $manday->breakhrs }}">
             <input type="hidden" name="overload" id="overload" value="{{ $manday->overload }}">
             <input type="hidden" name="underload" id="underload" value="{{ $manday->underload }}">
-            <input type="hidden" id="brmancost" value="{{ session('user.branchmancost') }}">
+            <input type="hidden" id="brmancost" value="{{ $manday->manskedhdr->mancost }}">
+            {{-- <input type="hidden" id="brmancost" value="{{ session('user.branchmancost') }}"> --}}
           </td>
           <td>
             Forecast Pax
@@ -331,16 +332,18 @@ var today = moment().format("YYYY-MM-D");
 var arr = [];
 
 var updateMancost = function(){
-  //console.log('mancost');
+  //console.log('value:  '+ typeof $('#empcount')[0].value);
   var e = (isNaN($('#empcount')[0].value)) ? 0: parseFloat($('#empcount')[0].value);
-  var m = (isNaN($('#brmancost')[0].value)) ? 0: parseFloat($('#brmancost')[0].value);;
+  var m = (isNaN($('#brmancost')[0].value)) ? 0: parseFloat($('#brmancost')[0].value);
   var c = (isNaN($('#custcount')[0].value)) ? 0: parseFloat($('#custcount')[0].value);
   var h = (isNaN($('#headspend')[0].value)) ? 0: parseFloat($('#headspend')[0].value);
   var mancost = ((e*m)/(c*h)*100);
-  //console.log((e*m));
-  //console.log((c*h));
+  console.log('empcount:' +e);
+  console.log('mancost:' +m);
+  console.log((e*m));
+  console.log((c*h));
   mancost = (isNaN(mancost) || !isFinite(mancost)) ? 0 : mancost;
-  //console.log('mancost: '+ mancost);
+  console.log('mancost: '+ mancost);
   $('.tb-mancost').text(mancost.toFixed(2)+' %');
 }
 

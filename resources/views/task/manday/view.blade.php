@@ -93,7 +93,7 @@
           </td>
           <td class="text-right">
             @if(($manday->custcount*$manday->headspend)!= 0)
-              {{ number_format((($manday->empcount*500)/($manday->custcount*$manday->headspend)*100),2) }} %
+              {{ number_format((($manday->empcount*$manday->manskedhdr->mancost)/($manday->custcount*$manday->headspend)*100),2) }} %
             @else 
               -
             @endif
