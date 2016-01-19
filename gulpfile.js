@@ -117,6 +117,42 @@ gulp.task('minify-css', function() {
 });
 
 
+gulp.task('copy-css', function() {
+  return gulp.src([
+      './public/css/styles-all.min.css'
+    ])
+    .pipe(gulp.dest('../gi-boss/public/css/'));
+});
+
+gulp.task('copy-js', function() {
+  return gulp.src([
+      './public/js/vendors-common.min.js'
+    ])
+    .pipe(gulp.dest('../gi-boss/public/js/'));
+});
+
+gulp.task('copy-fonts', function() {
+  return gulp.src([
+      './public/fonts/*.*'
+    ])
+    .pipe(gulp.dest('../gi-boss/public/fonts/'));
+});
+
+gulp.task('copy-images', function() {
+  return gulp.src([
+      './public/images/favicon.ico',
+      './public/images/g.png',
+      './public/images/giligans-header.gif',
+      './public/images/giligans-header.png',
+      './public/images/giligans-logo.png',
+      './public/images/gililogo.png',
+      './public/images/login-avatar.png'
+    ])
+    .pipe(gulp.dest('../gi-boss/public/images/'));
+});
+
+gulp.task('copy-assets', ['copy-css', 'copy-js', 'copy-fonts', 'copy-images']);
+
 
 gulp.task('default', ['concat-js', 'minify-css']);
 gulp.task('serve', ['concat-js', 'minify-css', 'connect', 'open', 'watch']);

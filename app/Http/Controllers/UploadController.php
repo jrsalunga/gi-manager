@@ -232,13 +232,9 @@ class UploadController extends Controller {
 
 	public function getDownload(Request $request, $p1=NULL, $p2=NULL, $p3=NULL, $p4=NULL, $p5=NULL){
     
-
     if(is_null($p2) || is_null($p2) || is_null($p3) || is_null($p4) || is_null($p5)){
     	throw new Http404("Error Processing Request");
     }
-    
-
-    //return 'tada!';
 
     $path = $p2.'/'.$p3.'/'.$p4.'/'.$p5;
 
@@ -247,17 +243,11 @@ class UploadController extends Controller {
 		$file = $storage->get($path);
 		$mimetype = $storage->fileMimeType($path);
 
-		//return dd($file);
-
-		//return response()->download($pathToFile, $name, $headers);
-
-
     $response = \Response::make($file, 200);
 	 	$response->header('Content-Type', $mimetype);
   	$response->header('Content-Disposition', 'attachment; filename="'.$p5.'"');
 
 	  return $response;
-
   }
 
 
@@ -273,7 +263,7 @@ class UploadController extends Controller {
     	'size' => $this->pos->fileSize($src),
     	'mimetype' => $this->pos->fileMimeType($src),
     	'terminal' => $request->ip(),
-    	'remarks' => $src,
+    	'remarks' => $src.':'.$request->input('notes'),
     	'userid' => $request->user()->id
     ];
 
@@ -286,8 +276,6 @@ class UploadController extends Controller {
   }
 
   public function ds(Request $request) {
-  	
-  	//return $this->backup->lastRecord();
   	$this->backup->ds->pushFilters(new WithBranch(['code', 'descriptor', 'id']));
   	return $this->backup->ds->lastRecord();
   }

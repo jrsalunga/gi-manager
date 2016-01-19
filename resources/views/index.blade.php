@@ -11,7 +11,7 @@
     </a>
     <ul class="dropdown-menu">
     	<li><a href="/tk"><span class="glyphicon glyphicon-dashboard"></span> TK Module</a></li>
-    	<li><a href="/backups/upload"><span class="glyphicon glyphicon-cloud-upload"></span> Upload Backup</a></li>
+    	{{-- <li><a href="/backups/upload"><span class="glyphicon glyphicon-cloud-upload"></span> Upload Backup</a></li> --}}
       <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>     
     </ul>
   </li>
@@ -39,7 +39,7 @@
 			    <div class="list-group">
 					  <a href="/task/mansked" class="list-group-item">Manpower Scheduling</a>
 					  <a href="/dtr/generate" class="list-group-item">Daily Time Record Generation</a>
-					  <a href="/backups/upload" class="list-group-item">Upload Backup</a>
+					  {{-- <a href="/backups/upload" class="list-group-item">Upload Backup</a> --}}
 					</div>
 			  </div>
 			</div>
