@@ -52,7 +52,7 @@ class EmployeeRepository extends Repository
                                   ->join('position', 'position.id', '=', 'employee.positionid')
                                   ->where('branchid', $request->user()->branchid)
                                   ->whereIn('deptid', $depts[$i]['deptid'])
-                          ->orderBy('position.ordinal', 'ASC')
+                          //->orderBy('position.ordinal', 'ASC')
                           ->orderBy('employee.lastname', 'ASC')
                           ->orderBy('employee.firstname', 'ASC')
                           ->get();
