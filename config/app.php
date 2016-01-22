@@ -150,6 +150,7 @@ return [
         Vinkla\Pusher\PusherServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
         GrahamCampbell\Flysystem\FlysystemServiceProvider::class,
+        
 
     ],
 
