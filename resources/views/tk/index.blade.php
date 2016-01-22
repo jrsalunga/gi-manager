@@ -24,7 +24,7 @@
 
 
 </head>
-<body class="tk">
+<body class="tk" data-branchcode="{{ strtolower(Cookie::get('code')) }}">
 <!-- Fixed navbar -->
 <nav class="navbar navbar-default navbar-fixed-top">
   <div class="container-fluid">
@@ -114,7 +114,7 @@
       <div class="emp-group">
         @if(count($timelogs)>0)
           <div class="img-cont">
-            <img  id="emp-img" src="/images/employees/{{ $timelogs[0]->employee->code }}.jpg" >
+            <img  id="emp-img" src="/images/employees/{{ $timelogs[0]->employee->code }}.jpg" height="100%" width="100%">
           </div>
           <div class="emp-cont">
             <p id="emp-code">{{ $timelogs[0]->employee->code }}</p>
@@ -191,7 +191,7 @@
       <div class="modal-body">
         <div class="emp-group">
         <div class="img-cont">
-          <img  id="mdl-emp-img" src="">
+          <img  id="mdl-emp-img" src="" height="100%" width="100%">
         </div>
         <div class="emp-cont">
           <p id="mdl-emp-code"></p>
@@ -226,7 +226,6 @@
     </div>
   </div>
 </div>
-
 
 <script src="/js/vendors-all.js"></script>
 <script src="/js/common.min.js"></script>

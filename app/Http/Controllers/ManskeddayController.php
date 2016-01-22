@@ -228,6 +228,7 @@ class ManskeddayController extends Controller {
 			return redirect(URL::previous());
 		}
 		//return $this->hourlyDuty($depts);
+		//return $depts;
 		return view('task.manday.view')->with('depts', $depts)
 																	->with('manday', $manday->load('manskedhdr'))
 																	->with('hours', $this->hourlyDuty($depts));

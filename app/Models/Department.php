@@ -14,5 +14,7 @@ class Department extends BaseModel {
     parent::__construct($attributes);
     if (app()->environment()==='production')
       $this->setConnection('mysql-hr');
+      
+     $this->setConnection('mysql-hr');
   }
 }

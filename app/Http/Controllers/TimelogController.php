@@ -33,6 +33,7 @@ class TimelogController extends Controller {
 		} else {
 
 			$timelogs = Timelog::with(['employee'=>function($query){
+													
 													$query->with([
 															'branch'=>function($query){
 																$query->select('code', 'descriptor', 'id');
@@ -43,13 +44,15 @@ class TimelogController extends Controller {
 														
 												}])
 											->select('timelog.*')
-											->join('employee', function($join){
+											->join('hr.employee', function($join){
                             $join->on('timelog.employeeid', '=', 'employee.id')
                                 ->where('employee.branchid', '=', $this->_branchid);
                             })
 											->orderBy('datetime', 'DESC')
 											->take(20)
 											->get();
+
+			
 		}
 
 		//return $timelogs;
@@ -58,6 +61,7 @@ class TimelogController extends Controller {
 		
 		$response = new Response(view('tk.index', compact('timelogs')));//->with('timelogs', $timelogs));
 		$response->withCookie(cookie('branchid', $this->_branchid, 45000));
+		$response->withCookie(cookie('code', session('user.branchcode'), 45000));
 		return $response;
 
     //return view('tk.index', compact($timelogs));//->with('timelogs', $timelogs);		

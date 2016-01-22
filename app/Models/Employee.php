@@ -15,7 +15,7 @@ class Employee extends BaseModel {
     if (app()->environment()==='production')
       $this->setConnection('mysql-hr');
       
-    //$this->setConnection('mysql-hr');
+    $this->setConnection('mysql-hr');
   }
 
  	public function timelogs() {
