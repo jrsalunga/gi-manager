@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use yajra\Datatables\Datatables;
+use Datatables;
 use App\Models\Employee;
 
 class DatatablesController extends Controller
@@ -27,6 +27,6 @@ class DatatablesController extends Controller
    */
   public function anyData()
   {
-      return Datatables::of(Employee::select('*'))->make(true);
+      return Datatables::of(Employee::with(['position', 'branch'])->select('*'))->make(true);
   }
 }

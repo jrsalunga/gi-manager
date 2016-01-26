@@ -51,23 +51,28 @@ class DtrController extends Controller {
   public function makeListView(Request $request, $param1, $param2, $param3){
     $mandtls_repo = new MandtlRepo;
     //$manday_repo = new MandayRepo;
-
+    //return $mandtls_repo->branchByDate($request->user(), Carbon::parse('2016-01-27')->format("Y-m-d"));
+    //return $this->dtrs->branchByDate($request->user(), Carbon::parse('2016-01-27')->format("Y-m-d"));
     //return $manday_repo->countBranchMandtlByDate($request->user(), '2015-11-13');
 
     $fr = Carbon::create($param1, $param2, 1, 0, 0, 0);
     $to = Carbon::parse($fr->format('Y-m').'-'.$fr->daysInMonth);
     $arr = [];
+    $x = 0;
     foreach($this->getDates($fr, $to) as $date){
-
+      /*
       $arr[$date->format("Y-m-d")]['date'] = $date;
       $arr[$date->format("Y-m-d")]['mandtls'] = $mandtls_repo->branchByDate($request->user(), $date->format("Y-m-d"));
-      //$arr[$date->format("Y-m-d")]['dtrs'] = $this->dtrs->branchByDate($request->user(), $date->format("Y-m-d"));
-      //$arr[$date->format("Y-m-d")]['mandtls_count'] = $manday_repo->countBranchMandtlByDate($request->user(), $date->format("Y-m-d"));
       $arr[$date->format("Y-m-d")]['dtrs'] = $this->dtrs->branchByDate($request->user(), $date->format("Y-m-d"));
-      //$arr[$date->format("Y-m-d")]['mandtls'] = [];
-      //$arr[$date->format("Y-m-d")]['dtrs'] = [];
+      */
+      $arr[$x]['date'] = $date;
+      $arr[$x]['mandtls'] = $mandtls_repo->branchByDate($request->user(), $date->format("Y-m-d"));
+      $arr[$x]['dtrs'] = $this->dtrs->branchByDate($request->user(), $date->format("Y-m-d"));
+
+      $x++;
     }
 
+    //return $arr;
     return view('dtr.list')->with('dtrs', $arr);
   }
 
@@ -87,7 +92,9 @@ class DtrController extends Controller {
 
   //dtr/{year}/{month}/{day}
   public function makeDayView(Request $request, $param1, $param2, $param3){
-    return view('dtr.view')->with('dtrs', $this->dtrs->branchByDate($request->user(), $param1.'-'.$param2.'-'.$param3)); 
+    $date = Carbon::parse($param1.'-'.$param2.'-'.$param3);
+    return view('dtr.view')->with('dtrs', $this->dtrs->branchByDate($request->user(), $date->format('Y-m-d')))
+                          ->with('date', $date); 
   }
 
   public function makeDayEmployeeView(Request $request, $param1, $param2, $param3, $param4){

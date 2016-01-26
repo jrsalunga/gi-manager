@@ -2,21 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use Datatables;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Employee;
 use App\Models\Branch;
+use App\Repositories\EmployeeRepository;
+use App\Repositories\Filters\ByBranch;
 
 class EmployeeController extends Controller {
 
+	protected $employees;
 	protected $branches;
 
-	public function __construct() {
+	public function __construct(Request $request, EmployeeRepository $employeesrepo) {
+		$this->employees = $employeesrepo;
+		$this->employees->pushFilters(new ByBranch($request));
 		$this->branches = Branch::orderBy('code')->get();
 	}
 
 
-	public function getIndex(Request $request, $menu, $table, $param1, $param2) {
+	public function getIndex(Request $request, $param1=null, $param2=null, $param3=null) {
+
+
 		if(strtolower($param1)==='add'){
 			return $this->makeAddView($request);
 		} else if(preg_match('/^[A-Fa-f0-9]{32}+$/', $param1) && strtolower($param2)==='edit') {
@@ -28,9 +36,15 @@ class EmployeeController extends Controller {
 		}
 	}
 
+	public function dt() {
+		return Datatables::of($this->employees->all())->make(true);
+		return Datatables::of(Employee::with(['position', 'branch'])->select('*'))->make(true);
+	}
+
 
 	public function makeListView(Request $request, $table, $branchid) {
-		
+		//return dd($this->employees->paginate(10));
+		return view('employee.list');
 		$employees = Employee::with(['branch' => function($query){
 													$query->select('code', 'descriptor', 'id');
 												}, 'position' => function($query){

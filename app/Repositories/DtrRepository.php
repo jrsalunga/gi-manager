@@ -18,7 +18,7 @@ class DtrRepository
 						        	$query->select('lastname', 'firstname', 'id');
 						        }])
         						->select('dtr.*')
-      							->leftJoin('employee', function($join){
+      							->leftJoin('hr.employee', function($join){
                       	$join->on('dtr.employeeid', '=', 'employee.id');
                     })
                     ->where('employee.branchid', '=', $user->branchid)

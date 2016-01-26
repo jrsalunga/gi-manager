@@ -29,6 +29,8 @@
       </div>
     </nav>
 
+    <h3>Daily DTR Summary - {{ $date->format('D, F d, Y') }} </h3>
+
     @include('_partials.alerts')
 
 
@@ -37,18 +39,44 @@
 
     @if(count($dtrs)>0)
       <table class="table table-bordered table-responsive">
+      <thead>
+        <tr>
+          <th>Employee</th>
+          <th>Total Hours</th>
+          <th>Reg Hours</th>
+          <th>OT Hours</th>
+          <th>Tardy Hours</th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
       <tbody>
+        <?php $x = 1; ?>
       @foreach($dtrs as $dtr)
         <tr>
           <td>
             <a href="/dtr/{{$dtr->date->year}}/{{pad($dtr->date->month)}}/{{pad($dtr->date->day)}}/{{$dtr->employee->lid()}}">
-              {{ $dtr->employee->lastname }}, {{ $dtr->employee->firstname }}
+              {{ $x }}. {{ $dtr->employee->lastname }}, {{ $dtr->employee->firstname }}
             </a>
           </td>
           <td class="text-right">
-            {{ number_format($dtr->totworkhrs(),2) }}<br>
-            {{ number_format($dtr->workhrs(),2) }}<br>
-            {{ number_format($dtr->othrs(),2) }}<br>
+            {{ number_format($dtr->totworkhrs(),2) }}
+            
+          </td>
+          <td class="text-right">
+
+            {{ number_format($dtr->workhrs(),2) }}
+
+          </td>
+          <td class="text-right">
+
+            {{ number_format($dtr->othrs(),2) }}
+
+          </td>
+          <td class="text-right">
+
             {{ number_format($dtr->tardyhrs,2) }}
           </td>
           <td class="text-right">
@@ -68,6 +96,7 @@
             {{ $dtr->timeout->format('H:i') == '00:00' ? '-': $dtr->timeout->format('h:i A') }}
           </td>
         </tr>
+        <?php $x++; ?>
       @endforeach
       </tbody>
       </table>

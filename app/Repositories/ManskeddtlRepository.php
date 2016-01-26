@@ -17,7 +17,7 @@ class ManskeddtlRepository
 						        	$query->select('lastname', 'firstname', 'id');
 						        }])
         						->select('manskeddtl.*')
-      							->leftJoin('employee', function($join){
+      							->leftJoin('hr.employee', function($join){
                                   	$join->on('manskeddtl.employeeid', '=', 'employee.id');
                                 })
                                 ->leftJoin('manskedday', function($join){

@@ -43,6 +43,12 @@ Route::get('dtr/{param1?}/{param2?}/{param3?}/{param4?}', ['uses'=>'DtrControlle
 				'param3'=>'edit|[A-Fa-f0-9]{32}|[0-9]{02}+',
 				'param4'=>'[A-Fa-f0-9]{32}+']);
 
+Route::get('employee/{param1?}/{param2?}/{param3?}', ['uses'=>'EmployeeController@getIndex'])
+->where(['param1'=>'list|add|[A-Fa-f0-9]{32}+', 
+				'param2'=>'[0-9]{02}+', 
+				'param3'=>'edit|[A-Fa-f0-9]{32}|[0-9]{02}+']);
+
+
 
 Route::get('dtr/generate', ['uses'=>'DtrController@index']);
 Route::get('reports/dtr/{date}', ['uses'=>'DtrController@getDtrReports']);
@@ -64,6 +70,7 @@ Route::group(['prefix'=>'api'], function(){
 
 Route::post('t/employee', ['as'=>'employee.post', 'uses'=>'EmployeeController@post']);
 Route::put('t/employee', ['as'=>'employee.put', 'uses'=>'EmployeeController@put']);
+Route::get('dt/employee', ['as'=>'employee.dt', 'uses'=>'EmployeeController@dt']);
 
 
 
@@ -116,7 +123,10 @@ get('csv/{year}/week/{weekno}', function($year, $weekno){
 
 
 
-
+Route::controller('datatables', 'DatatablesController', [
+    'anyData'  => 'datatables.data',
+    'getIndex' => 'datatables',
+]);
 
 
 

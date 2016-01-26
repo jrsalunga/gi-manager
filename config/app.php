@@ -150,6 +150,7 @@ return [
         Vinkla\Pusher\PusherServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
         GrahamCampbell\Flysystem\FlysystemServiceProvider::class,
+        Yajra\Datatables\DatatablesServiceProvider::class,
         
 
     ],
@@ -207,6 +208,7 @@ return [
         'Pusher' => Vinkla\Pusher\Facades\Pusher::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Flysystem' => GrahamCampbell\Flysystem\Facades\Flysystem::class,
+        'Datatables' => Yajra\Datatables\Datatables::class,
 
     ],
 

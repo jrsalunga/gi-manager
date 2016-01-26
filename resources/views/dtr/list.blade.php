@@ -33,12 +33,12 @@
       </div>
     </nav>
 
+    <h3>DTR Summary of {{ $dtrs[0]['date']->format('F') }}</h3>
+
     @include('_partials.alerts')
 
-    
-
     @if(count($dtrs)>0)
-      <table id="tb-dtr-" class="table table-bordered table-responsive">
+      <table id="tb-dtr" class="table table-bordered table-responsive">
       <thead>
         <tr><th>Date</th><th>Daily Time Record</th><th>Mansked</th></tr>
       </thead>
