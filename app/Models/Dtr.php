@@ -118,10 +118,10 @@ class Dtr extends BaseModel {
   }
 
   public function workhrs(){
-    if($this->totworkhrs() > 8)
+    if($this->totworkhrs() >= 8)
       return 8;
     else if($this->totworkhrs() > 0 && $this->totworkhrs() < 8)
-      return 8 - $this->totworkhrs();
+      return $this->totworkhrs();
     else
       return 0;
   }

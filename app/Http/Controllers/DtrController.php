@@ -39,8 +39,13 @@ class DtrController extends Controller {
       return $this->makeMonthsView($request, $param1);
     else if(is_year($param1) && is_month($param2) && is_null($param3) && is_null($param4)) 
       return $this->makeListView($request, $param1, $param2, $param3);
-    else if(is_year($param1) && is_month($param2) && is_day($param3) && is_null($param4)) 
-      return $this->makeDayView($request, $param1, $param2, $param3);
+    else if(is_year($param1) && is_month($param2) && !is_null($param3) && is_null($param4)) 
+      if(is_day($param3))
+        return $this->makeDayView($request, $param1, $param2, $param3);
+      else if(is_uuid($param3))
+        return $this->makeMonthEmployeeView($request, $param1, $param2, $param3);
+      else 
+        return redirect('/dtr/'.now('year'));
     else if(is_year($param1) && is_month($param2) && is_day($param3) ) 
       return $this->makeDayEmployeeView($request, $param1, $param2, $param3, $param4);
     else
@@ -73,7 +78,54 @@ class DtrController extends Controller {
     }
 
     //return $arr;
-    return view('dtr.list')->with('dtrs', $arr);
+    return view('dtr.list')->with('dtrs', $arr)->with('date', $fr);
+  }
+
+  //dtr/{year}/{month}/{employeeid}
+  public function makeMonthEmployeeView(Request $request, $param1, $param2, $param3) {
+    //$date = carbonCheckorNow($param1.'-'.$param2.'-01');
+    $employee = Employee::findOrFail($param3); // if fail -> 404
+    //return $dtr = $this->dtrs->byEmployeeDate($employee->id, '2016-01-27');
+
+    $fr = Carbon::create($param1, $param2, 1, 0, 0, 0);
+    $to = Carbon::parse($fr->format('Y-m').'-'.$fr->daysInMonth);
+    $arr = [];
+    $x = 0;
+    $tot_reghrs = 0;
+    $tot_othrs = 0;
+    $tot_tardy = 0;
+    
+    foreach($this->getDates($fr, $to) as $date){
+      //echo $date->format('Y-m-d').' - ';
+
+      $dtr = $this->dtrs->byEmployeeDate($employee->id, $date->format('Y-m-d'));
+
+      $obj = new \StdClass;
+      $obj->date = $date;
+      $obj->dtr = $dtr;
+
+      if(!is_null($dtr)) {
+        $tot_reghrs   += $dtr->workhrs();
+        $tot_othrs    += $dtr->othrs();
+        $tot_tardy    += $dtr->tardyhrs;
+      }
+
+      $arr['data'][$x] = $obj;
+
+      $x++;
+    }
+
+    $arr['reghrs']  = $tot_reghrs;
+    $arr['othrs']   = $tot_othrs;
+    $arr['tardy']   = $tot_tardy;
+
+
+
+    //return dd(empty($_GET['day']));
+    return view('dtr.mon-emp')->with('data', $arr)
+                              ->with('date', $fr)
+                              ->with('employee', $employee);
+
   }
 
   //dtr/{year}
@@ -97,6 +149,7 @@ class DtrController extends Controller {
                           ->with('date', $date); 
   }
 
+  //dtr/{year}/{month}/{day}/{employeeid}
   public function makeDayEmployeeView(Request $request, $param1, $param2, $param3, $param4){
     $employee = Employee::findOrFail($param4); // if fail -> 404
     $date = Carbon::create($param1, $param2, $param3, 0, 0, 0);
@@ -104,8 +157,10 @@ class DtrController extends Controller {
     $timelogs = $this->timelogs->employeeTimelogs($employee, $date);
     $dtrs = $this->dtrs->employeeByDate($employee, $date->format('Y-m-d'));
 
+    //return dd($dtrs);
     return view('dtr.employee')->with('timelogs', $timelogs)
                               ->with('dtrs', $dtrs)
+                              ->with('date', $date)
                               ->with('employee', $employee);
   }
 
@@ -332,6 +387,8 @@ class DtrController extends Controller {
     //echo 'is absent? '.($absent && $this->dtr->daytype == 1).'<br>';
     if($absent && $this->dtr->daytype == 1)
       $this->dtr->isabsent = 1;
+    else
+      $this->dtr->isabsent = 0;
   }
 
   // for $this->postGenerate() 
@@ -375,7 +432,7 @@ class DtrController extends Controller {
 
   // for $this->postGenerate() 
   private function computeWorkHours(){
-    $who = Carbon::parse($this->dtr->date->format('Y-m-d'). '00:00:00');
+    $who = Carbon::parse($this->dtr->date->format('Y-m-d').' 00:00:00');
     $wh = $who->copy();
     $work = $who->copy()->addHours(8);
 
@@ -385,13 +442,15 @@ class DtrController extends Controller {
       
       $wh->addMinutes($this->getMinDiff($dtr->timein, $dtr->timeout)); 
     } else {
+    
+      //  this algo is  (BI-TI)+(TO-BI)
 
-       // if there is a pair of timein and breakin
-      if(!$this->nt($this->dtr->timein) && !$this->nt($this->dtr->breakin)) 
+      // if there is a pair of timein and breakin
+      if(!$this->nt($this->dtr->timein) && !$this->nt($this->dtr->breakin))  // meaning may laman ti at bi
         $wh->addMinutes($this->getMinDiff($this->dtr->timein, $this->dtr->breakin));
         
       // if there is a pair of breakout and timeout
-      if(!$this->nt($this->dtr->breakout) && !$this->nt($this->dtr->timeout)) 
+      if(!$this->nt($this->dtr->breakout) && !$this->nt($this->dtr->timeout)) // meaning may laman bo at to
         $wh->addMinutes($this->getMinDiff($this->dtr->breakout, $this->dtr->timeout));
       
     }
@@ -436,6 +495,11 @@ class DtrController extends Controller {
     $ot_hrs = $ot_hrs <= 0 ? '0.00':number_format($ot_hrs,4); 
     $work_hrs = $work_hrs <= 0 ? '0.00':number_format($work_hrs,4); 
 
+
+    $this->dtr->reghrs   = $work_hrs;
+    $this->dtr->othrs    = $ot_hrs;
+
+    /* uncomment if you will use the daytype
     switch ($type) {
       case '2':
         $this->dtr->rhhrs   = $work_hrs;
@@ -462,6 +526,7 @@ class DtrController extends Controller {
         $this->dtr->othrs    = $ot_hrs;
         break;
     }
+    */
 
   }
 

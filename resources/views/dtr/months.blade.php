@@ -9,7 +9,7 @@
 
   <ol class="breadcrumb">
     <li><span class="gly gly-shop"></span> <a href="/">{{ $branch }}</a></li>
-    <li class="active">Daily Time Record</li>
+    <li class="active">DTR {{ $year }}</li>
   </ol>
 
   <div>

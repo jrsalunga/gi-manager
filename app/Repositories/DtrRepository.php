@@ -55,5 +55,13 @@ class DtrRepository
     }
 
 
+    public function  byEmployeeDate($employeeid, $date) 
+    {
+        return Dtr::where('employeeid', $employeeid)
+                    ->where('date', $date)
+                    ->first();
+    }
+
+
     
 }

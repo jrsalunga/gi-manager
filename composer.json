@@ -13,7 +13,8 @@
         "barryvdh/laravel-debugbar": "^2.0",
         "graham-campbell/flysystem": "^3.0",
         "dflydev/apache-mime-types": "^1.0",
-        "yajra/laravel-datatables-oracle": "~6.0"
+        "yajra/laravel-datatables-oracle": "~6.0",
+        "prettus/l5-repository": "^2.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

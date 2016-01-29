@@ -9,7 +9,8 @@
 
   <ol class="breadcrumb">
     <li><span class="gly gly-shop"></span> <a href="/">{{ $branch }}</a></li>
-    <li class="active">Daily Time Record</li>
+    <li><a href="/dtr/{{$date->format('Y')}}">DTR {{$date->format('Y')}}</a></li>
+    <li class="active">{{$date->format('M')}}</li>
   </ol>
 
   <div>
@@ -34,6 +35,7 @@
     </nav>
 
     <h3>DTR Summary of {{ $dtrs[0]['date']->format('F') }}</h3>
+    <p><em>Summary of DTR and Mansked count of employees each day.</em></p>
 
     @include('_partials.alerts')
 
@@ -149,12 +151,17 @@
           formData.to = $(this).data('date');
           processDtr(formData)
           .done(function(data, textStatus, jqXHR){
-            var date = $('.btn-generate.processing').data('date').split('-');
-            processBtnDone();
-            var link1 = '<a href="/dtr/'+date[0]+'/'+date[1]+'/'+date[2]+'">'+moment(date[0]+' '+date[1]+' '+date[2], 'YYYY MM DD').format("MMM DD, YYYY ddd");+'</a>';
-            parent.find('.td-date').effect("highlight", {}, 2000).children('.day').html(link1);
-            var link2 = '<a href="/dtr/'+date[0]+'/'+date[1]+'/'+date[2]+'">'+data.count+'</a>';
-            parent.find('.td-dtr').html(link2).effect("highlight", {}, 2000);
+            console.log(data);
+            if(data.status==='error' && data.code==='401') {
+              window.location.href = '/';
+            } else {
+              var date = $('.btn-generate.processing').data('date').split('-');
+              processBtnDone();
+              var link1 = '<a href="/dtr/'+date[0]+'/'+date[1]+'/'+date[2]+'">'+moment(date[0]+' '+date[1]+' '+date[2], 'YYYY MM DD').format("MMM DD, YYYY ddd");+'</a>';
+              parent.find('.td-date').stop( true, true ).effect("highlight", {}, 2000).children('.day').html(link1);
+              var link2 = '<a href="/dtr/'+date[0]+'/'+date[1]+'/'+date[2]+'">'+data.count+'</a>';
+              parent.find('.td-dtr').html(link2).stop( true, true ).effect("highlight", {}, 2000);
+            }
           })
           .fail(function(jqXHR, textStatus, errorThrown){
             var html = '<div class="alert alert-danger" role="alert">';

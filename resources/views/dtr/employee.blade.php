@@ -9,8 +9,9 @@
 
   <ol class="breadcrumb">
     <li><span class="gly gly-shop"></span> <a href="/">{{ $branch }}</a></li>
-    <li><a href="/dtr/{{$dtrs->date->year}}/{{pad($dtrs->date->month)}}">Daily Time Record</a></li>
-    <li><a href="/dtr/{{$dtrs->date->year}}/{{pad($dtrs->date->month)}}/{{pad($dtrs->date->day)}}">{{ $dtrs->date->format('D, M d') }}</a></li>
+    <li><a href="/dtr/{{$date->format('Y')}}">DTR {{$date->format('Y')}}</a></li>
+    <li><a href="/dtr/{{$date->format('Y')}}/{{$date->format('m')}}">{{ $date->format('M') }}</a></li>
+    <li><a href="/dtr/{{$date->format('Y')}}/{{$date->format('m')}}/{{$date->format('d')}}">{{ $date->format('d') }}</a></li>
     <li class="active">{{ $employee->code }}</li>
   </ol>
 
@@ -19,12 +20,17 @@
       <div class="container-fluid">
         <div class="navbar-form">
           <div class="btn-group" role="group">
-            <a href="/dtr/{{$dtrs->date->year}}/{{pad($dtrs->date->month)}}/{{pad($dtrs->date->day)}}" class="btn btn-default">
+            <a href="/dtr/{{$date->year}}/{{pad($date->month)}}/{{pad($date->day)}}" class="btn btn-default">
               <span class="fa fa-calendar-o"></span>
             </a> 
+          </div> <!-- end btn-grp -->
+          <div class="btn-group" role="group">
             <button type="button" class="btn btn-default active">
               <span class="glyphicon glyphicon-user"></span>
             </button>
+            <a href="/dtr/{{$date->year}}/{{pad($date->month)}}/{{$employee->lid()}}?day={{$date->format('d')}}" class="btn btn-default">
+              <span class="fa fa-calendar"></span>
+            </a> 
           </div> <!-- end btn-grp -->
         </div>
       </div>
@@ -33,53 +39,31 @@
     @include('_partials.alerts')
 
 
+      
     @if($dtrs)
-      <div class="page-header">
-        <h3>{{ $employee->lastname }}, {{ $employee->firstname }} <small>{{ $employee->code }}</small></h3>
-      </div>
-      <h4><span class=""></span> {{ $dtrs->date->format('l, F d, Y') }} <span class="small">{{ $dtrs->getDayType() }}</span></h4>
-
-      <p>&nbsp;</p>
+      
+      
       <div class="row">
-        <div class="col-sm-3">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h3 class="panel-title">Total Work Hours</h3>
-            </div>
-            <div class="panel-body text-right">
-              <h3>{{ (number_format($dtrs->totworkhrs(),2)+0) }}
-              <span class="small"> Hrs</span>
-              </h3>
-            </div>
-          </div>
-          
+        
+        <div class="col-sm-6">
+          <h3>{{ $employee->lastname }}, {{ $employee->firstname }} <small>{{ $employee->code }}</small></h3>  
+          <h4><span class=""></span> {{ $dtrs->date->format('l, F d, Y') }} <span class="small">{{ $dtrs->getDayType() }}</span></h4>
+
         </div>
+
         <div class="col-sm-3">
           <div class="panel panel-default">
             <div class="panel-heading">
-              <h3 class="panel-title">Reg Hours</h3>
+              <h3 class="panel-title">Work Hours</h3>
             </div>
             <div class="panel-body text-right">
-              <h3>{{ (number_format($dtrs->workhrs(),2)+0) }}
+              <h3>{{ (number_format($dtrs->reghrs,2)+0) }}
                 <span class="small"> Hrs</span>
               </h3>
             </div>
           </div>
-          
         </div>
-        <div class="col-sm-3">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h3 class="panel-title">OT Hours</h3>
-            </div>
-            <div class="panel-body text-right">
-              <h3>{{ (number_format($dtrs->othrs(),2)+0) }}
-                <span class="small"> Hrs</span>
-              </h3>
-            </div>
-          </div>
-          
-        </div>
+        
         <div class="col-sm-3">
           <div class="panel panel-default">
             <div class="panel-heading">

@@ -140,3 +140,23 @@ function vfpdate_to_carbon($f){
 	return Carbon\Carbon::parse($y.'-'.$m.'-'.$d);
 }
 
+function carbonCheckorNow($date=NULL) {
+
+	if(is_null($date))
+		return Carbon\Carbon::now();
+
+	try {
+		$d = Carbon\Carbon::parse($date); 
+	} catch(\Exception $e) {
+		return Carbon\Carbon::now(); 
+	}
+	return $d;
+}
+
+function isDayNow($day, $now=null){
+	$now = is_null($now) ? now('day') : $now;
+	return is_day($day) ? $day : $now;
+}
+
+
+

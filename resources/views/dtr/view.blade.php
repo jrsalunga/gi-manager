@@ -9,8 +9,9 @@
 
   <ol class="breadcrumb">
     <li><span class="gly gly-shop"></span> <a href="/">{{ $branch }}</a></li>
-    <li><a href="/dtr/{{ $dtrs[0]->date->year }}/{{ pad($dtrs[0]->date->month) }}">Daily Time Record</a></li>
-    <li class="active">{{ $dtrs[0]->date->format('D, M d') }}</li>
+    <li><a href="/dtr/{{ $date->format('Y') }}">DTR {{ $date->format('Y') }}</a></li>
+    <li><a href="/dtr/{{ $date->format('Y') }}/{{ $date->format('m') }}">{{ $date->format('M') }}</a></li>
+    <li class="active">{{ $date->format('d') }}</li>
   </ol>
 
   <div>
@@ -18,7 +19,7 @@
       <div class="container-fluid">
         <div class="navbar-form">
           <div class="btn-group" role="group">
-            <a href="/dtr/{{ $dtrs[0]->date->year }}/{{ pad($dtrs[0]->date->month) }}" class="btn btn-default">
+            <a href="/dtr/{{ $date->format('Y') }}/{{ $date->format('m') }}" class="btn btn-default">
               <span class="gly gly-table"></span>
             </a> 
             <button type="button" class="btn btn-default active">
@@ -29,7 +30,8 @@
       </div>
     </nav>
 
-    <h3>Daily DTR Summary - {{ $date->format('D, F d, Y') }} </h3>
+    <h3>DTR Summary - {{ $date->format('D, F d, Y') }} </h3>
+    <p><em>Daily time record summary of all employees for the day.</em></p>
 
     @include('_partials.alerts')
 
@@ -42,14 +44,12 @@
       <thead>
         <tr>
           <th>Employee</th>
-          <th>Total Hours</th>
-          <th>Reg Hours</th>
-          <th>OT Hours</th>
+          <th>Work Hours</th>
           <th>Tardy Hours</th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
+          <th>Time Start/In</th>
+          <th>Break Start/In</th>
+          <th>Break End/Out</th>
+          <th>Time End/Out</th>
         </tr>
       </thead>
       <tbody>
@@ -57,43 +57,31 @@
       @foreach($dtrs as $dtr)
         <tr>
           <td>
-            <a href="/dtr/{{$dtr->date->year}}/{{pad($dtr->date->month)}}/{{pad($dtr->date->day)}}/{{$dtr->employee->lid()}}">
+            <a href="/dtr/{{$dtr->date->year}}/{{pad($dtr->date->month)}}/{{pad($dtr->date->format('d'))}}/{{$dtr->employee->lid()}}">
               {{ $x }}. {{ $dtr->employee->lastname }}, {{ $dtr->employee->firstname }}
             </a>
           </td>
           <td class="text-right">
-            {{ number_format($dtr->totworkhrs(),2) }}
-            
+            {{ $dtr->reghrs == '0.00' ? '-':number_format($dtr->reghrs,2) }}
           </td>
           <td class="text-right">
-
-            {{ number_format($dtr->workhrs(),2) }}
-
+            {{ $dtr->tardyhrs == '0.00' ? '-':number_format($dtr->tardyhrs,2) }}
           </td>
           <td class="text-right">
-
-            {{ number_format($dtr->othrs(),2) }}
-
+            {{ $dtr->timein->format('H:i') == '00:00' ? '-': $dtr->timein->format('h:i A') }}<br>
+            {{ $dtr->timestart->format('H:i') == '00:00' ? '-': $dtr->timestart->format('h:i A') }}
           </td>
           <td class="text-right">
-
-            {{ number_format($dtr->tardyhrs,2) }}
+            {{ $dtr->breakin->format('H:i') == '00:00' ? '-': $dtr->breakin->format('h:i A') }}<br>
+            {{ $dtr->breakstart->format('H:i') == '00:00' ? '-': $dtr->breakstart->format('h:i A') }}
           </td>
           <td class="text-right">
-            {{ $dtr->timestart->format('H:i') == '00:00' ? '-': $dtr->timestart->format('h:i A') }}<br>
-            {{ $dtr->timein->format('H:i') == '00:00' ? '-': $dtr->timein->format('h:i A') }}
+            {{ $dtr->breakout->format('H:i') == '00:00' ? '-': $dtr->breakout->format('h:i A') }}<br>
+            {{ $dtr->breakend->format('H:i') == '00:00' ? '-': $dtr->breakend->format('h:i A') }}
           </td>
           <td class="text-right">
-            {{ $dtr->breakstart->format('H:i') == '00:00' ? '-': $dtr->breakstart->format('h:i A') }}<br>
-            {{ $dtr->breakin->format('H:i') == '00:00' ? '-': $dtr->breakin->format('h:i A') }}
-          </td>
-          <td class="text-right">
-            {{ $dtr->breakend->format('H:i') == '00:00' ? '-': $dtr->breakend->format('h:i A') }}<br>
-            {{ $dtr->breakout->format('H:i') == '00:00' ? '-': $dtr->breakout->format('h:i A') }}
-          </td>
-          <td class="text-right">
-            {{ $dtr->timeend->format('H:i') == '00:00' ? '-': $dtr->timeend->format('h:i A') }}<br>
-            {{ $dtr->timeout->format('H:i') == '00:00' ? '-': $dtr->timeout->format('h:i A') }}
+            {{ $dtr->timeout->format('H:i') == '00:00' ? '-': $dtr->timeout->format('h:i A') }}<br>
+            {{ $dtr->timeend->format('H:i') == '00:00' ? '-': $dtr->timeend->format('h:i A') }}
           </td>
         </tr>
         <?php $x++; ?>
