@@ -4,6 +4,11 @@
 
 @section('body-class', 'list-dtr')
 
+<?php
+  $prev = $date->copy()->subMonth();
+  $next = $date->copy()->addMonth();
+?>
+
 @section('container-body')
 <div class="container-fluid">
 
@@ -28,6 +33,15 @@
           <div class="btn-group" role="group">
             <a href="/dtr/generate" class="btn btn-default" title="Generate">
               <span class="gly gly-history"></span>
+            </a>
+          </div> <!-- end btn-grp -->
+
+          <div class="btn-group pull-right" role="group">
+            <a href="/dtr/{{$prev->format('Y')}}/{{$prev->format('m')}}" class="btn btn-default">
+              <span class="glyphicon glyphicon-chevron-left"></span>
+            </a>
+            <a href="/dtr/{{$next->format('Y')}}/{{$next->format('m')}}" class="btn btn-default">
+              <span class="glyphicon glyphicon-chevron-right"></span>
             </a>
           </div> <!-- end btn-grp -->
         </div>

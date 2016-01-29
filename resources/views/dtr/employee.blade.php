@@ -4,6 +4,11 @@
 
 @section('body-class', 'employee-dtr')
 
+<?php
+  $prev = $date->copy()->subDay();
+  $next = $date->copy()->addDay();
+?>
+
 @section('container-body')
 <div class="container-fluid">
 
@@ -31,6 +36,15 @@
             <a href="/dtr/{{$date->year}}/{{pad($date->month)}}/{{$employee->lid()}}?day={{$date->format('d')}}" class="btn btn-default">
               <span class="fa fa-calendar"></span>
             </a> 
+          </div> <!-- end btn-grp -->
+
+          <div class="btn-group pull-right" role="group">
+            <a href="/dtr/{{$prev->format('Y')}}/{{$prev->format('m')}}/{{$prev->format('d')}}/{{$employee->lid()}}" class="btn btn-default">
+              <span class="glyphicon glyphicon-chevron-left"></span>
+            </a>
+            <a href="/dtr/{{$next->format('Y')}}/{{$next->format('m')}}/{{$next->format('d')}}/{{$employee->lid()}}" class="btn btn-default">
+              <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
           </div> <!-- end btn-grp -->
         </div>
       </div>

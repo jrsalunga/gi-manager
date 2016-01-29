@@ -4,6 +4,11 @@
 
 @section('body-class', 'view-dtr')
 
+<?php
+  $prev = $date->copy()->subDay();
+  $next = $date->copy()->addDay();
+?>
+
 @section('container-body')
 <div class="container-fluid">
 
@@ -25,6 +30,15 @@
             <button type="button" class="btn btn-default active">
               <span class="fa fa-calendar-o"></span>
             </button>
+          </div> <!-- end btn-grp -->
+
+          <div class="btn-group pull-right" role="group">
+            <a href="/dtr/{{$prev->format('Y')}}/{{$prev->format('m')}}/{{$prev->format('d')}}" class="btn btn-default">
+              <span class="glyphicon glyphicon-chevron-left"></span>
+            </a>
+            <a href="/dtr/{{$next->format('Y')}}/{{$next->format('m')}}/{{$next->format('d')}}" class="btn btn-default">
+              <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
           </div> <!-- end btn-grp -->
         </div>
       </div>

@@ -4,6 +4,12 @@
 
 @section('body-class', 'employee-dtr')
 
+<?php
+  $back_date = empty($_GET['day'])?now('day'):isDayNow($_GET['day'],'01');
+  $prev = $date->copy()->subMonth();
+  $next = $date->copy()->addMonth();
+?>
+
 @section('container-body')
 <div class="container-fluid">
 
@@ -19,18 +25,28 @@
       <div class="container-fluid">
         <div class="navbar-form">
           <div class="btn-group" role="group">
-            <a href="/dtr/{{$date->format('Y')}}/{{$date->format('m')}}/{{ empty($_GET['day'])?now('day'):isDayNow($_GET['day'],'01') }}" class="btn btn-default">
+            <a href="/dtr/{{$date->format('Y')}}/{{$date->format('m')}}/{{ $back_date }}" class="btn btn-default">
               <span class="fa fa-calendar-o"></span>
             </a> 
           </div> <!-- end btn-grp -->
           <div class="btn-group" role="group">
-            <a href="/dtr/{{$date->format('Y')}}/{{$date->format('m')}}/{{ empty($_GET['day'])?now('day'):isDayNow($_GET['day'],'01') }}/{{ $employee->lid() }}" class="btn btn-default">
+            <a href="/dtr/{{$date->format('Y')}}/{{$date->format('m')}}/{{ $back_date }}/{{ $employee->lid() }}" class="btn btn-default">
               <span class="glyphicon glyphicon-user"></span>
             </a> 
             <button type="button" class="btn btn-default active">
               <span class="fa fa-calendar"></span>
             </button>
           </div> <!-- end btn-grp -->
+
+          <div class="btn-group pull-right" role="group">
+            <a href="/dtr/{{$prev->format('Y')}}/{{$prev->format('m')}}/{{$employee->lid()}}?day={{$back_date}}" class="btn btn-default">
+              <span class="glyphicon glyphicon-chevron-left"></span>
+            </a>
+            <a href="/dtr/{{$next->format('Y')}}/{{$next->format('m')}}/{{$employee->lid()}}?day={{$back_date}}" class="btn btn-default">
+              <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+          </div> <!-- end btn-grp -->
+
         </div>
       </div>
     </nav>
@@ -40,7 +56,7 @@
   <div class="row">
     <div class="col-sm-6">
       <h3>{{ $employee->lastname }}, {{ $employee->firstname }} <small>{{ $employee->code }}</small></h3>  
-      <p><em>DTR for the month of {{ $date->format('F') }} </em></p>
+      <p><em>DTR for the month of {{ $date->format('F Y') }} </em></p>
     </div>
     <div class="col-sm-3">
       <div class="panel panel-default">
@@ -94,7 +110,12 @@
               </a>
             </td>
             @if(is_null($dtr->dtr))
-            <td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>
+            <td class="text-right">-</td>
+            <td class="text-right">-</td>
+            <td class="text-right">-</td>
+            <td class="text-right">-</td>
+            <td class="text-right">-</td>
+            <td class="text-right">-</td>
             @else
             <td class="text-right">{{ (number_format($dtr->dtr->reghrs,2)+0)    != '0' ? (number_format($dtr->dtr->reghrs,2)+0) : '-' }}</td>
             <td class="text-right">{{ (number_format($dtr->dtr->tardyhrs,2)+0)  != '0' ? (number_format($dtr->dtr->tardyhrs,2)+0) :'-' }}</td>
