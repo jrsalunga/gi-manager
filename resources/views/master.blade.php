@@ -26,7 +26,7 @@ $debugbarRenderer = $debugbar->getJavascriptRenderer();
   <link rel="stylesheet" href="/css/styles.css">
   <link rel="stylesheet" href="/css/common.css">
   <link rel="stylesheet" href="/css/dropbox.css">
-  <link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css">
+
 
   <link rel="stylesheet" type="text/css" href="/Resources/vendor/font-awesome/css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="/Resources/vendor/highlightjs/styles/github.css">
@@ -42,6 +42,7 @@ $debugbarRenderer = $debugbar->getJavascriptRenderer();
 @else 
   <link rel="stylesheet" href="/css/styles-all.min.css">
 @endif
+  <link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css">
 
   
 </head>

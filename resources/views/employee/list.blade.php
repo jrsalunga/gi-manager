@@ -65,7 +65,6 @@
 @section('js-external')
   @parent
   <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
-  
 
   <script>
   $(function() {
@@ -85,6 +84,6 @@
       });
   });
   </script>
-@show
+@stop
 
 
