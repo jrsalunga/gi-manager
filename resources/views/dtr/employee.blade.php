@@ -51,12 +51,8 @@
     </nav>
 
     @include('_partials.alerts')
-
-
       
     @if($dtrs)
-      
-      
       <div class="row">
         
         <div class="col-sm-6">

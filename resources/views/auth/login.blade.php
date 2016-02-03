@@ -29,16 +29,19 @@
 <nav class="navbar navbar-default navbar-fixed-top">
   <div class="container-fluid">
     <div class="navbar-header">
-      
-      
-    
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
       <a class="navbar-brand" href="/">
         <img src="/images/giligans-header.png" class="img-responsive header-logo">
       </a>
       <p class="navbar-text" style="font-size: 20px; margin: 11px 0px 11px -10px; color: #d6e9c6;">
         <em>Beta</em></p>
     </div>
-    <div id="navbar">
+    <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right"> 
         <li>
           <a href="/tk">
@@ -85,3 +88,4 @@
 
 
 
+<script src="/js/vendors-all.js"></script>

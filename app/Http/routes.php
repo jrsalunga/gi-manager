@@ -27,6 +27,12 @@ Route::get('logout', ['as'=>'auth.getlogout', 'uses'=>'Auth\AuthController@getLo
 
 Route::group(['middleware' => 'auth'], function(){
 
+Route::get('settings/{param1?}/{param2?}', ['uses'=>'SettingsController@getIndex'])
+	->where(['param1'=>'password', 
+					'param2'=>'week|[0-9]+']);
+
+Route::post('/settings/password',  ['uses'=>'SettingsController@changePassword']);
+
 Route::get('task/mansked/{param1?}/{param2?}/{param3?}', ['uses'=>'ManskedController@getIndex'])
 	->where(['param1'=>'add|[0-9]{4}+', 
 					'param2'=>'week|[0-9]+', 

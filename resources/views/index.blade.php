@@ -11,6 +11,7 @@
     </a>
     <ul class="dropdown-menu">
     	<li><a href="/tk"><span class="glyphicon glyphicon-dashboard"></span> TK Module</a></li>
+    	<li><a href="/settings"><span class="glyphicon glyphicon-wrench"></span> Settings</a></li>
     	{{-- <li><a href="/backups/upload"><span class="glyphicon glyphicon-cloud-upload"></span> Upload Backup</a></li> --}}
       <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>     
     </ul>
