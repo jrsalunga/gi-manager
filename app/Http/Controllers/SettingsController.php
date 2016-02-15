@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Position;
-use App\Models\Branch;
 use App\User;
 use Validator;
 use Auth;

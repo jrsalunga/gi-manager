@@ -6,12 +6,11 @@
 <ul class="nav navbar-nav navbar-right"> 
   <li class="dropdown">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-      <span class="glyphicon glyphicon-cog"></span>
-      <b class="caret"></b>
+      <span class="glyphicon glyphicon-menu-hamburger"></span>
     </a>
     <ul class="dropdown-menu">
-    	<li><a href="/tk"><span class="glyphicon glyphicon-dashboard"></span> TK Module</a></li>
-    	<li><a href="/settings"><span class="glyphicon glyphicon-wrench"></span> Settings</a></li>
+    	{{-- <li><a href="/tk"><span class="glyphicon glyphicon-time"></span> TK Module</a></li> --}}
+    	<li><a href="/settings"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
     	{{-- <li><a href="/backups/upload"><span class="glyphicon glyphicon-cloud-upload"></span> Upload Backup</a></li> --}}
       <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>     
     </ul>

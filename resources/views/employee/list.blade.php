@@ -24,12 +24,13 @@
             </button>
              
           </div>
-
+          <!--
           <div class="btn-group" role="group">
             <a href="/task/mansked/add" class="btn btn-default">
               <span class="glyphicon glyphicon-plus"></span>
             </a>
           </div>
+        -->
       </div><!-- end btn-grp -->
       </div>
     </nav>

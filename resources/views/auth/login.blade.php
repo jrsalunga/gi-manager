@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/> 
   <meta name="csrf-token" content="{{ csrf_token() }}" />
 
-  <title>Giligan's Restaurant @yield('title')</title>
+  <title>GI Manager - Login</title>
 
   <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico" />
 @if(app()->environment() == 'local')
@@ -38,18 +38,14 @@
       <a class="navbar-brand" href="/">
         <img src="/images/giligans-header.png" class="img-responsive header-logo">
       </a>
-      <p class="navbar-text" style="font-size: 20px; margin: 11px 0px 11px -10px; color: #d6e9c6;">
-        <em>Beta</em></p>
+      <p class="navbar-text" style="font-size: 20px; margin: 11px 0px 11px -10px;">
+        <em style=" color: #3c763d;">
+          <span>Manager's Module</span>
+          <span style=" color: #d6e9c6;"> Beta</span>
+        </em>
+      </p>
     </div>
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav navbar-right"> 
-        <li>
-          <a href="/tk">
-            <span class="glyphicon glyphicon-time"></span>
-          </a>
-        </li>
-      </ul>
-    </div>
+    
   </div>
 </nav>
 
