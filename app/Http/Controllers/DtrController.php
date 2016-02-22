@@ -341,9 +341,9 @@ class DtrController extends Controller {
     return Timelog::employeeid($employeeid)
                   //->date($date)
                   ->whereBetween('datetime', [
-                      $date, // '2015-11-13 00:00:00'
+                      $date->format('Y-m-d'). ' 06:00:00', // '2015-11-13 00:00:00'
                    // $date->copy()->addDay() // '2015-11-14 00:00:00'
-                      $date->copy()->addDay()->format('Y-m-d'). ' 06:00:00' // '2015-11-14 06:00:00'
+                      $date->copy()->addDay()->format('Y-m-d'). ' 05:59:00' // '2015-11-14 06:00:00'
                     ])
                   ->txncode($i)
                   ->orderBy('datetime', $order)
