@@ -440,7 +440,7 @@ class DtrController extends Controller {
     if(!$this->nt($this->dtr->timein) && !$this->nt($this->dtr->timeout) && 
     ($this->nt($this->dtr->breakin) || $this->nt($this->dtr->breakout))) {
       
-      $wh->addMinutes($this->getMinDiff($dtr->timein, $dtr->timeout)); 
+      $wh->addMinutes($this->getMinDiff($this->dtr->timein, $this->dtr->timeout)); 
     } else {
     
       //  this algo is  (BI-TI)+(TO-BI)
