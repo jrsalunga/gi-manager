@@ -26,10 +26,10 @@ class DashboardController extends Controller {
 
 
 
-	public function getIndex(){
+	public function getIndex(Request $request){
 
 		//return $dailysales = $this->ds->paginate(8); 
-		$dailysales = $this->ds->getLastestSales(8); 
+		$dailysales = $this->ds->getLastestSales($request, 8); 
 		return view('dashboard.index', compact('dailysales'));
 	}
 

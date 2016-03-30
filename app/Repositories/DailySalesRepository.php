@@ -37,7 +37,7 @@ class DailySalesRepository extends BaseRepository {
   }
 
 
-  public function getLastestSales($day=1) {
+  public function getLastestSales(Request $request, $day=1) {
   	$arr = [];
   	$to = Carbon::now();
   	//$to = Carbon::parse('2016-03-6');
@@ -45,7 +45,7 @@ class DailySalesRepository extends BaseRepository {
   	
 
   	$dss = DailySales::whereBetween('date', [$fr->format('Y-m-d'), $to->format('Y-m-d')])
-  										->where('branchid' $this->$request->user()->branchid)->get();
+  										->where('branchid', $request->user()->branchid)->get();
 
 
   	foreach ($this->dateInterval($fr, $to) as $key => $date) {
