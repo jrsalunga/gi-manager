@@ -13,3 +13,4 @@ Homestead.json
 /TEST_FILES_BACKUP
 /storage/backup
 *.env
+/config

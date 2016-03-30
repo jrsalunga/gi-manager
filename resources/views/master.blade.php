@@ -1,9 +1,4 @@
-@if(app()->environment() == 'local')
-<?php
-$debugbar = new DebugBar\StandardDebugBar();
-$debugbarRenderer = $debugbar->getJavascriptRenderer();
-?>
-@endif
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -104,8 +99,6 @@ $debugbarRenderer = $debugbar->getJavascriptRenderer();
   ga('send', 'pageview');
 </script>
 @endif
-@if(app()->environment() == 'local')
-<?php echo $debugbarRenderer->render() ?>
-@endif
+
 </body>
 </html>

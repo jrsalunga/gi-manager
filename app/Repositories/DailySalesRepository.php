@@ -44,7 +44,8 @@ class DailySalesRepository extends BaseRepository {
   	$fr = $to->copy()->subDay($day);
   	
 
-  	$dss = DailySales::whereBetween('date', [$fr->format('Y-m-d'), $to->format('Y-m-d')])->get();
+  	$dss = DailySales::whereBetween('date', [$fr->format('Y-m-d'), $to->format('Y-m-d')])
+  										->where('branchid' $this->$request->user()->branchid)->get();
 
 
   	foreach ($this->dateInterval($fr, $to) as $key => $date) {
