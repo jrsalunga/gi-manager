@@ -13,9 +13,7 @@ Route::get('/', ['middleware' => 'auth', function () {
   return $emp->branch->addr1;
 }]);
 
-Route::get('dashboard', ['middleware' => 'auth', function () {
-    return view('index');
-}]);
+;
 
 
 
@@ -26,6 +24,8 @@ Route::post('login', ['as'=>'auth.postlogin', 'uses'=>'Auth\AuthController@postL
 Route::get('logout', ['as'=>'auth.getlogout', 'uses'=>'Auth\AuthController@getLogout']);
 
 Route::group(['middleware' => 'auth'], function(){
+
+Route::get('dashboard', ['uses'=>'DashboardController@getIndex']);
 
 Route::get('settings/{param1?}/{param2?}', ['uses'=>'SettingsController@getIndex'])
 	->where(['param1'=>'password', 

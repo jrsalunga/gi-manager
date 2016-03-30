@@ -234,7 +234,7 @@ abstract class Repository implements RepositoryInterface, FiltersInterface {
     public function orderBy($field, $order='ASC') {
         $this->applyFilters();
 
-        return $this->model->orderBy($field, $order)->get();
+        return $this->model->orderBy($field, $order);
     }
 
 
