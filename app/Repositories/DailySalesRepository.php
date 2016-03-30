@@ -39,8 +39,8 @@ class DailySalesRepository extends BaseRepository {
 
   public function getLastestSales($day=1) {
   	$arr = [];
-  	//$to = Carbon::now();
-  	$to = Carbon::parse('2016-03-6');
+  	$to = Carbon::now();
+  	//$to = Carbon::parse('2016-03-6');
   	$fr = $to->copy()->subDay($day);
   	
 
