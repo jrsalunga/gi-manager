@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="/css/font-awesome.min.css">
   <link rel="stylesheet" href="/css/bootstrap-3.3.5.css">
   <link rel="stylesheet" href="/css/bootstrap-select.min.css">
+  <link rel="stylesheet" href="/css/bootstrap-datetimepicker-4.17.37.min.css">
   <link rel="stylesheet" href="/css/dashboard.css">
   <link rel="stylesheet" href="/css/bt-override.css">
   <link rel="stylesheet" href="/css/styles.css">

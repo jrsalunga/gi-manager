@@ -71,4 +71,31 @@ class DailySalesRepository extends BaseRepository {
   }
 
 
+  public function branchByDR($branchid, DateRange $dr, $order = 'ASC') {
+    
+    $arr = [];
+    $dss = $this->scopeQuery(function($query) use ($order, $dr) {
+              return $query->whereBetween('date', [$dr->fr->format('Y-m-d'), $dr->to->format('Y-m-d')])
+                            ->orderBy('date', $order);
+          })->findWhere([
+            'branchid' => $branchid
+          ]);
+    
+
+    foreach ($dr->dateInterval() as $key => $date) {
+      $filtered = $dss->filter(function ($item) use ($date){
+          return $item->date->format('Y-m-d') == $date->format('Y-m-d')
+                ? $item : null;
+      });
+      $obj = new StdClass;
+      $obj->date = $date;
+      $obj->dailysale = $filtered->first();
+      $arr[$key] = $obj;
+    }
+
+    return collect($arr);
+
+  }
+
+
 }

@@ -66,7 +66,8 @@ gulp.task('concat-common-js', function() {
   		'./public/js/vendors/jquery-1.11.3.min.js',
   		'./public/js/vendors/jquery-ui-1.11.3.min.js',
   		'./public/js/vendors/bootstrap-3.3.5.min.js',
-  		'./public/js/vendors/moment-2.10.6.min.js',
+      './public/js/vendors/moment-2.10.6.min.js',
+  		'./public/js/vendors/bootstrap-datetimepicker-4.17.37.min.js',
       './public/js/common.min.js'
   	])
     .pipe(concat('vendors-common.min.js'))
@@ -100,7 +101,7 @@ gulp.task('minify-css', function() {
       './public/css/font-awesome.min.css', 
       './public/css/bootstrap-3.3.5.css',
       './public/css/bootstrap-select.min.css',
-  		//'./public/css/bootstrap-3.3.5.min.css',
+  		'./public/css/bootstrap-datetimepicker-4.17.37.min.css',
   		'./public/css/bt-override.css',
   		'./public/css/dashboard.css',
   		'./public/css/styles.css',

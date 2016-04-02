@@ -27,7 +27,7 @@
         <div class="panel-body">
           <p class="text-right">
 
-            <a href="/status" class="btn btn-default">
+            <a href="/analytics" class="btn btn-success">
               <span class="gly gly-cardio"></span> 
               <span class="hidden-xs">Analytics</span>
             </a>
@@ -38,9 +38,9 @@
             		<tr>
             			<td>Date</td>
             			<td class="text-right">Sales</td>
-            			<td class="text-right">Customers</td>
-            			<td class="text-right">Employees</td>
-            			<td class="text-right">Man Cost</td>
+            			<td class="text-right">Purchased</td>
+                  <td class="text-right">Customers</td>
+                  <td class="text-right">Employees</td>
             			<td class="text-right">Man Cost %</td>
             			<td class="text-right">Sales per Emp</td>
             		</tr>
@@ -52,11 +52,14 @@
 		            	<tr>
 		            		<td>{{ $ds->date->format('M j, D') }}</td>
 		            		@if(!is_null($ds->dailysale))
-		            		<td class="text-right">{{ number_format($ds->dailysale->sales,2) }}</td>
+                    <td class="text-right">{{ number_format($ds->dailysale->sales,2) }}</td>
+		            		<td class="text-right">{{ number_format($ds->dailysale->purchcost,2) }}</td>
 		            		<td class="text-right">{{ number_format($ds->dailysale->custcount,0,'',',') }}</td>
 		            		<td class="text-right">{{ number_format($ds->dailysale->empcount,0,'',',') }}</td>
-		            		<td class="text-right">{{ number_format($ds->dailysale->empcount*session('user.branchmancost'),2) }} </td> 
-		            		<td class="text-right">{{ number_format($ds->dailysale->mancostpct,2) }}%</td>
+		            		<!--
+                    <td class="text-right">{{ number_format($ds->dailysale->empcount*session('user.branchmancost'),2) }} </td> 
+		            		-->
+                    <td class="text-right">{{ number_format($ds->dailysale->mancostpct,2) }}%</td>
 		            		<?php
 			                $s = $ds->dailysale->empcount=='0' ? '0.00':($ds->dailysale->sales/$ds->dailysale->empcount);
 			              ?>
