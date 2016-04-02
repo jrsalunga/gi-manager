@@ -1,12 +1,13 @@
 <?php namespace App\Http\Controllers;
 
 use Carbon\Carbon;
-use App\Models\Backup;
+#use App\Models\Backup;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Repositories\DateRange;
 use App\Http\Controllers\Controller;
 use App\Repositories\DailySalesRepository as DSRepo;
+use App\Repositories\BackupRepository as Backup;
 use Illuminate\Container\Container as App;
 use Illuminate\Support\Collection;
 
@@ -16,10 +17,12 @@ class DashboardController extends Controller {
 
 	protected $ds;
 	protected $dr;
+	protected $backup;
 
-	public function __construct(DSRepo $dsrepo, DateRange $dr) {
+	public function __construct(DSRepo $dsrepo, DateRange $dr, Backup $backup) {
 		$this->ds = $dsrepo;
 		$this->dr = $dr;
+		$this->backup = $backup;
 
 	}
 
@@ -27,10 +30,10 @@ class DashboardController extends Controller {
 
 
 	public function getIndex(Request $request){
-
+		$backup = $this->backup->latestBackupStatus();
 		//return $dailysales = $this->ds->paginate(8); 
 		$dailysales = $this->ds->getLastestSales($request, 8); 
-		return view('dashboard.index', compact('dailysales'));
+		return view('dashboard.index', compact('dailysales'))->with('backup', $backup);
 	}
 
 

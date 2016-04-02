@@ -158,5 +158,12 @@ function isDayNow($day, $now=null){
 	return is_day($day) ? $day : $now;
 }
 
+function diffForHumans(Carbon\Carbon $time) {
+
+  $x = Carbon\Carbon::now()->diffForHumans($time);
+                    
+  return str_replace("after", "ago",  $x);
+}
+
 
 

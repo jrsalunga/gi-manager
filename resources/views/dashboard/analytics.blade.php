@@ -378,7 +378,8 @@
         defaultDate: "{{ $dr->fr->format('Y-m-d') }}",
         format: 'MM/DD/YYYY',
         showTodayButton: true,
-        ignoreReadonly: true
+        ignoreReadonly: true,
+        calendarWeeks: true
       }).on('dp.change', function(e){
         var date = e.date.format('YYYY-MM-DD');
         console.log(date);
@@ -396,7 +397,8 @@
         format: 'MM/DD/YYYY',
         showTodayButton: true,
         useCurrent: false,
-        ignoreReadonly: true
+        ignoreReadonly: true,
+        calendarWeeks: true
       }).on('dp.change', function(e){
         var date = e.date.format('YYYY-MM-DD');
         $('#dp-date-fr').data("DateTimePicker").maxDate(e.date);
