@@ -9,6 +9,17 @@ abstract class BaseModel extends Model {
 	public $timestamps = false;
 	public $incrementing = false;
 
+	/*
+	public function __construct(array $attributes = [])
+  {
+      $this->bootIfNotBooted();
+
+      $this->syncOriginal();
+
+      $this->fill($attributes);
+  }
+  */
+
 
 
 	/******* this is a substitute from Illuminate\Database\Eloquent\Model ******

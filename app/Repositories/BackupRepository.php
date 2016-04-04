@@ -48,7 +48,7 @@ class BackupRepository extends BaseRepository
   	if(is_null($file))
   		return $file;
 
-  	$backup->diffInDays = $file->uploaddate->diffInDays(Carbon::now(), false); 
+  	$backup->diffInDays = $file->date->diffInDays(Carbon::now(), false); 
   	$backup->file = $file;
   	$backup->diffForHumans = diffForHumans($file->uploaddate);
 

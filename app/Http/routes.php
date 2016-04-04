@@ -4,6 +4,18 @@
 /*
 Route::get('/', ['middleware' => 'auth', function () {
 
+	$backup = App\Models\Backup::first();
+
+	return $backup;
+
+
+	$last_ds = Carbon\Carbon::parse('2016-04-01');
+	$vfpdate = Carbon\Carbon::parse('2016-04-02');
+
+	return dd($last_ds->lt($vfpdate));
+
+
+
 	return view('index');
 
 	return $emp = App\Models\Employee::with(['branch'=>function($query){
@@ -12,8 +24,8 @@ Route::get('/', ['middleware' => 'auth', function () {
   
   return $emp->branch->addr1;
 }]);
-*/
 
+*/
 
 
 
