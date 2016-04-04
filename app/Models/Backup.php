@@ -9,7 +9,7 @@ class Backup extends BaseModel {
 	protected $table = 'backup';
 	public $timestamps = false;
 	protected $appends = ['date'];
- 	protected $fillable = ['filename', 'date'];
+ 	//protected $fillable = ['filename', 'date'];
 	protected $guarded = ['id'];
 	protected $casts = [
     'size' => 'float',
@@ -43,15 +43,12 @@ class Backup extends BaseModel {
 		$y = '20'.substr($f, 6, 2);
 		
 		if(is_iso_date($y.'-'.$m.'-'.$d))
-			return carbonCheckorNow($y.'-'.$m.'-'.$d);
+			return Carbon::parse($y.'-'.$m.'-'.$d);
 		else 
 			return null;
   }
 
-  public function getDate() {
-  	return $this->date = $this->parseDate();
-  	//$this->setAttribute('date', 'dates');
-  }
+  
 
 
 

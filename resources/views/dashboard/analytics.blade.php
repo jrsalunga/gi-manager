@@ -95,7 +95,9 @@
     <div class="row">
 
       <div class="col-md-12">
-        <div id="graph" style="overflow: hidden;"></div>
+      <div style="width:98%">
+        <div id="graph"></div>
+      </div>
       </div>
     </div>
     <div class="row">

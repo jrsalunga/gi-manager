@@ -37,6 +37,7 @@ class BackupRepository extends BaseRepository
   	return $this->scopeQuery(function($query){
   			return $query->orderBy('year','desc')
   									->orderBy('month','desc')
+  									->orderBy('uploaddate','desc');
   									->orderBy('filename','desc');
 			})->first();
   }
