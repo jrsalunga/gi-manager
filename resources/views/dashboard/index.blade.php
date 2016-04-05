@@ -97,7 +97,8 @@
         <div class="panel-body">
   				<div class="list-group">
 					  <a href="/task/mansked" class="list-group-item">Manpower Scheduling</a>
-					</div>
+            <a href="/timesheet" class="list-group-item">Daily Time Sheet</a>
+          </div>
   			</div>
   		</div> <!-- end: .panel -->
 

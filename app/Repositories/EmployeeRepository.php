@@ -7,13 +7,31 @@ use App\Models\Department;
 use App\Repositories\Repository;
 use Illuminate\Http\Request;
 
-class EmployeeRepository extends Repository
+use Carbon\Carbon;
+use Prettus\Repository\Eloquent\BaseRepository;
+use App\Repositories\Criterias\ByBranchCriteria;
+
+use Prettus\Repository\Traits\CacheableRepository;
+use Prettus\Repository\Contracts\CacheableInterface;
+
+class EmployeeRepository extends BaseRepository implements CacheableInterface
+//class EmployeeRepository extends BaseRepository 
 {
+  use CacheableRepository;
+
+  public function __construct() {
+      parent::__construct(app());
+
+      $this->pushCriteria(new ByBranchCriteria(request()))
+      ->scopeQuery(function($query){
+        return $query->orderBy('lastname')->orderBy('firstname');
+      });
+  }
 
 
-    public function model() {
-        return 'App\Models\Employee';
-    }
+  public function model() {
+    return 'App\\Models\\Employee';
+  }
 
     /**
      * Get all the DTR of all employee of a branch on a certain date

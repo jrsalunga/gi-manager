@@ -95,9 +95,9 @@
     <div class="row">
 
       <div class="col-md-12">
-      <div style="width:98%">
-        <div id="graph"></div>
-      </div>
+        <div id="graph-container">
+          <div id="graph"></div>
+        </div>
       </div>
     </div>
     <div class="row">
@@ -436,7 +436,7 @@
         panning: true,
         panKey: 'shift'
       },
-      colors: ['#15C0C2', '#B09ADB', '#5CB1EF', '#F49041', '#D36A71', '#f15c80', '#F9CDAD', '#91e8e1', '#8d4653'],
+      colors: ['#15C0C2','#D36A71', '#B09ADB', '#5CB1EF', '#F49041', '#f15c80', '#F9CDAD', '#91e8e1', '#8d4653'],
       title: {
           text: ''
       },
