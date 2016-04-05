@@ -33,8 +33,12 @@ class TimesheetController extends Controller
 
 	public function getIndex2(){ 
 
+		$date = carbonCheckorNow(request()->input('date'));
+		$this->dr->date = $date;
 
-		return $this->timelog->all();
+		return $this->timelog->allByDate($date);
+
+		
 
 	}
 
