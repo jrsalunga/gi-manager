@@ -70,7 +70,6 @@ class TimelogRepository extends BaseRepository
         return $item; 
     });
 
-    return $timelogs[0];
     foreach ($employees as $key => $employee) {
 
       $arr[0][$key]['employee'] = $employee;
