@@ -68,7 +68,7 @@ class TimelogRepository extends BaseRepository
     
     // timelog of employee assign to this branch
     $timelogs[0] = $raw_timelogs->filter(function ($item) use ($employees) {
-      if(in_array($item->employeeid, $employees->pluck('id')->toArray()))
+      //if(in_array($item->employeeid, $employees->pluck('id')->toArray()))
         return $item; 
     });
 
