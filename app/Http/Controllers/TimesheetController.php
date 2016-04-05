@@ -31,16 +31,7 @@ class TimesheetController extends Controller
 		return view('timesheet.index')->with('dr', $this->dr)->with('data', $data);
 	}
 
-	public function getIndex2(){ 
-
-		$date = carbonCheckorNow(request()->input('date'));
-		$this->dr->date = $date;
-
-		return $this->timelog->allByDate($date);
-
-		
-
-	}
+	
 
 
 
