@@ -40,14 +40,23 @@
     @include('_partials.alerts')
 
     @if(count($data[1])>0)
-      <div class="alert alert-important alert-warning">There is another timelog. Please contact us @ jefferson.salunga@gmail.com</div>
+      <div class="alert alert-important alert-warning">
+        <p>There is other employee timelog from other store. Please contact system administrator</p>
+      <ul>
+      @foreach($data[1] as $key => $f)
+        <?php $f->load('employee.branch'); ?>
+        <li>{{ $f->employee->lastname }}, {{ $f->employee->firstname }} of {{ $f->employee->branch->code }} - {{ $f->entrytype==2?'Manual':'' }} {{ $f->getTxnCode() }} - 
+          {{ $f->datetime->format('D, M j, Y h:m:s A') }} created at {{ $f->createdate->format('D, M j, Y h:m:s A') }}</li>
+      @endforeach
+    </ul>
+      </div>
     @endif
 
 
 
     @if(count($data[0])>0)
     <div class="table-responsive">
-    <table class="table table-hover table-striped">
+    <table class="table table-hover table-bordered">
       <thead>
         <tr>
           <th>Employee</th>
@@ -60,12 +69,16 @@
       <tbody>
         @foreach($data[0] as $key => $e)
         <tr>
-          <td>{{ $key+1}}. {{ $e['employee']->lastname }}, {{ $e['employee']->firstname }}</td>
+          <td>
+            {{ $key+1}}. {{ $e['employee']->lastname }}, {{ $e['employee']->firstname }}
+            <span class="label label-default pull-right" title="{{ $e['employee']->position->descriptor }}">{{ $e['employee']->position->code }}</span>
+          </td>
             @foreach($e['timelogs'] as $key => $t)
               @if(is_null($t))
                 <td class="text-right">-</td>
               @else
-                <td class="text-right" title="{{ $t['datetime']->format('D, M j, Y h:m A') }}">
+                <td class="text-right {{ $t['entrytype']=='2'?'bg-warning':'bg-success' }}" 
+                title="{{ $t['datetime']->format('D, M j, Y h:m:s A') }} @ {{ $t['createdate']->format('D, M j, Y h:m:s A') }}">
                   {{ $t['datetime']->format('h:m A') }}
                 </td>
               @endif

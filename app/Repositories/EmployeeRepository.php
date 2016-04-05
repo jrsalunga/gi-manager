@@ -17,6 +17,8 @@ use Prettus\Repository\Contracts\CacheableInterface;
 class EmployeeRepository extends BaseRepository implements CacheableInterface
 //class EmployeeRepository extends BaseRepository 
 {
+  protected $cacheMinutes = 1;
+
   use CacheableRepository;
 
   public function __construct() {

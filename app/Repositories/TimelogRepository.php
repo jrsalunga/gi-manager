@@ -36,13 +36,14 @@ class TimelogRepository extends BaseRepository
 
   public function allTimelogByDate(Carbon $date) {
 
-    return $this->model->whereBetween('datetime', [
+    return $this->scopeQuery(function($query) use ($date){
+        return $query->whereBetween('datetime', [
                       $date->copy()->format('Y-m-d').' 06:00:00',          // '2015-11-13 06:00:00'
                       $date->copy()->addDay()->format('Y-m-d').' 05:59:59' // '2015-11-14 05:59:59'
                     ])
                   ->orderBy('datetime', 'ASC')
-                  ->orderBy('txncode', 'ASC')
-                  ->get();
+                  ->orderBy('txncode', 'ASC');
+                  });
   }
 
 
@@ -51,7 +52,7 @@ class TimelogRepository extends BaseRepository
     $arr = [];
     $timelogs = [];
     // get all timelog on the day/date
-    $raw_timelogs = $this->allTimelogByDate($date);
+    $raw_timelogs = $this->allTimelogByDate($date)->all();
 
     $employees = $this->employees->with('position')
                       ->all(['code', 'lastname', 'firstname','gender','empstatus','positionid','deptid','branchid','id']);
