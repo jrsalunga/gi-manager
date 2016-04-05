@@ -70,14 +70,14 @@ class TimelogRepository extends BaseRepository
         return $item; 
     });
 
-    
+    $col = collect($timelogs[0]);
     foreach ($employees as $key => $employee) {
 
       $arr[0][$key]['employee'] = $employee;
       
       for ($i=1; $i < 5; $i++) { 
         
-        $arr[0][$key]['timelogs'][$i] = $timelogs[0]->where('employeeid', $employee->id)
+        $arr[0][$key]['timelogs'][$i] = $col->where('employeeid', $employee->id)
                                         ->where('txncode', $i)
                                         ->sortBy('datetime')->first();
       }
