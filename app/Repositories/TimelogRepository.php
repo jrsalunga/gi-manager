@@ -52,7 +52,16 @@ class TimelogRepository extends BaseRepository
     $arr = [];
     $timelogs = [];
     // get all timelog on the day/date
-    $raw_timelogs = $this->allTimelogByDate($date);
+    //$raw_timelogs = $this->allTimelogByDate($date);
+    $raw_timelogs = $this->scopeQuery(function($query) use ($date){
+        return $query->whereBetween('datetime', [
+                      $date->copy()->format('Y-m-d').' 06:00:00',          // '2015-11-13 06:00:00'
+                      $date->copy()->addDay()->format('Y-m-d').' 05:59:59' // '2015-11-14 05:59:59'
+                    ])
+                  ->where('branchid', session('user.branchid'))
+                  ->orderBy('datetime', 'ASC')
+                  ->orderBy('txncode', 'ASC');
+      })->all();
 
     $employees = $this->employees->with('position')
                       ->all(['code', 'lastname', 'firstname','gender','empstatus','positionid','deptid','branchid','id']);
