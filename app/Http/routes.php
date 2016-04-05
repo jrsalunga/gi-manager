@@ -76,6 +76,7 @@ Route::post('dtr/generate', ['uses'=>'DtrController@postGenerate']);
 
 
 Route::get('timesheet', ['uses'=>'TimesheetController@getIndex']);
+Route::get('timesheet/all', ['uses'=>'TimesheetController@getIndex2']);
 
 
 Route::get('backups/web/{param1?}/{param2?}', ['uses'=>'UploadController@indexWeb']);

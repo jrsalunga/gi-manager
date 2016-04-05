@@ -31,6 +31,13 @@ class TimesheetController extends Controller
 		return view('timesheet.index')->with('dr', $this->dr)->with('data', $data);
 	}
 
+	public function getIndex2(){ 
+
+
+		return $this->timelog->all();
+
+	}
+
 
 
 
