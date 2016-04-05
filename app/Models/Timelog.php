@@ -8,6 +8,9 @@ class Timelog extends BaseModel {
 	protected $table = 'timelog';
  	protected $fillable = ['employeeid', 'rfid', 'datetime', 'txncode', 'entrytype', 'terminal', 'createdate'];
  	public static $header = ['code', 'lastname'];
+ 	protected $casts = [
+    'txncode' => 'integer'
+  ];
 
 
  	public function employee() {
