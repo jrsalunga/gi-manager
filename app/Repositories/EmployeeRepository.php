@@ -14,12 +14,12 @@ use App\Repositories\Criterias\ByBranchCriteria;
 use Prettus\Repository\Traits\CacheableRepository;
 use Prettus\Repository\Contracts\CacheableInterface;
 
-class EmployeeRepository extends BaseRepository implements CacheableInterface
-//class EmployeeRepository extends BaseRepository 
+//class EmployeeRepository extends BaseRepository implements CacheableInterface
+class EmployeeRepository extends BaseRepository 
 {
-  protected $cacheMinutes = 1;
+  //protected $cacheMinutes = 1;
 
-  use CacheableRepository;
+  //use CacheableRepository;
 
   public function __construct() {
       parent::__construct(app());
