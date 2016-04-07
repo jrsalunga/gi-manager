@@ -180,7 +180,7 @@
               <td class="text-right" data-sort="{{ $d->dailysale['mancostpct'] }}"
                 @if($d->dailysale['sales']!='0.00' || $d->dailysale['sales']!='0' || !is_null($d->dailysale['sales']) )   
                 title="({{$d->dailysale['empcount']}}*{{session('user.branchmancost')}})/{{$d->dailysale['sales']}} 
-                ={{(($d->dailysale['empcount']*session('user.branchmancost'))/$d->dailysale['sales'])*100}}"
+                ={{(($d->dailysale['empcount']*session('user.branchmancost'))/10)*100}} - {{$d->dailysale['sales']}}"
                 @endif
                 >{{ $d->dailysale['mancostpct'] }}</td>
               <td class="text-right" data-sort="{{ number_format($d->dailysale['tips'],2,'.','') }}">{{ number_format($d->dailysale['tips'],2) }}</td>
