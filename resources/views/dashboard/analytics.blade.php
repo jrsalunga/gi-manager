@@ -269,7 +269,10 @@
                 <div>
                 <em><small id="f-tot-tips" title="{{$tot_sales}}/{{$tot_empcount}}" >
                   @if($tot_empcount!='0')
+                    <!--
                     {{ number_format($tot_sales/$tot_empcount,2) }}
+                    -->
+                    {{ number_format($tot_sales-($tot_purchcost+$tot_mancost)/,2) }}
                   @else
                     0
                   @endif
