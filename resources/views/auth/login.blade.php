@@ -8,7 +8,7 @@
 
   <title>GI Manager - Login</title>
 
-  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico" />
+  <link rel="shortcut icon" type="image/x-icon" href="/images/g.png" />
 @if(app()->environment() == 'local')
   <link rel="stylesheet" href="/css/normalize-3.0.3.min.css">
   <link rel="stylesheet" href="/css/font-awesome.min.css">

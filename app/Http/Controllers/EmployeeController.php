@@ -17,7 +17,7 @@ class EmployeeController extends Controller {
 
 	public function __construct(Request $request, EmployeeRepository $employeesrepo) {
 		$this->employees = $employeesrepo;
-		$this->employees->pushFilters(new ByBranch($request));
+		//$this->employees->pushFilters(new ByBranch($request));
 		$this->branches = Branch::orderBy('code')->get();
 	}
 

@@ -21,6 +21,10 @@
               <span class="gly gly-unshare"></span>
               <span class="hidden-xs hidden-sm">Back</span>
             </a> 
+            <button type="button" class="btn btn-default active">
+              <span class="glyphicon glyphicon-th-list"></span>
+              <span class="hidden-xs hidden-sm">Timesheet</span>
+            </button>
           </div> <!-- end btn-grp -->
           <div class="btn-group pull-right clearfix" role="group">
             <a href="/timesheet?date={{ $dr->date->copy()->subDay()->format('Y-m-d') }}" class="btn btn-default" title="{{ $dr->date->copy()->subDay()->format('Y-m-d') }}">
@@ -45,7 +49,7 @@
       <ul>
       @foreach($data[1] as $key => $f)
         <?php $f->load('employee.branch'); ?>
-        <li>{{ $f->employee->lastname }}, {{ $f->employee->firstname }} of {{ $f->employee->branch->code }} - {{ $f->entrytype==2?'Manual':'' }} {{ $f->getTxnCode() }} - 
+        <li>{{ $f->employee->lastname }}, {{ $f->employee->firstname }} of {{ $f->employee->branch->code }} - {{ $f->entrytype==2?'Manual':'Punched' }} {{ $f->getTxnCode() }} - 
           {{ $f->datetime->format('D, M j, Y h:m:s A') }} created at {{ $f->createdate->format('D, M j, Y h:m:s A') }}</li>
       @endforeach
     </ul>
