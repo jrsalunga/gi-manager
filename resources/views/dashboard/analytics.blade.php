@@ -163,7 +163,7 @@
             <tr {{ $d->date->dayOfWeek=='0' ? 'class=warning':''  }}>
               <td data-sort="{{$d->date->format('Y-m-d')}}">{{ $d->date->format('M j, D') }}</td>
               @if(!is_null($d->dailysale))
-              <td class="text-right" data-sort="{{ number_format($d->dailysale['sales'], 2,'.','') }}">{{ number_format($d->dailysale['sales'], 2) }}</td>
+              <td class="text-right" data-sort="{{ number_format($d->dailysale['sales'], 2,'.','') }}">{{ dd($d->dailysale['sales']) }}</td>
               <td class="text-right" data-sort="{{ number_format($d->dailysale['purchcost'], 2,'.','') }}">{{ number_format($d->dailysale['purchcost'], 2) }}</td>
               <td class="text-right" data-sort="{{ number_format($d->dailysale['custcount'], 0) }}">{{ number_format($d->dailysale['custcount'], 0) }}</td>
               <td class="text-right" data-sort="{{ number_format($d->dailysale['headspend'], 2,'.','') }}">{{ number_format($d->dailysale['headspend'], 2) }}</td>
@@ -179,7 +179,8 @@
               <td class="text-right" data-sort="{{ number_format($mancost,2,'.','') }}">{{ number_format($mancost,2) }}</td>
               <td class="text-right" data-sort="{{ $d->dailysale['mancostpct'] }}"
                 @if($d->dailysale['sales']!='0.00' || $d->dailysale['sales']!='0')
-                title="({{$d->dailysale['empcount']}}*{{session('user.branchmancost')}})/{{$d->dailysale['sales']}} ={{(($d->dailysale['empcount']*session('user.branchmancost'))/$d->dailysale['sales'])*100}}"
+                title="({{$d->dailysale['empcount']}}*{{session('user.branchmancost')}})/{{$d->dailysale['sales']}} 
+                ={{(($d->dailysale['empcount']*session('user.branchmancost'))/$d->dailysale['sales'])*100}}"
                 @endif
                 >{{ $d->dailysale['mancostpct'] }}</td>
               <td class="text-right" data-sort="{{ number_format($d->dailysale['tips'],2,'.','') }}">{{ number_format($d->dailysale['tips'],2) }}</td>
