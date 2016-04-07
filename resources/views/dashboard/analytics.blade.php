@@ -272,7 +272,7 @@
                     <!--
                     {{ number_format($tot_sales/$tot_empcount,2) }}
                     -->
-                    {{ number_format($tot_sales-($tot_purchcost+$tot_mancost)/,2) }}
+                    {{ number_format($tot_sales-($tot_purchcost+$tot_mancost),2) }}
                   @else
                     0
                   @endif
