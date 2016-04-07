@@ -178,11 +178,11 @@
               ?>
               <td class="text-right" data-sort="{{ number_format($mancost,2,'.','') }}">{{ number_format($mancost,2) }}</td>
               <td class="text-right" data-sort="{{ $d->dailysale['mancostpct'] }}"
-                @if(!empty($d->dailysale['sales']))   
+                @if(!empty($d->dailysale['sales']) )   
                 title="({{$d->dailysale['empcount']}}*{{session('user.branchmancost')}})/{{$d->dailysale['sales']}} 
                 ={{(($d->dailysale['empcount']*session('user.branchmancost'))/$d->dailysale['sales'])*100}} "
                 @endif
-                >{{ $d->dailysale['mancostpct'] }}    - {{ empty($d->dailysale['sales']) ? 'true':'false' }}</td>
+                >{{ $d->dailysale['mancostpct'] }}</td>
               <td class="text-right" data-sort="{{ number_format($d->dailysale['tips'],2,'.','') }}">{{ number_format($d->dailysale['tips'],2) }}</td>
               <td class="text-right" data-sort="{{ $d->dailysale['tipspct'] }}">{{ $d->dailysale['tipspct'] }}</td>
               <?php
