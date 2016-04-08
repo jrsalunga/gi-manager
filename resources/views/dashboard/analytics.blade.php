@@ -692,6 +692,9 @@
               verticalAlign: 'middle'
           }
         }
+      },
+      exporting: {
+        enabled: false
       }
     });
 
