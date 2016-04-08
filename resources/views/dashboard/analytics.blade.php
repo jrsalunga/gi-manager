@@ -164,7 +164,11 @@
               <td data-sort="{{$d->date->format('Y-m-d')}}">{{ $d->date->format('M j, D') }}</td>
               @if(!is_null($d->dailysale))
               <td class="text-right" data-sort="{{ number_format($d->dailysale['sales'], 2,'.','') }}">{{ number_format($d->dailysale['sales'], 2) }}</td>
-              <td class="text-right" data-sort="{{ number_format($d->dailysale['purchcost'], 2,'.','') }}">{{ number_format($d->dailysale['purchcost'], 2) }}</td>
+              <td class="text-right" data-sort="{{ number_format($d->dailysale['purchcost'], 2,'.','') }}">
+                <a href="#" data-date="{{ $d->date->format('Y-m-d') }}" class="text-primary btn-purch">
+                  {{ number_format($d->dailysale['purchcost'], 2) }}
+                </a>
+              </td>
               <td class="text-right" data-sort="{{ number_format($d->dailysale['custcount'], 0) }}">{{ number_format($d->dailysale['custcount'], 0) }}</td>
               <td class="text-right" data-sort="{{ number_format($d->dailysale['headspend'], 2,'.','') }}">{{ number_format($d->dailysale['headspend'], 2) }}</td>
               <td class="text-right" data-sort="{{ $d->dailysale['empcount'] }}">{{ $d->dailysale['empcount'] }}</td>
@@ -269,10 +273,10 @@
                 <div>
                 <em><small id="f-tot-tips" title="{{$tot_sales}}/{{$tot_empcount}}" >
                   @if($tot_empcount!='0')
-                    <!--
                     {{ number_format($tot_sales/$tot_empcount,2) }}
-                    -->
+                    <!--
                     {{ number_format($tot_sales-($tot_purchcost+$tot_mancost),2) }}
+                    -->
                   @else
                     0
                   @endif
@@ -367,6 +371,47 @@
 
 
 </div><!-- end .container-fluid -->
+
+
+
+
+<div class="modal fade" id="mdl-purchased" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Purchased</h4>
+      </div>
+      <div class="modal-body">
+        
+        <div class="table-responsive">
+        <table class="tb-purchase-data table table-condensed table-striped table-sort">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Component</th>
+              <th>Category</th>
+              <th>UoM</th>
+              <th>Qty</th>
+              <th>Unit Cost</th>
+              <th>Total Cost</th>
+              <th>Supplier</th>
+              <th>Terms</th>
+              <th>Vat</th>
+            </tr>
+          </thead>
+          <tbody class="tb-data">
+          </tbody>
+        </table>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 @endsection
 
 
@@ -374,11 +419,77 @@
 
 @section('js-external')
   @parent
-
   @include('_partials.js-vendor-highcharts')
-
+  
 <script>
+  var fetchPurchased = function(a){
+    var formData = a;
+    //console.log(formData);
+    return $.ajax({
+          type: 'GET',
+          contentType: 'application/x-www-form-urlencoded',
+          url: '/api/t/purchase',
+          data: formData,
+          //async: false,
+          success: function(d, textStatus, jqXHR){
+
+          },
+          error: function(jqXHR, textStatus, errorThrown){
+            alert('Error on fetching data...');
+          }
+      }); 
+  }
+
+
   $('document').ready(function(){
+
+    $('.btn-purch').on('click', function(e){
+      e.preventDefault();
+      var data = {};
+      data.date = $(this).data('date');
+      data.branchid = "{{session('user.branchid')}}";
+
+      fetchPurchased(data).success(function(d, textStatus, jqXHR){
+        //console.log(d);
+        if(d.code===200){
+          renderToTable(d.data)  
+        } else {
+
+        }
+
+      });
+
+      $('#mdl-purchased').modal('show');
+    });
+
+
+    var renderToTable = function(data) {
+      var tr = '';
+      var ctr = 1;
+      _.each(data, function(purchase, key, list){
+          //console.log(purchase);
+          tr += '<tr>';
+          tr += '<td>'+ ctr +'</td>';
+          tr += '<td>'+ purchase.comp +'</td>';
+          tr += '<td>'+ purchase.catname +'</td>';
+          tr += '<td>'+ purchase.unit +'</td>';
+          tr += '<td class="text-right">'+ purchase.qty +'</td>';
+          tr += '<td class="text-right">'+ accounting.formatMoney(purchase.ucost, "", 2, ",", ".") +'</td>';
+          tr += '<td class="text-right">'+ accounting.formatMoney(purchase.tcost, "", 2, ",", ".") +'</td>';
+          tr += '<td class="text-right" title="'+ purchase.supname +'">'+ purchase.supno +'</td>';
+          tr += '<td class="text-right">'+ purchase.terms +'</td>';
+          tr += '<td class="text-right">'+ purchase.vat +'</td>';
+          tr +='</tr>';
+          ctr++;
+      });
+      $('.tb-purchase-data .tb-data').html(tr);
+      $('.table-sort').trigger('update');
+      $('.table-sort').tablesorter({ sortList: [[0,0]]});
+    }
+
+
+
+
 
   	$('#dp-date-fr').datetimepicker({
         defaultDate: "{{ $dr->fr->format('Y-m-d') }}",

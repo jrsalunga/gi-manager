@@ -14,3 +14,6 @@ $.ajaxSetup({
 
 
 $('.alert').not('.alert-important').delay(5000).slideUp(300);
+
+$('.table-sort').tablesorter({stringTo: "min"});
+$('.table-sort-data').tablesorter({stringTo:"min",textExtraction:function(node){return node.dataset.sort;}}); 

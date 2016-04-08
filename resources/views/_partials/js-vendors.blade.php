@@ -3,4 +3,7 @@
   <script src="/js/vendors/bootstrap-3.3.5.min.js"></script>
   <script src="/js/vendors/moment-2.10.6.min.js"></script>
   <script src="/js/vendors/bootstrap-datetimepicker-4.17.37.min.js"></script>
+  <script src="/js/vendors/underscore-1.8.3.min.js"></script>
+  <script src="/js/vendors/accounting-0.4.1.min.js"></script>
+  <script src="/js/vendors/jquery.tablesorter-2.25.7.min.js"></script>
   <script src="/js/common.min.js"></script>

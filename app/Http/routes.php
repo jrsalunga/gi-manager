@@ -76,6 +76,7 @@ Route::post('dtr/generate', ['uses'=>'DtrController@postGenerate']);
 
 
 Route::get('timesheet', ['uses'=>'TimesheetController@getIndex']);
+Route::get('purchase', ['uses'=>'PurchaseController@getIndex']);
 
 
 Route::get('backups/web/{param1?}/{param2?}', ['uses'=>'UploadController@indexWeb']);
@@ -95,6 +96,7 @@ Route::post('t/employee', ['as'=>'employee.post', 'uses'=>'EmployeeController@po
 Route::put('t/employee', ['as'=>'employee.put', 'uses'=>'EmployeeController@put']);
 Route::get('dt/employee', ['as'=>'employee.dt', 'uses'=>'EmployeeController@dt']);
 
+Route::get('t/purchase', ['uses'=>'PurchaseController@apiGetPurchase']);
 
 
 

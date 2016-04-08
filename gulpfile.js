@@ -67,7 +67,10 @@ gulp.task('concat-common-js', function() {
   		'./public/js/vendors/jquery-ui-1.11.3.min.js',
   		'./public/js/vendors/bootstrap-3.3.5.min.js',
       './public/js/vendors/moment-2.10.6.min.js',
-  		'./public/js/vendors/bootstrap-datetimepicker-4.17.37.min.js',
+      './public/js/vendors/bootstrap-datetimepicker-4.17.37.min.js',
+      './public/js/vendors/underscore-1.8.3.min.js',
+      './public/js/vendors/accounting-0.4.1.min.js',
+  		'./public/js/vendors/jquery.tablesorter-2.25.7.min.js',
       './public/js/common.min.js'
   	])
     .pipe(concat('vendors-common.min.js'))
