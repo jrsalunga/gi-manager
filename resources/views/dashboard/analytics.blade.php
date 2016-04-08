@@ -478,9 +478,9 @@
       data.branchid = "{{session('user.branchid')}}";
 
       fetchPurchased(data).success(function(d, textStatus, jqXHR){
-        //console.log(d);
+        console.log(d);
         if(d.code===200){
-          $('.modal-title small').text(moment(data.date).format('ddd MMM D, YYYY'));
+          $('.modal-title small').text(moment(d.date).format('ddd MMM D, YYYY'));
           renderToTable(d.data);  
           $('#mdl-purchased').modal('show');
         } else if(d.code===401) {
