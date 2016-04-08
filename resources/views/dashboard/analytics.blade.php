@@ -95,7 +95,7 @@
     <div class="row">
 
       <div class="col-md-12">
-        <div id="graph-container">
+        <div id="graph-container" style="overflow:hidden;">
           <div id="graph"></div>
         </div>
       </div>
