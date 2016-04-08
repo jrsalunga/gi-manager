@@ -380,34 +380,61 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Purchased</h4>
+        <h4 class="modal-title" id="myModalLabel">Purchased <small></small></h4>
       </div>
       <div class="modal-body">
         
-        <div class="table-responsive">
-        <table class="tb-purchase-data table table-condensed table-striped table-sort">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Component</th>
-              <th>Category</th>
-              <th>UoM</th>
-              <th>Qty</th>
-              <th>Unit Cost</th>
-              <th>Total Cost</th>
-              <th>Supplier</th>
-              <th>Terms</th>
-              <th>Vat</th>
-            </tr>
-          </thead>
-          <tbody class="tb-data">
-          </tbody>
-        </table>
-        </div>
+        <ul class="nav nav-pills" role="tablist">
+          <li role="presentation" class="active">
+            <a href="#items" aria-controls="items" role="tab" data-toggle="tab">
+              <span class="gly gly-shopping-cart"></span>
+              Items
+            </a>
+          </li>
+          <!--
+          <li role="presentation">
+            <a href="#stats" aria-controls="stats" role="tab" data-toggle="tab">Stats</a>
+          </li>
+          -->
+          <li role="presentation" style="float: right;">
+            <div>
+            Total Purchased Cost: 
+            <h3 id="tot-purch-cost" class="text-right" style="margin:0 0 10px 0;"></h3>
+            </div>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active" id="items">
+            <div class="table-responsive">
+              <table class="tb-purchase-data table table-condensed table-striped table-sort">
+                <thead>
+                  <tr>
+                    <th class="text-right">#</th>
+                    <th>Component</th>
+                    <th>Category</th>
+                    <th>UoM</th>
+                    <th class="text-right">Qty</th>
+                    <th class="text-right">Unit Cost</th>
+                    <th class="text-right">Total Cost</th>
+                    <th class="text-right">Supplier</th>
+                    <th class="text-right">Terms</th>
+                    <th class="text-right">VAT</th>
+                  </tr>
+                </thead>
+                <tbody class="tb-data">
+                </tbody>
+              </table>
+            </div><!-- end: .table-responsive -->
+          </div><!-- end: #items.tab-pane -->
+          <div role="tabpanel" class="tab-pane" id="stats">
+
+          </div> 
+        </div><!-- end: .tab-content -->
+        
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-link pull-right" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
@@ -443,6 +470,7 @@
 
   $('document').ready(function(){
 
+
     $('.btn-purch').on('click', function(e){
       e.preventDefault();
       var data = {};
@@ -452,39 +480,45 @@
       fetchPurchased(data).success(function(d, textStatus, jqXHR){
         //console.log(d);
         if(d.code===200){
-          renderToTable(d.data)  
+          $('.modal-title small').text(moment(data.date).format('ddd MMM D, YYYY'));
+          renderToTable(d.data);  
+          $('#mdl-purchased').modal('show');
+        } else if(d.code===401) {
+          document.location.href = '/analytics';
         } else {
-
+          alert('Error on fetching data. Kindly refresh your browser');
         }
-
       });
 
-      $('#mdl-purchased').modal('show');
     });
 
 
     var renderToTable = function(data) {
       var tr = '';
       var ctr = 1;
+      var totcost = 0;
       _.each(data, function(purchase, key, list){
           //console.log(purchase);
           tr += '<tr>';
-          tr += '<td>'+ ctr +'</td>';
+          tr += '<td class="text-right">'+ ctr +'</td>';
           tr += '<td>'+ purchase.comp +'</td>';
           tr += '<td>'+ purchase.catname +'</td>';
           tr += '<td>'+ purchase.unit +'</td>';
           tr += '<td class="text-right">'+ purchase.qty +'</td>';
           tr += '<td class="text-right">'+ accounting.formatMoney(purchase.ucost, "", 2, ",", ".") +'</td>';
           tr += '<td class="text-right">'+ accounting.formatMoney(purchase.tcost, "", 2, ",", ".") +'</td>';
-          tr += '<td class="text-right" title="'+ purchase.supname +'">'+ purchase.supno +'</td>';
+          tr += '<td class="text-right" data-toggle="tooltip" data-placement="top" title="'+ purchase.supname +'">'+ purchase.supno +'</td>';
           tr += '<td class="text-right">'+ purchase.terms +'</td>';
           tr += '<td class="text-right">'+ purchase.vat +'</td>';
           tr +='</tr>';
           ctr++;
+          totcost += parseFloat(purchase.tcost);
       });
+      $('#tot-purch-cost').html(accounting.formatMoney(totcost, "", 2, ",", "."));
       $('.tb-purchase-data .tb-data').html(tr);
-      $('.table-sort').trigger('update');
-      $('.table-sort').tablesorter({ sortList: [[0,0]]});
+      $('.table-sort').trigger('update')
+                      .trigger('sorton', [[0,0]]);
+      
     }
 
 
