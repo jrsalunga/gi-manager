@@ -388,12 +388,37 @@
           <li role="presentation" class="active">
             <a href="#items" aria-controls="items" role="tab" data-toggle="tab">
               <span class="gly gly-shopping-cart"></span>
-              Items
+              <span class="hidden-xs hidden-sm">
+                Items
+              </span>
+            </a>
+          </li>
+          
+          <li role="presentation">
+            <a href="#stats" aria-controls="stats" role="tab" data-toggle="tab">
+              <span class="gly gly-charts"></span>
+              <span class="hidden-xs hidden-sm">
+                Stats
+              </span>
+            </a>
+          </li>
+
+          <li role="presentation">
+            <a href="#" id="link-download">
+              <span class="gly gly-disk-save"></span>
+              <span class="hidden-xs hidden-sm">
+              Download
+              </span>
             </a>
           </li>
           <!--
           <li role="presentation">
-            <a href="#stats" aria-controls="stats" role="tab" data-toggle="tab">Stats</a>
+            <a href="#" id="link-print" target="_blank">
+              <span class="glyphicon glyphicon-print"></span>
+              <span class="hidden-xs hidden-sm">
+              Printer Friendly
+              </span>
+            </a>
           </li>
           -->
           <li role="presentation" style="float: right;">
@@ -405,6 +430,7 @@
         </ul>
         <div class="tab-content">
           <div role="tabpanel" class="tab-pane active" id="items">
+            
             <div class="table-responsive">
               <table class="tb-purchase-data table table-condensed table-striped table-sort">
                 <thead>
@@ -425,9 +451,10 @@
                 </tbody>
               </table>
             </div><!-- end: .table-responsive -->
+            
           </div><!-- end: #items.tab-pane -->
           <div role="tabpanel" class="tab-pane" id="stats">
-
+            <h4>Under Construction</h4>
           </div> 
         </div><!-- end: .tab-content -->
         
@@ -482,6 +509,9 @@
         if(d.code===200){
           $('.modal-title small').text(moment(d.date).format('ddd MMM D, YYYY'));
           renderToTable(d.data);  
+          $('#link-download')[0].href="/api/t/purchase?date="+moment(d.date).format('YYYY-MM-DD')+"&download=1";
+          //$('#link-print')[0].href="/api/t/purchase?date="+moment(d.date).format('YYYY-MM-DD');
+          $('ul[role=tablist] a:first').tab('show');
           $('#mdl-purchased').modal('show');
         } else if(d.code===401) {
           document.location.href = '/analytics';

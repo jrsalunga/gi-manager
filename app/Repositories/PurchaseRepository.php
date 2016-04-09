@@ -12,6 +12,9 @@ class PurchaseRepository extends BaseRepository
     parent::__construct(app());
 
     $this->pushCriteria(new ByBranchCriteria(request()));
+    $this->scopeQuery(function($query){
+		  return $query->orderBy('comp','asc');
+		});
   }
 
 

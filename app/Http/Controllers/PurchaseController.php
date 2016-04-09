@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -24,15 +25,46 @@ class PurchaseController extends Controller {
 	}
 
 	public function apiGetPurchase(Request $request) {
+		
 		$date = carbonCheckorNow($request->input('date'));
-		$data = $this->purchase->scopeQuery(function($query){
-									    return $query->orderBy('comp','asc');
-									})->findWhere(['date'=>$date->format('Y-m-d')]);
+		$data = $this->getPurchaseByDate($date);
 
-		return response()->json(['status' => 'success',
+		if ($request->ajax()) {
+			return response()->json(['status' => 'success',
 														'code' => 200,
 														'date' => $date->format('Y-m-d'),
 														'data' => $data]);
+    } else {
+      if (intval($request->input('download'))===1) {
+      	return $this->export($data, $date);
+      } else 
+      	return $data;
+    }
+	}
+
+	private function getPurchaseByDate(Carbon $date) {
+		return $this->purchase->findWhere(['date'=>$date->format('Y-m-d')]);
+	}
+
+	private function export($data, Carbon $date, $ext='xlsx') {
+		$ext = in_array($ext, ['xls', 'xlsx', 'csv']) ? $ext:'xlsx';
+  	$filename = 'PO-'.session('user.branchcode').'-'.$date->format('Ymd').'-'.Carbon::now()->format('His');
+  	
+  	$output = [];
+		array_push($output, ['Component', 'Category', 'UoM', 'Qty', 'Unit Cost', 'Total Cost', 'Sup Code', 'Sup Name', 'Terms', 'VAT']);	
+		
+		foreach ($data as $d) {
+			array_push($output, [
+				$d->comp, $d->catname, $d->unit, $d->qty, $d->ucost, $d->tcost, $d->supno, $d->supname, $d->terms, $d->vat
+			]);	
+		}
+
+
+  	return Excel::create($filename, function($excel) use ($output, $date) {
+			$excel->sheet('PO-'.$date->format('Y-m-d'), function($sheet) use ($output) {
+		    $sheet->fromArray($output, null, 'A1', false, false);
+		  });
+		})->export($ext);
 	}
 
 

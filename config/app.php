@@ -151,6 +151,7 @@ return [
         Barryvdh\Debugbar\ServiceProvider::class,
         GrahamCampbell\Flysystem\FlysystemServiceProvider::class,
         Yajra\Datatables\DatatablesServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
         
         
 
@@ -203,14 +204,14 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
 
-        'Zipper' => Chumper\Zipper\Zipper::class,
-        'Form' => Collective\Html\FormFacade::class,
-        'Html' => Collective\Html\HtmlFacade::class,
-        'Pusher' => Vinkla\Pusher\Facades\Pusher::class,
-        'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        'Zipper'    => Chumper\Zipper\Zipper::class,
+        'Form'      => Collective\Html\FormFacade::class,
+        'Html'      => Collective\Html\HtmlFacade::class,
+        'Pusher'    => Vinkla\Pusher\Facades\Pusher::class,
+        'Debugbar'  => Barryvdh\Debugbar\Facade::class,
         'Flysystem' => GrahamCampbell\Flysystem\Facades\Flysystem::class,
-        'Datatables' => Yajra\Datatables\Datatables::class,
-
+        'Datatables'=> Yajra\Datatables\Datatables::class,
+        'Excel'     => Maatwebsite\Excel\Facades\Excel::class,
     ],
 
 ];
