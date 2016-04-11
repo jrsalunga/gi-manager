@@ -633,7 +633,7 @@
         legend: {
           enabled: true,
           //layout: 'vertical',
-          align: 'right',
+          //align: 'right',
           //width: 400,
           //verticalAlign: 'top',
           borderWidth: 0,
