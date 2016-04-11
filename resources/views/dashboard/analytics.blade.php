@@ -477,7 +477,7 @@
                   </div><!-- end: .row -->
                   </div><!-- end: .col-md-7 -->
                   <div class="col-md-6">
-                    <div class="graph-container">
+                    <div class="graph-container pull-rght">
                       <div id="graph-pie-category"></div>
                     </div>
                   </div><!-- end: .col-md-5 -->
@@ -505,7 +505,7 @@
                   </div><!-- end: .row -->
                   </div><!-- end: .col-md-7 -->
                   <div class="col-md-6">
-                    <div class="graph-container">
+                    <div class="graph-container pull-rght">
                       <div id="graph-pie-expense"></div>
                     </div>
                   </div><!-- end: .col-md-5 -->
@@ -533,7 +533,7 @@
                   </div><!-- end: .row -->
                   </div><!-- end: .col-md-7 -->
                   <div class="col-md-6">
-                    <div class="graph-container">
+                    <div class="graph-container pull-rght">
                       <div id="graph-pie-supplier"></div>
                     </div>
                   </div><!-- end: .col-md-5 -->
