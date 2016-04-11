@@ -595,7 +595,7 @@
           renderTo: to,
           type: 'pie',
           height: 600,
-          width: 300
+          width: 400
         },
         title: {
             text: ''
