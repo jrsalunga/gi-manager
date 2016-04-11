@@ -478,7 +478,7 @@
                   </div><!-- end: .col-md-7 -->
                   <div class="col-md-6">
                     <div class="graph-container pull-right">
-                      <div id="graph-pie-category"></div>
+                      <div id="graph-pie-category" data-table="#category-data"></div>
                     </div>
                   </div><!-- end: .col-md-5 -->
                 </div><!-- end: .row -->
@@ -506,7 +506,7 @@
                   </div><!-- end: .col-md-7 -->
                   <div class="col-md-6">
                     <div class="graph-container pull-right">
-                      <div id="graph-pie-expense"></div>
+                      <div id="graph-pie-expense" data-table="#expense-data"></div>
                     </div>
                   </div><!-- end: .col-md-5 -->
                 </div><!-- end: .row -->
@@ -534,7 +534,7 @@
                   </div><!-- end: .col-md-7 -->
                   <div class="col-md-6">
                     <div class="graph-container pull-right">
-                      <div id="graph-pie-supplier"></div>
+                      <div id="graph-pie-supplier" data-table="#supplier-data"></div>
                     </div>
                   </div><!-- end: .col-md-5 -->
                 </div><!-- end: .row -->
@@ -594,8 +594,13 @@
         chart: {
           renderTo: to,
           type: 'pie',
-          height: 600,
-          width: 400
+          height: 300,
+          width: 300,
+          events: {
+            load: function (e) {
+              //console.log(e.target.series[0].data);
+            }
+          }
         },
         title: {
             text: ''
@@ -616,14 +621,27 @@
             showInLegend: true,
             point: {
               events: {
-                mouseOver: function() {    
-                  console.log(this.name);
+                mouseOver: function(e) {    
+                  var orig = this.name;
+                  var tb = $(this.series.chart.container).parent().data('table');
+                  var tr = $(tb).children('tbody').children('tr');
+                   _.each(tr, function(tr, key, list){
+                    var text = $(tr).children('td:nth-child(2)').text();             
+                    if(text==orig){
+                      $(tr).children('td').addClass('bg-success');
+                    }
+                  });
                 },
                 mouseOut: function() {
-                  console.log(this);
+                  var orig = this.name;
+                  var tb = $(this.series.chart.container).parent().data('table');
+                  var tr = $(tb).children('tbody').children('tr');
+                   _.each(tr, function(tr, key, list){
+                      $(tr).children('td').removeClass('bg-success');
+                  });
                 },
                 click: function(event) {
-                  console.log(this);
+                  //console.log(this);
                 }
               }
             }
@@ -631,7 +649,7 @@
         },
         
         legend: {
-          enabled: true,
+          enabled: false,
           //layout: 'vertical',
           //align: 'right',
           //width: 400,
@@ -684,7 +702,7 @@
           var expenseChart = new Highcharts.Chart(getOptions('graph-pie-expense', 'expense-data'));
           renderTable(d.data.stats.suppliers, '.tb-supplier-data');  
           var supplierChart = new Highcharts.Chart(getOptions('graph-pie-supplier', 'supplier-data'));
-          $('#link-download')[0].href="/api/t/purchase?date="+moment(d.date).format('YYYY-MM-DD')+"&download=1";
+          $('#link-download')[0].href="/api/t/purchase?date="+moment(d.data.items.date).format('YYYY-MM-DD')+"&download=1";
           //$('#link-print')[0].href="/api/t/purchase?date="+moment(d.date).format('YYYY-MM-DD');
           $('ul[role=tablist] a:first').tab('show');
           $('#mdl-purchased').modal('show');
