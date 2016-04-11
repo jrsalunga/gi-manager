@@ -389,7 +389,7 @@
             <a href="#items" aria-controls="items" role="tab" data-toggle="tab">
               <span class="gly gly-shopping-cart"></span>
               <span class="hidden-xs hidden-sm">
-                Items
+                Components
               </span>
             </a>
           </li>
@@ -432,7 +432,7 @@
           <div role="tabpanel" class="tab-pane active" id="items">
             
             <div class="table-responsive">
-              <table class="tb-purchase-data table table-condensed table-striped table-sort">
+              <table class="tb-purchase-data table table-condensed table-hover table-striped table-sort">
                 <thead>
                   <tr>
                     <th class="text-right">#</th>
@@ -453,9 +453,96 @@
             </div><!-- end: .table-responsive -->
             
           </div><!-- end: #items.tab-pane -->
+          
           <div role="tabpanel" class="tab-pane" id="stats">
-            <h4>Under Construction</h4>
-          </div> 
+            
+            <div class="panel panel-default">
+              <div class="panel-heading">Category</div>
+              <div class="panel-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="row">
+                    <div class="table-responsive">
+                      <table id="category-data" class="tb-category-data table table-condensed table-hover table-striped table-sort">
+                        <thead>
+                          <tr>
+                            <th class="text-right">#</th>
+                            <th>Category</th>
+                            <th style="display:none;">Cost</th>
+                            <th>Total Cost</th>
+                          </tr>
+                        </thead>
+                      </table>
+                    </div><!-- end: .table-responsive -->
+                  </div><!-- end: .row -->
+                  </div><!-- end: .col-md-7 -->
+                  <div class="col-md-6">
+                    <div class="graph-container">
+                      <div id="graph-pie-category"></div>
+                    </div>
+                  </div><!-- end: .col-md-5 -->
+                </div><!-- end: .row -->
+              </div>
+            </div><!-- end: .panel.panel-default -->
+            <div class="panel panel-default">
+              <div class="panel-heading">Expense Code</div>
+              <div class="panel-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="row">
+                    <div class="table-responsive">
+                      <table id="expense-data" class="tb-expense-data table table-condensed table-hover table-striped table-sort">
+                        <thead>
+                          <tr>
+                            <th class="text-right">#</th>
+                            <th>Expense Code</th>
+                            <th style="display:none;">Cost</th>
+                            <th>Total Cost</th>
+                          </tr>
+                        </thead>
+                      </table>
+                    </div><!-- end: .table-responsive -->
+                  </div><!-- end: .row -->
+                  </div><!-- end: .col-md-7 -->
+                  <div class="col-md-6">
+                    <div class="graph-container">
+                      <div id="graph-pie-expense"></div>
+                    </div>
+                  </div><!-- end: .col-md-5 -->
+                </div><!-- end: .row -->
+              </div>
+            </div><!-- end: .panel.panel-default -->
+            <div class="panel panel-default">
+              <div class="panel-heading">Supplier</div>
+              <div class="panel-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="row">
+                    <div class="table-responsive">
+                      <table id="supplier-data" class="tb-supplier-data table table-condensed table-hover table-striped table-sort">
+                        <thead>
+                          <tr>
+                            <th class="text-right">#</th>
+                            <th>Supplier</th>
+                            <th style="display:none;">Cost</th>
+                            <th>Total Cost</th>
+                          </tr>
+                        </thead>
+                      </table>
+                    </div><!-- end: .table-responsive -->
+                  </div><!-- end: .row -->
+                  </div><!-- end: .col-md-7 -->
+                  <div class="col-md-6">
+                    <div class="graph-container">
+                      <div id="graph-pie-supplier"></div>
+                    </div>
+                  </div><!-- end: .col-md-5 -->
+                </div><!-- end: .row -->
+              </div>
+            </div><!-- end: .panel.panel-default -->
+
+          </div><!-- end: .tab-pane --> 
+
         </div><!-- end: .tab-content -->
         
 
@@ -497,6 +584,88 @@
 
   $('document').ready(function(){
 
+    var getOptions = function(to, table) {
+      var options = {
+        data: {
+          table: table,
+          startColumn: 1,
+          endColumn: 2,
+        },
+        chart: {
+          renderTo: to,
+          type: 'pie',
+          height: 400,
+          width: 400
+        },
+        title: {
+            text: ''
+        },
+        style: {
+          fontFamily: "Helvetica"
+        },
+        tooltip: {
+          pointFormat: '{point.y:.2f}  <b>({point.percentage:.2f}%)</b>'
+        },
+        plotOptions: {
+          pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: false
+            },
+            showInLegend: true,
+            point: {
+              events: {
+                mouseOver: function() {    
+                  console.log(this.name);
+                },
+                mouseOut: function() {
+                  console.log(this);
+                },
+                click: function(event) {
+                  console.log(this);
+                }
+              }
+            }
+          }
+        },
+        
+        legend: {
+          enabled: true,
+          //layout: 'vertical',
+          //align: 'right',
+          //width: 400,
+          //verticalAlign: 'top',
+          borderWidth: 0,
+          useHTML: true,
+          labelFormatter: function() {
+            //total += this.y;
+            return '<div style="width:400px"><span style="float: left; width: 250px;">' + this.name + '</span><span style="float: left; width: 100px; text-align: right;">' + this.percentage.toFixed(2) + '%</span></div>';
+          },
+          title: {
+            text: null,
+          },
+            itemStyle: {
+            fontWeight: 'normal',
+            fontSize: '12px',
+            lineHeight: '12px'
+          }
+        },
+        
+        exporting: {
+          enabled: false
+        }
+      }
+      return options;
+    }
+
+    Highcharts.setOptions({
+      lang: {
+        thousandsSep: ','
+    }});
+
+    
+
 
     $('.btn-purch').on('click', function(e){
       e.preventDefault();
@@ -507,8 +676,14 @@
       fetchPurchased(data).success(function(d, textStatus, jqXHR){
         console.log(d);
         if(d.code===200){
-          $('.modal-title small').text(moment(d.date).format('ddd MMM D, YYYY'));
-          renderToTable(d.data);  
+          $('.modal-title small').text(moment(d.data.items.date).format('ddd MMM D, YYYY'));
+          renderToTable(d.data.items.data);  
+          renderTable(d.data.stats.categories, '.tb-category-data');  
+          var categoryChart = new Highcharts.Chart(getOptions('graph-pie-category', 'category-data'));
+          renderTable(d.data.stats.expenses, '.tb-expense-data');  
+          var expenseChart = new Highcharts.Chart(getOptions('graph-pie-expense', 'expense-data'));
+          renderTable(d.data.stats.suppliers, '.tb-supplier-data');  
+          var supplierChart = new Highcharts.Chart(getOptions('graph-pie-supplier', 'supplier-data'));
           $('#link-download')[0].href="/api/t/purchase?date="+moment(d.date).format('YYYY-MM-DD')+"&download=1";
           //$('#link-print')[0].href="/api/t/purchase?date="+moment(d.date).format('YYYY-MM-DD');
           $('ul[role=tablist] a:first').tab('show');
@@ -548,6 +723,40 @@
       $('.tb-purchase-data .tb-data').html(tr);
       $('.table-sort').trigger('update')
                       .trigger('sorton', [[0,0]]);
+      
+    }
+
+
+
+
+    var renderTable = function(data, table) {
+      var tr = '';
+      var ctr = 1;
+      var totcost = 0;
+      tr += '<tbody>';
+      _.each(data, function(value, key, list){
+          //console.log(key);
+          tr += '<tr>';
+          tr += '<td class="text-right">'+ ctr +'</td>';
+          tr += '<td>'+ key +'</td>';
+          tr += '<td style="display:none;">'+value +'</td>';
+          tr += '<td class="text-right">'+ accounting.formatMoney(value, "", 2, ",", ".") +'</td>';
+          tr +='</tr>';
+          ctr++;
+          totcost += parseFloat(value);
+      });
+      tr += '</tbody>';
+      //tr += '<tfoot><tr><td></td><td class="text-right"><strong>Total</strong></td>';
+      //tr += '<td class="text-right"><strong>'+accounting.formatMoney(totcost, "", 2, ",", ".")+'</strong></td></tr><tfoot>';
+
+      
+      $(table+' tfoot').remove();
+      $(table+' tbody').remove();
+      $(table+' thead').after(tr);
+      $(table).tablesorter(); 
+      $(table).trigger('update');
+
+
       
     }
 

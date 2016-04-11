@@ -24,12 +24,55 @@ class PurchaseController extends Controller {
 		return $this->purchase->paginate(5);
 	}
 
+	private function getFieldTotal($data, $field, $sum) {
+		$arr = [];
+
+		foreach ($data as $value) {
+			if (array_key_exists($value->{$field} ,$arr))
+				$arr[$value->{$field}] += $value->{$sum};
+			else
+				$arr[$value->{$field}] = $value->{$sum};
+		}
+		return $arr;
+	}
+
+	private function getExpenseTotal($data, $sum) {
+		$arr = [];
+
+		foreach ($data as $value) {
+			$key = substr($value->supno, 0, 2);
+			if (array_key_exists($key ,$arr))
+				$arr[$key] += $value->tcost;
+			else
+				$arr[$key] = $value->tcost;
+		}
+		return $arr;
+	}
+
 	public function apiGetPurchase(Request $request) {
 		
+		//$categories 
 		$date = carbonCheckorNow($request->input('date'));
 		$data = $this->getPurchaseByDate($date);
 
+		$json = [
+			'status' => 'success',
+			'code' => 200,
+			'data' => [
+				'items' => [
+					'date' => $date->format('Y-m-d'),
+					'data' => $data
+				],
+				'stats' => [
+					'categories' 	=> $this->getFieldTotal($data, 'catname', 'tcost'),
+					'expenses' 		=> $this->getExpenseTotal($data, 'tcost'),
+					'suppliers' 	=> $this->getFieldTotal($data, 'supname', 'tcost')
+				]
+			]
+		];
+
 		if ($request->ajax()) {
+			return response()->json($json);
 			return response()->json(['status' => 'success',
 														'code' => 200,
 														'date' => $date->format('Y-m-d'),
@@ -41,6 +84,8 @@ class PurchaseController extends Controller {
       	return $data;
     }
 	}
+
+
 
 	private function getPurchaseByDate(Carbon $date) {
 		return $this->purchase->findWhere(['date'=>$date->format('Y-m-d')]);
