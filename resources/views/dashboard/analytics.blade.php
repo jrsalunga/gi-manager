@@ -594,7 +594,7 @@
         chart: {
           renderTo: to,
           type: 'pie',
-          height: 400,
+          height: 600,
           width: 400
         },
         title: {
@@ -633,7 +633,7 @@
         legend: {
           enabled: true,
           //layout: 'vertical',
-          //align: 'right',
+          align: 'right',
           //width: 400,
           //verticalAlign: 'top',
           borderWidth: 0,
