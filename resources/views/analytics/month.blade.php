@@ -161,7 +161,7 @@
                 @endif
                 <!--- end: head speand -->
                 <td class="text-right" data-sort="{{ $d->dailysale['empcount'] }}">
-                  {{ number_format($d->dailysale['empcount'], 2,'.','') }}
+                  {{ number_format($d->dailysale['empcount'], 0) }}
                 </td>
                 <!--- sales per emp -->
                 @if($d->dailysale['empcount']==0)
