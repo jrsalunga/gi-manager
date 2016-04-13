@@ -31,7 +31,7 @@
           </div> <!-- end btn-grp -->
 
           <div class="btn-group btn-group pull-right clearfix" role="group" style="margin-left: 5px;">
-            {!! Form::open(['url' => '/analytics', 'method' => 'get']) !!}
+            {!! Form::open(['url' => '/analytics/month', 'method' => 'get']) !!}
             <button type="submit" class="btn btn-success btn-go" title="Go"   }}>
               <span class="gly gly-search"></span>
               <span class="hidden-xs hidden-sm">Go</span>
