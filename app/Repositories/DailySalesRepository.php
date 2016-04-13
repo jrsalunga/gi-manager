@@ -1,5 +1,6 @@
 <?php namespace App\Repositories;
 
+use DB;
 use StdClass;
 use DateTime;
 use DateInterval;
@@ -64,8 +65,8 @@ class DailySalesRepository extends BaseRepository {
 
 
 
-  private function dateInterval(Carbon $fr, Carbon $to){
-    $interval = new DateInterval('P1D');
+  private function MonthInterval(Carbon $fr, Carbon $to){
+    $interval = new DateInterval('P6D');
     $to->add($interval);
     return new DatePeriod($fr, $interval, $to);
   }
@@ -84,8 +85,8 @@ class DailySalesRepository extends BaseRepository {
 
     foreach ($dr->dateInterval() as $key => $date) {
       $filtered = $dss->filter(function ($item) use ($date){
-          return $item->date->format('Y-m-d') == $date->format('Y-m-d')
-                ? $item : null;
+        return $item->date->format('Y-m-d') == $date->format('Y-m-d')
+              ? $item : null;
       });
       $obj = new StdClass;
       $obj->date = $date;
@@ -95,6 +96,37 @@ class DailySalesRepository extends BaseRepository {
 
     return collect($arr);
 
+  }
+
+
+  private function getAggregateByDateRange($fr, $to) {
+
+    return $this->scopeQuery(function($query) use ($fr, $to) {
+      return $query->select(DB::raw('date, MONTH(date) AS month, YEAR(date) as year, SUM(sales) AS sales, SUM(purchcost) AS purchcost, SUM(cos) AS cos, SUM(tips) AS tips, SUM(custcount) AS custcount, SUM(empcount) AS empcount'))
+        ->whereBetween('date', [$fr, $to])
+        ->groupBy(DB::raw('MONTH(date), YEAR (date)'))
+        ->orderBy(DB::raw('YEAR (date), MONTH(date)'));
+    });
+
+  }
+
+  public function getMonth(Request $request, DateRange $dr) {
+    $arr = [];
+    $data = $this->getAggregateByDateRange($dr->fr->format('Y-m-d'), $dr->to->format('Y-m-d'))->all();
+
+    foreach ($dr->monthInterval() as $key => $date) {
+
+      $filtered = $data->filter(function ($item) use ($date){
+        return $item->date->format('Y-m') == $date->format('Y-m')
+          ? $item : null;
+      });
+
+      $obj = new StdClass;
+      $obj->date = $date;
+      $obj->dailysale = $filtered->first();
+      $arr[$key] = $obj;
+    }
+    return collect($arr);
   }
 
 

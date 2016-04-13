@@ -1,14 +1,15 @@
 @extends('index')
 
-@section('title', '- By Day Analytics')
+@section('title', '- By Month Analytics')
 
-@section('body-class', 'analytics-day')
+@section('body-class', 'analytics-month')
 
 @section('container-body')
 <div class="container-fluid">
 	<ol class="breadcrumb">
     <li><span class="gly gly-shop"></span> <a href="/dashboard">{{ $branch }}</a></li>
-    <li class="active">Analytics</li>
+    <li>Analytics</li>
+    <li class="active">By Month</li>
   </ol>
 
   <div>
@@ -107,7 +108,7 @@
           <table class="table table-hover table-striped table-sort-data">
             <thead>
               <tr>
-                  <th>Date</th>
+                  <th>Month</th>
                   <th class="text-right">Sales</th>
                   <th class="text-right">Purchased</th>
                   <th class="text-right">Customers</th>
@@ -126,209 +127,106 @@
               </tr>
             </thead>
             <tbody>
-              <?php
-                $tot_sales = 0;
-                $tot_purchcost = 0;
-                $tot_custcount = 0;
-                $tot_headspend = 0;
-                $tot_empcount = 0;
-                $tot_sales_emp = 0;
-                $tot_mancost = 0;
-                $tot_mancostpct = 0;
-                $tot_tips = 0;
-                $tot_tipspct = 0;
-
-                $div_sales = 0;
-                $div_purchcost = 0;
-                $div_custcount = 0;
-                $div_headspend = 0;
-                $div_empcount = 0;
-                $div_mancost = 0;
-               
-               
-                
-                $div_tips = 0;
-
-
-              ?>
-            @foreach($dailysales as $d)
-            	<?php $div_sales+=($d->dailysale['sales']!=0)?1:0; ?>
-            	<?php $div_purchcost+=($d->dailysale['purchcost']!=0)?1:0; ?>
-            	<?php $div_custcount+=($d->dailysale['custcount']!=0)?1:0; ?>
-            	<?php $div_headspend+=($d->dailysale['headspend']!=0)?1:0; ?>
-            	<?php $div_empcount+=($d->dailysale['empcount']!=0)?1:0; ?>
-            	<?php $div_tips+=($d->dailysale['tips']!=0)?1:0; ?>
-
-
-            <tr {{ $d->date->dayOfWeek=='0' ? 'class=warning':''  }}>
-              <td data-sort="{{$d->date->format('Y-m-d')}}">{{ $d->date->format('M j, D') }}</td>
-              @if(!is_null($d->dailysale))
-              <td class="text-right" data-sort="{{ number_format($d->dailysale['sales'], 2,'.','') }}">{{ number_format($d->dailysale['sales'], 2) }}</td>
-              <td class="text-right" data-sort="{{ number_format($d->dailysale['purchcost'], 2,'.','') }}">
-                <a href="#" data-date="{{ $d->date->format('Y-m-d') }}" class="text-primary btn-purch">
-                  {{ number_format($d->dailysale['purchcost'], 2) }}
-                </a>
-              </td>
-              <td class="text-right" data-sort="{{ number_format($d->dailysale['custcount'], 0) }}">{{ number_format($d->dailysale['custcount'], 0) }}</td>
-              <td class="text-right" data-sort="{{ number_format($d->dailysale['headspend'], 2,'.','') }}">{{ number_format($d->dailysale['headspend'], 2) }}</td>
-              <td class="text-right" data-sort="{{ $d->dailysale['empcount'] }}">{{ $d->dailysale['empcount'] }}</td>
-              <?php
-                $s = $d->dailysale['empcount']=='0' ? '0.00':($d->dailysale['sales']/$d->dailysale['empcount']);
-              ?>
-              <td class="text-right" data-sort="{{$s}}">{{number_format($s,2)}}</td>
-              <?php
-                $mancost = $d->dailysale['empcount']*session('user.branchmancost');
-                $div_mancost+=($mancost!=0)?1:0; 
-              ?>
-              <td class="text-right" data-sort="{{ number_format($mancost,2,'.','') }}">{{ number_format($mancost,2) }}</td>
-              <td class="text-right" data-sort="{{ $d->dailysale['mancostpct'] }}"
-                @if(!empty($d->dailysale['sales']) && $d->dailysale['sales']!='0.00' && $d->dailysale['sales']!='0')   
-                title="({{$d->dailysale['empcount']}}*{{session('user.branchmancost')}})/{{$d->dailysale['sales']}} 
-                ={{(($d->dailysale['empcount']*session('user.branchmancost'))/$d->dailysale['sales'])*100}} "
+              @foreach($dailysales as $d)
+              <tr>
+                <td data-sort="{{$d->date->format('Y-m-d')}}">{{ $d->date->format('M Y') }}</td>
+                @if(!is_null($d->dailysale))
+                <td class="text-right" data-sort="{{ number_format($d->dailysale['sales'], 2,'.','') }}">
+                  {{ number_format($d->dailysale['sales'], 2) }}
+                </td>
+                <td class="text-right" data-sort="{{ number_format($d->dailysale['purchcost'], 2,'.','') }}">
+                    {{ number_format($d->dailysale['purchcost'], 2) }}
+                  @if($d->dailysale['purchcost']==0) 
+                    
+                  @else
+                  <!--
+                  <a href="#" data-date="{{ $d->date->format('Y-m-d') }}" class="text-primary btn-purch">
+                    {{ number_format($d->dailysale['purchcost'], 2) }}
+                  </a>
+                  -->
+                  @endif
+                </td>
+                <td class="text-right" data-sort="{{ number_format($d->dailysale['custcount'], 0) }}">
+                  {{ number_format($d->dailysale['custcount'], 0) }}
+                </td>
+                <!--- head speand -->
+                @if($d->dailysale['custcount']==0)
+                  <td class="text-right" data-sort="0.00">
+                    -
+                  </td>
+                @else
+                  <td class="text-right" data-sort="{{ number_format($d->dailysale['sales']/$d->dailysale['custcount'], 2,'.','') }}">
+                    {{ number_format($d->dailysale['sales']/$d->dailysale['custcount'], 2) }}
+                  </td>
                 @endif
-                >{{ $d->dailysale['mancostpct'] }}</td>
-              <td class="text-right" data-sort="{{ number_format($d->dailysale['tips'],2,'.','') }}">{{ number_format($d->dailysale['tips'],2) }}</td>
-              <td class="text-right" data-sort="{{ $d->dailysale['tipspct'] }}">{{ $d->dailysale['tipspct'] }}</td>
-              <?php
-                $tot_sales      += $d->dailysale['sales'];
-                $tot_purchcost  += $d->dailysale['purchcost'];
-                $tot_custcount  += $d->dailysale['custcount'];
-                $tot_headspend  += $d->dailysale['headspend'];
-                $tot_empcount   += $d->dailysale['empcount'];
+                <!--- end: head speand -->
+                <td class="text-right" data-sort="{{ $d->dailysale['empcount'] }}">
+                  {{ $d->dailysale['empcount'] }}
+                </td>
+                <!--- sales per emp -->
+                @if($d->dailysale['empcount']==0)
+                  <td class="text-right" data-sort="0.00">
+                    -
+                  </td>
+                @else
+                  <td class="text-right" data-sort="{{ number_format($d->dailysale['sales']/$d->dailysale['empcount'], 2,'.','') }}">
+                    {{ number_format($d->dailysale['sales']/$d->dailysale['empcount'], 2) }}
+                  </td>
+                @endif
+                <!--- end: sales per emp -->
+                <?php
+                  $mancost = $d->dailysale['empcount']*session('user.branchmancost');
+                ?>
+                <td class="text-right" data-sort="{{ number_format($mancost,2,'.','') }}">
+                  {{ number_format($mancost,2) }}
+                </td>
+                <!--- mancostpct -->
+                @if($d->dailysale['sales']==0)
+                  <td class="text-right" data-sort="0.00">
+                    -
+                  </td>
+                @else
+                  <?php
+                    $mancostpct = (($d->dailysale['empcount']*session('user.branchmancost'))/$d->dailysale['sales'])*100;
+                  ?>
+                  <td class="text-right" data-sort="{{ number_format($mancostpct, 2,'.','') }}"
+                    title="(({{$d->dailysale['empcount']}}*{{session('user.branchmancost')}}/{{$d->dailysale['sales']}})*100 ={{$mancostpct}}"
+                  >
+                    {{ number_format($mancostpct, 2) }}
+                  </td>
+                @endif
+                <!--- end: mancostpct -->
+                <td class="text-right" data-sort="{{ number_format($d->dailysale['tips'],2,'.','') }}">
+                  {{ number_format($d->dailysale['tips'],2) }}
+                </td>
+                <!--- sales per emp -->
+                @if($d->dailysale['sales']==0)
+                  <td class="text-right" data-sort="0.00">
+                    -
+                  </td>
+                @else
+                  <td class="text-right" data-sort="{{ number_format(($d->dailysale['tips']/$d->dailysale['sales'])*100, 2,'.','') }}">
+                    {{ number_format(($d->dailysale['tips']/$d->dailysale['sales'])*100, 2) }}
+                  </td>
+                @endif
+                <!--- end: sales per emp -->
 
-                if($d->dailysale['empcount']!='0') {
-                  $tot_sales_emp += number_format(($d->dailysale['sales']/$d->dailysale['empcount']),2, '.', '');
-                }
-
-                $tot_mancost    += $mancost;
-                $tot_mancostpct += $d->dailysale['mancostpct'];
-                $tot_tips       += $d->dailysale['tips'];
-                $tot_tipspct    += $d->dailysale['tipspct'];
-              ?>
-              @else 
-              <td class="text-right" data-sort="-">-</td>
-              <td class="text-right" data-sort="-">-</td>
-              <td class="text-right" data-sort="-">-</td>
-              <td class="text-right" data-sort="-">-</td>
-              <td class="text-right" data-sort="-">-</td>
-              <td class="text-right" data-sort="-">-</td>
-              <td class="text-right" data-sort="-">-</td>
-              <td class="text-right" data-sort="-">-</td>
-              <td class="text-right" data-sort="-">-</td>
-              <td class="text-right" data-sort="-">-</td>
-              @endif
-            </tr>
-            @endforeach
-          </tbody>
-          <tfoot>
-            <tr>
-              <td>
-                <strong>
-                {{ count($dailysales) }}
-                {{ count($dailysales) > 1 ? 'days':'day' }}
-                </strong>
-              </td>
-              <td class="text-right">
-                <strong id="f-tot-sales">{{ number_format($tot_sales,2) }}</strong>
-                <div>
-                <em><small title="{{$tot_sales}}/{{$div_sales}}">
-                  {{ $div_sales!=0?number_format($tot_sales/$div_sales,2):0 }}
-                </small></em>
-                </div>
-              </td>
-              <td class="text-right">
-                <strong id="f-tot-purch">{{ number_format($tot_purchcost,2) }}</strong>
-                <div>
-                <em><small title="{{$tot_purchcost}}/{{$div_purchcost}}">
-                  {{ $div_purchcost!=0?number_format($tot_purchcost/$div_purchcost,2):0 }}
-                </small></em>
-                </div>
-              </td>
-              <td class="text-right">
-                <strong>{{ number_format($tot_custcount, 0) }}</strong>
-                <div>
-                <em><small title="{{$tot_custcount}}/{{$div_custcount}}">
-                  {{ $div_custcount!=0?number_format($tot_custcount/$div_custcount,2):0 }}
-                </small></em>
-                </div>
-              </td>
-              <td class="text-right">
-                <strong>&nbsp;</strong>
-                <div>
-                <em><small title="{{$tot_headspend}}/{{$div_headspend}}">
-                  {{ $div_headspend!=0?number_format($tot_headspend/$div_headspend,2):0 }}
-                </small></em>
-                </div>
-              </td>
-              <td class="text-right">
-                <strong>{{ number_format($tot_empcount,0) }}</strong>
-                <div>
-                <em><small title="{{$tot_empcount}}/{{$div_empcount}}">
-                  {{ $div_empcount!=0?number_format($tot_empcount/$div_empcount,2):0 }}
-                </small></em>
-                </div>
-              </td>
-              <td class="text-right">
-                <strong>&nbsp;</strong>
-                <div>
-                <em><small id="f-tot-tips" title="{{$tot_sales}}/{{$tot_empcount}}" >
-                  @if($tot_empcount!='0')
-                    {{ number_format($tot_sales/$tot_empcount,2) }}
-                    <!--
-                    {{ number_format($tot_sales-($tot_purchcost+$tot_mancost),2) }}
-                    -->
-                  @else
-                    0
-                  @endif
-                </small></em>
-                </div>
-              </td>
-              <td class="text-right">
-                <strong id="f-tot-mancost">{{ number_format($tot_mancost,2) }}</strong>
-                <div>
-                <em><small title="{{$tot_mancost}}/{{$div_mancost}}">
-                	@if($div_mancost!='0')
-                  {{ number_format($tot_mancost/$div_mancost,2) }}
-                   @else
-                    0
-                  @endif
-                </small></em>
-                </div>
-              </td>
-              <td class="text-right">
-                <strong>&nbsp;</strong>
-                <div>
-                <em><small title="(({{$tot_empcount}}*{{session('user.branchmancost')}})/{{$tot_sales}})*100">
-                  @if($tot_sales!='0')
-                  {{ number_format((($tot_empcount*session('user.branchmancost'))/$tot_sales)*100,2) }}%
-                  @else
-                    0
-                  @endif
-                </small></em>
-                </div>
-              </td>
-              <td class="text-right">
-                <strong>{{ number_format($tot_tips,2) }}</strong>
-                <div>
-                <em><small title="{{$tot_tips}}/{{$div_tips}}">
-                	{{ $div_tips!=0?number_format($tot_tips/$div_tips,2):0 }}</small></em>
-                </div>
-              </td>
-              <td class="text-right">
-                <strong>&nbsp; </strong>
-                <div>
-                <em><small title="({{$tot_tips}}/{{$tot_sales}})*100 ">
-                  @if($tot_sales!='0')
-                  {{ number_format(($tot_tips/$tot_sales)*100,2) }}%
-                  @else
-                    0
-                  @endif
-                </small></em>
-                </div>
-              </td>
-            </tr>
-          </tfoot>
-        </table>
+                @else <!-- is_null d->dailysale) -->>
+                <td class="text-right" data-sort="0.00">-</td>
+                <td class="text-right" data-sort="0.00">-</td>
+                <td class="text-right" data-sort="0">-</td>
+                <td class="text-right" data-sort="0.00">-</td>
+                <td class="text-right" data-sort="0">-</td>
+                <td class="text-right" data-sort="0.00">-</td>
+                <td class="text-right" data-sort="0.00">-</td>
+                <td class="text-right" data-sort="0.00">-</td>
+                <td class="text-right" data-sort="0.00">-</td>
+                <td class="text-right" data-sort="0.00">-</td>
+                @endif
+              </tr>
+              @endforeach
+            </tbody>
+          </table>
 
         <table id="datatable" class="tb-data" style="display:none;">
           <thead>
@@ -358,7 +256,7 @@
               <td>0</td>
               <td>0</td>
               @endif
-              </tr>
+            </tr>
             @endforeach
           </tbody>
         </table>
@@ -375,184 +273,7 @@
 
 
 
-<div class="modal fade" id="mdl-purchased" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Purchased <small></small></h4>
-      </div>
-      <div class="modal-body">
-        
-        <ul class="nav nav-pills" role="tablist">
-          <li role="presentation" class="active">
-            <a href="#items" aria-controls="items" role="tab" data-toggle="tab">
-              <span class="gly gly-shopping-cart"></span>
-              <span class="hidden-xs hidden-sm">
-                Components
-              </span>
-            </a>
-          </li>
-          
-          <li role="presentation">
-            <a href="#stats" aria-controls="stats" role="tab" data-toggle="tab">
-              <span class="gly gly-charts"></span>
-              <span class="hidden-xs hidden-sm">
-                Stats
-              </span>
-            </a>
-          </li>
 
-          <li role="presentation">
-            <a href="#" id="link-download">
-              <span class="gly gly-disk-save"></span>
-              <span class="hidden-xs hidden-sm">
-              Download
-              </span>
-            </a>
-          </li>
-          <!--
-          <li role="presentation">
-            <a href="#" id="link-print" target="_blank">
-              <span class="glyphicon glyphicon-print"></span>
-              <span class="hidden-xs hidden-sm">
-              Printer Friendly
-              </span>
-            </a>
-          </li>
-          -->
-          <li role="presentation" style="float: right;">
-            <div>
-            Total Purchased Cost: 
-            <h3 id="tot-purch-cost" class="text-right" style="margin:0 0 10px 0;"></h3>
-            </div>
-          </li>
-        </ul>
-        <div class="tab-content">
-          <div role="tabpanel" class="tab-pane active" id="items">
-            
-            <div class="table-responsive">
-              <table class="tb-purchase-data table table-condensed table-hover table-striped table-sort">
-                <thead>
-                  <tr>
-                    <th class="text-right">#</th>
-                    <th>Component</th>
-                    <th>Category</th>
-                    <th>UoM</th>
-                    <th class="text-right">Qty</th>
-                    <th class="text-right">Unit Cost</th>
-                    <th class="text-right">Total Cost</th>
-                    <th class="text-right">Supplier</th>
-                    <th class="text-right">Terms</th>
-                    <th class="text-right">VAT</th>
-                  </tr>
-                </thead>
-                <tbody class="tb-data">
-                </tbody>
-              </table>
-            </div><!-- end: .table-responsive -->
-            
-          </div><!-- end: #items.tab-pane -->
-          
-          <div role="tabpanel" class="tab-pane" id="stats">
-            
-            <div class="panel panel-default">
-              <div class="panel-heading">Category</div>
-              <div class="panel-body">
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="row">
-                    <div class="table-responsive">
-                      <table id="category-data" class="tb-category-data table table-condensed table-hover table-striped table-sort">
-                        <thead>
-                          <tr>
-                            <th class="text-right">#</th>
-                            <th>Category</th>
-                            <th style="display:none;">Cost</th>
-                            <th>Total Cost</th>
-                          </tr>
-                        </thead>
-                      </table>
-                    </div><!-- end: .table-responsive -->
-                  </div><!-- end: .row -->
-                  </div><!-- end: .col-md-7 -->
-                  <div class="col-md-6">
-                    <div class="graph-container pull-right">
-                      <div id="graph-pie-category" data-table="#category-data"></div>
-                    </div>
-                  </div><!-- end: .col-md-5 -->
-                </div><!-- end: .row -->
-              </div>
-            </div><!-- end: .panel.panel-default -->
-            <div class="panel panel-default">
-              <div class="panel-heading">Expense Code</div>
-              <div class="panel-body">
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="row">
-                    <div class="table-responsive">
-                      <table id="expense-data" class="tb-expense-data table table-condensed table-hover table-striped table-sort">
-                        <thead>
-                          <tr>
-                            <th class="text-right">#</th>
-                            <th>Expense Code</th>
-                            <th style="display:none;">Cost</th>
-                            <th>Total Cost</th>
-                          </tr>
-                        </thead>
-                      </table>
-                    </div><!-- end: .table-responsive -->
-                  </div><!-- end: .row -->
-                  </div><!-- end: .col-md-7 -->
-                  <div class="col-md-6">
-                    <div class="graph-container pull-right">
-                      <div id="graph-pie-expense" data-table="#expense-data"></div>
-                    </div>
-                  </div><!-- end: .col-md-5 -->
-                </div><!-- end: .row -->
-              </div>
-            </div><!-- end: .panel.panel-default -->
-            <div class="panel panel-default">
-              <div class="panel-heading">Supplier</div>
-              <div class="panel-body">
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="row">
-                    <div class="table-responsive">
-                      <table id="supplier-data" class="tb-supplier-data table table-condensed table-hover table-striped table-sort">
-                        <thead>
-                          <tr>
-                            <th class="text-right">#</th>
-                            <th>Supplier</th>
-                            <th style="display:none;">Cost</th>
-                            <th>Total Cost</th>
-                          </tr>
-                        </thead>
-                      </table>
-                    </div><!-- end: .table-responsive -->
-                  </div><!-- end: .row -->
-                  </div><!-- end: .col-md-7 -->
-                  <div class="col-md-6">
-                    <div class="graph-container pull-right">
-                      <div id="graph-pie-supplier" data-table="#supplier-data"></div>
-                    </div>
-                  </div><!-- end: .col-md-5 -->
-                </div><!-- end: .row -->
-              </div>
-            </div><!-- end: .panel.panel-default -->
-
-          </div><!-- end: .tab-pane --> 
-
-        </div><!-- end: .tab-content -->
-        
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-link pull-right" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
 @endsection
 
 
@@ -685,7 +406,7 @@
     
 
 
-    $('.btn-purch').on('click', function(e){
+    $('.btn-purch-').on('click', function(e){
       e.preventDefault();
       var data = {};
       data.date = $(this).data('date');
@@ -862,7 +583,7 @@
               //var date = new Date(this.value);
               //console.log(date.getDay());
               //console.log(date);
-              return Highcharts.dateFormat('%b %e', this.value);
+              return Highcharts.dateFormat('%b %Y', this.value);
             }
           },
           plotLines: arr
@@ -875,12 +596,14 @@
           tickWidth: 0,
           labels: {
             formatter: function () {
+              /*
               arr.push({ // mark the weekend
                 color: "#CCCCCC",
                 width: 1,
                 value: this.value-86400000,
                 zIndex: 3
               });
+*/
               //return Highcharts.dateFormat('%a', (this.value-86400000));
             }
           }

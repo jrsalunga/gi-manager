@@ -100,6 +100,17 @@ class DateRange {
 
 
 
+  public function monthInterval(){
+  	$fr = $this->fr->copy();
+  	$arr = [];
+  	 do {
+      array_push($arr, Carbon::parse($fr->format('Y-m-d')));
+    } while ($fr->addMonth() <= $this->to);
+    return $arr;
+  }
+
+
+
 
 
 
