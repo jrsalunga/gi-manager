@@ -64,6 +64,13 @@ class DailySalesRepository extends BaseRepository {
   }
 
 
+  private function dateInterval(Carbon $fr, Carbon $to){
+    $interval = new DateInterval('P1D');
+    $to->add($interval);
+    return new DatePeriod($fr, $interval, $to);
+  }
+
+
 
   private function MonthInterval(Carbon $fr, Carbon $to){
     $interval = new DateInterval('P6D');
