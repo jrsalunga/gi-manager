@@ -21,6 +21,8 @@
               <span class="hidden-xs hidden-sm">Back</span>
             </a> 
           </div> <!-- end btn-grp -->
+
+          
           <!--
           <div class="btn-group" role="group">
             <a href="/dashboard" class="btn btn-default" title="Back to Main Menu">
@@ -40,15 +42,29 @@
             {!! Form::close() !!}
           </div> <!-- end btn-grp -->
 
+
+          <!--
           <div class="btn-group" style="margin-left: 5px;">
             <div class="dropdown">
-              <button id="dLabel" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <button id="dLabel" type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="gly gly-shop"></span>
                   <span class="br-code">{{ session('user.branchcode') }}</span>
                   <span class="br-desc hidden-xs hidden-sm">- {{ session('user.branch') }}</span>
               </button>
-            </div> <!-- .dropdown -->
+            </div> 
           </div>
+          -->
+          <div class="btn-group" role="group">
+            <button class="btn btn-default active">
+              <span class="fa fa-calendar-o"></span>
+              <span class="hidden-xs hidden-sm">Daily</span>
+            </button> 
+            <a href="/analytics/month?fr={{$dr->now->copy()->subMonths(3)->endOfMonth()->format('Y-m-d')}}&to={{$dr->now->endOfMonth()->format('Y-m-d')}}" class="btn btn-default" title="Back to Main Menu">
+              <span class="fa fa-calendar"></span>
+              <span class="hidden-xs hidden-sm">Monthly</span>
+            </a>
+          </div> <!-- end btn-grp -->
+
           <div class="btn-group pull-right clearfix" role="group">
             <label class="btn btn-default" for="dp-date-fr">
               <span class="glyphicon glyphicon-calendar"></span>
