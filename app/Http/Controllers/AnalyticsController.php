@@ -52,7 +52,7 @@ class AnalyticsController extends Controller
     }
 
     // if more than a year
-    if($fr->diffInDays($to, false)>=500) {
+    if($fr->diffInDays($to, false)>=1000) {
       $this->dr->fr = $to->copy()->startOfMonth();
       $this->dr->to = $to;
       $this->dr->date = $to;
