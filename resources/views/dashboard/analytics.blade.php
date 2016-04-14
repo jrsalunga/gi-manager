@@ -204,7 +204,7 @@
                 @endif
                 >{{ $d->dailysale['mancostpct'] }}</td>
               <td class="text-right" data-sort="{{ number_format($d->dailysale['tips'],2,'.','') }}">{{ number_format($d->dailysale['tips'],2) }}</td>
-              <td class="text-right" data-sort="{{ $d->dailysale['tipspct'] }}">{{ $d->dailysale['tipspct'] }}</td>
+              <td class="text-right" data-sort="{{ number_format($d->dailysale['tipspct'],2,'.','') }}">{{ number_format($d->dailysale['tipspct'], 2) }}</td>
               <?php
                 $tot_sales      += $d->dailysale['sales'];
                 $tot_purchcost  += $d->dailysale['purchcost'];
