@@ -95,7 +95,7 @@
     </table>
     </div>
     @else
-      No data
+      No employee data
     @endif
 
 

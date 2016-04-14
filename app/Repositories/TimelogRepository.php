@@ -71,6 +71,12 @@ class TimelogRepository extends BaseRepository
     });
 
     $col = collect($timelogs[0]);
+
+    
+    if(count($employees)==0);
+      $arr[0] = [];
+
+
     foreach ($employees as $key => $employee) {
 
       $arr[0][$key]['employee'] = $employee;
