@@ -22,11 +22,15 @@ class AnalyticsController extends Controller
 
   public function getMonth(Request $request) {
 
-    $this->setDateRangeMode($request, 'month');
+    $res = $this->setDateRangeMode($request, 'month');
     
     $dailysales = $this->ds->getMonth($request, $this->dr);
 
-    return view('analytics.month')->with('dailysales', $dailysales)->with('dr', $this->dr);
+    if($res)
+      return view('analytics.month')->with('dailysales', $dailysales)->with('dr', $this->dr);
+    else
+      return view('analytics.month')->with('dailysales', $dailysales)->with('dr', $this->dr)
+                                    ->with(['alert-warning' => 'Max months reached!']);
 
   }
 
@@ -52,8 +56,8 @@ class AnalyticsController extends Controller
     }
 
     // if more than a year
-    if($fr->diffInDays($to, false)>=1000) { // 730 = 2yrs
-      $this->dr->fr = $to->copy()->startOfMonth();
+    if($fr->diffInDays($to, false)>=731) { // 730 = 2yrs
+      $this->dr->fr = $to->copy()->addMonths(24)->startOfMonth();
       $this->dr->to = $to;
       $this->dr->date = $to;
       return false;
