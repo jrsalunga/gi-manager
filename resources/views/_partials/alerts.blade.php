@@ -42,9 +42,9 @@
 @endif
 
 
-@if(null !== $alert-warning)
+@if(null !== $alertwarning))
   <div class="alert alert-warning alert-important">
-    {{ $alert-warning }}
+    {{ $alertwarning }}
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
