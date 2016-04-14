@@ -48,7 +48,7 @@
             </a>
             <button class="btn btn-default active">
               <span class="fa fa-calendar"></span>
-              <span class="hidden-xs hidden-sm">Monthly</span> <span class="badge">{{ ceil($dr->fr->diffInDays($dr->to, false)/30) }}</span>
+              <span class="hidden-xs hidden-sm">Monthly</span> <span class="badge">{{ floor($dr->fr->diffInDays($dr->to, false)/30) }}</span>
             </button> 
           </div> <!-- end btn-grp -->
 
