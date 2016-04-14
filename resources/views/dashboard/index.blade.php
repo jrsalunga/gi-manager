@@ -104,7 +104,7 @@
           <div class="list-group">
             <a href="#" class="list-group-item" style="color: #aaa;">Trainee Arrivals</a>
             <a href="#" class="list-group-item" style="color: #aaa;">Trainee Status Changes</a>
-            <a href="#" class="list-group-item" style="color: #aaa;">Requests for Employee Movement</a>
+            <a href="#" class="list-group-item" style="color: #aaa;">Manpower Request</a>
             <a href="#" class="list-group-item" style="color: #aaa;">Requests for Employee Status Change</a>
             <a href="#" class="list-group-item" style="color: #aaa;">Notices of Resignation</a>
           </div>
