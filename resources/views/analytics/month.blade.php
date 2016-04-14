@@ -9,7 +9,7 @@
 	<ol class="breadcrumb">
     <li><span class="gly gly-shop"></span> <a href="/dashboard">{{ $branch }}</a></li>
     <li>Analytics</li>
-    <li class="active">By Month {{ $dr->fr->diffInDays($dr->to, false) }} </li>
+    <li class="active">By Month</li>
   </ol>
 
   <div>
@@ -48,7 +48,7 @@
             </a>
             <button class="btn btn-default active">
               <span class="fa fa-calendar"></span>
-              <span class="hidden-xs hidden-sm">Monthly</span>
+              <span class="hidden-xs hidden-sm">Monthly</span> {{ $dr->fr->diffInMonths($dr->to, false) }}
             </button> 
           </div> <!-- end btn-grp -->
 
