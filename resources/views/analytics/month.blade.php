@@ -44,11 +44,11 @@
           <div class="btn-group" role="group">
             <a href="/analytics?fr={{$dr->now->copy()->startOfMonth()->format('Y-m-d')}}&to={{$dr->now->format('Y-m-d')}}" class="btn btn-default" title="Back to Main Menu">
               <span class="fa fa-calendar-o"></span>
-              <span class="hidden-xs hidden-sm">Daily</span>
+              <span class="hidden-xs hidden-sm">Daily</span> <span class="badge">{{ $dr->fr->diffInDays($dr->to, false) }}</span>
             </a>
             <button class="btn btn-default active">
               <span class="fa fa-calendar"></span>
-              <span class="hidden-xs hidden-sm">Monthly</span> {{ $dr->fr->diffInMonths($dr->to, false) }}
+              <span class="hidden-xs hidden-sm">Monthly</span> <span class="badge">{{ $dr->fr->diffInMonths($dr->to, false) }}</span>
             </button> 
           </div> <!-- end btn-grp -->
 
