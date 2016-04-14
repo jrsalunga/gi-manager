@@ -9,7 +9,7 @@
 	<ol class="breadcrumb">
     <li><span class="gly gly-shop"></span> <a href="/dashboard">{{ $branch }}</a></li>
     <li>Analytics</li>
-    <li class="active">By Month {{ $fr->diffInDays($to, false) }} </li>
+    <li class="active">By Month {{ $dr->fr->diffInDays($dr->to, false) }} </li>
   </ol>
 
   <div>
