@@ -95,9 +95,18 @@
           </h3>
         </div>
         <div class="panel-body">
-  				<div class="list-group">
-					  <a href="/task/mansked" class="list-group-item">Manpower Scheduling</a>
+          <div class="list-group">
+            <a href="/task/mansked" class="list-group-item">Manpower Scheduling</a>
             <a href="/timesheet" class="list-group-item">Daily Time Sheet</a>
+            <a href="#" class="list-group-item">DTR Approvals</a>
+            <a href="#" class="list-group-item">Weekly Branch Report</a>
+          </div>
+          <div class="list-group">
+            <a href="#" class="list-group-item">Trainee Arrivals</a>
+            <a href="#" class="list-group-item">Trainee Status Changes</a>
+            <a href="#" class="list-group-item">Requests for Employee Movement</a>
+            <a href="#" class="list-group-item">Requests for Employee Status Change</a>
+            <a href="#" class="list-group-item">Notices of Resignation</a>
           </div>
   			</div>
   		</div> <!-- end: .panel -->
