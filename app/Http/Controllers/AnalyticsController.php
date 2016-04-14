@@ -30,7 +30,7 @@ class AnalyticsController extends Controller
       return view('analytics.month')->with('dailysales', $dailysales)->with('dr', $this->dr);
     else
       return view('analytics.month')->with('dailysales', $dailysales)->with('dr', $this->dr)
-                                    ->with(['alert-warning' => 'Max months reached!']);
+                                    ->with('alert-warning', 'Max months reached!');
 
   }
 
