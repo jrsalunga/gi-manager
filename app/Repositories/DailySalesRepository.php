@@ -108,8 +108,12 @@ class DailySalesRepository extends BaseRepository {
 
   private function getAggregateByDateRange($fr, $to) {
 
-    return $this->scopeQuery(function($query) use ($fr, $to) {
-      return $query->select(DB::raw('date, MONTH(date) AS month, YEAR(date) as year, SUM(sales) AS sales, SUM(purchcost) AS purchcost, SUM(cos) AS cos, SUM(tips) AS tips, SUM(custcount) AS custcount, SUM(empcount) AS empcount'))
+    $sql = 'date, MONTH(date) AS month, YEAR(date) as year, SUM(sales) AS sales, ';
+    $sql .= 'SUM(purchcost) AS purchcost, SUM(cos) AS cos, SUM(tips) AS tips, ';
+    $sql .= 'SUM(custcount) AS custcount, SUM(empcount) AS empcount, SUM(headspend) AS headspend';
+
+    return $this->scopeQuery(function($query) use ($fr, $to, $sql) {
+      return $query->select(DB::raw($sql))
         ->whereBetween('date', [$fr, $to])
         ->groupBy(DB::raw('MONTH(date), YEAR (date)'))
         ->orderBy(DB::raw('YEAR (date), MONTH(date)'));

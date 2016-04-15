@@ -48,7 +48,8 @@
             </a>
             <button class="btn btn-default active">
               <span class="fa fa-calendar"></span>
-              <span class="hidden-xs hidden-sm">Monthly</span> <span class="badge">{{ floor($dr->fr->diffInDays($dr->to, false)/30) }}</span>
+              <?php $months = floor($dr->fr->diffInDays($dr->to, false)/30); ?>
+              <span class="hidden-xs hidden-sm">Monthly</span> <span class="badge">{{ $months }}</span>
             </button> 
           </div> <!-- end btn-grp -->
 
@@ -129,7 +130,37 @@
               </tr>
             </thead>
             <tbody>
+              <?php
+                $tot_sales = 0;
+                $tot_purchcost = 0;
+                $tot_custcount = 0;
+                $tot_empcount = 0;
+                $tot_mancost = 0;
+                $tot_tips = 0;
+                $tot_headspend = 0;
+                $tot_sales_emp = 0;
+                $tot_mancostpct = 0;
+                $tot_tipspct = 0;
+
+                $div_sales = 0;
+                $div_purchcost = 0;
+                $div_custcount = 0;
+                $div_empcount = 0;
+                $div_mancost = 0;
+                $div_tips = 0;
+                $div_headspend = 0;
+              ?>
               @foreach($dailysales as $d)
+              <?php
+                $div_sales+=($d->dailysale['sales']!=0)?1:0;
+                $div_purchcost+=($d->dailysale['purchcost']!=0)?1:0; 
+                $div_custcount+=($d->dailysale['custcount']!=0)?1:0; 
+                $div_empcount+=($d->dailysale['empcount']!=0)?1:0; 
+                $div_tips+=($d->dailysale['tips']!=0)?1:0; 
+                $div_headspend+=($d->dailysale['headspend']!=0)?1:0;
+              ?>
+
+
               <tr>
                 <td data-sort="{{$d->date->format('Y-m-d')}}">{{ $d->date->format('M Y') }}</td>
                 @if(!is_null($d->dailysale))
@@ -152,15 +183,7 @@
                   {{ number_format($d->dailysale['custcount'], 0) }}
                 </td>
                 <!--- head speand -->
-                @if($d->dailysale['custcount']==0)
-                  <td class="text-right" data-sort="0.00">
-                    -
-                  </td>
-                @else
-                  <td class="text-right" data-sort="{{ number_format($d->dailysale['sales']/$d->dailysale['custcount'], 2,'.','') }}">
-                    {{ number_format($d->dailysale['sales']/$d->dailysale['custcount'], 2) }}
-                  </td>
-                @endif
+                <td class="text-right" data-sort="{{ number_format($d->dailysale['headspend'], 2,'.','') }}">{{ number_format($d->dailysale['headspend'], 2) }}</td>
                 <!--- end: head speand -->
                 <td class="text-right" data-sort="{{ $d->dailysale['empcount'] }}">
                   {{ number_format($d->dailysale['empcount'], 0) }}
@@ -178,6 +201,8 @@
                 <!--- end: sales per emp -->
                 <?php
                   $mancost = $d->dailysale['empcount']*session('user.branchmancost');
+                  $div_mancost+=($mancost!=0)?1:0; 
+              
                 ?>
                 <td class="text-right" data-sort="{{ number_format($mancost,2,'.','') }}">
                   {{ number_format($mancost,2) }}
@@ -213,6 +238,23 @@
                 @endif
                 <!--- end: sales per emp -->
 
+                <?php
+                  $tot_sales      += $d->dailysale['sales'];
+                  $tot_purchcost  += $d->dailysale['purchcost'];
+                  $tot_custcount  += $d->dailysale['custcount'];
+                  $tot_headspend  += $d->dailysale['headspend'];
+                  $tot_empcount   += $d->dailysale['empcount'];
+
+                  if($d->dailysale['empcount']!='0') {
+                    $tot_sales_emp += number_format(($d->dailysale['sales']/$d->dailysale['empcount']),2, '.', '');
+                  }
+
+                  $tot_mancost    += $mancost;
+                  $tot_mancostpct += $d->dailysale['mancostpct'];
+                  $tot_tips       += $d->dailysale['tips'];
+                  $tot_tipspct    += $d->dailysale['tipspct'];
+                ?>
+
                 @else <!-- is_null d->dailysale) -->
                 <td class="text-right" data-sort="0.00">-</td>
                 <td class="text-right" data-sort="0.00">-</td>
@@ -228,6 +270,113 @@
               </tr>
               @endforeach
             </tbody>
+            <tfoot>
+              <tr>
+                <td>
+                  <strong>
+                  {{ $months }}
+                  {{ $months > 1 ? 'months':'month' }}
+                  </strong>
+                <td class="text-right">
+                <strong id="f-tot-sales">{{ number_format($tot_sales,2) }}</strong>
+                <div>
+                <em><small title="{{$tot_sales}}/{{$div_sales}}">
+                  {{ $div_sales!=0?number_format($tot_sales/$div_sales,2):0 }}
+                </small></em>
+                </div>
+              </td>
+              <td class="text-right">
+                <strong id="f-tot-purch">{{ number_format($tot_purchcost,2) }}</strong>
+                <div>
+                <em><small title="{{$tot_purchcost}}/{{$div_purchcost}}">
+                  {{ $div_purchcost!=0?number_format($tot_purchcost/$div_purchcost,2):0 }}
+                </small></em>
+                </div>
+              </td>
+              <td class="text-right">
+                <strong>{{ number_format($tot_custcount, 0) }}</strong>
+                <div>
+                <em><small title="{{$tot_custcount}}/{{$div_custcount}}">
+                  {{ $div_custcount!=0?number_format($tot_custcount/$div_custcount,2):0 }}
+                </small></em>
+                </div>
+              </td>
+              <td class="text-right">
+                <strong>&nbsp;</strong>
+                <div>
+                <em><small title="{{$tot_headspend}}/{{$div_headspend}}">
+                  {{ $div_headspend!=0?number_format($tot_headspend/$div_headspend,2):0 }}
+                </small></em>
+                </div>
+              </td>
+              <td class="text-right">
+                <strong>{{ number_format($tot_empcount,0) }}</strong>
+                <div>
+                <em><small title="{{$tot_empcount}}/{{$div_empcount}}">
+                  {{ $div_empcount!=0?number_format($tot_empcount/$div_empcount,2):0 }}
+                </small></em>
+                </div>
+              </td>
+              <td class="text-right">
+                <strong>&nbsp;</strong>
+                <div>
+                <em><small id="f-tot-tips" title="{{$tot_sales}}/{{$tot_empcount}}" >
+                  @if($tot_empcount!='0')
+                    {{ number_format($tot_sales/$tot_empcount,2) }}
+                    <!--
+                    {{ number_format($tot_sales-($tot_purchcost+$tot_mancost),2) }}
+                    -->
+                  @else
+                    0
+                  @endif
+                </small></em>
+                </div>
+              </td>
+              <td class="text-right">
+                <strong id="f-tot-mancost">{{ number_format($tot_mancost,2) }}</strong>
+                <div>
+                <em><small title="{{$tot_mancost}}/{{$div_mancost}}">
+                  @if($div_mancost!='0')
+                  {{ number_format($tot_mancost/$div_mancost,2) }}
+                   @else
+                    0
+                  @endif
+                </small></em>
+                </div>
+              </td>
+              <td class="text-right">
+                <strong>&nbsp;</strong>
+                <div>
+                <em><small title="(({{$tot_empcount}}*{{session('user.branchmancost')}})/{{$tot_sales}})*100">
+                  @if($tot_sales!='0')
+                  {{ number_format((($tot_empcount*session('user.branchmancost'))/$tot_sales)*100,2) }}%
+                  @else
+                    0
+                  @endif
+                </small></em>
+                </div>
+              </td>
+              <td class="text-right">
+                <strong>{{ number_format($tot_tips,2) }}</strong>
+                <div>
+                <em><small title="{{$tot_tips}}/{{$div_tips}}">
+                  {{ $div_tips!=0?number_format($tot_tips/$div_tips,2):0 }}</small></em>
+                </div>
+              </td>
+              <td class="text-right">
+                <strong>&nbsp; </strong>
+                <div>
+                <em><small title="({{$tot_tips}}/{{$tot_sales}})*100 ">
+                  @if($tot_sales!='0')
+                  {{ number_format(($tot_tips/$tot_sales)*100,2) }}%
+                  @else
+                    0
+                  @endif
+                </small></em>
+                </div>
+              </td>
+            </tr>
+            </tfoot>  
           </table>
 
         <table id="datatable" class="tb-data" style="display:none;">

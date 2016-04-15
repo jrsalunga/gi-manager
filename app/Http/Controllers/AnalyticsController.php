@@ -42,7 +42,7 @@ class AnalyticsController extends Controller
     switch ($mode) {
       case 'month':
         $to = !is_null($request->input('to')) ? carbonCheckorNow($request->input('to')) : Carbon::now()->endOfMonth();
-        $fr = !is_null($request->input('fr')) ? carbonCheckorNow($request->input('fr')) : $to->copy()->subMonths(3)->startOfMonth();
+        $fr = !is_null($request->input('fr')) ? carbonCheckorNow($request->input('fr')) : $to->copy()->subMonths(5)->startOfMonth();
         if ($to->lt($fr)) {
           $to = Carbon::now()->endOfMonth();
           $fr = $to->copy()->startOfMonth();
