@@ -513,10 +513,9 @@
         calendarWeeks: true,
         viewMode: 'months'
       }).on('dp.change', function(e){
-        var date = e.date.format('YYYY-MM-DD');
         $('#dp-date-to').data("DateTimePicker").minDate(e.date);
+        $('#fr').val(e.date.format('YYYY-MM-DD'));
         /*
-        $('#fr').val(date);
         if($('#fr').data('fr')==date)
           $('.btn-go').prop('disabled', true);
         else
@@ -534,10 +533,9 @@
         calendarWeeks: true,
         viewMode: 'months'
       }).on('dp.change', function(e){
-        var date = e.date.format('YYYY-MM-DD');
         $('#dp-date-fr').data("DateTimePicker").maxDate(e.date);
+        $('#to').val(e.date.format('YYYY-MM-DD'));
         /*
-        $('#to').val(date);
         if($('#to').data('to')==date)
           $('.btn-go').prop('disabled', true);
         else
