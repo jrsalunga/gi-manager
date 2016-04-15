@@ -8,7 +8,8 @@
 <div class="container-fluid">
 	<ol class="breadcrumb">
     <li><span class="gly gly-shop"></span> <a href="/dashboard">{{ $branch }}</a></li>
-    <li class="active">Analytics</li>
+    <li>Analytics</li>
+    <li class="active">{{ $dr->fr->format('M d, Y') }} - {{ $dr->to->format('M d, Y') }}</li>
   </ol>
 
   <div>
@@ -57,7 +58,7 @@
           <div class="btn-group" role="group">
             <button class="btn btn-default active">
               <span class="fa fa-calendar-o"></span>
-              <span class="hidden-xs hidden-sm">Daily</span> <span class="badge">{{ $dr->fr->diffInDays($dr->to, false) }}</span>
+              <span class="hidden-xs hidden-sm">Daily</span> <span class="badge">{{ $dr->fr->diffInDays($dr->to, false)+1 }}</span>
             </button> 
             <a href="/analytics/month?fr={{$dr->now->copy()->subMonths(3)->endOfMonth()->format('Y-m-d')}}&to={{$dr->now->endOfMonth()->format('Y-m-d')}}" class="btn btn-default" title="Back to Main Menu">
               <span class="fa fa-calendar"></span>

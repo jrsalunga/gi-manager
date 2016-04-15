@@ -9,7 +9,7 @@
 	<ol class="breadcrumb">
     <li><span class="gly gly-shop"></span> <a href="/dashboard">{{ $branch }}</a></li>
     <li>Analytics</li>
-    <li class="active">By Month</li>
+    <li class="active">{{ $dr->fr->format('M Y') }} - {{ $dr->to->format('M Y') }}</li>
   </ol>
 
   <div>
@@ -44,7 +44,7 @@
           <div class="btn-group" role="group">
             <a href="/analytics?fr={{$dr->now->copy()->startOfMonth()->format('Y-m-d')}}&to={{$dr->now->format('Y-m-d')}}" class="btn btn-default" title="Back to Main Menu">
               <span class="fa fa-calendar-o"></span>
-              <span class="hidden-xs hidden-sm">Daily</span> <span class="badge">{{ $dr->fr->diffInDays($dr->to, false) }}</span>
+              <span class="hidden-xs hidden-sm">Daily</span> <span class="badge">{{ $dr->fr->diffInDays($dr->to, false)+1 }}</span>
             </a>
             <button class="btn btn-default active">
               <span class="fa fa-calendar"></span>
@@ -56,9 +56,9 @@
             <label class="btn btn-default" for="dp-date-fr">
               <span class="glyphicon glyphicon-calendar"></span>
             </label>
-            <input readonly type="text" class="btn btn-default dp" id="dp-date-fr" value="{{ $dr->fr->format('m/d/Y') }}" style="max-width: 110px;">
+            <input readonly type="text" class="btn btn-default dp" id="dp-date-fr" value="{{ $dr->fr->format('m/Y') }}" style="max-width: 110px;">
             <div class="btn btn-default" style="pointer-events: none;">-</div>
-            <input readonly type="text" class="btn btn-default dp" id="dp-date-to" value="{{ $dr->to->format('m/d/Y') }}" style="max-width: 110px;">
+            <input readonly type="text" class="btn btn-default dp" id="dp-date-to" value="{{ $dr->to->format('m/Y') }}" style="max-width: 110px;">
             <label class="btn btn-default" for="dp-date-to">
               <span class="glyphicon glyphicon-calendar"></span>
             </label>
@@ -506,38 +506,43 @@
 
 
   	$('#dp-date-fr').datetimepicker({
-        defaultDate: "{{ $dr->fr->format('Y-m-d') }}",
-        format: 'MM/DD/YYYY',
+        //defaultDate: "{{ $dr->fr->format('Y-m-d') }}",
+        format: 'MM/YYYY',
         showTodayButton: true,
         ignoreReadonly: true,
-        calendarWeeks: true
+        calendarWeeks: true,
+        viewMode: 'months'
       }).on('dp.change', function(e){
         var date = e.date.format('YYYY-MM-DD');
-        console.log(date);
         $('#dp-date-to').data("DateTimePicker").minDate(e.date);
+        /*
         $('#fr').val(date);
         if($('#fr').data('fr')==date)
           $('.btn-go').prop('disabled', true);
         else
           $('.btn-go').prop('disabled', false);
+        */
       });
 
 
       $('#dp-date-to').datetimepicker({
-        defaultDate: "{{ $dr->to->format('Y-m-d') }}",
-        format: 'MM/DD/YYYY',
+       // defaultDate: "{{ $dr->to->format('Y-m-d') }}",
+        format: 'MM/YYYY',
         showTodayButton: true,
         useCurrent: false,
         ignoreReadonly: true,
-        calendarWeeks: true
+        calendarWeeks: true,
+        viewMode: 'months'
       }).on('dp.change', function(e){
         var date = e.date.format('YYYY-MM-DD');
         $('#dp-date-fr').data("DateTimePicker").maxDate(e.date);
+        /*
         $('#to').val(date);
         if($('#to').data('to')==date)
           $('.btn-go').prop('disabled', true);
         else
           $('.btn-go').prop('disabled', false);
+        */
       });
 
       Highcharts.setOptions({

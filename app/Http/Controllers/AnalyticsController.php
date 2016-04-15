@@ -29,7 +29,7 @@ class AnalyticsController extends Controller
     if($res)
       return view('analytics.month')->with('dailysales', $dailysales)->with('dr', $this->dr);
     else {
-      $request->session()->flash('alert-warning', 'Max months reached!');
+      $request->session()->flash('alert-warning', 'Max months reached! Adjusted to '.$this->dr->fr->format('M Y').' - '.$this->dr->to->format('M Y'));
       return view('analytics.month')->with('dailysales', $dailysales)->with('dr', $this->dr);
     }
       
