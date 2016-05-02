@@ -25,12 +25,30 @@
           </h3>
         </div>
         <div class="panel-body">
-          <p class="text-right">
+          <p>
 
             <a href="/analytics" class="btn btn-default">
               <span class="gly gly-cardio"></span> 
               <span class="hidden-xs">Analytics</span>
             </a>
+
+            <span class="pull-right">
+              Last backup:
+             @if(is_null($backup))
+              No backup uploaded
+             @else
+               <span class="{{ $backup->bg }}"> 
+                 <span class="fa fa-file-archive-o"></span> 
+                 <strong>{{ $backup->file->filename }}</strong>  
+               </span> 
+               <small><em>{{ $backup->diffForHumans }}</em></small>
+               @if($backup->diffInDays>1)
+                 <p class="text-danger"><span class="fa fa-exclamation-triangle"></span> 
+                  <small><em>Your backup is {{ $backup->diffInDays }} days delayed. Kindly notify your cashier to upload your backup thru DropBox. </em></small>
+                 </p>
+               @endif
+             @endif
+            </span>
 
             <div class="table-responsive">
             <table class="table table-hover table-striped">
@@ -110,7 +128,7 @@
           </div>
   			</div>
   		</div> <!-- end: .panel -->
-
+      <!--
       <div class="panel panel-default">
         <div class="panel-body">
            Last backup:
@@ -131,6 +149,7 @@
 
         </div>
       </div>
+      -->
 
       
   	</div><!-- end: .col-md-4 -->

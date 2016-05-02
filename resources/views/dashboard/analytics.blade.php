@@ -161,12 +161,7 @@
                 $div_headspend = 0;
                 $div_empcount = 0;
                 $div_mancost = 0;
-               
-               
-                
                 $div_tips = 0;
-
-
               ?>
             @foreach($dailysales as $d)
             	<?php $div_sales+=($d->dailysale['sales']!=0)?1:0; ?>
