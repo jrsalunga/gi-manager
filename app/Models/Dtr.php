@@ -6,12 +6,20 @@ use Carbon\Carbon;
 class Dtr extends BaseModel {
 
 	protected $table = 'dtr';
- 	//protected $fillable = ['code', 'descriptor'];
- 	//public static $header = ['code', 'descriptor'];
 
 	public function employee() {
     return $this->belongsTo('App\Models\Employee', 'employeeid');
   }
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -37,27 +37,7 @@ class DashboardController extends Controller {
 	}
 
 
-	public function getAnalytics(Request $request){
-
-		//return dd(is_null($request->input('fr'));
-
-		$fr = !is_null($request->input('fr')) ? carbonCheckorNow($request->input('fr')) : $this->dr->fr;
-		$to = !is_null($request->input('to')) ? carbonCheckorNow($request->input('to')) : $this->dr->to;
-
-		if ($to->lt($fr)) {
-			$to = Carbon::now();
-			$fr = $to->copy()->subDay(30); //$fr = $to->copy()->subDay(7);
-		} 
-
-		$this->dr->fr = $fr;
-		$this->dr->to = $to;
-		$this->dr->date = $to;
-
-		$dailysales = $this->ds->branchByDR($request->user()->branchid, $this->dr);
-
-		return $this->setViewWithDR(view('dashboard.analytics')->with('dailysales', $dailysales)
-																		->with('dr', $this->dr));
-	}
+	
 
 
 	

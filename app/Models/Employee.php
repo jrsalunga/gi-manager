@@ -4,21 +4,16 @@ use App\Models\BaseModel;
 
 class Employee extends BaseModel {
 
-  //protected $connection = 'mysql-hr';
+  protected $connection = 'mysql-hr';
 	protected $table = 'employee';
  	protected $fillable = ['code', 'lastname', 'firstname', 'middlename', 'positionid', 'branchid', 'punching', 'processing'];
   public $timestamps = false;
 
-  public function __construct(array $attributes = [])
-  {
-    parent::__construct($attributes);
-    if (app()->environment()==='production')
-      $this->setConnection('mysql-hr');
-      
-    $this->setConnection('mysql-hr');
+  public function dtrs() {
+    return $this->hasMany('App\Models\Dtr', 'employeeid');
   }
 
- 	public function timelogs() {
+  public function timelogs() {
     return $this->hasMany('App\Models\Timelog', 'employeeid');
   }
 
@@ -42,9 +37,6 @@ class Employee extends BaseModel {
     return $this->hasMany('App\Models\Manskedhdr', 'managerid');
   }
 
-  public function dtrs() {
-    return $this->hasMany('App\Models\Dtr', 'employeeid');
-  }
 
 
 

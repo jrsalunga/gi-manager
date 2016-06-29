@@ -39,7 +39,8 @@ Route::group(['middleware' => 'auth'], function(){
 
 Route::get('/', ['uses'=>'DashboardController@getIndex']);
 Route::get('dashboard', ['uses'=>'DashboardController@getIndex']);
-Route::get('analytics', ['uses'=>'DashboardController@getAnalytics']);
+//Route::get('analytics', ['uses'=>'DashboardController@getAnalytics']);
+Route::get('analytics', ['uses'=>'AnalyticsController@getDaily']);
 Route::get('analytics/month', ['uses'=>'AnalyticsController@getMonth']);
 
 Route::get('settings/{param1?}/{param2?}', ['uses'=>'SettingsController@getIndex'])

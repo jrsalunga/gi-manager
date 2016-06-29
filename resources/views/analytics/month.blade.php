@@ -41,6 +41,7 @@
             {!! Form::close() !!}
           </div> <!-- end btn-grp -->
 
+          <!--
           <div class="btn-group" role="group">
             <a href="/analytics?fr={{$dr->now->copy()->startOfMonth()->format('Y-m-d')}}&to={{$dr->now->format('Y-m-d')}}" class="btn btn-default" title="Back to Main Menu">
               <span class="fa fa-calendar-o"></span>
@@ -52,6 +53,8 @@
               <span class="hidden-xs hidden-sm">Monthly</span> <span class="badge">{{ $months }}</span>
             </button> 
           </div> <!-- end btn-grp -->
+
+
 
           <div class="btn-group pull-right clearfix" role="group">
             <label class="btn btn-default" for="dp-date-fr">
