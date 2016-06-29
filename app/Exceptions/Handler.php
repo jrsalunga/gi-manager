@@ -47,11 +47,13 @@ class Handler extends ExceptionHandler
         }
 
 
+        /* disable so if 404 the error.404.blade.php will kick in
         if(app()->environment()=='production'){
           if($e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
             return redirect('/');
           }
         }
+        */
 
         if ($e instanceof \Illuminate\Session\TokenMismatchException) {
             return redirect('/logout');
