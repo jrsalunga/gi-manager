@@ -392,7 +392,7 @@
             </tfoot>  
           </table>
 
-        <table id="datatable" class="tb-data" style="display:block;">
+        <table id="datatable" class="tb-data" style="display:none;">
           <thead>
             <tr>
                 <th>Date</th>
