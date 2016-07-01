@@ -306,7 +306,7 @@
                 <td>
                   <strong>
                   {{ count($dailysales) }}
-                  {{ count($dailysales) > 1 ? 'months':'month' }}
+                  {{ count($dailysales) > 1 ? 'weeks':'week' }}
                   </strong>
                 <td class="text-right">
                 <strong id="f-tot-sales">{{ number_format($tot_sales,2) }}</strong>
