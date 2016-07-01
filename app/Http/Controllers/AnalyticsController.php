@@ -30,6 +30,19 @@ class AnalyticsController extends Controller
   }
 
 
+  public function getWeekly(Request $request) {
+
+    $res = $this->setDateRangeMode($request, 'weekly');
+
+    $dailysales = $this->ds->getWeek($request, $this->dr);
+
+    if(!$res)
+      $request->session()->flash('alert-warning', 'Max months reached! Adjusted to '.$this->dr->fr->format('M Y').' - '.$this->dr->to->format('M Y'));
+
+    return $this->setViewWithDR(view('analytics.weekly')->with('dailysales', $dailysales));
+  }
+
+
 
 
   public function getMonth(Request $request) {
@@ -46,6 +59,37 @@ class AnalyticsController extends Controller
     }
       
 
+  }
+
+
+
+  public function getQuarter(Request $request) {
+
+    $res = $this->setDateRangeMode($request, 'quarterly');
+    
+    $dailysales = $this->ds->getQuarter($request, $this->dr);
+
+    if($res)
+      return $this->setViewWithDR(view('analytics.quarter')->with('dailysales', $dailysales));
+    else {
+      $request->session()->flash('alert-warning', 'Max months reached! Adjusted to '.$this->dr->fr->format('M Y').' - '.$this->dr->to->format('M Y'));
+      return $this->setViewWithDR(view('analytics.quarter')->with('dailysales', $dailysales));
+    }
+  }
+
+
+  public function getYear(Request $request) {
+
+    $res = $this->setDateRangeMode($request, 'yearly');
+    
+    $dailysales = $this->ds->getYear($request, $this->dr);
+
+    if($res)
+      return $this->setViewWithDR(view('analytics.year')->with('dailysales', $dailysales));
+    else {
+      $request->session()->flash('alert-warning', 'Max months reached! Adjusted to '.$this->dr->fr->format('M Y').' - '.$this->dr->to->format('M Y'));
+      return $this->setViewWithDR(view('analytics.year')->with('dailysales', $dailysales));
+    }
   }
 
   

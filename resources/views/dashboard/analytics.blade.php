@@ -373,7 +373,7 @@
                 <th>Sales</th>
                 <th>Purchased</th>
                 <th>Emp Count</th>
-  
+                <th>Customer</th>
                 <th>Man Cost</th>
                 <th>Tips</th>
                 <th>Sales per Emp</th>
@@ -387,11 +387,12 @@
               <td>{{ $d->dailysale['sales'] }}</td>
               <td>{{ $d->dailysale['purchcost'] }}</td>
               <td>{{ $d->dailysale['empcount'] }}</td>
+              <td>{{ $d->dailysale['custcount'] }}</td>
               <td>{{ $d->dailysale['mancost'] }}</td>
               <td>{{ $d->dailysale['tips'] }}</td>
               <td>{{ $d->dailysale['empcount']=='0' ? 0:number_format(($d->dailysale['sales']/$d->dailysale['empcount']), 2, '.', '') }}</td>
               @else 
-
+              <td>0</td>
               <td>0</td>
               <td>0</td>
               <td>0</td>
@@ -1220,14 +1221,21 @@
             yAxis: 1
           }, {
             type: 'line',
+             dashStyle: 'shortdot',
+            yAxis: 1,
+            visible: false
+          }, {
+            type: 'line',
             yAxis: 0
           }, {
             type: 'line',
             //dashStyle: 'shortdot',
-            yAxis: 0
+            yAxis: 0,
+            visible: false
           }, {
             type: 'line',
-            yAxis: 0
+            yAxis: 0,
+            visible: false
           }
         ]
     });
@@ -1256,23 +1264,23 @@
           case 'weekly':
             html = '<select id="fr-year" class="btn btn-default dp-w-fr" style="height:34px; padding: 6px 3px 6px 12px">'
                 @for($y=2015;$y<2021;$y++)
-                  +'<option value="{{$y}}" {{ $dr->fr->year==$y?'selected':'' }}>{{$y}}</option>'
+                  +'<option value="{{$y}}" {{ $dr->fr->copy()->startOfWeek()->year==$y?'selected':'' }}>{{$y}}</option>'
                 @endfor
               +' </select>'
               +'<select id="fr-week" class="btn btn-default dp-w-fr" style="height:34px; padding: 6px 0px 6px 12px">'
-                @for($x=1;$x<=lastWeekOfYear($dr->fr->year);$x++)
-                +'<option value="{{$x}}" {{ $dr->fr->weekOfYear==$x?'selected':'' }}>{{$x}}</option>'
+                @for($x=1;$x<=lastWeekOfYear($dr->fr->copy()->startOfWeek()->year);$x++)
+                +'<option value="{{$x}}" {{ $dr->fr->copy()->startOfWeek()->weekOfYear==$x?'selected':'' }}>{{$x}}</option>'
                 @endfor
               +'</select>'
               +'<div class="btn btn-default" style="pointer-events: none;">-</div>'
               +'<select id="to-year" class="btn btn-default dp-w-to" style="height:34px; padding: 6px 3px 6px 12px">'
                 @for($y=2015;$y<2021;$y++)
-                  +'<option value="{{$y}}" {{ $dr->to->year==$y?'selected':'' }}>{{$y}}</option>'
+                  +'<option value="{{$y}}" {{ $dr->to->copy()->endOfWeek()->year==$y?'selected':'' }}>{{$y}}</option>'
                 @endfor
               +'</select>'
               +'<select id="to-week" class="btn btn-default dp-w-to" style="height:34px; padding: 6px 0px 6px 12px">'
-                @for($x=1;$x<=lastWeekOfYear($dr->to->year);$x++)
-                  +'<option value="{{$x}}" {{ $dr->to->weekOfYear==$x?'selected':'' }}>{{$x}}</option>'
+                @for($x=1;$x<=lastWeekOfYear($dr->to->copy()->endOfWeek()->year);$x++)
+                  +'<option value="{{$x}}" {{ $dr->to->copy()->endOfWeek()->weekOfYear==$x?'selected':'' }}>{{$x}}</option>'
                 @endfor
               +'</select>';
               $('#dp-form').prop('action', '/analytics/week');
