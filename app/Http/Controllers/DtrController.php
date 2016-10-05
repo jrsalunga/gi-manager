@@ -477,7 +477,7 @@ class DtrController extends Controller {
   // $this->computeWorkHours()
   private function getMinDiff(Carbon $time1, Carbon $time2){
     if($time2->lt($time1)) // if timeout is less than breakout
-      $time2->addMinutes('1441'); // $time2->addDay(); // add 1 day
+      $time2->addMinutes('1439'); // $time2->addDay(); // add 1 day
     return $time2->diffInMinutes($time1);
   }
 
