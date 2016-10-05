@@ -454,7 +454,7 @@
   @include('_partials.js-vendor-highcharts')
   
 <script>
-  moment.locale('en', { week : {
+    moment.locale('en', { week : {
       dow : 1 // Monday is the first day of the week.
     }});
 
@@ -630,8 +630,7 @@
 
         var day = moment($('.dp-w-to')[0].value+'-08-27').startOf('week').isoWeek($('.dp-w-to')[1].value);
         console.log(day.add(6, 'days').format('YYYY-MM-DD'));
-        $('#to').val(day.format('YYYY-MM-DD'));
-        
+        $('#to').val(day.format('YYYY-MM-DD'));       
       });
 
 

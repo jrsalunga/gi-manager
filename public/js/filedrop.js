@@ -16,7 +16,7 @@ $(function(){
 		url: '/upload/postfile',
 		withCredentials: true, 
 		headers: {          // Send additional request headers
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     },
 		uploadFinished:function(i,file,response){
 			// response is the JSON object that post_file.php returns
