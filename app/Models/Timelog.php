@@ -18,8 +18,8 @@ class Timelog extends BaseModel {
     parent::__construct($attributes);
     if (app()->environment()==='production')
       $this->setConnection('mysql');
-      
-    $this->setConnection('tk-live');
+    else  
+    	$this->setConnection('tk-live');
   }
 
  	public function employee() {
