@@ -6,13 +6,21 @@ use Carbon\Carbon;
 class Timelog extends BaseModel {
 
 	protected $table = 'timelog';
- 	protected $fillable = ['employeeid', 'rfid', 'datetime', 'txncode', 'entrytype', 'terminal', 'createdate'];
+ 	protected $fillable = ['employeeid', 'rfid', 'branchid', 'datetime', 'txncode', 'entrytype', 'terminal', 'createdate'];
  	public static $header = ['code', 'lastname'];
  	protected $casts = [
     'txncode' => 'integer',
     'entrytype' => 'integer'
   ];
 
+  public function __construct(array $attributes = [])
+  {
+    parent::__construct($attributes);
+    if (app()->environment()==='production')
+      $this->setConnection('mysql-hr');
+      
+    //$this->setConnection('tk-live');
+  }
 
  	public function employee() {
     return $this->belongsTo('App\Models\Employee', 'employeeid');

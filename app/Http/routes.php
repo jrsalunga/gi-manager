@@ -80,7 +80,7 @@ Route::get('reports/dtr/{date}', ['uses'=>'DtrController@getDtrReports']);
 Route::post('dtr/generate', ['uses'=>'DtrController@postGenerate']);
 
 
-Route::get('timesheet', ['uses'=>'TimesheetController@getIndex']);
+Route::get('timesheet/{param1?}', ['uses'=>'TimesheetController@getRoute']);
 Route::get('purchase', ['uses'=>'PurchaseController@getIndex']);
 
 
@@ -94,8 +94,17 @@ Route::post('upload/postfile', ['as'=>'upload.postfile', 'uses'=>'UploadControll
 Route::put('upload/postfile', ['as'=>'upload.putfile', 'uses'=>'UploadController@putfile']); // move from web to storage
 Route::get('download/{param1?}/{param2?}/{param3?}/{param4?}/{param5?}', ['uses'=>'UploadController@getDownload']);
 
+
+Route::get('timelog/{param1?}/{param2?}', ['uses'=>'TimelogController@getIndex'])
+  ->where(['param1'=>'add', 
+          'param2'=>'week|[0-9]+']);
+Route::post('timelog', ['uses'=>'TimelogController@manualPost']);
+
+
 /******************* API  *************************************************/
 Route::group(['prefix'=>'api'], function(){
+
+Route::get('search/employee', ['uses'=>'EmployeeController@search']);
 
 Route::post('t/employee', ['as'=>'employee.post', 'uses'=>'EmployeeController@post']);
 Route::put('t/employee', ['as'=>'employee.put', 'uses'=>'EmployeeController@put']);
@@ -118,7 +127,7 @@ Route::put('t/manskedday/{id}', ['as'=>'manday.put', 'uses'=>'ManskeddayControll
 
 // for TK
 Route::post('api/timelog', ['as'=>'timelog.post', 'uses'=>'TimelogController@post']);
-Route::get('tk', ['as'=>'tk.index','uses'=>'TimelogController@getIndex']);
+Route::get('tk', ['as'=>'tk.index','uses'=>'TimelogController@getTkIndex']);
 Route::get('api/employee/{field?}/{value?}', ['as'=>'employee.getbyfield', 'uses'=>'EmployeeController@getByField']);
 
 

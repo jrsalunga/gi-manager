@@ -39,6 +39,9 @@
   <link rel="stylesheet" href="/css/styles-all.min.css">
 @endif
   <link rel="stylesheet" href="//cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css">
+@section('css-external')
+
+@show
 
   
 </head>
@@ -73,20 +76,14 @@
   </div>
 </nav>
 
-
 @section('container-body')
 
-
 @show
-
 
 
 @section('js-external')
 
 @show
-
-
-
 
 
 @if(app()->environment() == 'production')

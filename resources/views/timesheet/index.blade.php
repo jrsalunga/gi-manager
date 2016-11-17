@@ -21,6 +21,10 @@
               <span class="gly gly-unshare"></span>
               <span class="hidden-xs hidden-sm">Back</span>
             </a> 
+             <a href="/timelog" class="btn btn-default">
+              <span class="gly gly-stopwatch"></span>
+              <span class="hidden-xs hidden-sm">Timelogs</span>
+            </a>
             <button type="button" class="btn btn-default active">
               <span class="glyphicon glyphicon-th-list"></span>
               <span class="hidden-xs hidden-sm">Timesheet</span>
@@ -36,7 +40,12 @@
               <span class="glyphicon glyphicon-chevron-right"></span>
             </a>
           </div>
-          
+          <div class="btn-group" role="group">
+            <a href="/timelog/add" class="btn btn-default">
+              <span class="glyphicon glyphicon-plus"></span>
+              <span class="hidden-xs hidden-sm">Add Timelog</span>
+            </a>
+          </div>
         </div>
       </div>
     </nav>
@@ -64,6 +73,7 @@
       <thead>
         <tr>
           <th>Employee</th>
+          <th class="text-right">Work Hours</th>
           <th class="text-right">Time In</th>
           <th class="text-right">Break In</th>
           <th class="text-right">Break Out</th>
@@ -73,9 +83,24 @@
       <tbody>
         @foreach($data[0] as $key => $e)
         <tr>
-          <td>
-            {{ $key+1}}. {{ $e['employee']->lastname }}, {{ $e['employee']->firstname }}
+          <td <?=$e['onbr']?'':'class="bg-danger"'?>>
+            {{ $key+1}}. 
+            <a href="/timesheet/{{$e['employee']->lid()}}?fr={{$dr->date->copy()->startOfMonth()->format('Y-m-d')}}&amp;to={{$dr->date->copy()->endOfMonth()->format('Y-m-d')}}">
+              {{ $e['employee']->lastname or '-' }}, {{ $e['employee']->firstname or '-' }}
+            </a>
             <span class="label label-default pull-right" title="{{ $e['employee']->position->descriptor }}">{{ $e['employee']->position->code }}</span>
+          </td>
+          <td class="text-right">
+            @if($e['timesheet']->workHours->format('H:i')==='00:00')
+              -
+            @else
+              <small class="text-muted"><em>
+                ({{ $e['timesheet']->workHours->format('H:i') }})</em> 
+              </small>
+              <strong>
+                {{ $e['timesheet']->workedHours }}
+              </strong>
+            @endif
           </td>
             @foreach($e['timelogs'] as $key => $t)
               @if(is_null($t))

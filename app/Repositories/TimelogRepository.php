@@ -10,6 +10,7 @@ use Prettus\Repository\Eloquent\BaseRepository;
 use App\Repositories\Criterias\ByBranchCriteria;
 use Illuminate\Container\Container as App;
 use App\Repositories\EmployeeRepository;
+use App\Helpers\Timesheet;
 
 class TimelogRepository extends BaseRepository 
 { 
@@ -47,6 +48,18 @@ class TimelogRepository extends BaseRepository
       });
   }
 
+  public function generateTimesheet($employeeid, Carbon $date, $timelogs) {
+    $ts = new Timesheet;
+    return $ts->generate($employeeid, $date, $timelogs);
+  }
+
+  public function getActiveEmployees($field = NULL) {
+    $field = !is_null($field) ? $field : ['code', 'lastname', 'firstname','gender','empstatus','positionid','deptid','branchid','id'];
+    return $this->employees->with('position')
+                ->orderBy('lastname')
+                ->orderBy('firstname')
+                ->findWhereNotIn('empstatus', [4, 5], $field);
+  }
 
   public function allByDate(Carbon $date) {
 
@@ -55,6 +68,51 @@ class TimelogRepository extends BaseRepository
     // get all timelog on the day/date
     $raw_timelogs = $this->allTimelogByDate($date)->all();
     //$raw_timelogs = ;
+    $tk_empids =  $raw_timelogs->pluck('employeeid')->toArray();
+    $employees = $this->getActiveEmployees();
+
+    $br_empids = $employees->pluck('id')->toArray();
+    $combined_empids = collect($tk_empids)->merge($br_empids)->unique()->values()->all();
+
+    $o = [];
+    foreach ($combined_empids as $key => $id) {
+      $o[$key] = $this->employees
+            ->skipCriteria()
+            ->findByField('id', $id, ['code', 'lastname', 'firstname', 'id'])
+            ->first()->toArray();
+    }
+
+    $sorted_emps = collect($o)->sortBy('firstname')->sortBy('lastname');
+
+    $col = collect($raw_timelogs);
+    foreach (array_values($sorted_emps->toArray()) as $key => $emp) {
+     
+      $e = $this->employees
+            ->skipCriteria()
+            ->with(['position'])
+            ->findByField('id', $emp['id'], ['code', 'lastname', 'firstname', 'id', 'positionid'])
+            ->first();
+      
+      $arr[0][$key]['employee'] = $e;
+      $arr[0][$key]['onbr'] = in_array($emp['id'], $br_empids) ? true : false; // on branch??
+
+      for ($i=1; $i < 5; $i++) { 
+        $arr[0][$key]['timelogs'][$i] = $col->where('employeeid', $emp['id'])
+                                            ->where('txncode', $i)
+                                            ->sortBy('datetime')
+                                            ->first();
+      }
+      
+      $raw = $raw_timelogs->where('employeeid', $e->id)->sortBy('datetime');
+      
+      $arr[0][$key]['timesheet'] = $this->generateTimesheet($e->id, $date, $raw);
+
+      $arr[0][$key]['raw'] = $raw;
+    }
+    $arr[1] = [];
+    return $arr;
+
+
 
     $employees = $this->employees->with('position')
                       ->all(['code', 'lastname', 'firstname','gender','empstatus','positionid','deptid','branchid','id']);
@@ -121,4 +179,15 @@ class TimelogRepository extends BaseRepository
                   ->get();
         return count($res)>0 ? $res:false;
     }
+
+    public function getRawEmployeeTimelog($employeeid, Carbon $fr, Carbon $to) {
+
+      return $this->scopeQuery(function($query) use ($employeeid, $fr, $to) {
+        return $query->where('employeeid', $employeeid)
+                    ->whereBetween('datetime', [
+                      $fr->copy()->format('Y-m-d').' 06:00:00',          // '2015-11-13 06:00:00'
+                      $to->copy()->addDay()->format('Y-m-d').' 05:59:59'
+                    ]);
+      });
+  }
 }
