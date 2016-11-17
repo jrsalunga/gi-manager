@@ -8,7 +8,7 @@
 <div class="container-fluid">
 	<ol class="breadcrumb">
     <li><span class="gly gly-shop"></span> <a href="/dashboard">{{ $branch }}</a></li>
-    <li>Time Sheet</li>
+    <li>Timesheet</li>
     <li class="active">{{ $dr->date->format('D, M j, Y') }}</li>
   </ol>
 
