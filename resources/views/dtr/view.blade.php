@@ -58,12 +58,12 @@
       <thead>
         <tr>
           <th>Employee</th>
-          <th>Work Hours</th>
-          <th>Tardy Hours</th>
           <th>Time Start/In</th>
           <th>Break Start/In</th>
           <th>Break End/Out</th>
           <th>Time End/Out</th>
+          <th>Work Hours</th>
+          <th>Tardy Hours</th>
         </tr>
       </thead>
       <tbody>
@@ -74,12 +74,6 @@
             <a href="/dtr/{{$dtr->date->year}}/{{pad($dtr->date->month)}}/{{pad($dtr->date->format('d'))}}/{{$dtr->employee->lid()}}">
               {{ $x }}. {{ $dtr->employee->lastname }}, {{ $dtr->employee->firstname }}
             </a>
-          </td>
-          <td class="text-right">
-            {{ $dtr->reghrs == '0.00' ? '-':number_format($dtr->reghrs,2) }}
-          </td>
-          <td class="text-right">
-            {{ $dtr->tardyhrs == '0.00' ? '-':number_format($dtr->tardyhrs,2) }}
           </td>
           <td class="text-right">
             {{ $dtr->timein->format('H:i') == '00:00' ? '-': $dtr->timein->format('h:i A') }}<br>
@@ -96,6 +90,12 @@
           <td class="text-right">
             {{ $dtr->timeout->format('H:i') == '00:00' ? '-': $dtr->timeout->format('h:i A') }}<br>
             {{ $dtr->timeend->format('H:i') == '00:00' ? '-': $dtr->timeend->format('h:i A') }}
+          </td>
+          <td class="text-right">
+            {{ $dtr->reghrs == '0.00' ? '-':number_format($dtr->reghrs,2) }}
+          </td>
+          <td class="text-right">
+            {{ $dtr->tardyhrs == '0.00' ? '-':number_format($dtr->tardyhrs,2) }}
           </td>
         </tr>
         <?php $x++; ?>

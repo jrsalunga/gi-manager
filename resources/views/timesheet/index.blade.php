@@ -69,7 +69,7 @@
 
     @if(count($data[0])>0)
     <div class="table-responsive">
-    <table class="table table-hover table-bordered">
+    <table class="table table-hover table-bordered" style="margin-top: 0px;">
       <thead>
         <tr>
           <th>Employee</th>
