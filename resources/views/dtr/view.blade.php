@@ -76,20 +76,20 @@
             </a>
           </td>
           <td class="text-right">
-            {{ $dtr->timein->format('H:i') == '00:00' ? '-': $dtr->timein->format('h:i A') }}<br>
-            {{ $dtr->timestart->format('H:i') == '00:00' ? '-': $dtr->timestart->format('h:i A') }}
+            <small>{{ $dtr->timein->format('H:i') == '00:00' ? '-': $dtr->timein->format('h:i A') }}</small><br>
+            <small>{{ $dtr->timestart->format('H:i') == '00:00' ? '-': $dtr->timestart->format('h:i A') }}</small>
           </td>
           <td class="text-right">
-            {{ $dtr->breakin->format('H:i') == '00:00' ? '-': $dtr->breakin->format('h:i A') }}<br>
-            {{ $dtr->breakstart->format('H:i') == '00:00' ? '-': $dtr->breakstart->format('h:i A') }}
+            <small>{{ $dtr->breakin->format('H:i') == '00:00' ? '-': $dtr->breakin->format('h:i A') }}</small><br>
+            <small>{{ $dtr->breakstart->format('H:i') == '00:00' ? '-': $dtr->breakstart->format('h:i A') }}</small>
           </td>
           <td class="text-right">
-            {{ $dtr->breakout->format('H:i') == '00:00' ? '-': $dtr->breakout->format('h:i A') }}<br>
-            {{ $dtr->breakend->format('H:i') == '00:00' ? '-': $dtr->breakend->format('h:i A') }}
+            <small>{{ $dtr->breakout->format('H:i') == '00:00' ? '-': $dtr->breakout->format('h:i A') }}</small><br>
+            <small>{{ $dtr->breakend->format('H:i') == '00:00' ? '-': $dtr->breakend->format('h:i A') }}</small>
           </td>
           <td class="text-right">
-            {{ $dtr->timeout->format('H:i') == '00:00' ? '-': $dtr->timeout->format('h:i A') }}<br>
-            {{ $dtr->timeend->format('H:i') == '00:00' ? '-': $dtr->timeend->format('h:i A') }}
+            <small>{{ $dtr->timeout->format('H:i') == '00:00' ? '-': $dtr->timeout->format('h:i A') }}</small><br>
+            <small>{{ $dtr->timeend->format('H:i') == '00:00' ? '-': $dtr->timeend->format('h:i A') }}</small>
           </td>
           <td class="text-right">
             {{ $dtr->reghrs == '0.00' ? '-':number_format($dtr->reghrs,2) }}
