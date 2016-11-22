@@ -57,7 +57,7 @@
       <table class="table table-bordered table-responsive">
       <thead>
         <tr>
-          <th>Employee</th>
+          <th class="bg-default">Employee</th>
           <th>Time Start/In</th>
           <th>Break Start/In</th>
           <th>Break End/Out</th>
