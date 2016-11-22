@@ -58,12 +58,12 @@
       <thead>
         <tr>
           <th class="bg-default">Employee</th>
-          <th>Time Start/In</th>
-          <th>Break Start/In</th>
-          <th>Break End/Out</th>
-          <th>Time End/Out</th>
-          <th>Work Hours</th>
-          <th>Tardy Hours</th>
+          <th class="bg-default">Time Start/In</th>
+          <th class="bg-default">Break Start/In</th>
+          <th class="bg-default">Break End/Out</th>
+          <th class="bg-default">Time End/Out</th>
+          <th class="bg-default">Work Hours</th>
+          <th class="bg-default">Tardy Hours</th>
         </tr>
       </thead>
       <tbody>

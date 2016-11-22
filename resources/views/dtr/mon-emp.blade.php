@@ -91,13 +91,13 @@
       <table id="tb-dtr" class="table table-bordered table-responsive">
         <thead>
           <tr>
-            <th>Date</th>
-            <th>Work Hrs</th>
-            <th>Tardy Hrs</th>
-            <th>Time In</th>
-            <th>Break In</th>
-            <th>Break Out</th>
-            <th>Time Out</th>
+            <th class="bg-default">Date</th>
+            <th class="bg-default">Work Hrs</th>
+            <th class="bg-default">Tardy Hrs</th>
+            <th class="bg-default">Time In</th>
+            <th class="bg-default">Break In</th>
+            <th class="bg-default">Break Out</th>
+            <th class="bg-default">Time Out</th>
 
           </tr>
         </thead>

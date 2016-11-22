@@ -56,7 +56,10 @@
     @if(count($dtrs)>0)
       <table id="tb-dtr" class="table table-bordered table-responsive">
       <thead>
-        <tr><th>Date</th><th>Daily Time Record</th><th>Mansked</th></tr>
+        <tr>
+          <th class="bg-default">Date</th>
+          <th class="bg-default">Daily Time Record</th>
+          <th class="bg-default">Mansked</th></tr>
       </thead>
       <tbody>
       @foreach($dtrs as $dtr)

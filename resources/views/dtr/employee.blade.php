@@ -97,11 +97,11 @@
               <table class="table">
                 <thead>
                   <tr>
-                    <th></th>
-                    <th>Time Start/In</td>
-                    <th>Break Start/In</th>
-                    <th>Break End/Out</th>
-                    <th>Time End/Out</th>
+                    <th class="bg-default"></th>
+                    <th class="bg-default">Time Start/In</td>
+                    <th class="bg-default">Break Start/In</th>
+                    <th class="bg-default">Break End/Out</th>
+                    <th class="bg-default">Time End/Out</th>
                   </tr>
                 </thead>
                 <tbody>
