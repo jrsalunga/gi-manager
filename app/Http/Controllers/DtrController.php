@@ -480,9 +480,7 @@ class DtrController extends Controller {
       $time2->addDay(); // add 1 day
     return $time2->diffInMinutes($time1);
   }
- foreach ($variable as $key => $value) {
-   # code...
- }
+ 
   // $this->computeWorkHours()
   private function nt($date){ // null time
     $date = $date instanceof Carbon ? $date->format('H:i') : $date;
