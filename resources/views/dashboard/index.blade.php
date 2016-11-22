@@ -115,8 +115,8 @@
         <div class="panel-body">
           <div class="list-group">
             <a href="/task/mansked" class="list-group-item">Manpower Scheduling</a>
-            <a href="/timesheet" class="list-group-item">Daily Time Sheet</a>
-            <a href="#" class="list-group-item" style="color: #aaa;">DTR Approvals</a>
+            <a href="/timesheet" class="list-group-item">Daily Timesheet</a>
+            <a href="dtr" class="list-group-item">DTR Generator</a>
             <a href="#" class="list-group-item" style="color: #aaa;">Weekly Branch Report</a>
           </div>
           <div class="list-group">
