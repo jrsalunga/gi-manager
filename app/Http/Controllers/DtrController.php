@@ -361,7 +361,7 @@ class DtrController extends Controller {
         $u = ''; 
         //echo 'no timelog<br>';
       } else {
-        $u = $t->datetime->format('H:i'); 
+        $u = $t->datetime->format('H:i:s'); 
         $absent = false; 
         //echo 'absent false<br>';
       }
