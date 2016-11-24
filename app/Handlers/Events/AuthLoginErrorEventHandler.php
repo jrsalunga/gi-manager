@@ -39,7 +39,7 @@ class AuthLoginErrorEventHandler
 
 
         Mail::queue('emails.loggederror', $data, function ($message) {
-            $message->subject('Failed Logged In');
+            $message->subject('Manager Failed Logged In');
             $message->from('no-reply@giligansrestaurant.com', 'GI App - Cashier');
             $message->to('giligans.app@gmail.com');
         });
