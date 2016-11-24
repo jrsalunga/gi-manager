@@ -2,14 +2,14 @@
 
 namespace App\Handlers\Events;
 
-use App\Events\UserLoggedIn;
+use App\Events\UserLoggedFailed;
 use App\User;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Http\Request;
 use Mail;
 
-class AuthLoginEventHandler
+class AuthLoginErrorEventHandler
 {
     /**
      * Create the event handler.
@@ -27,20 +27,21 @@ class AuthLoginEventHandler
      * @param  Events  $event
      * @return void
      */
-    public function handle(UserLoggedIn $event)
+    public function handle(UserLoggedFailed $event)
     {
         //dd($event->request->user()->id);
         $data = [
             'ip' => clientIP(),
-            'user' => $event->request['username'],
+            'user' => $event->request->input('email'),
+            'password' => $event->request->input('password'),
             'browser' => $_SERVER ['HTTP_USER_AGENT']
         ];
 
-        Mail::send('emails.loggedin', $data, function ($message) use ($data) {
-            $message->subject('Logged In');
-            $message->from('no-reply@giligansrestaurant.com', 'GI App - Manager');
+
+        Mail::queue('emails.loggederror', $data, function ($message) {
+            $message->subject('Failed Logged In');
+            $message->from('no-reply@giligansrestaurant.com', 'GI App - Cashier');
             $message->to('giligans.app@gmail.com');
-            $message->to('freakyash_02@yahoo.com');
         });
     }
 }

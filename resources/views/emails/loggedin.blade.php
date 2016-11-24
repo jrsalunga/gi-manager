@@ -1,1 +1,1 @@
-<p>{{ $user }} was logged on {{ $ip }}</p>
+<p>{{ $user }} was logged on {{ $ip }} using {{ $browser }}</p>

@@ -9,6 +9,8 @@ use App\Handlers\Events\ChangePasswordEventHandler;
 use App\Handlers\Events\AuthLoginEventHandler;
 use App\Events\UserChangePassword;
 use App\Events\UserLoggedIn;
+use App\Events\UserLoggedFailed;
+use App\Handlers\Events\AuthLoginErrorEventHandler;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -26,7 +28,10 @@ class EventServiceProvider extends ServiceProvider
         ],
         UserChangePassword::class => [
             ChangePasswordEventHandler::class,
-        ]
+        ],
+        UserLoggedFailed::class => [
+            AuthLoginErrorEventHandler::class,
+        ],
         
     ];
 
