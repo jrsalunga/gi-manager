@@ -119,7 +119,7 @@ class AuthController extends Controller
         //$credentials = $this->getCredentials($request);
 
         if (Auth::attempt($credentials, $request->has('remember'))) {
-            event(new UserLoggedIn($request));
+            //event(new UserLoggedIn($request));
             return $this->handleUserWasAuthenticated($request, $throttles);
         }
 
@@ -131,7 +131,7 @@ class AuthController extends Controller
         }
 
 
-        event(new UserLoggedFailed($request));
+        //event(new UserLoggedFailed($request));
         //return $this->loginUsername();
         return redirect($this->loginPath())
             ->withInput($request->only($this->loginUsername(), 'remember'))

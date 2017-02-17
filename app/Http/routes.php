@@ -1,6 +1,4 @@
 <?php
-
-
 /*
 Route::get('/', ['middleware' => 'auth', function () {
 
@@ -14,8 +12,6 @@ Route::get('/', ['middleware' => 'auth', function () {
 
 	return dd($last_ds->lt($vfpdate));
 
-
-
 	return view('index');
 
 	return $emp = App\Models\Employee::with(['branch'=>function($query){
@@ -24,7 +20,6 @@ Route::get('/', ['middleware' => 'auth', function () {
   
   return $emp->branch->addr1;
 }]);
-
 */
 
 

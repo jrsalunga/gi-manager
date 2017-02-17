@@ -57,7 +57,7 @@ class ManskeddayController extends Controller {
 			$depts[$i]['employees'] = $employees;
 
 		}
-		 return  $depts;
+		return  $depts;
 	}
 
 	// for $this->makeEditView and $this->makeSingleView
@@ -174,11 +174,6 @@ class ManskeddayController extends Controller {
 	}
 
 
-
-
-
-
-
 	public function makeEditView(Request $request, $param1) {
 		$manday = Manday::with('manskedhdr')->find($param1);
 		//return $manday;
@@ -244,13 +239,6 @@ class ManskeddayController extends Controller {
 		$weeks = Mansked::paginateWeeks($request, '2015');
 		return view('task.mansked.list')->with('weeks', $weeks);
 	}
-
-
-
-
-
-
-
 
 	public function post(Request $request){
 		return $request->all();
