@@ -116,7 +116,7 @@
                           <tfoot><tr><td></td><td class="text-right"><b>{{number_format($t,2)}}</b></td><td></td><td></td</tr></tfoot>
                         </table>
                       </div>
-                      <span class="label label-info show toggle" style="margin-left:3px;">show more</span>
+                      <span class="label label-info show toggle" style="margin-left:3px;display: inline;">show more</span>
                       
                       <table id="component-purch-data" style="display:none;">
                           <thead>
@@ -177,7 +177,7 @@
                           <tfoot><tr><td></td><td></td><td class="text-right"><b>{{number_format($t,2)}}</b></td></tr></tfoot>
                         </table>
                       </div>
-                      <span class="label label-info show toggle" style="margin-left:3px;">show more</span>
+                      <span class="label label-info show toggle" style="margin-left:3px;display: inline;">show more</span>
                       
                       <table id="compcat-purch-data" style="display:none;">
                           <thead>
@@ -240,7 +240,7 @@
                           <tfoot><tr><td></td><td></td><td class="text-right"><b>{{number_format($t,2)}}</b></td></tr></tfoot>
                         </table>
                       </div>
-                      <span class="label label-info show toggle" style="margin-left:3px;">show more</span>
+                      <span class="label label-info show toggle" style="margin-left:3px;display: inline;">show more</span>
                       
                       <table id="expense-purch-data" style="display:none;">
                           <thead>
@@ -437,7 +437,7 @@
                           <tfoot><tr><td></td><td></td><td class="text-right"><b>{{number_format($t,2)}}</b></td></tr></tfoot>
                         </table>
                       </div>
-                      <span class="label label-info show toggle" style="margin-left:3px;">show more</span>
+                      <span class="label label-info show toggle" style="margin-left:3px;display: inline;">show more</span>
                       
                       <table id="supplier-purch-data" style="display:none;">
                           <thead>
