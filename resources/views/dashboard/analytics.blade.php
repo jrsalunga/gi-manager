@@ -1618,7 +1618,10 @@
   .show.less {
       max-height: 310px;
       overflow: hidden;
-      display: inline;
+  }
+
+  .show.toggle {
+    display: inline;
   }
   </style>
 @endsection
