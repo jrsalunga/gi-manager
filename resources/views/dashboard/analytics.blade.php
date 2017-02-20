@@ -1621,7 +1621,7 @@
   }
 
   .show.toggle {
-    display: inline;
+    display: inline !important;
   }
   </style>
 @endsection
