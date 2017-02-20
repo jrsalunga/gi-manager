@@ -96,6 +96,12 @@ Route::get('timelog/{param1?}/{param2?}', ['uses'=>'TimelogController@getIndex']
 Route::post('timelog', ['uses'=>'TimelogController@manualPost']);
 
 
+Route::get('product/sales', ['uses'=>'SaleController@getDaily']);
+Route::get('api/mdl/sales/{id}', ['uses'=>'SaleController@ajaxSales']);
+Route::get('api/mdl/purchases/{id}', ['uses'=>'Purchase2Controller@ajaxPurchases']);
+
+Route::get('component/purchases', ['uses'=>'Purchase2Controller@getDaily']);
+
 /******************* API  *************************************************/
 Route::group(['prefix'=>'api'], function(){
 

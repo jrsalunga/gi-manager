@@ -11,6 +11,9 @@ class DateRange {
   public $to;
   public $date;
   public $now;
+  protected $request;
+  protected $modes = ['daily', 'monthly', 'weekly', 'quarterly', 'yearly'];
+  protected $mode;
 
 
   public function __construct(Request $request, $now = null) {
@@ -151,6 +154,103 @@ class DateRange {
 			return Carbon::now(); 
 		}
 	}
+
+
+
+
+  public function setDateRangeMode($arg=null, $arg2=null) { 
+
+    if (is_null($arg) && is_null($arg)) {
+      $request = $this->request;
+      $mode = 'daily';
+    } elseif (in_array($arg, $this->modes) && $arg2==null) {
+      $request = $this->request;
+      $mode = $arg;
+    } elseif ($arg instanceof Request && in_array($arg2, $this->modes)) {
+      $request = $arg;
+      $mode = $arg2;
+    }
+
+    //$this->setDateRangeFromRequest($request);
+
+    $this->mode = $mode;
+    $y=false;
+    switch ($mode) {
+      case 'monthly':
+        $this->to = !is_null($request->input('to')) ? carbonCheckorNow($request->input('to')) : Carbon::now()->endOfMonth();
+        $this->fr = !is_null($request->input('fr')) ? carbonCheckorNow($request->input('fr')) : $this->to->copy()->subMonths(5)->startOfMonth();
+        if ($this->to->lt($this->fr)) {
+          $this->to = Carbon::now()->endOfMonth();
+          $this->fr = $this->to->copy()->subMonths(5)->startOfMonth(); //$this->to->copy()->startOfMonth();
+        } else {
+          $this->to = $this->to->endOfMonth();
+          $this->fr = $this->fr->startOfMonth();
+        }
+        break;
+      case 'daily':
+        $this->to = !is_null($request->input('to')) ? carbonCheckorNow($request->input('to')) : Carbon::now()->endOfMonth();
+        $this->fr = !is_null($request->input('fr')) ? carbonCheckorNow($request->input('fr')) : $this->to->copy()->startOfMonth();
+        if ($this->to->lt($this->fr)) {
+          $this->to = Carbon::now();
+          $this->fr = $this->to->copy()->startOfMonth();
+        }
+        break;
+      case 'weekly':
+        $this->to = !is_null($request->input('to')) ? carbonCheckorNow($request->input('to')) : Carbon::now()->endOfWeek();
+        $this->fr = !is_null($request->input('fr')) ? carbonCheckorNow($request->input('fr')) : $this->to->copy()->subWeeks(5)->startOfWeek();
+        if ($this->to->lt($this->fr)) {
+          $this->to = Carbon::now()->endOfWeek();
+          $this->fr = $this->to->copy()->subWeeks(5)->startOfWeek(); //$this->to->copy()->startOfWeek();
+        } else {
+          $this->to = $this->to->endOfWeek();
+          $this->fr = $this->fr->startOfWeek();
+        }
+        break;
+      case 'quarterly':
+        $this->to = !is_null($request->input('to')) ? carbonCheckorNow($request->input('to')) : Carbon::now()->lastOfQuarter();
+        $this->fr = !is_null($request->input('fr')) ? carbonCheckorNow($request->input('fr')) : $this->to->copy()->subMonths(11)->firstOfQuarter();
+        if ($this->to->lt($this->fr)) {
+          $this->to = Carbon::now()->lastOfQuarter();
+          $this->fr = $this->to->copy()->subMonths(12)->firstOfQuarter(); //$this->to->copy()->startOfWeek();
+        } else {
+          $this->to = $this->to->lastOfQuarter();
+          $this->fr = $this->fr->firstOfQuarter();
+        }
+        break;
+      case 'yearly':
+        $y=true;
+        $this->to = !is_null($request->input('to')) ? carbonCheckorNow($request->input('to')) : Carbon::now()->lastOfYear();
+        $this->fr = !is_null($request->input('fr')) ? carbonCheckorNow($request->input('fr')) : $this->to->copy()->subYear()->firstOfYear();
+        if ($this->to->lt($this->fr)) {
+          $this->to = Carbon::now()->lastOfYear();
+          $this->fr = $this->to->copy()->subYear()->firstOfYear(); //$this->to->copy()->startOfWeek();
+        } else {
+          $this->to = $this->to->lastOfYear();
+          $this->fr = $this->fr->firstOfYear();
+        }
+        break;
+      default:
+        $this->to = Carbon::now()->endOfDay();
+        $this->fr = $this->to->copy()->startOfMonth();
+        break;
+    }
+    
+
+    if(!$y){
+      
+      // if more than a year
+      if($this->fr->diffInDays($this->to, false)>=731) { // 730 = 2yrs
+        $this->fr = $this->to->copy()->subDays(730)->startOfMonth();
+        $this->to = $this->to;
+        $this->date = $this->to;
+        return false;
+      }
+    }
+
+
+   
+    return true;
+  }
 
 
 }

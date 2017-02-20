@@ -196,10 +196,23 @@
             <tr {{ $d->date->dayOfWeek=='0' ? 'class=warning':''  }}>
               <td data-sort="{{$d->date->format('Y-m-d')}}">{{ $d->date->format('M j, D') }}</td>
               @if(!is_null($d->dailysale))
-              <td class="text-right" data-sort="{{ number_format($d->dailysale['sales'], 2,'.','') }}">{{ number_format($d->dailysale['sales'], 2) }}</td>
+              <td class="text-right" data-sort="{{ number_format($d->dailysale['sales'], 2,'.','') }}">
+                @if($d->dailysale['slsmtd_totgrs']>0)
+                  <a href="#" class="text-primary btn-slsmtd-totgrs" data-id="{{strtolower($d->dailysale['id'])}}" data-date="{{$d->date->format('Y-m-d')}}">
+                  {{ number_format($d->dailysale['sales'], 2) }}
+                  </a>
+                @else
+                  {{ number_format($d->dailysale['sales'], 2) }}
+                @endif
+              </td>
               <td class="text-right" data-sort="{{ number_format($d->dailysale['purchcost'], 2,'.','') }}">
-                <a href="#" data-date="{{ $d->date->format('Y-m-d') }}" class="text-primary btn-purch">
+                @if($d->dailysale['purchcost']>0)
+                <a href="#" data-date="{{ $d->date->format('Y-m-d') }}" data-id="{{strtolower($d->dailysale['id'])}}" class="text-primary btn-purch">
                   {{ number_format($d->dailysale['purchcost'], 2) }}
+                  </a>
+                @else
+                  {{ number_format($d->dailysale['purchcost'], 2) }}
+                @endif
                 </a>
               </td>
               <td class="text-right" data-sort="{{ number_format($d->dailysale['custcount'], 0) }}">{{ number_format($d->dailysale['custcount'], 0) }}</td>
@@ -595,6 +608,23 @@
     </div>
   </div>
 </div>
+
+
+<div class="modal fade mdl-col-collapse" id="mdl-generic" tabindex="-1" role="dialog" aria-labelledby="bookModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Loading</h4>
+      </div>
+      <div class="modal-body">
+        <p class="text-center"><img src="/images/spinner_google.gif"></p>
+        <p class="text-center">Loading content...</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 @endsection
 
 
@@ -613,6 +643,99 @@
       lang: {
         thousandsSep: ','
     }});
+
+    var getOptions = function(to, table) {
+        var options = {
+          data: {
+            table: table,
+            startColumn: 0,
+            endColumn: 1,
+          },
+          chart: {
+            renderTo: to,
+            type: 'pie',
+            height: 300,
+            width: 300,
+            events: {
+              load: function (e) {
+                //console.log(e.target.series[0].data);
+              }
+            }
+          },
+          title: {
+              text: ''
+          },
+          style: {
+            fontFamily: "Helvetica"
+          },
+          tooltip: {
+            pointFormat: '{point.y:.2f}  <b>({point.percentage:.2f}%)</b>'
+          },
+          plotOptions: {
+            pie: {
+              allowPointSelect: true,
+              cursor: 'pointer',
+              dataLabels: {
+                  enabled: false
+              },
+              showInLegend: true,
+              point: {
+                events: {
+                  mouseOver: function(e) {    
+                    var orig = this.name;
+                    var tb = $(this.series.chart.container).parent().data('table');
+                    var tr = $(tb).children('tbody').children('tr');
+                     _.each(tr, function(tr, key, list){
+                      var text = $(tr).children('td:nth-child(2)').text();             
+                      if(text==orig){
+                        $(tr).children('td').addClass('bg-success');
+                      }
+                    });
+                  },
+                  mouseOut: function() {
+                    var orig = this.name;
+                    var tb = $(this.series.chart.container).parent().data('table');
+                    var tr = $(tb).children('tbody').children('tr');
+                     _.each(tr, function(tr, key, list){
+                        $(tr).children('td').removeClass('bg-success');
+                    });
+                  },
+                  click: function(event) {
+                    //console.log(this);
+                  }
+                }
+              }
+            }
+          },
+          
+          legend: {
+            enabled: false,
+            //layout: 'vertical',
+            //align: 'right',
+            //width: 400,
+            //verticalAlign: 'top',
+            borderWidth: 0,
+            useHTML: true,
+            labelFormatter: function() {
+              //total += this.y;
+              return '<div style="width:400px"><span style="float: left; width: 250px;">' + this.name + '</span><span style="float: left; width: 100px; text-align: right;">' + this.percentage.toFixed(2) + '%</span></div>';
+            },
+            title: {
+              text: null,
+            },
+              itemStyle: {
+              fontWeight: 'normal',
+              fontSize: '12px',
+              lineHeight: '12px'
+            }
+          },
+          
+          exporting: {
+            enabled: false
+          }
+        }
+        return options;
+      }
 
     var initDatePicker = function(){
 
@@ -820,6 +943,120 @@
       }); 
   }
 
+  var fetchPurchasedView = function(id, date) {
+        var m = 1;
+        if (pLastId===id && module==m) {
+          $('#mdl-generic').modal('show');
+        } else {
+          $('#mdl-generic').modal('show');
+          $('#mdl-generic .modal-content').html(ghtml);
+          pLastId=id;
+          module = 1;
+
+          return $.ajax({
+            method: 'GET',
+            url: '/api/mdl/purchases/'+id,
+            dataType: 'html',
+            data: {
+              fr: date,
+              to: date
+            },
+            beforeSend: function(jqXHR, obj) {
+              
+              $('#mdl-generic .modal-content').html(ghtml);
+              
+            },
+            success: function(data, textStatus, jqXHR) {
+              
+              $('#mdl-generic .modal-content').html(data);
+              
+              $('.tb-component-data').tablesorter({sortList: [[3,1]]});
+              $('.tb-compcat-data').tablesorter({sortList: [[3,1]]});
+              $('.tb-expense-data').tablesorter({sortList: [[3,1]]});
+              $('.tb-expscat-data').tablesorter({sortList: [[3,1]]});
+              $('.tb-payment-data').tablesorter({sortList: [[3,1]]});
+              $('.tb-supplier-data').tablesorter({sortList: [[3,1]]});
+              var componentChart = new Highcharts.Chart(getOptions('graph-pie-component-sale', 'component-purch-data'));
+              var compcatChart = new Highcharts.Chart(getOptions('graph-pie-compcat-sale', 'compcat-purch-data'));
+              var expenseChart = new Highcharts.Chart(getOptions('graph-pie-expense-sale', 'expense-purch-data'));
+              var expscatChart = new Highcharts.Chart(getOptions('graph-pie-expscat-sale', 'expscat-purch-data'));
+              var paymentChart = new Highcharts.Chart(getOptions('graph-pie-payment-sale', 'payment-purch-data'));
+              var supplierChart = new Highcharts.Chart(getOptions('graph-pie-supplier-sale', 'supplier-purch-data'));
+              
+             
+            },
+            error: function(data, textStatus, jqXHR) {
+              console.log('error');
+              console.log(data);
+              console.log(textStatus);
+              console.log(jqXHR);
+            }
+          })
+        }
+      }
+
+  var ghtml = '<div class="modal-header">'
+                +'<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>'
+                +'<h4 class="modal-title" id="myModalLabel">Loading</h4></div>'
+                +'<div class="modal-body"><p class="text-center"><img src="/images/spinner_google.gif"></p><p class="text-center">Loading content...</p></div>';
+
+  var module = 0;              
+  var lastId = 0;
+  var pLastId = 0;
+
+  var fetchSalesView = function(id, date) {
+    var m = 2;
+    console.log(id);
+    if (lastId===id && module==m) {
+      $('#mdl-generic').modal('show');
+    } else {
+      $('#mdl-generic').modal('show');
+      
+      lastId=id;
+      module=2;
+
+
+      return $.ajax({
+        method: 'GET',
+        url: '/api/mdl/sales/'+id,
+        dataType: 'html',
+        data: {
+          fr: date,
+          to: date
+        },
+        beforeSend: function(jqXHR, obj) {
+          
+          $('#mdl-generic .modal-content').html(ghtml);
+          
+        },
+        success: function(data, textStatus, jqXHR) {
+         
+          
+          $('#mdl-generic .modal-content').html(data);
+          $('.tb-sales-data').tablesorter(); 
+
+          $('.tb-product-data').tablesorter({sortList: [[2,1]]});
+          $('.tb-prodcat-data').tablesorter({sortList: [[2,1]]});
+          $('.tb-menucat-data').tablesorter({sortList: [[2,1]]});
+
+          var productChart = new Highcharts.Chart(getOptions('graph-pie-product-sale', 'product-sale-data'));
+          var prodcatChart = new Highcharts.Chart(getOptions('graph-pie-prodcat-sale', 'prodcat-sale-data'));
+          var menucatChart = new Highcharts.Chart(getOptions('graph-pie-menucat-sale', 'menucat-sale-data'));
+          
+
+         
+        },
+        error: function(data, textStatus, jqXHR) {
+          console.log('error');
+          console.log(data);
+          console.log(textStatus);
+          console.log(jqXHR);
+        }
+      })
+    }
+
+  }
+
 
   $('document').ready(function(){
 
@@ -926,7 +1163,7 @@
     
 
 
-    $('.btn-purch').on('click', function(e){
+    $('.btn-purchx').on('click', function(e){
       e.preventDefault();
       var data = {};
       data.date = $(this).data('date');
@@ -955,6 +1192,32 @@
       });
 
     });
+
+    $('#mdl-generic').delegate('.show.toggle', 'click', function() {
+        var div = $(this).siblings('div.show');
+        if(div.hasClass('less')) {
+          div.removeClass('less');
+          div.addClass('more');
+          $(this).text('show less');
+        } else if(div.hasClass('more')) {
+          div.removeClass('more');
+          div.addClass('less');
+          $(this).text('show more');
+        }
+      });
+
+
+    $('.btn-slsmtd-totgrs').on('click', function(e){
+      e.preventDefault();
+      fetchSalesView($(this).data('id'), $(this).data('date'));
+    });
+
+    $('.btn-purch').on('click', function(e){
+      e.preventDefault();
+      fetchPurchasedView($(this).data('id'), $(this).data('date'));
+    });
+
+     
 
 
     var renderToTable = function(data) {
@@ -1351,4 +1614,10 @@
    
   });
 </script>
+<style type="text/css">
+  .show.less {
+      max-height: 310px;
+      overflow: hidden;
+  }
+  </style>
 @endsection
