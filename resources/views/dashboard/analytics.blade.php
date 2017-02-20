@@ -1622,6 +1622,7 @@
 
   .show.toggle {
     display: inline !important;
+    cursor: pointer;
   }
   </style>
 @endsection
