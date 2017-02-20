@@ -1618,6 +1618,7 @@
   .show.less {
       max-height: 310px;
       overflow: hidden;
+      display: inline;
   }
   </style>
 @endsection
