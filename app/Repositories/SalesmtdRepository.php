@@ -21,7 +21,7 @@ class SalesmtdRepository extends BaseRepository implements CacheableInterface
 
 
 
-   public function byDateRange(DateRange $dr) {
+  public function byDateRange(DateRange $dr) {
     return $this->scopeQuery(function($query) use ($dr) {
       return $query->whereBetween('salesmtd.orddate', [$dr->fr->format('Y-m-d'), $dr->to->format('Y-m-d')])
                     ->leftJoin('product', 'product.id', '=', 'salesmtd.product_id')
@@ -73,6 +73,18 @@ class SalesmtdRepository extends BaseRepository implements CacheableInterface
                     ->orderBy(DB::raw('sum(salesmtd.netamt)'), 'desc');
     })->skipOrder();
   }
+
+
+  public function brGroupies(DateRange $dr) {
+    return $this->scopeQuery(function($query) use ($dr) {
+      return $query->whereBetween('salesmtd.orddate', [$dr->fr->format('Y-m-d'), $dr->to->format('Y-m-d')])
+                    ->where('salesmtd.group', '<>', '')
+                    ->select(DB::raw('salesmtd.group, group_cnt as qty, sum(salesmtd.grsamt) as grsamt, cslipno'))
+                    ->groupBy('salesmtd.cslipno')
+                    ->orderBy(DB::raw('salesmtd.group'), 'asc');
+    })->skipOrder();
+  }
+
   
 
 

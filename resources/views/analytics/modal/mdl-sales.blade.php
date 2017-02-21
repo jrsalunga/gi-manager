@@ -295,6 +295,73 @@
             </div>
           </div><!-- end: .panel.panel-default -->
 
+          <!-- Groupies Panel -->
+          <div class="panel panel-default">
+            <div class="panel-heading">Groupies Summary</div>
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-xs-12 col-md-5 col-md-push-7">
+                  <div class="graph-container pull-right">
+                    <div id="graph-pie-groupies" data-table="#groupies-data"></div>
+                  </div>
+                </div><!-- end: .col-md-5 -->
+                <div class="col-xs-12 col-md-7 col-md-pull-5">
+                  <div class="row">
+                    <div class="table-responsive">
+                      <div>
+                        <table class="tb-groupies-data table table-condensed table-hover table-striped">
+                          <thead>
+                            <tr>
+                              <th>Groupies</th>
+                              <th>Qty</th>
+                              <th class="text-right">Amount</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <?php $t=0; ?>
+                            @foreach($data['groupies'] as $key => $groupie)
+                              <tr>
+                                <td>{{ $key }}</td>
+                                <td>{{ number_format($groupie['qty'], 2)+0 }}</td>
+                                <td class="text-right">{{ number_format($groupie['grsamt'], 2) }}</td>
+                              </tr>
+                            <?php $t+=$groupie['grsamt']; ?>
+                            @endforeach
+                          </tbody>
+                          <tfoot><tr><td></td><td></td><td class="text-right"><b>{{number_format($t,2)}}</b></td></tr></tfoot>
+                        </table>
+                      </div>
+                      
+                      <table id="groupies-data" style="display:none;">
+                          <thead>
+                            <tr>
+                              <th>Group</th>
+                              <th>Total Cost</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                          <?php $t=0; ?>
+                            @foreach($data['groupies'] as $groupie)
+                              <tr>
+                                <td>{{ $groupie['group'] }}</td>
+                                <td>{{ $groupie['grsamt'] }}</td>
+                              </tr>
+                            <?php $t+=$groupie['grsamt']; ?>
+                            @endforeach
+                              <tr>
+                                <td>Sales of not Groupies</td>
+                                <td>{{ $data['ds']->sales-$t }}</td>
+                              </tr>
+                          </tbody>
+                        </table>
+                      
+                    </div><!-- end: .table-responsive -->
+                  </div><!-- end: .row -->
+                </div><!-- end: .col-md-7 -->
+              </div><!-- end: .row -->
+            </div>
+          </div><!-- end: .panel.panel-default -->
+
           @endif
         </div><!-- end: #stats -->
       </div>

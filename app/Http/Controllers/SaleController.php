@@ -35,6 +35,8 @@ class SaleController extends Controller {
   public function getDaily(Request $request) {
 
     $this->dr->setDateRangeMode($request, 'daily');
+
+
     
     $where = [];
     $fields = ['menucat', 'prodcat', 'product'];
@@ -85,6 +87,8 @@ class SaleController extends Controller {
           //->skipCache()
           ->sumByDateRange($this->dr->fr->format('Y-m-d'), $this->dr->to->format('Y-m-d'))
           ->all();
+
+    $groupies = $this->aggregateGroupies($this->sale->brGroupies($this->dr)->all());
     
     $products = $this->sale
           ->skipCache()
@@ -101,12 +105,29 @@ class SaleController extends Controller {
           ->brMenucatByDR($this->dr)
           ->findWhere($where);
 
-    return $this->setDailyViewVars('product.sales.daily', $filter, $sales, $ds[0], $products, $prodcats, $menucats);
+    return $this->setDailyViewVars('product.sales.daily', $filter, $sales, $ds[0], $products, $prodcats, $menucats, $groupies);
+  }
+
+  private function aggregateGroupies($grps) {
+    $arr = [];
+
+    foreach ($grps as $key => $value) {
+      if(array_key_exists($value['group'], $arr)) {
+        $arr[$value['group']]['qty'] += $value['qty'];
+        $arr[$value['group']]['grsamt'] += $value['grsamt'];
+      } else {
+        $arr[$value['group']]['group'] = $value['group'];
+        $arr[$value['group']]['qty'] = $value['qty'];
+        $arr[$value['group']]['grsamt'] = $value['grsamt'];
+      }
+    }
+
+    return $arr;
   }
 
 
 
-  private function setDailyViewVars($view, $filter=null, $sales=null, $ds=null, $products=null, $prodcats=null, $menucats=null) {
+  private function setDailyViewVars($view, $filter=null, $sales=null, $ds=null, $products=null, $prodcats=null, $menucats=null, $groupies=null) {
 
     return $this->setViewWithDR(view($view)
                 ->with('filter', $filter)
@@ -114,6 +135,7 @@ class SaleController extends Controller {
                 ->with('ds', $ds)
                 ->with('products', $products)
                 ->with('prodcats', $prodcats)
+                ->with('groupies', $groupies)
                 ->with('menucats', $menucats));
   }
 
@@ -170,13 +192,16 @@ class SaleController extends Controller {
           ->brMenucatByDR($this->dr)
           ->findWhere($where);
 
+    $groupies = $this->aggregateGroupies($this->sale->brGroupies($this->dr)->all());
+
 
     $data = [
       'ds' => $ds,
       'sales' => $sales,
       'products' => $products,
       'prodcats' => $prodcats,
-      'menucats' => $menucats
+      'menucats' => $menucats,
+      'groupies' => $groupies
     ];
 
     return $data;
