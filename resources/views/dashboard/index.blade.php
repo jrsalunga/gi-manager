@@ -71,7 +71,11 @@
 		            		<td>{{ $ds->date->format('M j, D') }}</td>
 		            		@if(!is_null($ds->dailysale))
                     <td class="text-right">{{ number_format($ds->dailysale->sales,2) }}</td>
-		            		<td class="text-right">{{ number_format($ds->dailysale->purchcost,2) }}</td>
+		            		<td class="text-right">
+                      <a href="/component/purchases?fr={{$ds->date->format('Y-m-d')}}&to={{$ds->date->format('Y-m-d')}}">
+                        {{ number_format($ds->dailysale->purchcost,2) }}
+                      </a>
+                    </td>
 		            		<td class="text-right">{{ number_format($ds->dailysale->custcount,0,'',',') }}</td>
 		            		<td class="text-right">{{ number_format($ds->dailysale->empcount,0,'',',') }}</td>
 		            		<!--

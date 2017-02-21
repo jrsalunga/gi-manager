@@ -4,3 +4,118 @@ body,button,figure,input,optgroup,select,textarea{margin:0}.fa-ul,.tsg-container
    /* color: #999;*/
     background: #f1f1f1;
 }
+
+.show {
+
+}
+
+.show.more {
+ 	
+}
+
+.show.less {
+ 	max-height: 250px; overflow: hidden;
+}
+
+.show.toggle {
+ 	display: inline!important;
+ 	cursor: pointer;
+ 	margin-left: 3px;
+}
+
+.show > table {
+	margin: 0;
+}
+
+
+/* Medium devices (desktops, 768px and up) */
+@media (min-width: 768px) { 
+.table-responsive .table {
+	margin: 0px;
+}
+
+}
+
+
+
+.visuallyhidden { 
+  position: absolute; 
+  overflow: hidden; 
+  clip: rect(0 0 0 0); 
+  height: 1px; width: 1px; 
+  margin: -1px; padding: 0; border: 0; 
+}
+
+.ui-autocomplete {
+    max-height: 200px;
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
+    border:1px solid #222;
+    position:absolute;
+		z-index: 1050;
+}
+
+.ui-autocomplete {
+    cursor: default;
+}
+
+.ui-menu {
+    list-style: none outside none;
+    padding: 0;
+    border-color: #ccc;
+    border-radius: 4px
+}
+
+.ui-menu .ui-menu-item {
+    display: block;
+    font-weight: normal;
+    line-height: 1.5;
+    padding: 2px 0.4em;
+    text-decoration: none;
+}
+.ui-widget-content {
+    color: #555555;
+}
+
+
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus {
+    background-color: #DADADA;
+    border: 0 solid #999999;
+    color: #212121;
+    font-weight: normal;
+}
+
+
+.ui-state-disabled {
+	color: #ddd;	
+}
+
+.ui-helper-hidden-accessible {
+	position: absolute; 
+	left:-999em;
+}
+
+.loader {
+    display: inline-block;
+    margin: 0 auto;
+    z-index: 1050;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    opacity: 1;
+}
+
+.backdrop {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1040;
+    background-color: #fff;
+    opacity: .6;
+}

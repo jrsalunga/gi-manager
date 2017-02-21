@@ -12,6 +12,7 @@
 
   <link rel="shortcut icon" type="image/x-icon" href="/images/g.png" />
 @if(app()->environment() == 'local')
+<!--
   <link rel="stylesheet" href="/css/normalize-3.0.3.min.css">
   <link rel="stylesheet" href="/css/font-awesome.min.css">
   <link rel="stylesheet" href="/css/bootstrap-3.3.5.css">
@@ -22,9 +23,10 @@
   <link rel="stylesheet" href="/css/styles.css">
   <link rel="stylesheet" href="/css/common.css">
   <link rel="stylesheet" href="/css/dropbox.css">
-
+-->
 
   
+  <link rel="stylesheet" href="/css/styles-all.min.css">
 @else 
   <link rel="stylesheet" href="/css/styles-all.min.css">
 @endif
