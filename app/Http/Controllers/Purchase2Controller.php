@@ -9,6 +9,11 @@ use App\Http\Controllers\Controller;
 use App\Repositories\Purchase2Repository as PurchaseRepo;
 use App\Repositories\DailySalesRepository as DSRepo;
 use App\Repositories\Criterias\ByBranchCriteria;
+use App\Models\Component;
+use App\Models\Compcat;
+use App\Models\Expense;
+use App\Models\Expscat;
+use App\Models\Supplier;
 
 class Purchase2Controller extends Controller { 
 
@@ -113,7 +118,7 @@ class Purchase2Controller extends Controller {
   }
 
 
-   private function setDailyViewVars($view, $purchases=null, $filter=null,
+  private function setDailyViewVars($view, $purchases=null, $filter=null,
     $components=null, $compcats=null, $expenses=null, $expscats=null, $suppliers=null, $payments=null) {
 
     return $this->setViewWithDR(view($view)
@@ -184,6 +189,64 @@ class Purchase2Controller extends Controller {
       'payments' => $payments
     ];    
   }
+
+
+  public function search(Request $request) {
+
+
+    $arr = [];
+
+    if($request->has('q')) {
+      
+      $q = $request->input('q');
+      $branchid = $request->user()->branchid;
+      
+      $components = Component::where('descriptor', 'like', '%'.$q.'%')->orderBy('descriptor')->get(['descriptor', 'id']);
+      foreach ($components as $component) {
+        array_push($arr, ['table'=>'component', 'item'=>$component->descriptor, 'id'=>strtolower($component->id)]);
+      }
+
+      $compcats = Compcat::where('descriptor', 'like', '%'.$q.'%')->orderBy('descriptor')->get(['descriptor', 'id']);
+      foreach ($compcats as $compcat) {
+        array_push($arr, ['table'=>'compcat', 'item'=>$compcat->descriptor, 'id'=>strtolower($compcat->id)]);
+      }
+
+      $expenses = Expense::where('descriptor', 'like', '%'.$q.'%')->orderBy('descriptor')->get(['descriptor', 'id']);
+      foreach ($expenses as $expense) {
+        array_push($arr, ['table'=>'expense', 'item'=>$expense->descriptor, 'id'=>strtolower($expense->id)]);
+      }
+
+      $expscats = Expscat::where('descriptor', 'like', '%'.$q.'%')->orderBy('descriptor')->get(['descriptor', 'id']);
+      foreach ($expscats as $expscat) {
+        array_push($arr, ['table'=>'expscat', 'item'=>$expscat->descriptor, 'id'=>strtolower($expscat->id)]);
+      }
+
+      $suppliers = Supplier::where('descriptor', 'like', '%'.$q.'%')->where('branchid', $branchid)->orderBy('descriptor')->get(['descriptor', 'id']);
+      foreach ($suppliers as $supplier) {
+        array_push($arr, ['table'=>'supplier', 'item'=>$supplier->descriptor, 'id'=>strtolower($supplier->id)]);
+      }
+
+      //$payments = ['110A573E855511E68FF47E841D02B37D'=>'cash', '19ADA60B855511E68FF47E841D02B37D'=>'check'];
+      $payments = ['c'=>'cash', 'k'=>'check'];
+
+      $s = preg_grep("/^".strtolower($q)."/", $payments);
+      if($s) {
+        $k = key($s);
+        array_push($arr, ['table'=>'payment', 'item'=>ucwords($s[$k]), 'id'=>strtolower($k)]);
+      }
+
+    }
+
+
+    //return $arr;
+
+
+      if($request->ajax())
+        return $arr;
+      else
+        return abort('404');
+
+   }
 
 
 }

@@ -338,5 +338,11 @@ if (!function_exists('c')) {
     }
 }
 
+if (!function_exists('rand_color')) {
+    function rand_color() {
+        return sprintf('#%06X', mt_rand(0, 0xFFFFFF));
+    }
+}
+
 
 

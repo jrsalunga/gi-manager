@@ -4,6 +4,7 @@
 
 @section('css-external')
   <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/2.1.24/daterangepicker.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet">
 @endsection
 
 @section('body-class', 'timesheet-employee')
@@ -116,7 +117,7 @@
     <div class="row">
       <div class="col-sm-12">
         <div class="table-responsive">
-          <table class="table table-hover table-condensed">
+          <table class="table table-hover table-condensed" style="font-family: 'Source Code Pro', monospace;">
             <thead>
               <tr>
                 <th>Day(s)</th>

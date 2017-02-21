@@ -25,7 +25,7 @@
 <div class="container-fluid">
 
   <ol class="breadcrumb">
-    <li><a href="/"><span class="gly gly-shop"></span> </a></li>
+    <li><span class="gly gly-shop"></span> <a href="/dashboard">{{ $branch }}</a></li>
     <li><a href="/component">Component</a></li>
     @if($branch)
     <li><a href="/component/purchases">Purchases</a></li>
@@ -749,15 +749,13 @@
 
    	$(".searchfield").autocomplete({
      	source: function(request, response) {
-        var bid = $('#branchid').val();
       	$.ajax({
         	type: 'GET',
         	url: "/api/search/component",
           dataType: "json",
           data: {
             maxRows: 25,
-            q: request.term,
-            branchid : bid
+            q: request.term
           },
           success: function(data) {
             response($.map(data, function(item) {

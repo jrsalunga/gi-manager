@@ -254,5 +254,18 @@ class DailySalesRepository extends BaseRepository {
     return collect($arr);
   }
 
+  public function sumByDateRange($fr, $to) {
+
+    $sql = 'SUM(sales) AS sales, ';
+    $sql .= 'SUM(purchcost) AS purchcost, SUM(cos) AS cos, SUM(tips) AS tips, ';
+    $sql .= 'SUM(custcount) AS custcount, SUM(empcount) AS empcount, SUM(headspend) AS headspend, branchid';
+
+    return $this->scopeQuery(function($query) use ($fr, $to, $sql) {
+      return $query->select(DB::raw($sql))
+        ->whereBetween('date', [$fr, $to]);
+    });
+
+  }
+
 
 }

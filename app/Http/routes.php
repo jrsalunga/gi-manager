@@ -101,6 +101,7 @@ Route::get('api/mdl/sales/{id}', ['uses'=>'SaleController@ajaxSales']);
 Route::get('api/mdl/purchases/{id}', ['uses'=>'Purchase2Controller@ajaxPurchases']);
 
 Route::get('component/purchases', ['uses'=>'Purchase2Controller@getDaily']);
+Route::get('api/search/component', ['uses'=>'Purchase2Controller@search']);
 
 /******************* API  *************************************************/
 Route::group(['prefix'=>'api'], function(){

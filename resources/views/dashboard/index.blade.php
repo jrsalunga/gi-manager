@@ -42,7 +42,7 @@
                  <strong>{{ $backup->file->filename }}</strong>  
                </span> 
                <small><em>{{ $backup->diffForHumans }}</em></small>
-               @if($backup->diffInDays>1)
+               @if($backup->diffInDays>2)
                  <p class="text-danger"><span class="fa fa-exclamation-triangle"></span> 
                   <small><em>Your backup is {{ $backup->diffInDays }} days delayed. Kindly notify your cashier to upload your backup thru DropBox. </em></small>
                  </p>
@@ -70,8 +70,11 @@
 		            	<tr>
 		            		<td>{{ $ds->date->format('M j, D') }}</td>
 		            		@if(!is_null($ds->dailysale))
-                    <td class="text-right">{{ number_format($ds->dailysale->sales,2) }}</td>
-		            		<td class="text-right">
+                    <td class="text-right">
+                      <a href="/product/sales?fr={{$ds->date->format('Y-m-d')}}&to={{$ds->date->format('Y-m-d')}}">
+                        {{ number_format($ds->dailysale->sales,2) }}</td>
+                      </a>
+                    <td class="text-right">
                       <a href="/component/purchases?fr={{$ds->date->format('Y-m-d')}}&to={{$ds->date->format('Y-m-d')}}">
                         {{ number_format($ds->dailysale->purchcost,2) }}
                       </a>

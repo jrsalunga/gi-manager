@@ -11,6 +11,10 @@ use App\Repositories\DailySalesRepository as DSRepo;
 use App\Repositories\Criterias\ByBranch2;
 use App\Repositories\Criterias\ByBranchCriteria;
 
+use App\Models\Product;
+use App\Models\Prodcat;
+use App\Models\Menucat;
+
 
 class SaleController extends Controller { 
 
@@ -31,8 +35,96 @@ class SaleController extends Controller {
   public function getDaily(Request $request) {
 
     $this->dr->setDateRangeMode($request, 'daily');
-    $products = $this->sale->skipCache()->paginate(10);
-    return view('index');
+    
+    $where = [];
+    $fields = ['menucat', 'prodcat', 'product'];
+    
+    $filter = new StdClass;
+    if($request->has('itemid') && $request->has('table') && $request->has('item')) {
+      
+      $id = strtolower($request->input('itemid'));
+      $table = strtolower($request->input('table'));
+
+      $c = '\App\Models\\'.ucfirst($table);
+      $i = $c::find($id);
+
+      if (strtolower($request->input('item'))==strtolower($i->descriptor)) {
+        $item = $request->input('item');
+      
+        if(is_uuid($id) && in_array($table, $fields))
+          $where[$table.'.id'] = $id;
+        else if($table==='payment')
+          $where['purchase.terms'] = $id;
+
+        $filter->table = $table;
+        $filter->id = $id;
+        $filter->item = $item;
+      } else {
+        $filter->table = '';
+        $filter->id = '';
+        $filter->item = '';
+      }
+      $sales = $this->sale->skipCache()->byDateRange($this->dr)->findWhere($where);
+
+
+    } else {
+      $filter->table = '';
+      $filter->id = '';
+      $filter->item = '';
+      $sales = null;
+      
+      if ($this->dr->fr->eq($this->dr->to))
+        $sales = $this->sale->skipCache()->byDateRange($this->dr)->findWhere($where);
+    
+    }
+
+    //$where['salesmtd.branch_id'] = $branch->id;
+    $where = [];    
+
+    $ds = $this->ds
+          //->skipCache()
+          ->sumByDateRange($this->dr->fr->format('Y-m-d'), $this->dr->to->format('Y-m-d'))
+          ->all();
+    
+    $products = $this->sale
+          ->skipCache()
+          ->brProductByDR($this->dr)
+          ->findWhere($where);
+
+    $prodcats = $this->sale
+          //->skipCache()
+          ->brProdcatByDR($this->dr)
+          ->findWhere($where);
+
+    $menucats = $this->sale
+          //->skipCache()
+          ->brMenucatByDR($this->dr)
+          ->findWhere($where);
+
+    return $this->setDailyViewVars('product.sales.daily', $filter, $sales, $ds[0], $products, $prodcats, $menucats);
+  }
+
+
+
+  private function setDailyViewVars($view, $filter=null, $sales=null, $ds=null, $products=null, $prodcats=null, $menucats=null) {
+
+    return $this->setViewWithDR(view($view)
+                ->with('filter', $filter)
+                ->with('sales', $sales)
+                ->with('ds', $ds)
+                ->with('products', $products)
+                ->with('prodcats', $prodcats)
+                ->with('menucats', $menucats));
+  }
+
+
+
+  private function setViewWithDR($view){
+    $response = new Response($view->with('dr', $this->dr));
+    $response->withCookie(cookie('to', $this->dr->to->format('Y-m-d'), 45000));
+    $response->withCookie(cookie('fr', $this->dr->fr->format('Y-m-d'), 45000));
+    $response->withCookie(cookie('date', $this->dr->date->format('Y-m-d'), 45000));
+    return $response;
   }
 
 
