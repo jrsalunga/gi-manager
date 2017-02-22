@@ -89,7 +89,12 @@ class SaleController extends Controller {
           ->all();
 
     $groupies = $this->aggregateGroupies($this->sale->brGroupies($this->dr)->all());
-    
+
+    $menucatid = (app()->environment()==='production') 
+      ? 'E83A9DAEBC3711E6856EC3CDBB4216A7'
+      : '614D4411BDF211E6978200FF18C615EC';
+    $mps = $this->aggregateMPs($this->sale->skipCache()->menucatByDR($this->dr, $menucatid)->all());
+
     $products = $this->sale
           ->skipCache()
           ->brProductByDR($this->dr)
@@ -105,7 +110,7 @@ class SaleController extends Controller {
           ->brMenucatByDR($this->dr)
           ->findWhere($where);
 
-    return $this->setDailyViewVars('product.sales.daily', $filter, $sales, $ds[0], $products, $prodcats, $menucats, $groupies);
+    return $this->setDailyViewVars('product.sales.daily', $filter, $sales, $ds[0], $products, $prodcats, $menucats, $groupies, $mps);
   }
 
   private function aggregateGroupies($grps) {
@@ -125,9 +130,31 @@ class SaleController extends Controller {
     return $arr;
   }
 
+  private function aggregateMPs($mps) {
+    $arr['ordered'] = [];
+    $arr['cancelled'] = [];
 
+    foreach ($mps as $key => $value) {
 
-  private function setDailyViewVars($view, $filter=null, $sales=null, $ds=null, $products=null, $prodcats=null, $menucats=null, $groupies=null) {
+      if ($value['grsamt'] > 0 && $value['qty'] > 0) {
+        
+        if(array_key_exists($value['productcode'],  $arr['ordered'])) {
+          $arr['ordered'][$value['productcode']]['qty'] += $value['qty'];
+          $arr['ordered'][$value['productcode']]['grsamt'] += $value['grsamt'];
+        } else {
+          $arr['ordered'][$value['productcode']]['productcode'] = $value['productcode'];
+          $arr['ordered'][$value['productcode']]['product'] = $value['product'];
+          $arr['ordered'][$value['productcode']]['qty'] = $value['qty'];
+          $arr['ordered'][$value['productcode']]['grsamt'] = $value['grsamt'];
+        }
+      } else {
+        array_push($arr['cancelled'], $value);
+      }
+    }
+    return $arr;
+  }
+
+  private function setDailyViewVars($view, $filter=null, $sales=null, $ds=null, $products=null, $prodcats=null, $menucats=null, $groupies=null, $mps=null) {
 
     return $this->setViewWithDR(view($view)
                 ->with('filter', $filter)
@@ -136,6 +163,7 @@ class SaleController extends Controller {
                 ->with('products', $products)
                 ->with('prodcats', $prodcats)
                 ->with('groupies', $groupies)
+                ->with('mps', $mps)
                 ->with('menucats', $menucats));
   }
 

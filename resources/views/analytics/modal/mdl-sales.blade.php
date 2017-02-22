@@ -91,7 +91,7 @@
                     </td>
                     <td><small class="text-muted" style="color: {{$color}};">{{ $sale->cslipno }}</small></td>
                     <td>{{ $sale->product }} <small><span class="label label-primary">{{ $sale->group }}</span></small></td>
-                    <td class="text-right"><small class="text-muted">{{ number_format($sale->qty, 2)+0 }}</small></td>
+                    <td class="text-right"><small class="text-muted">{{ number_format($sale->qty, 0) }}</small></td>
                     <td class="text-right"><small class="text-muted">{{ number_format($sale->uprice,2) }}</small></td>
                     <td class="text-right">{{ number_format($sale->grsamt,2) }}</td>
                     <td><small class="text-muted">{{ $sale->prodcat }}</small></td>
@@ -322,7 +322,7 @@
                             @foreach($data['groupies'] as $key => $groupie)
                               <tr>
                                 <td>{{ $key }}</td>
-                                <td>{{ number_format($groupie['qty'], 2)+0 }}</td>
+                                <td>{{ number_format($groupie['qty'], 0) }}</td>
                                 <td class="text-right">{{ number_format($groupie['grsamt'], 2) }}</td>
                               </tr>
                             <?php $t+=$groupie['grsamt']; ?>
