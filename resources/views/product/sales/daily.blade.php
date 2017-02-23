@@ -763,8 +763,8 @@
     $('.tb-product-data').tablesorter({sortList: [[2,1]]});
     $('.tb-prodcat-data').tablesorter({sortList: [[1,1]]});
     $('.tb-menucat-data').tablesorter({sortList: [[2,1]]});
-    $('.tb-groupies-data').tablesorter({sortList: [[0,0]]});
-    $('.tb-mp-data').tablesorter({sortList: [[1,0]]});
+    $('.tb-groupies-data').tablesorter({sortList: [[1,1]]});
+    $('.tb-mp-data').tablesorter({sortList: [[2,1]]});
    
 
 

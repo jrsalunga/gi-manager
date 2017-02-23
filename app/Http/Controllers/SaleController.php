@@ -222,6 +222,10 @@ class SaleController extends Controller {
 
     $groupies = $this->aggregateGroupies($this->sale->brGroupies($this->dr)->all());
 
+    $menucatid = (app()->environment()==='production') 
+      ? 'E83A9DAEBC3711E6856EC3CDBB4216A7'
+      : '614D4411BDF211E6978200FF18C615EC';
+    $mps = $this->aggregateMPs($this->sale->skipCache()->menucatByDR($this->dr, $menucatid)->all());
 
     $data = [
       'ds' => $ds,
@@ -229,6 +233,7 @@ class SaleController extends Controller {
       'products' => $products,
       'prodcats' => $prodcats,
       'menucats' => $menucats,
+      'mps' => $mps,
       'groupies' => $groupies
     ];
 
