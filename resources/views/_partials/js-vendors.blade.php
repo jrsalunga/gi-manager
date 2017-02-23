@@ -7,3 +7,4 @@
   <script src="/js/vendors/accounting-0.4.1.min.js"></script>
   <script src="/js/vendors/jquery.tablesorter-2.25.7.min.js"></script>
   <script src="/js/common.min.js"></script>
+  <script src="/js/dr-picker.js"> </script>

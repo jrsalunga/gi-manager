@@ -1,10 +1,12 @@
 @extends('index')
 
-@section('title', '- Create Daily Man Schedule')
+@section('title', '- Dashboard')
 
-@section('body-class', 'mansked-create')
+@section('body-class', 'dashboard')
 
 @section('container-body')
+<div class="backdrop"></div>
+<div class="loader"><img src="/images/spinner_google.gif"></div>
 <div class="container-fluid">
 	<ol class="breadcrumb">
     <li><span class="gly gly-shop"></span> {{ $branch }}</li>
@@ -71,11 +73,11 @@
 		            		<td>{{ $ds->date->format('M j, D') }}</td>
 		            		@if(!is_null($ds->dailysale))
                     <td class="text-right">
-                      <a href="/{{brcode()}}/product/sales?fr={{$ds->date->format('Y-m-d')}}&to={{$ds->date->format('Y-m-d')}}">
+                      <a href="/{{brcode()}}/product/sales?fr={{$ds->date->format('Y-m-d')}}&to={{$ds->date->format('Y-m-d')}}" data-toggle="loader">
                         {{ number_format($ds->dailysale->sales,2) }}</td>
                       </a>
                     <td class="text-right">
-                      <a href="/{{brcode()}}/component/purchases?fr={{$ds->date->format('Y-m-d')}}&to={{$ds->date->format('Y-m-d')}}">
+                      <a href="/{{brcode()}}/component/purchases?fr={{$ds->date->format('Y-m-d')}}&to={{$ds->date->format('Y-m-d')}}" data-toggle="loader">
                         {{ number_format($ds->dailysale->purchcost,2) }}
                       </a>
                     </td>
