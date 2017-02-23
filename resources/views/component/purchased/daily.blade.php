@@ -292,10 +292,12 @@
                             </thead>
                             <tbody>
                               @foreach($components as $component)
+                                @if($component->tcost>0)
                                 <tr>
                                   <td>{{ $component->component }}</td>
                                   <td>{{ $component->tcost }}</td>
                                 </tr>
+                                @endif
                               @endforeach
                             </tbody>
                           </table>
