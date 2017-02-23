@@ -971,6 +971,7 @@
             success: function(data, textStatus, jqXHR) {
               
               $('#mdl-generic .modal-content').html(data);
+              $('.tb-purch-data').tablesorter(); 
               
               $('.tb-component-data').tablesorter({sortList: [[3,1]]});
               $('.tb-compcat-data').tablesorter({sortList: [[3,1]]});
@@ -1036,6 +1037,7 @@
           
           $('#mdl-generic .modal-content').html(data);
           $('.tb-sales-data').tablesorter(); 
+          
 
           $('.tb-product-data').tablesorter({sortList: [[2,1]]});
           $('.tb-prodcat-data').tablesorter({sortList: [[2,1]]});

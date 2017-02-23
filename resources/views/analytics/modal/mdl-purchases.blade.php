@@ -39,7 +39,7 @@
       <div class="tab-content">
         <div role="tabpanel" class="tab-pane" id="purchases">
           <div class="table-responsive">
-            <table class="tb-sales-data table table-condensed table-hover table-striped table-sort tablesorter tablesorter-default" role="grid">
+            <table class="tb-purch-data table table-condensed table-hover table-striped table-sort tablesorter tablesorter-default" role="grid">
               <thead>
                 <tr>
                   <th>Component</th>
