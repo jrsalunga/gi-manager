@@ -27,7 +27,7 @@
         <div class="panel-body">
           <p>
 
-            <a href="/analytics" class="btn btn-default">
+            <a href="/{{brcode()}}/analytics" class="btn btn-default">
               <span class="gly gly-cardio"></span> 
               <span class="hidden-xs">Analytics</span>
             </a>
@@ -71,11 +71,11 @@
 		            		<td>{{ $ds->date->format('M j, D') }}</td>
 		            		@if(!is_null($ds->dailysale))
                     <td class="text-right">
-                      <a href="/product/sales?fr={{$ds->date->format('Y-m-d')}}&to={{$ds->date->format('Y-m-d')}}">
+                      <a href="/{{brcode()}}/product/sales?fr={{$ds->date->format('Y-m-d')}}&to={{$ds->date->format('Y-m-d')}}">
                         {{ number_format($ds->dailysale->sales,2) }}</td>
                       </a>
                     <td class="text-right">
-                      <a href="/component/purchases?fr={{$ds->date->format('Y-m-d')}}&to={{$ds->date->format('Y-m-d')}}">
+                      <a href="/{{brcode()}}/component/purchases?fr={{$ds->date->format('Y-m-d')}}&to={{$ds->date->format('Y-m-d')}}">
                         {{ number_format($ds->dailysale->purchcost,2) }}
                       </a>
                     </td>

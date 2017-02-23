@@ -344,5 +344,11 @@ if (!function_exists('rand_color')) {
     }
 }
 
+if (!function_exists('brcode')) {
+    function brcode() {
+        return strtolower(session('user.branchcode'));
+    }
+}
+
 
 

@@ -34,12 +34,16 @@ Route::group(['middleware' => 'auth'], function(){
 
 Route::get('/', ['uses'=>'DashboardController@getIndex']);
 Route::get('dashboard', ['uses'=>'DashboardController@getIndex']);
+Route::get('/{brcode}/dashboard', ['uses'=>'DashboardController@getIndex']);
 //Route::get('analytics', ['uses'=>'DashboardController@getAnalytics']);
 Route::get('analytics', ['uses'=>'AnalyticsController@getDaily']);
 Route::get('analytics/month', ['uses'=>'AnalyticsController@getMonth']);
 Route::get('analytics/week', ['uses'=>'AnalyticsController@getWeekly']);
 Route::get('analytics/quarter', ['uses'=>'AnalyticsController@getQuarter']);
 Route::get('analytics/year', ['uses'=>'AnalyticsController@getYear']);
+
+Route::get('{brcode}/analytics', ['uses'=>'AnalyticsController@getDaily']);
+
 
 Route::get('settings/{param1?}/{param2?}', ['uses'=>'SettingsController@getIndex'])
 	->where(['param1'=>'password', 
@@ -97,10 +101,12 @@ Route::post('timelog', ['uses'=>'TimelogController@manualPost']);
 
 
 Route::get('product/sales', ['uses'=>'SaleController@getDaily']);
+Route::get('{brcode}/product/sales', ['uses'=>'SaleController@getDaily']);
 Route::get('api/mdl/sales/{id}', ['uses'=>'SaleController@ajaxSales']);
 Route::get('api/mdl/purchases/{id}', ['uses'=>'Purchase2Controller@ajaxPurchases']);
 
 Route::get('component/purchases', ['uses'=>'Purchase2Controller@getDaily']);
+Route::get('{brcode}/component/purchases', ['uses'=>'Purchase2Controller@getDaily']);
 Route::get('api/search/component', ['uses'=>'Purchase2Controller@search']);
 
 /******************* API  *************************************************/
