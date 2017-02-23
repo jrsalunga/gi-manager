@@ -348,10 +348,12 @@
                             </thead>
                             <tbody>
                               @foreach($compcats as $compcat)
+                                @if($compcat->tcost>0)
                                 <tr>
                                   <td>{{ $compcat->compcat }}</td>
                                   <td>{{ $compcat->tcost }}</td>
                                 </tr>
+                                @endif
                               @endforeach
                             </tbody>
                           </table>
@@ -404,10 +406,12 @@
                             </thead>
                             <tbody>
                               @foreach($expenses as $expense)
+                                @if($expense->tcost>0)
                                 <tr>
                                   <td>{{ $expense->expense }}</td>
                                   <td>{{ $expense->tcost }}</td>
                                 </tr>
+                                @endif
                               @endforeach
                             </tbody>
                           </table>
@@ -462,10 +466,12 @@
                             </thead>
                             <tbody>
                               @foreach($expscats as $expscat)
+                                @if($expscat->tcost>0)
                                 <tr>
                                   <td>{{ $expscat->expscat }}</td>
                                   <td>{{ $expscat->tcost}}</td>
                                 </tr>
+                                @endif
                               @endforeach
                             </tbody>
                           </table>
@@ -592,10 +598,12 @@
                             </thead>
                             <tbody>
                               @foreach($suppliers as $supplier)
+                                @if($supplier->tcost>0)
                                 <tr>
                                   <td>{{ $supplier->descriptor }}</td>
                                   <td>{{ $supplier->tcost }}</td>
                                 </tr>
+                                @endif
                               @endforeach
                             </tbody>
                           </table>
