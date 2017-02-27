@@ -125,7 +125,7 @@
         @endif
         <li role="presentation" style="float: right;">
           <div>
-          Gross Amount: 
+          Gross Sales: 
           <h3 id="tot-sales-cost" class="text-right" style="margin:0 0 10px 0;">0.00</h3>
           @if(!request()->has('table'))
             <div class="diff text-right" style="font-size:12px; margin-top:-10px;"></div>
@@ -135,7 +135,7 @@
         @if(!request()->has('table'))
         <li role="presentation" style="float: right;margin-right:20px;">
           <div>
-          Net Amount:
+          Net Sales:
           <h3 id="tot-salesmtd-cost" class="text-right" style="margin:0 0 20px 0;">{{ number_format($ds->sales,2) }}</h3>
           </div>
           
