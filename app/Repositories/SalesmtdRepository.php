@@ -92,7 +92,7 @@ class SalesmtdRepository extends BaseRepository implements CacheableInterface
                     ->leftJoin('product', 'product.id', '=', 'salesmtd.product_id')
                     ->select(DB::raw('product.descriptor as product, product.code as productcode, salesmtd.*, 
                       salesmtd.qty as qty, salesmtd.grsamt as grsamt, salesmtd.netamt as netamt, cslipno'))
-                    ->groupBy('salesmtd.cslipno')
+                    //->groupBy('salesmtd.cslipno')
                     ->orderBy('product.descriptor');
     })->skipOrder();
   }
