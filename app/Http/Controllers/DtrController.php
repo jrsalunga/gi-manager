@@ -32,7 +32,7 @@ class DtrController extends Controller {
     return $mandtls->branchByDate($request->user(), $date);
   }
 
-  public function getIndex(Request $request, $param1=null, $param2=null, $param3=null, $param4=null){
+  public function getIndex(Request $request, $brcode, $param1=null, $param2=null, $param3=null, $param4=null){
     if(strtolower($param1)==='generate')
       return $this->getGenerate($request);
     else if(is_year($param1) && is_null($param2) && is_null($param3) && is_null($param4)) 
