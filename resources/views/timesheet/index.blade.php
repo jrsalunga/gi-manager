@@ -7,7 +7,7 @@
 @section('container-body')
 <div class="container-fluid">
 	<ol class="breadcrumb">
-    <li><span class="gly gly-shop"></span> <a href="/dashboard">{{ $branch }}</a></li>
+    <li><span class="gly gly-shop"></span> <a href="/{{brcode()}}/dashboard">{{ $branch }}</a></li>
     <li>Timesheet</li>
     <li class="active">{{ $dr->date->format('D, M j, Y') }}</li>
   </ol>
@@ -17,7 +17,7 @@
       <div class="container-fluid">
         <div class="navbar-form">
           <div class="btn-group" role="group">
-            <a href="/dashboard" class="btn btn-default" title="Back to Main Menu">
+            <a href="/{{brcode()}}/dashboard" class="btn btn-default" title="Back to Main Menu">
               <span class="gly gly-unshare"></span>
               <span class="hidden-xs hidden-sm">Back</span>
             </a> 
@@ -31,12 +31,12 @@
             </button>
           </div> <!-- end btn-grp -->
           <div class="btn-group pull-right clearfix" role="group">
-            <a href="/timesheet?date={{ $dr->date->copy()->subDay()->format('Y-m-d') }}" class="btn btn-default" title="{{ $dr->date->copy()->subDay()->format('Y-m-d') }}">
+            <a href="/{{brcode()}}/timesheet?date={{ $dr->date->copy()->subDay()->format('Y-m-d') }}" class="btn btn-default" title="{{ $dr->date->copy()->subDay()->format('Y-m-d') }}">
               <span class="glyphicon glyphicon-chevron-left"></span>
             </a>
             <input type="text" class="btn btn-default" id="dp-date" value="{{ $dr->date->format('m/d/Y') }}" style="max-width: 110px;" readonly>
             <label class="btn btn-default" for="dp-date"><span class="glyphicon glyphicon-calendar"></span></label>
-            <a href="/timesheet?date={{ $dr->date->copy()->addDay()->format('Y-m-d') }}" class="btn btn-default" title="{{ $dr->date->copy()->addDay()->format('Y-m-d') }}">
+            <a href="/{{brcode()}}/timesheet?date={{ $dr->date->copy()->addDay()->format('Y-m-d') }}" class="btn btn-default" title="{{ $dr->date->copy()->addDay()->format('Y-m-d') }}">
               <span class="glyphicon glyphicon-chevron-right"></span>
             </a>
           </div>
@@ -85,7 +85,7 @@
         <tr>
           <td <?=$e['onbr']?'':'class="bg-danger"'?>>
             {{ $key+1}}. 
-            <a href="/timesheet/{{$e['employee']->lid()}}?fr={{$dr->date->copy()->startOfMonth()->format('Y-m-d')}}&amp;to={{$dr->date->copy()->endOfMonth()->format('Y-m-d')}}">
+            <a href="/{{brcode()}}/timesheet/{{$e['employee']->lid()}}?fr={{$dr->date->copy()->startOfMonth()->format('Y-m-d')}}&amp;to={{$dr->date->copy()->endOfMonth()->format('Y-m-d')}}">
               {{ $e['employee']->lastname or '-' }}, {{ $e['employee']->firstname or '-' }}
             </a>
             <span class="label label-default pull-right" title="{{ $e['employee']->position->descriptor or '' }}">{{ $e['employee']->position->code or '' }}</span>
@@ -155,7 +155,7 @@
       }).on('dp.change', function(e){
         var date = e.date.format('YYYY-MM-DD');
         console.log(date);
-        document.location.href = '/timesheet?date='+e.date.format('YYYY-MM-DD');
+        document.location.href = '/{{brcode()}}/timesheet?date='+e.date.format('YYYY-MM-DD');
         
       });
 

@@ -13,7 +13,7 @@
 <div class="container-fluid">
   
   <ol class="breadcrumb">
-    <li><span class="gly gly-shop"></span> <a href="/dashboard">{{ $branch }}</a></li>
+    <li><span class="gly gly-shop"></span> <a href="/{{brcode()}}/dashboard">{{ $branch }}</a></li>
     <li>Timesheet</li>
     <li class="active">{{ $employee->code or '' }}</li>
     <!--
@@ -26,7 +26,7 @@
       <div class="container-fluid">
         <div class="navbar-form">
           <div class="btn-group" role="group">
-            <a href="/dashboard" class="btn btn-default" title="Back to Main Menu">
+            <a href="/{{brcode()}}/dashboard" class="btn btn-default" title="Back to Main Menu">
               <span class="gly gly-unshare"></span>
               <span class="hidden-xs hidden-sm">Back</span>
             </a> 
@@ -51,12 +51,12 @@
               <span class="p">{{ $dr->fr->format("m/d/Y") }} - {{ $dr->to->format("m/d/Y") }}</span> 
             </div>
             <!--
-            <a href="/timesheet/{{$employee->lid()}}?date={{ $dr->date->copy()->subDay()->format('Y-m-d') }}" class="btn btn-default" title="{{ $dr->date->copy()->subDay()->format('Y-m-d') }}">
+            <a href="/{{brcode()}}/timesheet/{{$employee->lid()}}?date={{ $dr->date->copy()->subDay()->format('Y-m-d') }}" class="btn btn-default" title="{{ $dr->date->copy()->subDay()->format('Y-m-d') }}">
               <span class="glyphicon glyphicon-chevron-left"></span>
             </a>
             <input type="text" class="btn btn-default" id="dp-date" value="{{ $dr->date->format('m/d/Y') }}" style="max-width: 110px;" readonly>
             <label class="btn btn-default" for="dp-date"><span class="glyphicon glyphicon-calendar"></span></label>
-            <a href="/timesheet/{{$employee->lid()}}?date={{ $dr->date->copy()->addDay()->format('Y-m-d') }}" class="btn btn-default" title="{{ $dr->date->copy()->addDay()->format('Y-m-d') }}">
+            <a href="/{{brcode()}}/timesheet/{{$employee->lid()}}?date={{ $dr->date->copy()->addDay()->format('Y-m-d') }}" class="btn btn-default" title="{{ $dr->date->copy()->addDay()->format('Y-m-d') }}">
               <span class="glyphicon glyphicon-chevron-right"></span>
             </a>
             -->
@@ -143,7 +143,7 @@
               >
                 <td>
                   {{-- $timesheet['date']->format('Y-m-d') --}}
-                  <a href="/timesheet?date={{$timesheet['date']->format('Y-m-d')}}">
+                  <a href="/{{brcode()}}/timesheet?date={{$timesheet['date']->format('Y-m-d')}}">
                   {{ $timesheet['date']->format("D, M j") }}
                   </a>
                 </td>
@@ -236,7 +236,7 @@ $(function() {
   }, cb)
   .on('apply.daterangepicker', function(ev, picker) {
     //console.log(ev);
-    var url = "/timesheet/{{$employee->lid()}}?fr="+ picker.startDate.format('YYYY-MM-DD') +"&to="+ picker.endDate.format('YYYY-MM-DD');
+    var url = "/{{brcode()}}/timesheet/{{$employee->lid()}}?fr="+ picker.startDate.format('YYYY-MM-DD') +"&to="+ picker.endDate.format('YYYY-MM-DD');
     window.location.replace(url)
     console.log(picker.startDate.format('MM/DD/YYYY'));
     console.log(picker.endDate.format('MM/DD/YYYY'));

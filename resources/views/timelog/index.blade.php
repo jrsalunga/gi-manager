@@ -8,7 +8,7 @@
 <div class="container-fluid">
 
   <ol class="breadcrumb">
-    <li><span class="gly gly-shop"></span> <a href="/">{{ $branch }}</a></li>
+    <li><span class="gly gly-shop"></span> <a href="/{{brcode()}}/dashboard">{{ $branch }}</a></li>
     <li class="active">Timelog</li>
   </ol>
 
@@ -17,7 +17,7 @@
       <div class="container-fluid">
         <div class="navbar-form">
           <div class="btn-group" role="group">
-            <a href="/" class="btn btn-default" title="Back to Main Menu">
+            <a href="/{{brcode()}}/dashboard" class="btn btn-default" title="Back to Main Menu">
               <span class="gly gly-unshare"></span>
               <span class="hidden-xs hidden-sm">Back</span>
             </a> 
@@ -25,7 +25,7 @@
               <span class="gly gly-stopwatch"></span>
               <span class="hidden-xs hidden-sm">Timelogs</span>
             </button>
-            <a href="/timesheet" class="btn btn-default">
+            <a href="/{{brcode()}}/timesheet" class="btn btn-default">
               <span class="glyphicon glyphicon-th-list"></span>
               <span class="hidden-xs hidden-sm">Timesheet</span>
             </a>
