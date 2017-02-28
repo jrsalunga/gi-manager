@@ -33,7 +33,7 @@ Route::get('logout', ['as'=>'auth.getlogout', 'uses'=>'Auth\AuthController@getLo
 Route::group(['middleware' => 'auth'], function(){
 
 Route::get('/', ['uses'=>'DashboardController@getIndex']);
-Route::get('/{brcode}/', ['uses'=>'DashboardController@getIndex']);
+//Route::get('/{brcode}/', ['uses'=>'DashboardController@getIndex']);
 Route::get('dashboard', ['uses'=>'DashboardController@getIndex']);
 Route::get('/{brcode}/dashboard', ['uses'=>'DashboardController@getIndex']);
 //Route::get('analytics', ['uses'=>'DashboardController@getAnalytics']);
@@ -75,12 +75,12 @@ Route::get('{brcode}/employee/{param1?}/{param2?}/{param3?}', ['uses'=>'Employee
 
 
 
-Route::get('dtr/generate', ['uses'=>'DtrController@index']);
+Route::get('/{brcode}/dtr/generate', ['uses'=>'DtrController@index']);
 Route::get('reports/dtr/{date}', ['uses'=>'DtrController@getDtrReports']);
 Route::post('dtr/generate', ['uses'=>'DtrController@postGenerate']);
 
 
-Route::get('/{{brcode()}}/timesheet/{param1?}', ['uses'=>'TimesheetController@getRoute']);
+Route::get('/{brcode}/timesheet/{param1?}', ['uses'=>'TimesheetController@getRoute']);
 Route::get('purchase', ['uses'=>'PurchaseController@getIndex']);
 
 

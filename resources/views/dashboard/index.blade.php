@@ -124,12 +124,12 @@
         <div class="panel-body">
           <div class="list-group">
             <a href="/task/mansked" class="list-group-item">Manpower Scheduling</a>
-            <a href="/timesheet" class="list-group-item">Daily Timesheet</a>
-            <a href="dtr" class="list-group-item">DTR Generator</a>
+            <a href="/{{brcode()}}/timesheet" class="list-group-item">Daily Timesheet</a>
+            <a href="/{{brcode()}}dtr" class="list-group-item">DTR Generator</a>
             <a href="#" class="list-group-item" style="color: #aaa;">Weekly Branch Report</a>
           </div>
           <div class="list-group">
-            <a href="#" class="list-group-item" style="color: #aaa;">Trainee Arrivals</a>
+            <a href="/{{brcode()}}/employee" class="list-group-item" style="color: #aaa;">Employees</a>
             <a href="#" class="list-group-item" style="color: #aaa;">Trainee Status Changes</a>
             <a href="#" class="list-group-item" style="color: #aaa;">Manpower Request</a>
             <a href="#" class="list-group-item" style="color: #aaa;">Requests for Employee Status Change</a>
