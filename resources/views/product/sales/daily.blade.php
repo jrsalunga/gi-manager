@@ -40,7 +40,7 @@
       <div class="container-fluid">
         <div class="navbar-form">
           <div class="btn-group pull-left" role="group">
-            <a href="/dashboard" class="btn btn-default" title="Back to Main Menu">
+            <a href="/{{brcode()}}/dashboard" class="btn btn-default" title="Back to Main Menu">
               <span class="gly gly-unshare"></span>
               <span class="hidden-xs">Back</span>
             </a> 
