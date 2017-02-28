@@ -49,7 +49,7 @@ class DtrController extends Controller {
     else if(is_year($param1) && is_month($param2) && is_day($param3) ) 
       return $this->makeDayEmployeeView($request, $param1, $param2, $param3, $param4);
     else
-      return redirect('/dtr/'.now('year')); //.'/'.now('month'));//return $this->makeListView($request, $param1, $param2, $param3);
+      return redirect(brcode().'/dtr/'.now('year')); //.'/'.now('month'));//return $this->makeListView($request, $param1, $param2, $param3);
   }
 
   //dtr/{year}/{month}
