@@ -80,7 +80,7 @@ Route::get('reports/dtr/{date}', ['uses'=>'DtrController@getDtrReports']);
 Route::post('dtr/generate', ['uses'=>'DtrController@postGenerate']);
 
 
-Route::get('timesheet/{param1?}', ['uses'=>'TimesheetController@getRoute']);
+Route::get('/{{brcode()}}/timesheet/{param1?}', ['uses'=>'TimesheetController@getRoute']);
 Route::get('purchase', ['uses'=>'PurchaseController@getIndex']);
 
 
