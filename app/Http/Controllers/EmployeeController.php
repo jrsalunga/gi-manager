@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Employee;
 use App\Models\Branch;
 use App\Repositories\EmployeeRepository;
-use App\Repositories\Filters\ByBranch;
+use App\Repositories\Criterias\ByBranchCriteria as ByBranch;
 
 class EmployeeController extends Controller {
 
@@ -17,12 +17,14 @@ class EmployeeController extends Controller {
 
 	public function __construct(Request $request, EmployeeRepository $employeesrepo) {
 		$this->employees = $employeesrepo;
-		//$this->employees->pushFilters(new ByBranch($request));
+		$this->employees->pushCriteria(new ByBranch($request));
 		$this->branches = Branch::orderBy('code')->get();
 	}
 
 
-	public function getIndex(Request $request, $param1=null, $param2=null, $param3=null) {
+	public function getIndex(Request $request, $brcode, $param1=null, $param2=null, $param3=null) {
+
+		
 
 
 		if(strtolower($param1)==='add'){
@@ -43,22 +45,20 @@ class EmployeeController extends Controller {
 
 
 	public function makeListView(Request $request, $table, $branchid) {
-		//return dd($this->employees->paginate(10));
-		return view('employee.list');
-		$employees = Employee::with(['branch' => function($query){
-													$query->select('code', 'descriptor', 'id');
-												}, 'position' => function($query){
-													$query->select('code', 'descriptor', 'id');
-												}])
-												//->select('code', 'branchid')
-												->paginate(10);
-		if(!empty($table) && !empty($branchid)){
-			//$employees
-		}
 
+		//return view('employee.list');
+
+		$employees = $this->employees
+			->with(['branch' => function($query) {
+						$query->select('code', 'descriptor', 'id');
+					}, 'position' => function($query){
+						$query->select('code', 'descriptor', 'id');
+					}
+			])->paginate(10, ['code', 'lastname', 'firstname', 'id', 'branchid', 'positionid', 'middlename']);
+		
 		//return $employees;
-		return view('masterfiles.employee.list')
-								->with('employees', $employees);
+		return view('masterfiles.employee.list', compact('employees'));
+								//->with('employees', $employees);
 		//return view('masterfiles.employee.list', ['employees' => $employees]); //same as top
 
 	}

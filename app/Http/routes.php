@@ -33,6 +33,7 @@ Route::get('logout', ['as'=>'auth.getlogout', 'uses'=>'Auth\AuthController@getLo
 Route::group(['middleware' => 'auth'], function(){
 
 Route::get('/', ['uses'=>'DashboardController@getIndex']);
+Route::get('/{brcode}/', ['uses'=>'DashboardController@getIndex']);
 Route::get('dashboard', ['uses'=>'DashboardController@getIndex']);
 Route::get('/{brcode}/dashboard', ['uses'=>'DashboardController@getIndex']);
 //Route::get('analytics', ['uses'=>'DashboardController@getAnalytics']);
@@ -67,7 +68,7 @@ Route::get('dtr/{param1?}/{param2?}/{param3?}/{param4?}', ['uses'=>'DtrControlle
 				'param3'=>'edit|[A-Fa-f0-9]{32}|[0-9]{02}+',
 				'param4'=>'[A-Fa-f0-9]{32}+']);
 
-Route::get('employee/{param1?}/{param2?}/{param3?}', ['uses'=>'EmployeeController@getIndex'])
+Route::get('{brcode}/employee/{param1?}/{param2?}/{param3?}', ['uses'=>'EmployeeController@getIndex'])
 ->where(['param1'=>'list|add|[A-Fa-f0-9]{32}+', 
 				'param2'=>'[0-9]{02}+', 
 				'param3'=>'edit|[A-Fa-f0-9]{32}|[0-9]{02}+']);

@@ -8,6 +8,9 @@ class Employee extends BaseModel {
 	protected $table = 'employee';
  	protected $fillable = ['code', 'lastname', 'firstname', 'middlename', 'positionid', 'branchid', 'punching', 'processing'];
   public $timestamps = false;
+  protected $appends = ['photo'];
+
+
 
   public function dtrs() {
     return $this->hasMany('App\Models\Dtr', 'employeeid');
@@ -70,6 +73,10 @@ class Employee extends BaseModel {
   public function getMiddlenameAttribute($value){
     return mb_convert_case($value, MB_CASE_TITLE, "UTF-8");
     //return ucwords(strtolower($value));
+  }
+
+  public function getPhotoAttribute(){
+    return file_exists('../../gi-cashier/public/images/employees/'.$this->code.'.jpg');
   }
 	
 }

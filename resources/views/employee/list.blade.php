@@ -72,7 +72,7 @@
       $('#employee-table').DataTable({
           processing: true,
           serverSide: true,
-          ajax: 'api/dt/employee',
+          ajax: '/api/dt/employee',
           columns: [
               { data: 'lastname', name: 'lastname' },
               { data: 'firstname', name: 'firstname' },
