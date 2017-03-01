@@ -13,13 +13,15 @@ use App\Repositories\Criterias\ByBranchCriteria;
 
 use Prettus\Repository\Traits\CacheableRepository;
 use Prettus\Repository\Contracts\CacheableInterface;
+use Prettus\Repository\Criteria\RequestCriteria;
 
-//class EmployeeRepository extends BaseRepository implements CacheableInterface
-class EmployeeRepository extends BaseRepository 
+
+class EmployeeRepository extends BaseRepository implements CacheableInterface
+//class EmployeeRepository extends BaseRepository 
 {
   //protected $cacheMinutes = 1;
 
-  //use CacheableRepository;
+  use CacheableRepository;
 
   public function __construct() {
       parent::__construct(app());
@@ -30,10 +32,21 @@ class EmployeeRepository extends BaseRepository
       });
   }
 
+  public function boot(){
+    $this->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
+  }
+
 
   public function model() {
     return 'App\\Models\\Employee';
   }
+
+  protected $fieldSearchable = [
+    'position.code',
+    'code',
+    'lastname'=>'like',
+    'fistname'=>'like',
+  ];
 
     /**
      * Get all the DTR of all employee of a branch on a certain date

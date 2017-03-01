@@ -9,7 +9,8 @@
 
   <ol class="breadcrumb">
     <li><span class="gly gly-shop"></span> <a href="/{{brcode()}}/dashboard">{{ $branch }}</a></li>
-    <li class="active">Employees</li>
+    <li><a href="/{{brcode()}}/employee">Employee</a></li>
+    <li class="active">List</li>
   </ol>
 
   <div>
@@ -17,11 +18,29 @@
       <div class="container-fluid">
         <div class="navbar-form">
           <div class="btn-group" role="group">
+            <a href="/{{brcode()}}/employee" class="btn btn-default">
+              <span class="gly gly-unshare"></span>
+              <span class="hidden-xs">Back</span>
+            </a>
+          </div>
+          <div class="btn-group" role="group">
             <button type="button" class="btn btn-default active">
-              <span class="glyphicon glyphicon-th-list"></span>
+              <span class="fa fa-users"></span>
               <span class="hidden-xs">List</span>
             </button>
-             
+          
+          @if(request()->has('search'))
+            <button type="button" class="btn btn-default active">
+              <span class="fa fa-filter"></span>
+              <span class="hidden-xs">{{ strtoupper(explode(':',request()->input('search'))[1]) }}</span>
+            </button>
+            <a type="button" class="btn btn-default" href="/{{brcode()}}/employee/list" title="Remove Filter"><span class="fa fa-close"></span></a>
+            <!--
+            <span class="label label-primary">{{ explode(':',request()->input('search'))[1] }} 
+              <a href="/{{brcode()}}/employee/list" style="color: #ccc;" title="Remove filter">x</a>
+            </span>
+            -->
+          @endif
           </div>
           <!--
           <div class="btn-group" role="group">
@@ -45,7 +64,7 @@
         </span>
         <span class="pull-left">
           <h4>{{ $employee->lastname}}, {{ $employee->firstname}} {{ $employee->middlename }} <small>{{ $employee->code }}</small></h4>
-          <p>{{ $employee->position->descriptor }}</p>
+          <span><a href="/{{brcode()}}/employee/list?search=position.code:{{strtolower($employee->position->code)}}">{{ $employee->position->descriptor }}</a></span>
         </span>
       </div>
       <div class="col-sm-4">

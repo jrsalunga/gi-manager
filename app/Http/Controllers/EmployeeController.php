@@ -10,6 +10,7 @@ use App\Models\Branch;
 use App\Repositories\EmployeeRepository;
 use App\Repositories\Criterias\ByBranchCriteria as ByBranch;
 
+
 class EmployeeController extends Controller {
 
 	protected $employees;
@@ -33,8 +34,10 @@ class EmployeeController extends Controller {
 			return $this->makeEditView($request, $param1);
 		} else if(preg_match('/^[A-Fa-f0-9]{32}+$/', $param1)) {   //preg_match('/^[A-Fa-f0-9]{32}+$/',$action))
 			return $this->makeSingleView($request, $param1);
-		} else {
+		} else if(strtolower($param1)==='list' && is_null($param2)) {
 			return $this->makeListView($request, $param1, $param2);
+		} else {
+			return $this->makeDashboard($request);
 		}
 	}
 
@@ -44,16 +47,23 @@ class EmployeeController extends Controller {
 	}
 
 
+	public function makeDashboard(Request $request) {
+		return view('employee.dashboard');
+	}
+
+
 	public function makeListView(Request $request, $table, $branchid) {
 
 		//return view('employee.list');
 
 		$employees = $this->employees
-			->with(['branch' => function($query) {
-						$query->select('code', 'descriptor', 'id');
-					}, 'position' => function($query){
-						$query->select('code', 'descriptor', 'id');
-					}
+			->with([
+				// 'branch' => function($query) {
+				// 	$query->select('code', 'descriptor', 'id');
+				// }, 
+				'position' => function($query){
+					$query->select('code', 'descriptor', 'id');
+				}
 			])->paginate(10, ['code', 'lastname', 'firstname', 'id', 'branchid', 'positionid', 'middlename']);
 		
 		//return $employees;

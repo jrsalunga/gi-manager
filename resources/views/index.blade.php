@@ -1,6 +1,6 @@
 @extends('master')
 
-@section('title', ' - Dashboard  ('.strtoupper(brcode()).')')
+@section('title', ' - Dashboard')
 
 @section('navbar-2')
 <ul class="nav navbar-nav navbar-right"> 
