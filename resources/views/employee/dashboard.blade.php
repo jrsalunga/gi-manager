@@ -1,6 +1,6 @@
 @extends('index')
 
-@section('title', '- Employee Dashboard('.strtoupper(brcode()).')')
+@section('title', '- Employee Dashboard ('.strtoupper(brcode()).')')
 
 @section('body-class', 'employee-dash')
 
@@ -39,6 +39,31 @@
       </div><!-- end btn-grp -->
       </div>
     </nav>
+  </div>
+
+  <div class="row">
+    <div class="col-md-3">
+      @if(!is_null($data['positions']['datas']))
+        <table class="table table-condensed">
+        <thead>
+          <tr><th>Position</th><th>Count</th></tr>
+        </thead>
+        <tbody>
+        @foreach($data['positions']['datas'] as $key => $e)
+          <tr>
+            <td>{{ $e['descriptor'] }}</td>
+            <td>
+              <a href="/{{brcode()}}/employee/list?search=position.code:{{$key}}">
+                {{ $e['count'] }}
+              </a>
+            </td>
+          </tr>
+        @endforeach
+        </tbody>
+        <thead><tr><td></td><td>{{ $data['positions']['total'] }}</td></tr></thead>
+        </table>
+      @endif
+    </div>
   </div>
 
  

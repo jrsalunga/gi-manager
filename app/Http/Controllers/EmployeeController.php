@@ -19,7 +19,7 @@ class EmployeeController extends Controller {
 	public function __construct(Request $request, EmployeeRepository $employeesrepo) {
 		$this->employees = $employeesrepo;
 		$this->employees->pushCriteria(new ByBranch($request));
-		$this->branches = Branch::orderBy('code')->get();
+		//$this->branches = Branch::orderBy('code')->get();
 	}
 
 
@@ -48,7 +48,27 @@ class EmployeeController extends Controller {
 
 
 	public function makeDashboard(Request $request) {
-		return view('employee.dashboard');
+		$data = [];
+		$data['positions']['datas'] = [];
+		$data['positions']['total'] = 0;
+
+		$e = $this->employees->with(['position' => function($query){
+			$query->select('code', 'descriptor', 'id');
+		}])->paginate();
+		
+		foreach ($e as $key => $employee) {
+			$p = strtolower($employee->position->code);
+			if(array_key_exists($p, $data['positions']['datas'])) {
+				$data['positions']['datas'][$p]['count'] += 1;
+			} else {
+				$data['positions']['datas'][$p]['descriptor'] = $employee->position->descriptor;
+				$data['positions']['datas'][$p]['count'] = 1;
+			}
+			$data['positions']['total'] += 1;
+		}
+
+
+		return view('employee.dashboard', compact('data'));
 	}
 
 
