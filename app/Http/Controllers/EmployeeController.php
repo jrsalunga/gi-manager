@@ -67,6 +67,7 @@ class EmployeeController extends Controller {
 			$data['positions']['total'] += 1;
 		}
 
+		ksort($data['positions']['datas']);
 
 		return view('employee.dashboard', compact('data'));
 	}
