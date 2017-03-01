@@ -60,7 +60,7 @@
           </tr>
         @endforeach
         </tbody>
-        <thead><tr><td></td><td>{{ $data['positions']['total'] }}</td></tr></thead>
+        <thead><tr><td></td><td><a href="/{{brcode()}}/employee">{{ $data['positions']['total'] }}</a></td></tr></thead>
         </table>
       @endif
     </div>
