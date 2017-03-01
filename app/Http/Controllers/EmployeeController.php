@@ -54,7 +54,7 @@ class EmployeeController extends Controller {
 
 		$e = $this->employees->with(['position' => function($query){
 			$query->select('code', 'descriptor', 'id');
-		}])->paginate();
+		}])->all();
 		
 		foreach ($e as $key => $employee) {
 			$p = strtolower($employee->position->code);
