@@ -1,6 +1,6 @@
 @extends('index')
 
-@section('title', '- Employees')
+@section('title', '- Employees ('.strtoupper(brcode()).')')
 
 @section('body-class', 'branch-employees')
 

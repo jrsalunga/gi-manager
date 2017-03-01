@@ -1,6 +1,6 @@
 @extends('index')
 
-@section('title', '- Timelog List')
+@section('title', '- Timelog List ('.strtoupper(brcode()).')')
 
 @section('body-class', 'timelog-list')
 

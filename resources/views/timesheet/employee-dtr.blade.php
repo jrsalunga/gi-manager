@@ -1,6 +1,6 @@
 @extends('index')
 
-@section('title', '- DTR')
+@section('title', '- Employee DTR ('.strtoupper(brcode()).')')
 
 @section('css-external')
   <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/2.1.24/daterangepicker.min.css">

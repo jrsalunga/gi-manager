@@ -1,6 +1,6 @@
 @extends('index')
 
-@section('title', '- By Month Analytics')
+@section('title', '- By Month Analytics ('.strtoupper(brcode()).')')
 
 @section('body-class', 'analytics-month')
 

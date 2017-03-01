@@ -1,6 +1,6 @@
 @extends('index')
 
-@section('title', '- Timesheet')
+@section('title', '- Timesheet ('.strtoupper(brcode()).')')
 
 @section('body-class', 'timesheet-index')
 

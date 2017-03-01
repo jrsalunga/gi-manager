@@ -1,8 +1,8 @@
 @extends('index')
 
-@section('title', '- By Month Analytics')
+@section('title', '- By Week Analytics ('.strtoupper(brcode()).')')
 
-@section('body-class', 'analytics-month')
+@section('body-class', 'analytics-week')
 
 @section('container-body')
 <div class="container-fluid">

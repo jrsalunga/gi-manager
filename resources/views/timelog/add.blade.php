@@ -1,6 +1,6 @@
 @extends('index')
 
-@section('title', '- Timelog Add')
+@section('title', '- Timelog Add ('.strtoupper(brcode()).')')
 
 @section('css-external')
 <link rel="stylesheet" href="/css/jquery-ui.css">

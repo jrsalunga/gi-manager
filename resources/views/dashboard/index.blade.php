@@ -1,6 +1,6 @@
 @extends('index')
 
-@section('title', '- Dashboard')
+@section('title', '- Dashboard ('.strtoupper(brcode()).')')
 
 @section('body-class', 'dashboard')
 

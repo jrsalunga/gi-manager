@@ -1,8 +1,8 @@
 @extends('index')
 
-@section('title', '- Backups')
+@section('title', '- Backups ('.strtoupper(brcode()).')')
 
-@section('body-class', 'generate-dtr')
+@section('body-class', 'backups')
 
 @section('container-body')
 <div class="container-fluid">

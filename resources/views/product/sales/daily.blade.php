@@ -1,6 +1,6 @@
 @extends('master')
 
-@section('title', '- Daily Sales')
+@section('title', '- Daily Sales ('.strtoupper(brcode()).')')
 
 @section('body-class', 'daily-sales')
 
