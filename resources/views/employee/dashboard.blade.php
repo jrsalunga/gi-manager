@@ -46,13 +46,13 @@
       @if(!is_null($data['positions']['datas']))
         <table class="table table-condensed">
         <thead>
-          <tr><th>Position</th><th>Count</th></tr>
+          <tr><th>Position</th><th class="text-right">Count</th></tr>
         </thead>
         <tbody>
         @foreach($data['positions']['datas'] as $key => $e)
           <tr>
             <td>{{ $e['descriptor'] }}</td>
-            <td>
+            <td class="text-right">
               <a href="/{{brcode()}}/employee/list?search=position.code:{{$key}}">
                 {{ $e['count'] }}
               </a>
@@ -60,7 +60,7 @@
           </tr>
         @endforeach
         </tbody>
-        <thead><tr><td></td><td><a href="/{{brcode()}}/employee/list">{{ $data['positions']['total'] }}</a></td></tr></thead>
+        <thead><tr><td></td><td class="text-right"><a href="/{{brcode()}}/employee/list">{{ $data['positions']['total'] }}</a></td></tr></thead>
         </table>
       @endif
     </div>
