@@ -51,7 +51,11 @@
         <tbody>
         @foreach($data['positions']['datas'] as $key => $e)
           <tr>
-            <td>{{ $e['descriptor'] }}</td>
+            <td>
+              <a href="/{{brcode()}}/employee/list?search=position.code:{{$key}}">
+                {{ $e['descriptor'] }}
+              </a>
+            </td>
             <td class="text-right">
               <a href="/{{brcode()}}/employee/list?search=position.code:{{$key}}">
                 {{ $e['count'] }}
