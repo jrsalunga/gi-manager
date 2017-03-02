@@ -17,4 +17,8 @@ class Department extends BaseModel {
       
      $this->setConnection('mysql-hr');
   }
+
+  public function employee() {
+    return $this->hasOne('App\Models\Employee', 'deptid');
+  }
 }

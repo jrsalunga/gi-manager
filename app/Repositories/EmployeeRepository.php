@@ -43,6 +43,7 @@ class EmployeeRepository extends BaseRepository implements CacheableInterface
 
   protected $fieldSearchable = [
     'position.code',
+    'department.code',
     'code',
     'lastname'=>'like',
     'fistname'=>'like',

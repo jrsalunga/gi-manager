@@ -64,7 +64,9 @@
         </span>
         <span class="pull-left">
           <h4>{{ $employee->lastname}}, {{ $employee->firstname}} {{ $employee->middlename }} <small>{{ $employee->code }}</small></h4>
-          <span><a href="/{{brcode()}}/employee/list?search=position.code:{{strtolower($employee->position->code)}}">{{ $employee->position->descriptor }}</a></span>
+          <span>
+            <a href="/{{brcode()}}/employee/list?search=position.code:{{strtolower($employee->position->code)}}">{{ $employee->position->descriptor }}</a>
+          </span>
         </span>
       </div>
       <div class="col-sm-4">

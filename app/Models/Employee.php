@@ -28,6 +28,10 @@ class Employee extends BaseModel {
     return $this->belongsTo('App\Models\Position', 'positionid');
   }
 
+  public function department() {
+    return $this->belongsTo('App\Models\Department', 'deptid');
+  }
+
   public function uploads() {
     return $this->hasMany('App\Models\Upload', 'employeeid');
   }

@@ -9,6 +9,7 @@ use App\Models\Employee;
 use App\Models\Branch;
 use App\Repositories\EmployeeRepository;
 use App\Repositories\Criterias\ByBranchCriteria as ByBranch;
+use App\Repositories\Criterias\ActiveEmployeeCriteria as ActiveEmployee;
 
 
 class EmployeeController extends Controller {
@@ -19,6 +20,7 @@ class EmployeeController extends Controller {
 	public function __construct(Request $request, EmployeeRepository $employeesrepo) {
 		$this->employees = $employeesrepo;
 		$this->employees->pushCriteria(new ByBranch($request));
+		$this->employees->pushCriteria(new ActiveEmployee);
 		//$this->branches = Branch::orderBy('code')->get();
 	}
 
@@ -52,9 +54,13 @@ class EmployeeController extends Controller {
 		$data['positions']['datas'] = [];
 		$data['positions']['total'] = 0;
 
-		$e = $this->employees->with(['position' => function($query){
+		$e = $this->employees
+		//->skipCache()
+		->with(['position' => function($query){
 			$query->select('code', 'descriptor', 'id');
-		}])->all();
+		}, 'department' => function($query){
+			$query->select('code', 'descriptor', 'id');
+		}])->all(['code', 'firstname', 'lastname', 'middlename', 'positionid', 'deptid']);
 		
 		foreach ($e as $key => $employee) {
 			$p = strtolower($employee->position->code);
@@ -84,8 +90,10 @@ class EmployeeController extends Controller {
 				// }, 
 				'position' => function($query){
 					$query->select('code', 'descriptor', 'id');
+				}, 'department' => function($query){
+					$query->select('code', 'descriptor', 'id');
 				}
-			])->paginate(10, ['code', 'lastname', 'firstname', 'id', 'branchid', 'positionid', 'middlename']);
+			])->paginate(10, ['code', 'lastname', 'firstname', 'id', 'branchid', 'positionid', 'middlename', 'deptid']);
 		
 		//return $employees;
 		return view('masterfiles.employee.list', compact('employees'));
