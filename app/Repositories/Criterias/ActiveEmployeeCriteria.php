@@ -8,7 +8,7 @@ class ActiveEmployeeCriteria implements CriteriaInterface {
 
   public function apply($model, RepositoryInterface $repository)
   {
-      $model = $model->where('empstatus', '<>', '4');
+      $model = $model->where('empstatus', '<>', '4')->where('empstatus', '<>', '5');
       return $model;
   }
 }
