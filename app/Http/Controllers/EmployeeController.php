@@ -55,7 +55,7 @@ class EmployeeController extends Controller {
 		$data['positions']['total'] = 0;
 
 		$e = $this->employees
-		->skipCache()
+		//->skipCache()
 		->with(['position' => function($query){
 			$query->select('code', 'descriptor', 'id');
 		}, 'department' => function($query){
