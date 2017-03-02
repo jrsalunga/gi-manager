@@ -16,6 +16,7 @@ class EmployeeController extends Controller {
 
 	protected $employees;
 	protected $branches;
+	protected $field = ['code', 'lastname', 'firstname', 'middlename', 'positionid', 'deptid', 'branchid', 'id'];
 
 	public function __construct(Request $request, EmployeeRepository $employeesrepo) {
 		$this->employees = $employeesrepo;
@@ -60,7 +61,7 @@ class EmployeeController extends Controller {
 			$query->select('code', 'descriptor', 'id');
 		}, 'department' => function($query){
 			$query->select('code', 'descriptor', 'id');
-		}])->all(['code', 'firstname', 'lastname', 'middlename', 'positionid', 'deptid']);
+		}])->all($this->field);
 		
 		foreach ($e as $key => $employee) {
 			$p = strtolower($employee->position->code);
@@ -81,19 +82,13 @@ class EmployeeController extends Controller {
 
 	public function makeListView(Request $request, $table, $branchid) {
 
-		//return view('employee.list');
-
 		$employees = $this->employees
-			->with([
-				// 'branch' => function($query) {
-				// 	$query->select('code', 'descriptor', 'id');
-				// }, 
-				'position' => function($query){
-					$query->select('code', 'descriptor', 'id');
-				}, 'department' => function($query){
-					$query->select('code', 'descriptor', 'id');
-				}
-			])->paginate(10, ['code', 'lastname', 'firstname', 'id', 'branchid', 'positionid', 'middlename', 'deptid']);
+		->with(['position' => function($query){
+				$query->select('code', 'descriptor', 'id');
+			}, 'department' => function($query){
+				$query->select('code', 'descriptor', 'id');
+			}
+		])->paginate(10, $this->field);
 		
 		//return $employees;
 		return view('masterfiles.employee.list', compact('employees'));
