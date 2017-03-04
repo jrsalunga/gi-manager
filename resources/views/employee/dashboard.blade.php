@@ -42,41 +42,51 @@
   </div>
 
   <div class="row">
-    <div class="col-md-3">
-      @if(!is_null($data['positions']['datas']))
-        <table class="table table-condensed">
-        <thead>
-          <tr><th>Position</th><th class="text-right">Count</th></tr>
-        </thead>
-        <tbody>
-        @foreach($data['positions']['datas'] as $key => $e)
-          <tr>
-            <td>
-              @if($key==='temp')
-                {{ $e['descriptor'] }}
-              @else
-                <a href="/{{brcode()}}/employee/list?search=position.code:{{$key}}">
-                  {{ $e['descriptor'] }}
-                </a>
-              @endif
-            </td>
-            <td class="text-right">
-              @if($key==='temp')
-                {{ $e['count'] }}
-              @else
-                <a href="/{{brcode()}}/employee/list?search=position.code:{{$key}}">
-                  {{ $e['count'] }}
-                </a>
-              @endif
-            </td>
-          </tr>
-        @endforeach
-        </tbody>
-        <thead><tr><td></td><td class="text-right"><a href="/{{brcode()}}/employee/list">{{ $data['positions']['total'] }}</a></td></tr></thead>
-        </table>
-      @endif
-    </div>
-  </div>
+    <div class="col-sm-6 col-md-3">
+      
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Branch Manpower</h3>
+        </div>
+        <div class="panel-body">
+          @if(!is_null($data['positions']['datas']))
+            <table class="table table-condensed">
+            <thead>
+              <tr><th>Position</th><th class="text-right">#</th></tr>
+            </thead>
+            <tbody>
+            @foreach($data['positions']['datas'] as $key => $e)
+              <tr>
+                <td>
+                  @if($key==='temp')
+                    {{ $e['descriptor'] }}
+                  @else
+                    <a href="/{{brcode()}}/employee/list?search=position.code:{{$key}}">
+                      {{ $e['descriptor'] }}
+                    </a>
+                  @endif
+                </td>
+                <td class="text-right">
+                  @if($key==='temp')
+                    {{ $e['count'] }}
+                  @else
+                    <a href="/{{brcode()}}/employee/list?search=position.code:{{$key}}">
+                      {{ $e['count'] }}
+                    </a>
+                  @endif
+                </td>
+              </tr>
+            @endforeach
+            </tbody>
+            <thead><tr><td></td><td class="text-right"><a href="/{{brcode()}}/employee/list">{{ $data['positions']['total'] }}</a></td></tr></thead>
+            </table>
+          @endif
+        </div><!-- end: .panel-body-->
+      </div><!-- end: .panel.panel-default-->
+
+      
+    </div><!-- end: .col-md-3-->
+  </div><!-- end: .row-->
 
  
   
