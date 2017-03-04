@@ -52,14 +52,22 @@
         @foreach($data['positions']['datas'] as $key => $e)
           <tr>
             <td>
-              <a href="/{{brcode()}}/employee/list?search=position.code:{{$key}}">
+              @if($key==='temp')
                 {{ $e['descriptor'] }}
-              </a>
+              @else
+                <a href="/{{brcode()}}/employee/list?search=position.code:{{$key}}">
+                  {{ $e['descriptor'] }}
+                </a>
+              @endif
             </td>
             <td class="text-right">
-              <a href="/{{brcode()}}/employee/list?search=position.code:{{$key}}">
+              @if($key==='temp')
                 {{ $e['count'] }}
-              </a>
+              @else
+                <a href="/{{brcode()}}/employee/list?search=position.code:{{$key}}">
+                  {{ $e['count'] }}
+                </a>
+              @endif
             </td>
           </tr>
         @endforeach

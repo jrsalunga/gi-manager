@@ -64,11 +64,11 @@ class EmployeeController extends Controller {
 		}])->all($this->field);
 		
 		foreach ($e as $key => $employee) {
-			$p = strtolower($employee->position->code);
+			$p = empty($employee->position->code) ? 'temp':strtolower($employee->position->code);
 			if(array_key_exists($p, $data['positions']['datas'])) {
 				$data['positions']['datas'][$p]['count'] += 1;
 			} else {
-				$data['positions']['datas'][$p]['descriptor'] = $employee->position->descriptor;
+				$data['positions']['datas'][$p]['descriptor'] = empty($employee->position->descriptor) ? 'Position Not Set':$employee->position->descriptor;
 				$data['positions']['datas'][$p]['count'] = 1;
 			}
 			$data['positions']['total'] += 1;
