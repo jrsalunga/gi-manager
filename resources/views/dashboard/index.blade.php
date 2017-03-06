@@ -73,9 +73,13 @@
 		            		<td>{{ $ds->date->format('M j, D') }}</td>
 		            		@if(!is_null($ds->dailysale))
                     <td class="text-right">
-                      <a href="/{{brcode()}}/product/sales?fr={{$ds->date->format('Y-m-d')}}&to={{$ds->date->format('Y-m-d')}}" data-toggle="loader">
+                      @if($ds->dailysale->slsmtd_totgrs>0)
+                        <a href="/{{brcode()}}/product/sales?fr={{$ds->date->format('Y-m-d')}}&to={{$ds->date->format('Y-m-d')}}" data-toggle="loader">
+                          {{ number_format($ds->dailysale->slsmtd_totgrs,2) }}</td>
+                        </a>
+                      @else
                         {{ number_format($ds->dailysale->sales,2) }}</td>
-                      </a>
+                      @endif
                     <td class="text-right">
                       <a href="/{{brcode()}}/component/purchases?fr={{$ds->date->format('Y-m-d')}}&to={{$ds->date->format('Y-m-d')}}" data-toggle="loader">
                         {{ number_format($ds->dailysale->purchcost,2) }}

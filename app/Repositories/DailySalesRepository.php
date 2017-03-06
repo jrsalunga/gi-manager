@@ -108,7 +108,7 @@ class DailySalesRepository extends BaseRepository {
 
   private function getAggregateByDateRange($fr, $to) {
 
-    $sql = 'date, MONTH(date) AS month, YEAR(date) as year, SUM(sales) AS sales, ';
+    $sql = 'date, MONTH(date) AS month, YEAR(date) as year, SUM(sales) AS sales, SUM(slsmtd_totgrs) AS slsmtd_totgrs, ';
     $sql .= 'SUM(purchcost) AS purchcost, SUM(cos) AS cos, SUM(tips) AS tips, SUM(mancost) AS mancost,  ';
     $sql .= 'SUM(custcount) AS custcount, SUM(empcount) AS empcount, SUM(headspend) AS headspend';
 
@@ -142,7 +142,7 @@ class DailySalesRepository extends BaseRepository {
 
   private function getAggregateWeekly($fr, $to) {
 
-    $sql = 'date, MONTH(date) AS month, YEAR(date) as year, SUM(sales) AS sales, ';
+    $sql = 'date, MONTH(date) AS month, YEAR(date) as year, SUM(sales) AS sales, SUM(slsmtd_totgrs) AS slsmtd_totgrs, ';
     $sql .= 'WEEKOFYEAR(date) as week, YEARWEEK(date, 3) AS yearweak, ';
     $sql .= 'SUM(purchcost) AS purchcost, SUM(cos) AS cos, SUM(tips) AS tips, SUM(mancost) AS mancost, ';
     $sql .= 'SUM(custcount) AS custcount, SUM(empcount) AS empcount, SUM(headspend) AS headspend';
@@ -183,7 +183,7 @@ class DailySalesRepository extends BaseRepository {
 
   private function getAggregateQuarterly($fr, $to) {
 
-    $sql = 'date, QUARTER(date) as quarter, YEAR(date) as year, SUM(sales) AS sales, ';
+    $sql = 'date, QUARTER(date) as quarter, YEAR(date) as year, SUM(sales) AS sales, SUM(slsmtd_totgrs) AS slsmtd_totgrs, ';
     $sql .= 'SUM(purchcost) AS purchcost, SUM(cos) AS cos, SUM(tips) AS tips, SUM(mancost) AS mancost, ';
     $sql .= 'SUM(custcount) AS custcount, SUM(empcount) AS empcount, SUM(headspend) AS headspend';
 
@@ -222,7 +222,7 @@ class DailySalesRepository extends BaseRepository {
   private function getAggregateYearly($fr, $to) {
 
     $sql = 'date, YEAR(date) as year, SUM(sales) AS sales, ';
-    $sql .= 'SUM(purchcost) AS purchcost, SUM(cos) AS cos, SUM(tips) AS tips, SUM(mancost) AS mancost, ';
+    $sql .= 'SUM(purchcost) AS purchcost, SUM(cos) AS cos, SUM(tips) AS tips, SUM(mancost) AS mancost, SUM(slsmtd_totgrs) AS slsmtd_totgrs, ';
     $sql .= 'SUM(custcount) AS custcount, SUM(empcount) AS empcount, SUM(headspend) AS headspend';
 
     return $this->scopeQuery(function($query) use ($fr, $to, $sql) {
@@ -257,7 +257,7 @@ class DailySalesRepository extends BaseRepository {
   public function sumByDateRange($fr, $to) {
 
     $sql = 'SUM(sales) AS sales, ';
-    $sql .= 'SUM(purchcost) AS purchcost, SUM(cos) AS cos, SUM(tips) AS tips, ';
+    $sql .= 'SUM(purchcost) AS purchcost, SUM(cos) AS cos, SUM(tips) AS tips, SUM(slsmtd_totgrs) AS slsmtd_totgrs, ';
     $sql .= 'SUM(custcount) AS custcount, SUM(empcount) AS empcount, SUM(headspend) AS headspend, branchid';
 
     return $this->scopeQuery(function($query) use ($fr, $to, $sql) {

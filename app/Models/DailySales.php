@@ -20,7 +20,9 @@ class DailySales extends BaseModel {
     'tipspct' => 'float',
     'mancostpct' => 'float',
     'cospct' => 'float',
-    'purchcost' => 'float'
+    'purchcost' => 'float',
+    'tot' => 'float',
+    'slsmtd_totgrs' => 'float'
   ];
 
 
