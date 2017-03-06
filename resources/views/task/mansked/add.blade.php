@@ -21,13 +21,23 @@
       <div class="container-fluid">
         <div class="navbar-form">
           <div class="btn-group" role="group">
-            
+            <a href="/task/mansked" class="btn btn-default" title="Back to Main Menu">
+              <span class="gly gly-unshare"></span>
+              <span class="hidden-xs hidden-sm">Back</span>
+            </a>
             <a href="/task/mansked" class="btn btn-default">
               <span class="glyphicon glyphicon-th-list"></span>
+              <span class="hidden-xs hidden-sm">Mansked List</span>
             </a> 
+            <!--
             <button type="button" class="btn btn-default active">
               <span class="glyphicon glyphicon-file"></span>
-            </button>  
+            </button> -->
+          </div>
+          <div class="btn-group" role="group">
+             <button type="button" class="btn btn-default active">
+              <span class="glyphicon glyphicon-plus"></span>
+            </button>
           </div>
       </div><!-- end btn-grp -->
       </div>

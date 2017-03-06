@@ -21,9 +21,11 @@
           <div class="btn-group" role="group">
             <a href="/dashboard" class="btn btn-default" title="Back to Main Menu">
               <span class="gly gly-unshare"></span>
+              <span class="hidden-xs hidden-sm">Back</span>
             </a> 
             <button type="button" class="btn btn-default active">
               <span class="glyphicon glyphicon-th-list"></span>
+              <span class="hidden-xs hidden-sm">Mansked List</span>
             </button>
             
             

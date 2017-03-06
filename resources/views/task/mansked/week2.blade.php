@@ -21,6 +21,7 @@
           <div class="btn-group" role="group">
             <a href="/task/mansked" class="btn btn-default">
               <span class="glyphicon glyphicon-th-list"></span>
+              <span class="hidden-xs hidden-sm">Mansked List</span>
             </a>
             <button type="button" class="btn btn-default active">
               <span class="gly gly-table"></span>
