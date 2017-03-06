@@ -43,79 +43,93 @@
     @endforeach
 
 
-    {!! Form::open(['url' => 'api/t/mansked', 'accept-charset'=>'utf-8', 'id'=>'frm-manskedhdr', 'name'=>'frm-manskedhdr', 'class'=>'table-manskedhdr']) !!}
-    <div class="panel panel-success">
-        <div class="panel-heading">Manpower Schedule Header</div>
-        <div class="panel-body row">
-        <div class="col-md-3 col-sm-3">
-          <div class="form-group">
-            <label for="refno" class="control-label">Ref No</label>
-            <input type="text" class="form-control" id="refno" placeholder="Ref No" readonly>
-          </div>
-        </div>   
-        
-        <div class="col-md-2 col-md-offset-2 col-sm-3">
-          <div class="form-group">
-            <label for="date" class="control-label">Date</label>
-            <input type="text" class="form-control" name="date" id="date" placeholder="YYYY-MM-DD" value="{{ date('Y-m-d', strtotime('now')) }}" maxlength="10" >
-            <input type="hidden" id="year" name="year" value="{{ $data['year'] }}" >
-          </div>
+  {!! Form::open(['url' => 'api/t/mansked', 'accept-charset'=>'utf-8', 'id'=>'frm-manskedhdr', 'name'=>'frm-manskedhdr', 'class'=>'table-manskedhdr']) !!}
+  <div class="panel panel-success">
+    <div class="panel-heading">Manpower Schedule Header</div>
+    <div class="panel-body row">
+      <!--
+      <div class="col-md-3 col-sm-3">
+        <div class="form-group">
+          <label for="refno" class="control-label">Ref No</label>
+          <input type="text" class="form-control" id="refno" placeholder="Ref No" readonly>
         </div>
-        <div class="col-md-2 col-sm-3">
-          <div class="form-group">
-            <label for="weekno" class="control-label">Week No</label>
-            <input type="text" class="form-control" name="weekno" id="weekno" value="{{ $data['weekno'] }}" placeholder="Week No" readonly>
-          </div>
+      </div>   
+      
+      <div class="col-md-2 col-md-offset-2 col-sm-3">
+        <div class="form-group">
+          <label for="date" class="control-label">Date</label>
+          <input type="text" class="form-control" name="date" id="date" placeholder="YYYY-MM-DD" value="{{ date('Y-m-d', strtotime('now')) }}" maxlength="10" >
+          <input type="hidden" id="year" name="year" value="{{ $data['year'] }}" >
         </div>
-        <div class="col-md-3 col-sm-3">
-          <div class="form-group">
-            <label for="mancost" class="control-label">Man Cost</label>
-            <div class="input-group">
-              <span class="input-group-addon">&#8369;</span>
-              <input type="text" class="form-control text-right" name="mancost" id="mancost" value="{{ $data['mancost'] }}" placeholder="0" maxlength="10" >
-            </div>
-          </div>
-        </div>
-          
-
-        <div class="col-md-5 col-sm-6">
-          <div class="form-group">
-            <label for="branch" class="control-label">Branch</label>
-            <div class="input-group">
-              <span class="input-group-addon"><span class="gly gly-shop"></span></span>
-              <input type="text" class="form-control" id="branch"  value="{{ $data['branch'] }}" readonly>
-            </div>
-            <input type="hidden" id="branchid" name="branchid"  value="{{ $data['branchid'] }}">
-          </div>
-        </div>  
-        
-        <div class="col-md-5 col-md-offset-2 col-sm-6">
-          <div class="form-group">
-            <label for="manager" class="control-label">Manager</label>
-            <div class="input-group">
-              <span class="input-group-addon"><span class="gly gly-user"></span></span>
-              <input type="text" class="form-control" id="manager" value="{{ $data['manager'] }}"  readonly>
-            </div>
-            <input type="hidden" id="managerid" name="managerid" value="{{ $data['managerid'] }}">
-            
-          </div>
-        </div>
-
-        <div class="col-md-5 col-sm-7">
-          <div class="form-group">
-            <label for="manager" class="control-label">Notes</label>
-            
-            <textarea id="notes" name="notes" class="form-control"></textarea>
-            
-          </div>
-        </div>      
-        
-        
       </div>
-    </div>
+      -->
+      <div class="col-md-2 col-sm-3">
+        <div class="form-group">
+          <label for="refno" class="control-label">Year</label>
+          <select name="year" id="year" class="form-control" >
+          @for($y=date('Y', strtotime('now'));$y<2021;$y++)
+              <option value="{{$y}}">{{$y}}</option>
+          @endfor
+          </select>
+        </div>
+      </div>
+
+      <div class="col-md-2 col-sm-3">
+        <div class="form-group">
+          <label for="weekno" class="control-label">Week No</label>
+          <input type="text" class="form-control" name="weekno" id="weekno" value="{{ $data['weekno'] }}" placeholder="Week No">
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-3">
+        <div class="form-group">
+          <label for="mancost" class="control-label">Man Cost</label>
+          <div class="input-group">
+            <span class="input-group-addon">&#8369;</span>
+            <input type="text" class="form-control text-right" name="mancost" id="mancost" value="{{ $data['mancost'] }}" placeholder="0" maxlength="10" >
+          </div>
+        </div>
+      </div>
+        
+
+      <div class="col-md-5 col-sm-6">
+        <div class="form-group">
+          <label for="branch" class="control-label">Branch</label>
+          <div class="input-group">
+            <span class="input-group-addon"><span class="gly gly-shop"></span></span>
+            <input type="text" class="form-control" id="branch"  value="{{ $data['branch'] }}" readonly>
+          </div>
+          <input type="hidden" id="branchid" name="branchid"  value="{{ $data['branchid'] }}">
+        </div>
+      </div>  
+      
+      <div class="col-md-5 col-sm-6">
+        <div class="form-group">
+          <label for="manager" class="control-label">Manager</label>
+          <div class="input-group">
+            <span class="input-group-addon"><span class="gly gly-user"></span></span>
+            <input type="text" class="form-control" id="manager" value="{{ $data['manager'] }}"  readonly>
+          </div>
+          <input type="hidden" id="managerid" name="managerid" value="{{ $data['managerid'] }}">
+          <input type="hidden" name="date" id="date" value="{{ date('Y-m-d', strtotime('now')) }}">
+          
+        </div>
+      </div>
+
+      <div class="col-md-5 col-sm-7">
+        <div class="form-group">
+          <label for="manager" class="control-label">Notes</label>
+          
+          <textarea id="notes" name="notes" class="form-control"></textarea>
+          
+        </div>
+      </div>      
+        
+        
+    </div><!-- end: .panel.row -->
+  </div><!-- end: .panel.panel-success -->
     <div class="row button-container">
       <div class="col-md-6">
-        <a href="{{ isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'/branch/mansched' }}" class="btn btn-default">Cancel</a>
+        <a href="/task/mansked" class="btn btn-default">Cancel</a>
         <button type="submit" class="btn btn-primary">Save</button>
       </div>
     </div>

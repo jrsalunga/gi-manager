@@ -153,20 +153,44 @@ class ManskedController extends Controller {
 
 	public function post(Request $request){
 		
+		
+
 		$this->validate($request, [
         'date' => 'required|date|max:10',
         'weekno' => 'required',
+        'year' => 'required',
     ]);
 
 		 // check weekno if exist
 		$mansked = Mansked::whereWeekno($request->input('weekno'))
+												->where('year', $request->input('year'))
 												->branchid($request->user()->branchid)
 												->get();
 		if(count($mansked) > 0){
 			return redirect('/task/mansked/add')
-                        ->withErrors(['message' => 'Week '. $request->input('weekno') .' already created!'])
+                        ->withErrors(['message' => 'Week '. $request->input('weekno') .' of '.$request->input('year').' already created!'])
                         ->withInput();
 		}
+
+
+		if($request->input('weekno')>lastWeekOfYear($request->input('year'))) {
+			return redirect('/task/mansked/add')
+                        ->withErrors(['message' => 'Invalid week '. $request->input('weekno') .' of '.$request->input('year').'!'])
+                        ->withInput();
+		}
+
+
+
+		/*
+		$x = c(firstDayOfWeek($request->input('weekno'), $request->input('year'))->format('Y-m-d'));
+		$days = [];
+		for($c=0;$c<7;$c++) {
+			array_push($days, $x->format('Y-m-d'));
+			$x->addDay();
+		}
+		return $days;
+		*/
+
 
 		//$mansked = array_shift($mansked);
 		$mansked = new Mansked;
@@ -182,12 +206,28 @@ class ManskedController extends Controller {
 		$mansked->id 				= $mansked->get_uid();
 
 		$mandays = [];
+		/*
     foreach ($mansked->getDaysByWeekNo($request->input('weekno')) as $key => $date) {
     		$manday = new Manday;
     		$manday->date = $date;
     		$manday->id = $manday->get_uid();
         array_push($mandays, $manday);
     }
+    */
+    
+    $x = c(firstDayOfWeek($request->input('weekno'), $request->input('year'))->format('Y-m-d'));
+
+    for($c=0;$c<7;$c++) {
+    	$manday = new Manday;
+  		$manday->date = $x->format('Y-m-d');
+  		$manday->id = $manday->get_uid();
+      array_push($mandays, $manday);
+			
+			$x->addDay();
+			
+		}
+		
+   
 
 		\DB::beginTransaction(); //Start transaction!
 

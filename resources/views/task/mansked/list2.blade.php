@@ -51,7 +51,7 @@
             <a role="button" data-toggle="collapse" data-parent="#accordion-week-days" href="#collapse-week{{ $new['weekno'] }}" aria-expanded="false" aria-controls="collapse-week{{ $new['weekno'] }}" class="collapsed">
               Week {{ $new['weekno'] }}
             </a-->
-            Week {{ $new['weekno'] }}
+            {{ $new['year'] }} - W{{ $new['weekno'] }}
             <span style="margin-left: 10%;">
               {{ $new['weekdays'][0]->format('D, M d') }} - 
               {{ $new['weekdays'][6]->format('D, M d') }}
@@ -76,13 +76,14 @@
       @else 
 
       @foreach($manskeds as $mansked)
-      <div class="panel panel-default">
+      <div class="panel panel-{{ $mansked->weekno==c()->weekOfYear&&$mansked->year==c()->year?'success':'default' }}">
         <div class="panel-heading {{ session('new') ? 'new':'' }}" role="tab" id="week{{ $mansked->weekno }}">
           {{ session()->forget('new') }}
           <h4 class="panel-title">
             
             <a href="/task/mansked/{{ $mansked->year }}/week/{{ $mansked->weekno }}">
-              Week {{ $mansked->weekno }}</a> 
+              {{ $mansked->year }} - 
+              W{{ $mansked->weekno }}</a> 
 
             <span style="margin-left: 10%;">
               {{ date('D, M j',strtotime($mansked['manskeddays'][0]->date)) }} - 

@@ -144,6 +144,10 @@
   @include('_partials.js-vendor-highcharts')
 
 <script>
+   moment.locale('en', { week : {
+      dow : 1 // Monday is the first day of the week.
+    }});
+
   $('document').ready(function(){
 
   	$('#dp-date').datetimepicker({
