@@ -40,7 +40,12 @@
       <div class="container-fluid">
         <div class="navbar-form">
           <div class="btn-group pull-left" role="group">
-            <a href="/{{brcode()}}/dashboard" class="btn btn-default" title="Back to Main Menu">
+            <?php
+              $href = request()->has('back') && request()->has('back_fr') && request()->has('back_to')
+                ? '/analytics/'.request()->input('back').'?fr='.request()->input('back_fr').'&to='.request()->input('back_to')
+                :'/'.brcode().'/dashboard';
+            ?>
+            <a href="{{$href}}" class="btn btn-default" title="Back to Main Menu">
               <span class="gly gly-unshare"></span>
               <span class="hidden-xs">Back</span>
             </a> 
@@ -482,7 +487,9 @@
                             <tr><td></td><td></td>
                               <td class="text-right"><b>{{number_format($t,2)}}</b></td><td></td>
                               <td class="text-right">
-                              <b>{{ number_format(($t/$ds->slsmtd_totgrs)*100,2)}}%</b>
+                                @if($ds->slsmtd_totgrs>0)
+                                <b>{{ number_format(($t/$ds->slsmtd_totgrs)*100,2)}}%</b>
+                                @endif
                               </td>
                             </tr>
                           </tfoot>
@@ -563,7 +570,9 @@
                               <td></td><td></td><td></td>
                               <td class="text-right"><b>{{number_format($t,2)}}</b></td><td></td>
                               <td class="text-right">
-                              <b>{{ number_format(($t/$ds->slsmtd_totgrs)*100,2)}}%</b>
+                              @if($ds->slsmtd_totgrs>0)
+                                <b>{{ number_format(($t/$ds->slsmtd_totgrs)*100,2)}}%</b>
+                              @endif
                               </td>
                             </tr>
                           </tfoot>

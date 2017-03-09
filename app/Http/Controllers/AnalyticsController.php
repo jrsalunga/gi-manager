@@ -22,6 +22,8 @@ class AnalyticsController extends Controller
 
   public function getDaily(Request $request){
 
+    
+
     $res = $this->setDateRangeMode($request, 'daily');
 
     $dailysales = $this->ds->branchByDR($request->user()->branchid, $this->dr);

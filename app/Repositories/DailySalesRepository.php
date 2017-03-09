@@ -190,7 +190,7 @@ class DailySalesRepository extends BaseRepository {
     return $this->scopeQuery(function($query) use ($fr, $to, $sql) {
       return $query->select(DB::raw($sql))
         ->whereBetween('date', [$fr, $to])
-        ->groupBy(DB::raw('QUARTER(date)'));
+        ->groupBy(DB::raw('YEAR(date), QUARTER(date)'));
         //->orderBy(DB::raw('YEAR (date), MONTH(date)'));
     });
 

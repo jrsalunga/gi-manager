@@ -351,5 +351,13 @@ if (!function_exists('brcode')) {
     }
 }
 
+if (!function_exists('back_btn')) {
+    function back_btn($url='/') {
+        return parse_url(URL::current(), PHP_URL_PATH) === parse_url(URL::previous(), PHP_URL_PATH)
+        ? $url
+        : URL::previous();
+    }
+}
+
 
 

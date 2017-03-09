@@ -31,7 +31,7 @@
           </div> <!-- end btn-grp -->
 
           <div class="btn-group btn-group pull-right clearfix" role="group" style="margin-left: 5px;">
-            {!! Form::open(['url' => '/analytics/month', 'method' => 'get', 'id'=>'dp-form']) !!}
+            {!! Form::open(['url' => '/analytics/year', 'method' => 'get', 'id'=>'dp-form']) !!}
             <button type="submit" class="btn btn-success btn-go" title="Go"   }}>
               <span class="gly gly-search"></span>
               <span class="hidden-xs hidden-sm">Go</span>
@@ -169,8 +169,8 @@
 
               <tr>
                 <td data-sort="{{$d->date->format('Y-m-d')}}">
-                  <a href="/analytics?fr={{$d->date->firstOfMonth()->format('Y-m-d')}}&to={{$d->date->lastOfMonth()->format('Y-m-d')}}">
-                  {{ $d->date->format('M Y') }}
+                  <a href="/analytics/month?fr={{$d->date->firstOfYear()->format('Y-m-d')}}&to={{$d->date->lastOfYear()->format('Y-m-d')}}">
+                  {{ $d->date->format('Y') }}
                   </a>
                 </td>
                 @if(!is_null($d->dailysale))
@@ -287,7 +287,7 @@
                 <td>
                   <strong>
                   {{ count($dailysales) }}
-                  {{ count($dailysales) > 1 ? 'months':'month' }}
+                  {{ count($dailysales) > 1 ? 'years':'year' }}
                   </strong>
                 <td class="text-right">
                 <strong id="f-tot-sales">{{ number_format($tot_sales,2) }}</strong>
