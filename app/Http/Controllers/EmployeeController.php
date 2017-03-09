@@ -82,6 +82,8 @@ class EmployeeController extends Controller {
 
 	public function makeListView(Request $request, $table, $branchid) {
 
+		$limit = $request->has('limit') && ((int) $request->input('limit')>0) ? $request->input('limit') : 10;
+
 		$employees = $this->employees
 		->skipCache()
 		->with(['position' => function($query){
@@ -89,7 +91,7 @@ class EmployeeController extends Controller {
 			}, 'department' => function($query){
 				$query->select('code', 'descriptor', 'id');
 			}
-		])->paginate(10, $this->field);
+		])->paginate($limit, $this->field);
 		
 		//return $employees;
 		return view('masterfiles.employee.list', compact('employees'));
