@@ -5,6 +5,8 @@
 @section('body-class', 'analytics-week')
 
 @section('container-body')
+<div class="backdrop"></div>
+<div class="loader"><img src="/images/spinner_google.gif"></div>
 <div class="container-fluid">
 	<ol class="breadcrumb">
     <li><span class="gly gly-shop"></span> <a href="/dashboard">{{ $branch }}</a></li>
@@ -187,7 +189,7 @@
                   <span data-toggle="tooltip" data-placement="right"  style="cursor: help;"
                 title="{{ $d->date->copy()->startOfWeek()->format('M j, Y') }} - 
                   {{ $d->date->copy()->endOfWeek()->format('M j, Y') }}">
-                  <a href="/analytics?fr={{$d->date->copy()->startOfWeek()->format('Y-m-d')}}&to={{$d->date->copy()->endOfWeek()->format('Y-m-d')}}">
+                  <a href="/analytics?fr={{$d->date->copy()->startOfWeek()->format('Y-m-d')}}&to={{$d->date->copy()->endOfWeek()->format('Y-m-d')}}" data-toggle="loader">
                   {{ $d->date->format('W')!='01'? $d->date->format('Y') : $d->date->copy()->endOfWeek()->format('Y')  }}-W{{ $d->date->format('W') }}
                   </a>
                 </span>
@@ -195,7 +197,7 @@
                 @if(!is_null($d->dailysale))
                 <td class="text-right" data-sort="{{ number_format($d->dailysale['slsmtd_totgrs'], 2,'.','') }}">
                    @if($d->dailysale['slsmtd_totgrs']>0)
-                    <a href="/{{brcode()}}/product/sales?fr={{ $d->date->startOfWeek()->format('Y-m-d') }}&to={{ $d->date->endOfWeek()->format('Y-m-d') }}&back=week&back_fr={{ $dr->fr->format('Y-m-d') }}&back_to={{ $dr->to->format('Y-m-d') }}">
+                    <a href="/{{brcode()}}/product/sales?fr={{ $d->date->startOfWeek()->format('Y-m-d') }}&to={{ $d->date->endOfWeek()->format('Y-m-d') }}&back=week&back_fr={{ $dr->fr->format('Y-m-d') }}&back_to={{ $dr->to->format('Y-m-d') }}" data-toggle="loader">
                     {{ number_format($d->dailysale['slsmtd_totgrs'], 2) }}
                     </a>
                   @else
@@ -204,7 +206,7 @@
                 </td>
                 <td class="text-right" data-sort="{{ number_format($d->dailysale['purchcost'], 2,'.','') }}">
                   @if($d->dailysale['purchcost']>0) 
-                  <a href="/{{brcode()}}/component/purchases?fr={{ $d->date->startOfWeek()->format('Y-m-d') }}&to={{ $d->date->endOfWeek()->format('Y-m-d') }}&back=week&back_fr={{ $dr->fr->format('Y-m-d') }}&back_to={{ $dr->to->format('Y-m-d') }}">
+                  <a href="/{{brcode()}}/component/purchases?fr={{ $d->date->startOfWeek()->format('Y-m-d') }}&to={{ $d->date->endOfWeek()->format('Y-m-d') }}&back=week&back_fr={{ $dr->fr->format('Y-m-d') }}&back_to={{ $dr->to->format('Y-m-d') }}" data-toggle="loader">
                     {{ number_format($d->dailysale['purchcost'], 2) }}
                   </a>
                   @else

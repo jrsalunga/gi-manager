@@ -5,6 +5,8 @@
 @section('body-class', 'analytics-year')
 
 @section('container-body')
+<div class="backdrop"></div>
+<div class="loader"><img src="/images/spinner_google.gif"></div>
 <div class="container-fluid">
   <ol class="breadcrumb">
     <li><span class="gly gly-shop"></span> <a href="/dashboard">{{ $branch }}</a></li>
@@ -169,7 +171,7 @@
 
               <tr>
                 <td data-sort="{{$d->date->format('Y-m-d')}}">
-                  <a href="/analytics/month?fr={{$d->date->firstOfYear()->format('Y-m-d')}}&to={{$d->date->lastOfYear()->format('Y-m-d')}}">
+                  <a href="/analytics/month?fr={{$d->date->firstOfYear()->format('Y-m-d')}}&to={{$d->date->lastOfYear()->format('Y-m-d')}}" data-toggle="loader">
                   {{ $d->date->format('Y') }}
                   </a>
                 </td>
