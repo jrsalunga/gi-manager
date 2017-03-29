@@ -34,6 +34,12 @@ class DailySales extends BaseModel {
     return Carbon::parse($value.' 00:00:00');
   }
 
+  public function getSlsmtdTotgrsAttribute($value){
+    if (Carbon::parse('2017-01-01')->gt(Carbon::parse($this->date)))
+      return $this->sales;
+    return $value;
+  }
+
 	
 	
  
