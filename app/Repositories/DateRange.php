@@ -94,6 +94,16 @@ class DateRange {
   }
 
 
+  public function hourInterval() {
+    $o = $this->fr->copy();
+    $arr = [];
+    do {
+      array_push($arr, Carbon::parse($o->format('Y-m-d').' '.$o->format('H').':00:00'));
+    } while ($o->addHour() <= $this->to->copy()->addHour());
+   return $arr;
+  }
+
+
   public function dateInterval(){
   	$to = $this->to->copy();
     $interval = new DateInterval('P1D');

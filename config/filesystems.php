@@ -50,7 +50,8 @@ return [
         'pos'=>[
             'local'=>[
                 'driver' => 'local',
-                'root'   => base_path('TEST_POS_BACKUP')
+                'root'   => '../../gi-cashier/TEST_POS_BACKUP/'
+                //'root'   => base_path('TEST_POS_BACKUP')
             ],
             'production'=>[
                 'driver' => 'local',
@@ -60,7 +61,9 @@ return [
         'files'=>[
             'local'=>[
                 'driver' => 'local',
-                'root'   => base_path('TEST_FILES_BACKUP')
+                'root'   => '../../gi-cashier/TEST_FILES_BACKUP/'
+                //'root'   => base_path('TEST_FILES_BACKUP')
+
             ],
             'production'=>[
                 'driver' => 'local',

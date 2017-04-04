@@ -123,7 +123,17 @@
           <a href="#items" aria-controls="items" role="tab" data-toggle="tab">
             <span class="gly gly-cutlery"></span>
             <span class="hidden-xs">
-              Sales History
+              Orders
+            </span>
+          </a>
+        </li>
+        @endif
+        @if(!is_null($customers))
+        <li role="presentation">
+          <a href="#customers" aria-controls="customers" role="tab" data-toggle="tab">
+            <span class="gly gly-group"></span> 
+            <span class="hidden-xs">
+              Customers
             </span>
           </a>
         </li>
@@ -587,6 +597,48 @@
           </div><!-- end: .panel.panel-default -->
 
         </div><!-- end: #stats -->
+        <div role="tabpanel" class="tab-pane" id="customers">
+        @if(!is_null($customers))
+        <div class="row">
+          <div class="col-md-4">
+            <table class="table table-hover table-striped table-sort">
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th class="text-right">Customer Count</th>
+                  <th class="text-right">Sales</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach($customers['hours'] as $customer)
+                  <tr>
+                    <td>{{ $customer['date']->format('h A') }}</td>
+                    <td class="text-right">{{ number_format($customer['custcount'], 0) }}</td>
+                    <td class="text-right">{{ number_format($customer['sales'], 2) }}</td>
+                  </tr>
+                @endforeach
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td></td>
+                  <td class="text-right">{{ number_format($customers['totcust'], 0) }}</td>
+                  <td class="text-right">{{ number_format($customers['sales'], 2) }}</td>
+                </tr>
+              </tfoot>
+            </table>
+
+            
+          </div><!-- end: .col-md-4 -->
+          <div class="col-md-8">
+            <div class="graph-container pull-right">
+              <div id="graph-line-customer" data-table="#customer-data"></div>
+
+              <div id="graph-line-customer2" data-table="#customer-data"></div>
+            </div>
+          </div><!-- end: .col-md-8 -->
+        </div><!-- end: .row -->
+        @endif
+        </div><!-- end: #customers -->
       </div>
     </div><!-- end: .col-md-12 -->
   </div>
@@ -815,6 +867,145 @@
       var mpChart = new Highcharts.Chart(getOptions('graph-pie-mp', 'mp-data'));
     @endif
 
+    @if(!is_null($customers))
+      
+
+      Highcharts.chart('graph-line-customer', {
+        chart: {
+            zoomType: 'x',
+            marginTop: 40,
+        },
+        title: {
+            text: ''
+        },
+        style: {
+          fontFamily: "Helvetica"
+        },
+        xAxis: [{
+            categories: [
+              @foreach($customers['hours'] as $customer)
+                  '{{ $customer['date']->format('gA') }}',
+              @endforeach
+            ],
+            crosshair: true
+        }],
+        yAxis: [{ // Primary yAxis
+            min: 0,
+            labels: {
+                format: '{value}',
+                style: {
+                  color: '#2b908f'
+                },
+                align: 'right',
+                x: -10,
+                y: 15,
+            },
+            title: {
+                text: 'Customers',
+                style: {
+                  color: '#2b908f'
+                }
+            },
+            opposite: true,
+            showFirstLabel: false,
+
+        }, { // Secondary yAxis
+            gridLineWidth: 0,
+            min: 0,
+            title: {
+                text: 'Sales',
+                style: {
+                  color: Highcharts.getOptions().colors[0]
+                }
+            },
+            labels: {
+              align: 'left',
+              x: 3,
+              y: 16,
+                format: '{value:.,0f}',
+                style: {
+                  color: Highcharts.getOptions().colors[0]
+                }
+            },
+            showFirstLabel: false
+        }],
+        tooltip: {
+            shared: true
+        },
+        legend: {
+            align: 'left',
+            verticalAlign: 'top',
+            y: -10,
+            floating: true,
+            borderWidth: 0,
+            layout: 'horizontal',
+            align: 'left',
+            x: 10,
+            verticalAlign: 'top',
+            //y: 55,
+            floating: true,
+            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+        },
+        labels: {
+            items: [{
+                html: 'Man Power',
+                style: {
+                    left: '110px',
+                    top: '1px',
+                    color: (Highcharts.theme && Highcharts.theme.textColor) || '#D36A71'
+                }
+            }]
+        },
+        series: [{
+            name: 'Sales',
+            type: 'column',
+            yAxis: 1,
+            data: [
+              @foreach($customers['hours'] as $customer)
+                  {{ $customer['sales'] }},
+              @endforeach
+            ],
+            tooltip: {
+                valueSuffix: ''
+            }
+
+        },  {
+            name: 'Customers',
+            type: 'line',
+            dashStyle: 'shortdot',
+            color: '#2b908f',
+            data: [
+              @foreach($customers['hours'] as $customer)
+                  {{ $customer['custcount'] }},
+              @endforeach
+            ],
+            tooltip: {
+                valueSuffix: ' PhP'
+            }
+        }, {
+        type: 'pie',
+        name: 'On Duty',
+        data: [{
+            name: 'Kitchen Crew',
+            y: 13,
+            color: '#B09ADB' 
+        }, {
+            name: 'Dining Crew',
+            y: 23,
+            color: '#15C0C2' 
+        }],
+        center: [120, 40],
+        size: 80,
+        showInLegend: false,
+        dataLabels: {
+            enabled: false
+        }
+    }],
+        exporting: {
+            enabled: false
+          }
+      });
+    @endif    
 
 
     $.widget("custom.autocomplete", $.ui.autocomplete, {
