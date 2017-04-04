@@ -15,15 +15,30 @@
 
   @include('_partials.alerts')
 
+  @if($inadequates)
 
+      <div class="alert alert-warning alert-important">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong><span class="glyphicon glyphicon-warning-sign"></span> Warning</strong>: No backup uploaded on the following date(s) below. This may affect report generation.
+        <ul>
+        @foreach($inadequates as $d) 
+          <li>{{ $d->format('m/d/Y') }} - <b>GC{{ $d->format('mdy') }}.ZIP</b></li>
+        @endforeach
+        </ul>
+      </div>
+
+  @endif
+
+  <!--
   <div style="margin-top:50px;" class="hidden-xs"></div>
   <div style="margin-top:10px;" class="visible-xs-block"></div>
+  -->
   <div class="row">
   	<div class="col-md-8">
   		<div id="panel-top-sales" class="panel panel-success">
         <div class="panel-heading">
           <h3 class="panel-title"><span class="fa fa-line-chart"></span> 
-            Last 7 Days Stat
+            Stats
           </h3>
         </div>
         <div class="panel-body">
@@ -68,10 +83,10 @@
             	<tbody>
             		<?php $ctr = 0 ?>
 		            @foreach($dailysales as $ds)
-		            	@if($ctr < 7)
+		            	@if($ctr < 9)
 		            	<tr>
-		            		<td>{{ $ds->date->format('M j, D') }}</td>
-		            		@if(!is_null($ds->dailysale))
+		            		<td>{{ $ds->date->format('D, M j') }}</td>
+		            		@if(!is_null($ds->dailysale) && $ds->dailysale->slsmtd_totgrs>0)
                     <td class="text-right">
                       @if($ds->dailysale->slsmtd_totgrs>0)
                         <a href="/{{brcode()}}/product/sales?fr={{$ds->date->format('Y-m-d')}}&to={{$ds->date->format('Y-m-d')}}" data-toggle="loader">
@@ -163,9 +178,10 @@
         </div>
       </div>
       -->
+    </div><!-- end: .col-md-4 -->
+  </div><!-- end: .row -->
 
-      
-  	</div><!-- end: .col-md-4 -->
+ 
 
 				
 </div><!-- end .container-fluid -->

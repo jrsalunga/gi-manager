@@ -30,10 +30,11 @@ class DashboardController extends Controller {
 
 
 	public function getIndex(Request $request){
+		$inadequates = $this->backup->inadequateBackups();
 		$backup = $this->backup->latestBackupStatus();
 		//return $dailysales = $this->ds->paginate(8); 
 		$dailysales = $this->ds->getLastestSales($request, 8); 
-		return view('dashboard.index', compact('dailysales'))->with('backup', $backup);
+		return view('dashboard.index', compact('dailysales'))->with('backup', $backup)->with('inadequates', $inadequates);
 	}
 
 

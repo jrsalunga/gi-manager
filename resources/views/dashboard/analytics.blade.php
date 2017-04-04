@@ -197,7 +197,7 @@
 
             <tr {{ $d->date->dayOfWeek=='0' ? 'class=warning':''  }}>
               <td data-sort="{{$d->date->format('Y-m-d')}}">{{ $d->date->format('M j, D') }}</td>
-              @if(!is_null($d->dailysale))
+              @if(!is_null($d->dailysale) && $d->dailysale['slsmtd_totgrs']>0)
               <td class="text-right" data-sort="{{ number_format($d->dailysale['slsmtd_totgrs'], 2,'.','') }}">
                 @if($d->dailysale['slsmtd_totgrs']>0)
                   <a href="#" class="text-primary btn-slsmtd-totgrs" data-id="{{strtolower($d->dailysale['id'])}}" data-date="{{$d->date->format('Y-m-d')}}">

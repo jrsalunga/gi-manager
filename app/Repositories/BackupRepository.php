@@ -1,7 +1,8 @@
 <?php namespace App\Repositories;
 
-use Carbon\Carbon;
 use StdClass;
+use Carbon\Carbon;
+use App\Helpers\Locator;
 use App\Repositories\Repository;
 use Prettus\Repository\Eloquent\BaseRepository;
 
@@ -35,10 +36,11 @@ class BackupRepository extends BaseRepository
 
   public function latestBackup() {
   	return $this->scopeQuery(function($query){
-  			return $query->orderBy('year','desc')
-  									->orderBy('month','desc')
-  									->orderBy('filename','desc')
-                    ->orderBy('uploaddate','desc');
+  		return $query
+        ->orderBy('year','desc')
+				->orderBy('month','desc')
+				->orderBy('filename','desc')
+        ->orderBy('uploaddate','desc');
 			})->first();
   }
 
@@ -62,6 +64,33 @@ class BackupRepository extends BaseRepository
 
 
   	return $backup;
+
+  }
+
+  public function inadequateBackups($fr=null, $to=null) {
+    if (is_null($fr) && is_null($to)) {
+      $to = Carbon::now();
+      $fr = $to->copy()->subDays(30);
+    }
+
+    $fr = Carbon::parse($fr);
+    $to = Carbon::parse($to);
+
+    if ($fr->gt($to))
+      return false;
+
+    $locator = new Locator('pos');
+
+
+    $arr = [];
+    $o = $fr->copy();
+    do {
+      $path = session('user.branchcode').DS.$o->format('Y').DS.$o->format('m').DS.'GC'.$o->format('mdy').'.ZIP';
+      if (!$locator->exists($path) && Carbon::parse(now())->gt($o))
+        array_push($arr, Carbon::parse($o->format('Y-m-d').' 00:00:00'));
+    } while ($o->addDay() <= $to);
+   
+    return $arr;
 
   }
 

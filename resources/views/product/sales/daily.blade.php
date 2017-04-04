@@ -98,6 +98,18 @@
   
   @include('_partials.alerts')
 
+  @if($backups)
+    <div class="alert alert-warning alert-important">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <strong><span class="glyphicon glyphicon-warning-sign"></span> Warning</strong>: No backup uploaded on the following date(s) below. This may affect report generation.
+      <ul>
+      @foreach($backups as $d) 
+        <li>{{ $d->format('m/d/Y') }} - <b>GC{{ $d->format('mdy') }}.ZIP</b></li>
+      @endforeach
+      </ul>
+    </div>
+  @endif
+
   <?php
     $totsales = 0;
     $totqty = 0;
