@@ -978,7 +978,7 @@
               @endforeach
             ],
             tooltip: {
-                valueSuffix: ''
+                valueSuffix: 'PhP'
             }
 
         },  {
@@ -992,7 +992,7 @@
               @endforeach
             ],
             tooltip: {
-                valueSuffix: ' PhP'
+                valueSuffix: ''
             }
         }, {
         type: 'pie',
