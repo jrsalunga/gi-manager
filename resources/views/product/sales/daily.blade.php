@@ -163,7 +163,8 @@
         <li role="presentation" style="float: right;margin-right:20px;">
           <div>
           Net Sales:
-          <h3 id="tot-salesmtd-cost" class="text-right" style="margin:0 0 20px 0;">{{ number_format($ds->sales,2) }}</h3>
+          <h3 id="tot-salesmtd-cost" class="text-right hidden-xs" style="margin:0 0 20px 0;">{{ number_format($ds->sales,2) }}</h3>
+          <h4 id="tot-salesmtd-cost" class="text-right visible-xs" style="margin:0 0 20px 0;">{{ number_format($ds->sales,2) }}</h4>
           </div>
           
         </li>
@@ -999,11 +1000,11 @@
         name: 'On Duty',
         data: [{
             name: 'Kitchen Crew',
-            y: 13,
+            y: {{ $ds->crew_kit }},
             color: '#B09ADB' 
         }, {
             name: 'Dining Crew',
-            y: 23,
+            y: {{ $ds->crew_din }},
             color: '#15C0C2' 
         }],
         center: [120, 40],

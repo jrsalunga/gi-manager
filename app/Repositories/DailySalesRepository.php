@@ -256,7 +256,7 @@ class DailySalesRepository extends BaseRepository {
 
   public function sumByDateRange($fr, $to) {
 
-    $sql = 'SUM(sales) AS sales, ';
+    $sql = 'SUM(sales) AS sales, SUM(crew_kit) AS crew_kit, SUM(crew_din) AS crew_din, ';
     $sql .= 'SUM(purchcost) AS purchcost, SUM(cos) AS cos, SUM(tips) AS tips, SUM(slsmtd_totgrs) AS slsmtd_totgrs, ';
     $sql .= 'SUM(custcount) AS custcount, SUM(empcount) AS empcount, SUM(headspend) AS headspend, branchid';
 
