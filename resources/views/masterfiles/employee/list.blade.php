@@ -60,7 +60,7 @@
     <div class="row">
       <div class="col-sm-8">
         <span class="pull-left" style="margin-right: 5px;">
-          <img src="http://cashier.giligans.net/images/{{$employee->photo?'employees/'.$employee->code.'.jpg':'login-avatar.png'}}" style="max-width: 100px;" class="img-responsive">
+          <img src="http://cashier.giligansrestaurant.com/images/{{$employee->photo?'employees/'.$employee->code.'.jpg':'login-avatar.png'}}" style="max-width: 100px;" class="img-responsive">
         </span>
         <span class="pull-left">
           <h4>{{ $employee->lastname}}, {{ $employee->firstname}} {{ $employee->middlename }} <small>{{ $employee->code }}</small></h4>
