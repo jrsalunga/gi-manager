@@ -590,7 +590,6 @@ var updateWorkhrs = function(el){
     updateMancost();
 
     $('select.timestart').on('change', function(e){
-      //console.log();
       var x = ($(this)[0].value=='off') ? 0:1; 
       $('#manskeddtl'+$(this).data('index')+'daytype').val(x); 
       if(x==0){  
@@ -600,15 +599,50 @@ var updateWorkhrs = function(el){
         var d = false;
       }
 
+      var that = $(this);
+      
+      
       updateWorkhrs($(this))
 
       $(this).parent().siblings('td').children('.frm-ctrl').each(function(el){
         
-        if(d){
-           $(this)[0].value = 'off'
-           $(this).parent().addClass('disabled');
+        if (d) {
+          $(this)[0].value = 'off';
+          $(this).parent().addClass('disabled');
         } else {
           $(this).parent().removeClass('disabled');
+
+          if (that.val()=='09:00') {
+            if ($(this).parent().index()==3 && $(this)[0].value=='off') 
+              $(this)[0].value = '13:00';
+            if ($(this).parent().index()==4 && $(this)[0].value=='off') 
+              $(this)[0].value = '15:00';
+            if ($(this).parent().index()==5 && $(this)[0].value=='off') 
+              $(this)[0].value = '21:00';
+            $(this).trigger('change');
+          }
+
+          if (that.val()=='10:00') {
+            if ($(this).parent().index()==3 && $(this)[0].value=='off') 
+              $(this)[0].value = '14:00';
+            if ($(this).parent().index()==4 && $(this)[0].value=='off') 
+              $(this)[0].value = '16:00';
+            if ($(this).parent().index()==5 && $(this)[0].value=='off') 
+              $(this)[0].value = '22:00';
+            $(this).trigger('change');
+          }
+
+          if (that.val()=='12:00') {
+            if ($(this).parent().index()==3 && $(this)[0].value=='off') 
+              $(this)[0].value = '16:00';
+            if ($(this).parent().index()==4 && $(this)[0].value=='off') 
+              $(this)[0].value = '18:00';
+            if ($(this).parent().index()==5 && $(this)[0].value=='off') 
+              $(this)[0].value = '24:00';
+            $(this).trigger('change');
+          }
+          
+          console.log(parseInt(that.val()));
         }
         $(this)[0].disabled = d;
         $(this)[0].readonly = d;
@@ -656,16 +690,16 @@ var updateWorkhrs = function(el){
       var te = tr.children('td').children('.timeend');
 
       $('#manskeddtl'+tr.index()+'daytype').val(1); 
-      ts[0].value = '08:00';
-      bs[0].value = '12:00';
+      ts[0].value = '10:00';
+      bs[0].value = '14:00';
       bs[0].disabled = false;
       bs[0].readonly = false;
       bs.parent().removeClass('disabled');
-      be[0].value = '13:00';
+      be[0].value = '16:00';
       be[0].disabled = false;
       be[0].readonly = false;
       be.parent().removeClass('disabled');
-      te[0].value = '17:00';
+      te[0].value = '22:00';
       te[0].disabled = false;
       te[0].readonly = false;
       te.parent().removeClass('disabled');

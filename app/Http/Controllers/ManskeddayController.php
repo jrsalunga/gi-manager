@@ -178,7 +178,8 @@ class ManskeddayController extends Controller {
 		$manday = Manday::with('manskedhdr')->find($param1);
 		//return $manday;
 		if(count($manday) > 0){ // check if the $id 
-			if(strtotime($manday->date) < strtotime('now')){
+			//if ($request->has('edit')) {
+			if ((strtotime($manday->date) < strtotime('now')) && (!$request->has('edit') && $request->input('edit')!='true')) {
 				return redirect(URL::previous())->with(['alert-warning' => 'Editing is disabled! Date already passed...']);
 			}
 			$depts = $this->empGrpByDeptWithManday($request, $param1);			
