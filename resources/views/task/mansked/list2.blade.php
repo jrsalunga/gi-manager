@@ -43,7 +43,7 @@
     @include('_partials.alerts')
 
     <div class="panel-group" id="accordion-week-days" role="tablist" aria-multiselectable="true">
-      <div class="panel panel-default panel-warning">
+      <div class="panel panel-default panel-default">
         <div class="panel-heading" role="tab" id="headingOne">
           <h4 class="panel-title">
             <!--

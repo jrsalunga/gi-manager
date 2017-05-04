@@ -632,6 +632,16 @@ var updateWorkhrs = function(el){
             $(this).trigger('change');
           }
 
+          if (that.val()=='11:00') {
+            if ($(this).parent().index()==3 && $(this)[0].value=='off') 
+              $(this)[0].value = '15:00';
+            if ($(this).parent().index()==4 && $(this)[0].value=='off') 
+              $(this)[0].value = '17:00';
+            if ($(this).parent().index()==5 && $(this)[0].value=='off') 
+              $(this)[0].value = '23:00';
+            $(this).trigger('change');
+          }
+
           if (that.val()=='12:00') {
             if ($(this).parent().index()==3 && $(this)[0].value=='off') 
               $(this)[0].value = '16:00';
