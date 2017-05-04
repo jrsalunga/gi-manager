@@ -71,7 +71,7 @@
         <table>
           <tr>
             <td>
-              <img src="http://cashier.giligans.net/images/{{$employee->photo?'employees/'.$employee->code.'.jpg':'login-avatar.png'}}" style="margin-right: 5px; width: 100px;" class="img-responsive">
+              <img src="http://cashier.giligansrestaurant.com/images/{{$employee->photo?'employees/'.$employee->code.'.jpg':'login-avatar.png'}}" style="margin-right: 5px; width: 100px;" class="img-responsive">
             </td>
             <td>
               <h3>
