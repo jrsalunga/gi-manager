@@ -75,12 +75,15 @@ class EmployeeRepository extends BaseRepository implements CacheableInterface
   public function byDepartment(Request $request) {
 
       $department = new Department;
-      $d1 = array_flatten($department->whereNotIn('code', ['KIT'])->orderBy('code', 'DESC')->get(['id'])->toArray());
+      $d1 = array_flatten($department->whereNotIn('code', ['KIT', 'CAS'])->orderBy('code', 'DESC')->get(['id'])->toArray());
 
-      $depts = [['name'=>'Dining', 'employees'=>[], 'deptid'=>$d1],
-                  ['name'=>'Kitchen', 'employees'=>[], 'deptid'=>['71B0A2D2674011E596ECDA40B3C0AA12']]];
+      $depts = [
+        ['code'=>'Din', 'name'=>'Dining', 'employees'=>[], 'deptid'=>$d1],
+        ['code'=>'Kit', 'name'=>'Kitchen', 'employees'=>[], 'deptid'=>['71B0A2D2674011E596ECDA40B3C0AA12']],
+        ['code'=>'Cas', 'name'=>'Cashier', 'employees'=>[], 'deptid'=>['DC60EC42B0B143AFA7D42312DA5D80BF']]
+      ];
 
-      for($i=0; $i<= 1; $i++) { 
+      for($i=0; $i<= 2; $i++) { 
           $employees = Employee::with('position')
                                   ->select('lastname', 'firstname', 'positionid', 'employee.id')
                                   ->join('position', 'position.id', '=', 'employee.positionid')

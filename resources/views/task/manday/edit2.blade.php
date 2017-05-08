@@ -214,7 +214,7 @@
                   </select>
                 </td>
                 <td class="text-right text-input {{ $disabled }}">
-                  <select name="manskeddtls[{{ $ctr }}][breakstart]" class="frm-ctrl tk-select breakstart" data-index="{{$ctr}}" {{ $disabled }}> 
+                  <select name="manskeddtls[{{ $ctr }}][breakstart]" class="frm-ctrl tk-select breakstart" data-index="{{$ctr}}" {{ $disabled }} tabindex="-1"> 
                     <option value="off">-</option>
                     @for ($j = 1; $j <= 24; $j++)
                       <?php $p = str_pad($j,2,'0',STR_PAD_LEFT)  ?>
@@ -236,7 +236,7 @@
                   </select>
                 </td>
                 <td class="text-right text-input {{ $disabled }}">
-                  <select name="manskeddtls[{{ $ctr }}][breakend]" class="frm-ctrl tk-select breakend" data-index="{{$ctr}}" {{ $disabled }}> 
+                  <select name="manskeddtls[{{ $ctr }}][breakend]" class="frm-ctrl tk-select breakend" data-index="{{$ctr}}" {{ $disabled }} tabindex="-1"> 
                     <option value="off">-</option>
                     @for ($j = 1; $j <= 24; $j++)
                       <?php $p = str_pad($j,2,'0',STR_PAD_LEFT)  ?>
@@ -258,7 +258,7 @@
                   </select>
                 </td>
                 <td class="text-right text-input {{ $disabled }}">
-                  <select name="manskeddtls[{{ $ctr }}][timeend]" class="frm-ctrl tk-select timeend" data-index="{{$ctr}}" {{ $disabled }}> 
+                  <select name="manskeddtls[{{ $ctr }}][timeend]" class="frm-ctrl tk-select timeend" data-index="{{$ctr}}" {{ $disabled }} tabindex="-1"> 
                     <option value="off">-</option>
                     @for ($j = 1; $j <= 24; $j++)
                       @if($dept['employees'][$i]['manskeddtl']['timeend'] == date('H:i', strtotime( $j .':00')))

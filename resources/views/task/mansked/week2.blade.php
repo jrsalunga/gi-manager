@@ -49,8 +49,8 @@
     @include('_partials.alerts')
 
     
-
-    <table class="table table-bordered table-responsive">
+    <div class="table-responsive">
+    <table class="table table-bordered">
       <tbody>
         <tr>
           <td colspan="2" class="nbtl">
@@ -132,21 +132,24 @@
         @foreach($depts as $dept)
           @for($i = 0; $i < count($dept['employees']); $i++)
             <tr>
-              <td><?=strtolower($dept['name'])=='dining'?'DIN':'KIT';?></td>
+              <td>{{ strtoupper($dept['code']) }}</td>
               <td>{{ $ctr }}. {{ $dept['employees'][$i]->lastname }}, {{ $dept['employees'][$i]->firstname }} <span class="label label-default pull-right">{{ empty($dept['employees'][$i]->position->code) ? '':$dept['employees'][$i]->position->code }}</span></td>
               
                 @foreach($dept['employees'][$i]['manskeddays'] as $manday)
                   @if(!empty($manday['mandtl']['daytype']))
                     <td>
                       <div>
-                        {{ empty($manday['mandtl']['timestart']) ? '':date('g:i', strtotime($manday['mandtl']['timestart'])) }} - 
+                        {{ empty($manday['mandtl']['timestart']) ? '':date('g:i', strtotime($manday['mandtl']['timestart'])) }} 
+                        <!--    
+                        - 
                         {{ empty($manday['mandtl']['timeend']) ? '':date('g:i', strtotime($manday['mandtl']['timeend'])) }}
                       </div>
                       <div>
+                        -->
                         @if($manday['mandtl']['loading'] > 0)
-                          <span class="label label-primary" style="letter-spacing: 2px;">+{{ $manday['mandtl']['loading']+0 }}</span>
+                          <span class="label label-primary pull-right" style="letter-spacing: 2px;">+{{ $manday['mandtl']['loading']+0 }}</span>
                         @elseif($manday['mandtl']['loading'] < 0)
-                          <span class="label label-danger" style="letter-spacing: 2px;">{{ $manday['mandtl']['loading']+0 }}</span>
+                          <span class="label label-danger pull-right" style="letter-spacing: 2px;">{{ $manday['mandtl']['loading']+0 }}</span>
                         @else
                            - 
                         @endif
@@ -163,7 +166,7 @@
         @endforeach
       </tbody>
     </table>
-
+    </div> <!-- end: .table-responsive -->
     
     
       
