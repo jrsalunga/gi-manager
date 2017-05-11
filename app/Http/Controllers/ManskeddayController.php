@@ -13,14 +13,17 @@ use Auth;
 use URL;
 use Carbon\Carbon;
 use App\Repositories\EmployeeRepository as EmployeeRepo;
+use App\Repositories\ManskeddayRepository as MandayRepo;
 
 class ManskeddayController extends Controller {
 
 	protected $branchid = '';
 	private $employees;
+	protected $manday;
 
-	public function __construct(EmployeeRepo $employees){
+	public function __construct(EmployeeRepo $employees, MandayRepo $manday) {
 		$this->employees = $employees;
+		$this->manday = $manday;
 		$this->branchid = Auth::user()->branchid;
 	}
 
@@ -61,7 +64,7 @@ class ManskeddayController extends Controller {
 	}
 
 	// for $this->makeEditView and $this->makeSingleView
-	private function empGrpByDeptWithManday(Request $request, $id){
+	private function old_empGrpByDeptWithManday(Request $request, $id){
 		//$depts = $this->empGrpByDept(); // get array of dept w/ emp grouped by department e.g. dining, kitchen
 			$depts = $this->employees->byDepartment($request);
 			for($h=0; $h<count($depts); $h++){
@@ -69,6 +72,95 @@ class ManskeddayController extends Controller {
 				for($i=0; $i<count($arr); $i++){
 					$mandtl = Mandtl::where('employeeid', $depts[$h]['employees'][$i]->id)
 													->where('mandayid', $id)->get()->first();
+					$depts[$h]['employees'][$i]['manskeddtl'] = count($mandtl) > 0 ?
+						['daytype'=> $mandtl->daytype, 
+						'timestart'=>$mandtl->timestart,
+						'breakstart'=>$mandtl->breakstart,
+						'breakend'=>$mandtl->breakend,
+						'timeend'=>$mandtl->timeend,
+						'workhrs'=>$mandtl->workhrs,
+						'breakhrs'=>$mandtl->breakhrs,
+						'loading'=>$mandtl->loading, 
+						'id'=>$mandtl->id]: 
+						['daytype'=> 0, 
+						'timestart'=>'off',
+						'breakstart'=>'',
+						'breakend'=>'',
+						'timeend'=>'',
+						'workhrs'=>'',
+						'breakhrs'=>'',
+						'loading'=>'', 
+						'id'=>''];
+				}
+			}
+		return $depts;
+	}
+
+	private function empGrpByDeptWithManday(Request $request, $id) {
+		return $id;
+	}
+
+
+	
+	private function byDeptFrmEmpIds($manday){ 
+
+		$empsOnMansked = $manday->manskeddtls->pluck('employeeid');
+		
+		$depts = $this->employees->byDeptFrmEmpIds($empsOnMansked->toArray());
+
+		$mandtls = $manday->manskeddtls;
+
+		for($h=0; $h<count($depts); $h++){
+				$arr = $depts[$h]['employees']->toArray(); // extract emp on each dept
+				for($i=0; $i<count($arr); $i++){
+					
+					$mandtl = $mandtls
+										->where('employeeid', $depts[$h]['employees'][$i]->id)
+  									->where('mandayid', $manday->id)
+  									->first();
+					
+					$depts[$h]['employees'][$i]['manskeddtl'] = count($mandtl) > 0 ?
+						['daytype'=> $mandtl->daytype, 
+						'timestart'=>$mandtl->timestart,
+						'breakstart'=>$mandtl->breakstart,
+						'breakend'=>$mandtl->breakend,
+						'timeend'=>$mandtl->timeend,
+						'workhrs'=>$mandtl->workhrs,
+						'breakhrs'=>$mandtl->breakhrs,
+						'loading'=>$mandtl->loading, 
+						'id'=>$mandtl->id]: 
+						['daytype'=> 0, 
+						'timestart'=>'off',
+						'breakstart'=>'',
+						'breakend'=>'',
+						'timeend'=>'',
+						'workhrs'=>'',
+						'breakhrs'=>'',
+						'loading'=>'', 
+						'id'=>''];
+				}
+			}
+		return $depts;
+	}
+
+
+	private function byDeptFrmEmpIdsCombined($manday, $depts){ 
+
+		//$empsOnMansked = $manday->manskeddtls->pluck('employeeid');
+		
+		//$depts = $this->employees->byDeptFrmEmpIds($empsOnMansked->toArray());
+
+		$mandtls = $manday->manskeddtls;
+
+		for($h=0; $h<count($depts); $h++){
+				$arr = $depts[$h]['employees']->toArray(); // extract emp on each dept
+				for($i=0; $i<count($arr); $i++){
+					
+					$mandtl = $mandtls
+										->where('employeeid', $depts[$h]['employees'][$i]->id)
+  									->where('mandayid', $manday->id)
+  									->first();
+					
 					$depts[$h]['employees'][$i]['manskeddtl'] = count($mandtl) > 0 ?
 						['daytype'=> $mandtl->daytype, 
 						'timestart'=>$mandtl->timestart,
@@ -175,14 +267,31 @@ class ManskeddayController extends Controller {
 
 
 	public function makeEditView(Request $request, $param1) {
-		$manday = Manday::with('manskedhdr')->find($param1);
+		//$manday = Manday::with('manskedhdr')->find($param1);
+
+		$manday = $this->manday
+			->skipCache()
+			->with('manskeddtls')
+			->find($param1);
+
+		
+
 		//return $manday;
 		if(count($manday) > 0){ // check if the $id 
 			//if ($request->has('edit')) {
 			if ((strtotime($manday->date) < strtotime('now')) && (!$request->has('edit') && $request->input('edit')!='true')) {
 				return redirect(URL::previous())->with(['alert-warning' => 'Editing is disabled! Date already passed...']);
 			}
-			$depts = $this->empGrpByDeptWithManday($request, $param1);			
+
+			$empsOnMansked = $manday->manskeddtls->pluck('employeeid')->toArray(); // array of employeeids on mansked
+			$currentEmpsOnBranch = $this->employees->all(['id'])->pluck('id')->toArray(); // array of employeeids on branch
+			$combined_empids = collect($empsOnMansked)->merge($currentEmpsOnBranch)->unique()->values()->all();
+
+			$e = $this->employees->byDeptFrmEmpIds($combined_empids);
+
+			$depts = $this->byDeptFrmEmpIdsCombined($manday, $e);
+
+			//return $depts = $this->empGrpByDeptWithManday($request, $param1);			
 		} else {
 			return redirect('task/mansked');
 		}
@@ -215,19 +324,28 @@ class ManskeddayController extends Controller {
 
 	//task/manday/{id}
 	public function makeSingleView(Request $request, $param1){
-		$manday = Manday::find($param1);
+		//$manday = Manday::find($param1);
+		$manday = $this->manday
+			->skipCache()
+			->with('manskeddtls')
+			->find($param1);
+
+		//return $manday->manskeddtls()->all();
+
+		
+		
 		//return dd($request);
 		if(count($manday) > 0){ // check if the $id 
-			$depts = $this->empGrpByDeptWithManday($request, $param1);	
-			//session(['weekno'=>Carbon::parse($manday->date)->weekOfYear])	;	
+			$depts = $this->byDeptFrmEmpIds($manday, true);
 		} else {
 			return redirect(URL::previous());
 		}
 		//return $this->hourlyDuty($depts);
 		//return $depts;
-		return view('task.manday.view')->with('depts', $depts)
-																	->with('manday', $manday->load('manskedhdr'))
-																	->with('hours', $this->hourlyDuty($depts));
+		return view('task.manday.view')
+							->with('depts', $depts)
+							->with('manday', $manday->load('manskedhdr'))
+							->with('hours', $this->hourlyDuty($depts));
 	}
 
 

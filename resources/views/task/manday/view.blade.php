@@ -27,19 +27,23 @@
             -->
             <a href="/task/mansked/{{$manday->date->year}}/week/{{$manday->date->weekOfYear}}" class="btn btn-default">
               <span class="gly gly-table"></span>
+              <span class="hidden-sm hidden-xs">{{$manday->date->year}}-W{{$manday->date->weekOfYear}}</span>
             </a>
             <button type="button" class="btn btn-default active">
               <span class="fa fa-calendar-o"></span>
+              <span class="hidden-sm hidden-xs">{{ $manday->date->format('M j') }}</span>
             </button>   
           </div>
           <div class="btn-group" role="group">
             @if(strtotime($manday->date) > strtotime('now'))
-            <a href="/task/manday/{{strtolower($manday->id)}}/edit" class="btn btn-default">
+            <a href="/task/manday/{{strtolower($manday->id)}}/edit" class="btn btn-primary">
               <span class="glyphicon glyphicon-edit"></span>
+              <span class="hidden-sm hidden-xs">Edit</span>
             </a>
             @else
             <button type="button" class="btn btn-default" disabled>
               <span class="glyphicon glyphicon-edit"></span>
+              <span class="hidden-sm hidden-xs">Edit</span>
             </button>
             @endif
           </div><!-- end btn-grp -->
@@ -65,7 +69,7 @@
     </nav>
 
     @include('_partials.alerts')
-
+    
     <table class="table table-bordered">
       <tbody>
         <tr>
@@ -115,7 +119,9 @@
       <tbody>
           <tr>
           @foreach ($hours as $key => $value) 
-            <td title="{{ $key }}"> {{ date('g:i A', strtotime($key.'.00')) }}</td>
+            <td data-value={{ date('g:i A', strtotime($key.'.00')) }}"" title="{{ $key }}" class="text-center"> 
+              {{ date('g A', strtotime($key.'.00')) }}
+            </td>
           @endforeach
           </tr>
           <tr>
@@ -135,8 +141,8 @@
         <?php $ctr=1 ?>
         @foreach($depts as $dept)
           @for($i = 0; $i < count($dept['employees']); $i++)
-            <tr>
-              <td><?=strtolower($dept['name'])=='dining'?'DIN':'KIT';?></td>
+            <tr  data-mandtl-id="{{ $dept['employees'][$i]['manskeddtl']['id'] }}">
+              <td>{{ strtoupper($dept['code']) }}</td>
               <td>{{ $ctr }}. {{ $dept['employees'][$i]->lastname }}, {{ $dept['employees'][$i]->firstname }} <span class="label label-default pull-right">{{ $dept['employees'][$i]->position->code }}</span></td>
               @if($dept['employees'][$i]['manskeddtl']['daytype']==1)
                 <td class="text-right">

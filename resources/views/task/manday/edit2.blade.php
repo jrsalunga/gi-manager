@@ -24,18 +24,22 @@
             <a href="/task/mansked" class="btn btn-default">
               <span class="glyphicon glyphicon-th-list"></span>
             </a>
+            -->
             <a href="/task/mansked/{{$manday->date->year}}/week/{{$manday->date->weekOfYear}}" class="btn btn-default">
               <span class="gly gly-table"></span>
+              <span class="hidden-sm hidden-xs">{{$manday->date->year}}-W{{$manday->date->weekOfYear}}</span>
             </a>
-            -->
+            
             <a href="/task/manday/{{$manday->lid()}}" class="btn btn-default">
               <span class="fa fa-calendar-o"></span>
+              <span class="hidden-sm hidden-xs">{{ $manday->date->format('M j') }}</span>
             </a>   
           </div>
           <div class="btn-group" role="group">
             
             <button type="button" class="btn btn-default active">
               <span class="glyphicon glyphicon-edit"></span>
+              <span class="hidden-sm hidden-xs">Editing</span>
             </button>
             
           </div><!-- end btn-grp -->
@@ -57,12 +61,12 @@
     <input type="hidden" name="_method" value="PUT">
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
     <input type="hidden" id="id" name="id" value="{{ $manday->id }}">
+    
     <table class="table table-bordered" id="tb-manday">
       <tbody>
         <tr>
           <td rowspan="2" colspan="2">
             {{ date('F j, Y', strtotime($manday->date)) }}
-            
             <input type="hidden" name="empcount" id="empcount" value="{{ $manday->empcount }}">
             <input type="hidden" name="workhrs" id="workhrs" value="{{ $manday->workhrs }}">
             <input type="hidden" name="breakhrs" id="breakhrs" value="{{ $manday->breakhrs }}">
@@ -71,35 +75,19 @@
             <input type="hidden" id="brmancost" value="{{ $manday->manskedhdr->mancost }}">
             {{-- <input type="hidden" id="brmancost" value="{{ session('user.branchmancost') }}"> --}}
           </td>
-          <td>
-            Forecast Pax
-          </td>
-          <td>
-            Head Spend
-          </td>
-          <td>
-            Emp Count
-          </td>
-          <td>
-            Man Cost
-          </td>
-          <td colspan="2">
-            Total Work Hrs
-          </td>
-          <td>
-            Over Load
-          </td>
-          <td>
-            Under Load
-          </td>
+          <td>Forecast Pax</td>
+          <td>Head Spend</td>
+          <td>Emp Count</td>
+          <td>Man Cost</td>
+          <td colspan="2">Total Work Hrs</td>
+          <td>Over Load</td>
+          <td>Under Load</td>
         </tr>
         <tr>
           <td class="text-right text-input">
-            
             <input type="text" name="custcount" id="custcount" class="frm-ctrl text-right" value="{{ $manday->custcount }}" autofocus onfocus="this.value = this.value">
           </td>
           <td class="text-right text-input">
-            
             <input type="text" name="headspend" id="headspend" class="frm-ctrl text-right" value="{{ $manday->headspend }}">
           </td>
           <td class="text-right tb-empcount">
@@ -170,10 +158,11 @@
 
           @for($i = 0; $i < count($dept['employees']); $i++)
             <?php
-              $disabled = $dept['employees'][$i]['manskeddtl']['daytype'] == 0 ? 'disabled':'';
+              $dayType = $dept['employees'][$i]['manskeddtl']['daytype'];
+              $disabled = $dayType == 0 ? 'disabled':'';
             ?>
-            <tr>
-              <td><?=strtolower($dept['name'])=='dining'?'DIN':'KIT';?>
+            <tr data-mandtl-id="{{ $dept['employees'][$i]['manskeddtl']['id'] }}">
+              <td>{{ strtoupper($dept['code']) }}
                 <input type="hidden" id="manskeddtl{{ $ctr }}id" name="manskeddtls[{{ $ctr }}][id]" value="{{ $dept['employees'][$i]['manskeddtl']['id'] }}">
                 <input type="hidden" id="manskeddtl{{ $ctr }}daytype" name="manskeddtls[{{ $ctr }}][daytype]" class="daytype" value="{{ $dept['employees'][$i]['manskeddtl']['daytype'] }}">
                 <input type="hidden" id="manskeddtl{{ $ctr }}employeeid" name="manskeddtls[{{ $ctr }}][employeeid]" value="{{ $dept['employees'][$i]->id }}">
@@ -181,8 +170,61 @@
                 <input type="hidden" id="manskeddtl{{ $ctr }}breakhrs" name="manskeddtls[{{ $ctr }}][breakhrs]" value="{{ empty($dept['employees'][$i]['manskeddtl']['breakhrs']) ? 0:$dept['employees'][$i]['manskeddtl']['breakhrs'] }}" class="breakhrs">
                 <input type="hidden" id="manskeddtl{{ $ctr }}loading" name="manskeddtls[{{ $ctr }}][loading]" value="{{ empty($dept['employees'][$i]['manskeddtl']['loading']) ? 0:$dept['employees'][$i]['manskeddtl']['loading'] }}" class="loading">  
               </td>
-              <td>{{ $ctr }}. {{ $dept['employees'][$i]->lastname }}, {{ $dept['employees'][$i]->firstname }} <span class="label label-default pull-right">{{ $dept['employees'][$i]->position->code }}</span></td>
-              @if($dept['employees'][$i]['manskeddtl']['daytype']==2)
+              <td>{{ $ctr }}. {{ $dept['employees'][$i]->lastname }}, {{ $dept['employees'][$i]->firstname }} 
+              
+              <div class="btn-group pull-right" style="margin-left: 5px;">
+                <div class="dropdown">
+                  <button id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" 
+                  class="btn btn-default btn-xs dropdown-toggle" style="border:0;" tabindex="-1">
+                    
+                    <span class="br-code br{{$ctr}}">
+                    <?php 
+                    switch ($dayType) {
+                      case 0:
+                        echo 'O';
+                        break;
+                      case 1:
+                        echo 'D';
+                        break;
+                      case 2:
+                        echo 'L';
+                        break;
+                      case 3:
+                        echo 'S';
+                        break;
+                      case 4:
+                        echo 'B';
+                        break;
+                      case 5:
+                        echo 'R';
+                        break;
+                      case 6:
+                        echo 'X';
+                        break;
+                      default:
+                        echo '-';
+                        break;
+                    }?>
+                    </span>
+                    
+                  </button>
+                  <ul class="br dropdown-menu" aria-labelledby="dLabel">
+                    <li><a href="#" data-code="O" data-value="0" data-input="manskeddtl{{$ctr}}daytype">Day Off</a></li>
+                    <li><a href="#" data-code="D" data-value="1" data-input="manskeddtl{{$ctr}}daytype">With Duty</a></li>
+                    <li><a href="#" data-code="L" data-value="2" data-input="manskeddtl{{$ctr}}daytype">On Leave</a></li>
+                    <li><a href="#" data-code="S" data-value="3" data-input="manskeddtl{{$ctr}}daytype">Suspended</a></li>
+                    <li><a href="#" data-code="B" data-value="4" data-input="manskeddtl{{$ctr}}daytype">Backup</a></li>
+                    <li><a href="#" data-code="R" data-value="5" data-input="manskeddtl{{$ctr}}daytype">Resigned</a></li>
+                    <li><a href="#" data-code="X" data-value="6" data-input="manskeddtl{{$ctr}}daytype">Other</a></li>
+                  </ul>
+                </div>
+              </div> <!-- end: btn-group pull-right -->
+
+              <span class="label label-default pull-right">{{ $dept['employees'][$i]->position->code }}</span>
+
+
+              </td>
+              @if($dept['employees'][$i]['manskeddtl']['daytype']==4)
                 <td class="text-right">{{ $dept['employees'][$i]['manskeddtl']['timestart'] }}</td>
                 <td class="text-right">{{ $dept['employees'][$i]['manskeddtl']['breakstart'] }}</td>
                 <td class="text-right">{{ $dept['employees'][$i]['manskeddtl']['breakend'] }}</td>
@@ -192,7 +234,8 @@
               @else
                 
                 <td class="text-right text-input">
-                  <select name="manskeddtls[{{ $ctr }}][timestart]" class="frm-ctrl tk-select timestart" data-index="{{$ctr}}"> 
+                  <select name="manskeddtls[{{ $ctr }}][timestart]" class="frm-ctrl tk-select timestart" data-index="{{$ctr}}"
+                   data-input="manskeddtl{{$ctr}}daytype" data-br-code="br{{$ctr}}"> 
                     <option value="off">-</option>
                     @for ($j = 1; $j <= 24; $j++)
                       <?php $p = str_pad($j,2,'0',STR_PAD_LEFT)  ?>
@@ -257,11 +300,13 @@
                     @endfor
                   </select>
                 </td>
-                <td class="text-right text-input {{ $disabled }}">
+                <td class="text-right text-input {{ $disabled }}" data-value="{{$dept['employees'][$i]['manskeddtl']['timeend']}}">
                   <select name="manskeddtls[{{ $ctr }}][timeend]" class="frm-ctrl tk-select timeend" data-index="{{$ctr}}" {{ $disabled }} tabindex="-1"> 
                     <option value="off">-</option>
                     @for ($j = 1; $j <= 24; $j++)
                       @if($dept['employees'][$i]['manskeddtl']['timeend'] == date('H:i', strtotime( $j .':00')))
+                        <option selected value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
+                      @elseif ($dept['employees'][$i]['manskeddtl']['timeend'] == $j.':00')
                         <option selected value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
                       @else
                         <option value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
@@ -595,9 +640,16 @@ var updateWorkhrs = function(el){
       if(x==0){  
         var d = true;
         $('#manskeddtl'+$(this).data('index')+'breakhrs').val(x); 
+        $('#'+$(this).data('input')).val('0');
+        $('.br-code.'+$(this).data('br-code')).text('O');
       } else {
+        $('#'+$(this).data('input')).val('1');
+        $('.br-code.'+$(this).data('br-code')).text('D');
         var d = false;
       }
+
+      //console.log($(this).data('input'));
+      //console.log($(this).data('br-code'));
 
       var that = $(this);
       
@@ -718,6 +770,26 @@ var updateWorkhrs = function(el){
       updateEmpcount();
       updateMancost();
     });
+
+    $('.br.dropdown-menu li a').on('click', function(e){
+        e.preventDefault();
+        
+        var el = $(e.currentTarget);
+        var $span = el.parent().parent().siblings('#dLabel').children('.br-code');
+        var $timestart = $(this).closest('td').next('td').children('select');
+       
+        if (el.data('value')!='1')
+          $timestart.val('off').trigger('change');
+        
+        $span.text(el.data('code'));
+        $('#'+el.data('input')).val((el.data('value')));
+
+
+        
+        console.log(el.data('input'));
+      });
+
+
   });
 
 </script>

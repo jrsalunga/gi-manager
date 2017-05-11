@@ -25,8 +25,10 @@
             </a>
             <button type="button" class="btn btn-default active">
               <span class="gly gly-table"></span>
+              <span class="hidden-xs hidden-sm">{{ $mansked->year }}-W{{ $mansked->weekno }}</span>
             </button>   
           </div>
+
           
           <div class="btn-group pull-right" role="group">
             @if($mansked->previous()==='false')
@@ -41,6 +43,13 @@
               <a href="/task/mansked/{{$mansked->next()->year}}/week/{{$mansked->next()->weekno}}" class="btn btn-default"><span class="glyphicon glyphicon-chevron-right"></span></a>
             @endif  
              
+          </div>
+
+          <div class="btn-group pull-right" role="group" style="margin-right: 5px;">
+            <a href="{{ request()->url() }}?print=true" class="btn btn-default" target="_blank">
+              <span class="glyphicon glyphicon-print"></span>
+              <span class="hidden-xs hidden-sm">Print</span>
+            </a>   
           </div>
         </div>
       </div>
@@ -57,7 +66,7 @@
             <i class="fa fa-calendar"></i> {{ $mansked->year }} - Week {{ $mansked->weekno }}
           </td>
           @for($i=0;$i<7;$i++)
-          <td>
+          <td class="text-center">
             <a href="/task/manday/{{  $mansked->manskeddays[$i]->lid() }}">
               {{ $mansked->manskeddays[$i]->date->format('D, M d') }}
             </a>
@@ -120,7 +129,7 @@
         <tr>
           <td>Dept</td><td>Employee</td>
           @foreach($mansked->manskeddays as $manday)
-            <td>
+            <td class="text-center">
               <a href="/task/manday/{{ $manday->lid() }}">
                 {{ $manday->date->format('D, M d') }}
               </a>
@@ -140,12 +149,12 @@
                     <td>
                       <div>
                         {{ empty($manday['mandtl']['timestart']) ? '':date('g:i', strtotime($manday['mandtl']['timestart'])) }} 
-                        <!--    
+                           
                         - 
                         {{ empty($manday['mandtl']['timeend']) ? '':date('g:i', strtotime($manday['mandtl']['timeend'])) }}
                       </div>
                       <div>
-                        -->
+                        
                         @if($manday['mandtl']['loading'] > 0)
                           <span class="label label-primary pull-right" style="letter-spacing: 2px;">+{{ $manday['mandtl']['loading']+0 }}</span>
                         @elseif($manday['mandtl']['loading'] < 0)

@@ -2,9 +2,20 @@
 
 use App\User;
 use App\Models\Manskedday;
+use Prettus\Repository\Eloquent\BaseRepository;
+use Prettus\Repository\Traits\CacheableRepository;
+use Prettus\Repository\Contracts\CacheableInterface;
 
-class ManskeddayRepository
+class ManskeddayRepository extends BaseRepository implements CacheableInterface
 {
+
+  use CacheableRepository;
+
+
+  function model() {
+    return "App\\Models\\Manskedday";
+  }
+
     /**
      * Get all of the tasks for a given user.
      *

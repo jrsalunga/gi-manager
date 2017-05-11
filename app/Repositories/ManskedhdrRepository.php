@@ -6,12 +6,16 @@ use App\Models\Employee;
 use Illuminate\Http\Request;
 use App\Models\Manskedhdr as Mansked;
 use Carbon\Carbon;
-class ManskedhdrRepository
+use Prettus\Repository\Eloquent\BaseRepository;
+
+class ManskedhdrRepository extends BaseRepository 
 {
 
   private $manskedhdrs;
 
-
+  function model() {
+    return "App\\Models\\Manskedhdr";
+  }
 
   /**
    * Get all the DTR of all employee of a branch on a certain date

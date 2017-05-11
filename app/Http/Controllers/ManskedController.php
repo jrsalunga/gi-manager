@@ -33,7 +33,10 @@ class ManskedController extends Controller {
 		if(strtolower($param1)==='add')
 			return $this->makeAddView($request);
 		else if(preg_match('/(20[0-9][0-9])/', $param1) && (strtolower($param2)==='week') && preg_match('/^[0-9]+$/', $param3)) //((strtolower($param1)==='week') && preg_match('/^[0-9]+$/', $param2)) 
-			return $this->makeViewWeek($request, $param1, $param3); //task/mansked/2016/week/7
+			if ($request->has('print') && $request->input('print')=='true')
+				return $this->makeViewWeekPrint($request, $param1, $param3);
+			else
+				return $this->makeViewWeek($request, $param1, $param3); //task/mansked/2016/week/7
 		else if(preg_match('/^[A-Fa-f0-9]{32}+$/', $param1) && strtolower($param2)==='edit')
 			return $this->makeEditView($request, $param1);
 		else if(preg_match('/^[A-Fa-f0-9]{32}+$/', $param1))   //preg_match('/^[A-Fa-f0-9]{32}+$/',$action))
@@ -97,7 +100,7 @@ class ManskedController extends Controller {
 	}
 
 	//task/mansked/week/{weekno}
-	public function makeViewWeek($request, $year, $weekno){
+	public function old_makeViewWeek($request, $year, $weekno){
 		//$this->employees->pushFilters(new ByBranch($request));
 		//$this->employees->pushFilters(new Regular());
 		//$this->employees->pushFilters(new Male());
@@ -137,6 +140,118 @@ class ManskedController extends Controller {
 		//$manday = Mansked::getManskedday('2015', $weekno);
 		//$mansked = Mansked::whereWeekno($weekno)->get()->first();
 		//return view('task.mansked.week')->with('manday', $manday)->with('mansked', $mansked);
+	}
+
+	public function makeViewWeek($request, $year, $weekno) {
+
+		$mansked = $this->manskeds
+								->with('manskeddays.manskeddtls')
+								->findWhere([
+									'weekno'		=> $weekno,
+									'year' 			=> $year,
+									'branchid' 	=> $request->user()->branchid
+								])->first();
+
+		$mandtls = collect(array_collapse($mansked->manskeddays->pluck('manskeddtls')->toArray()));
+
+		$empsOnMansked = $mandtls->pluck('employeeid')
+														->unique()
+														->values()
+														->all();
+
+		$depts = $this->employees->byDeptFrmEmpIds($empsOnMansked);
+
+		if(count($mansked) <= 0)
+  		return redirect('/task/mansked');
+
+  	$days = $mansked->manskeddays;
+  	$manskeddays = [];
+		for($h=0; $h<count($depts); $h++) {
+			$arr = $depts[$h]['employees']->toArray(); // extract emp on each dept
+			for($i=0; $i<count($arr); $i++) {
+				for($j=0; $j<count($days); $j++) {
+					
+					$manskeddays[$j]['date'] = $days[$j]->date;
+					$manskeddays[$j]['id'] = strtolower($days[$j]->id);
+
+					$mandtl = $mandtls
+										->where('employeeid', $depts[$h]['employees'][$i]->id)
+  									->where('mandayid', $days[$j]->id)
+  									->first();
+
+					$manskeddays[$j]['mandtl'] = count($mandtl) > 0 ? $mandtl:
+							['timestart'=>0, 'timeend'=>0, 'loading'=>0];
+				}
+				$depts[$h]['employees'][$i]['manskeddays'] = $manskeddays;
+			}
+		}
+		return view('task.mansked.week2')->with('depts', $depts)->with('mansked', $mansked);
+	}
+
+	public function makeViewWeekPrint($request, $year, $weekno){
+
+		
+		$mansked = $this->manskeds
+								->with('manskeddays.manskeddtls')
+								->findWhere([
+									'weekno'		=> $weekno,
+									'year' 			=> $year,
+									'branchid' 	=> $request->user()->branchid
+								])->first();
+
+		$mandtls = collect(array_collapse($mansked->manskeddays->pluck('manskeddtls')->toArray()));
+
+		$empsOnMansked = $mandtls->pluck('employeeid')
+														->unique()
+														->values()
+														->all();
+
+		$depts = $this->employees->byDeptFrmEmpIds($empsOnMansked);
+
+		//$depts = $this->employees->byDepartment($request);
+
+		/*
+		$mansked = Mansked::with('manskeddays')
+											->where('weekno', $weekno)
+											->where('year', $year)
+											->where('branchid', $request->user()->branchid)
+											->first();
+		*/
+  	//return $mansked;		
+  	if(count($mansked) <= 0)
+  		return redirect('/task/mansked');
+
+
+  	$days = $mansked->manskeddays;
+  	$manskeddays = [];
+		for($h=0; $h<count($depts); $h++) {
+			$arr = $depts[$h]['employees']->toArray(); // extract emp on each dept
+			for($i=0; $i<count($arr); $i++) {
+				for($j=0; $j<count($days); $j++) {
+					
+					$manskeddays[$j]['date'] = $days[$j]->date;
+					$manskeddays[$j]['id'] = strtolower($days[$j]->id);
+					/*
+					$mandtl = Mandtl::where('employeeid', $depts[$h]['employees'][$i]->id)
+												->where('mandayid', $days[$j]->id)->get()->first();
+					*/
+					$mandtl = $mandtls
+										->where('employeeid', $depts[$h]['employees'][$i]->id)
+  									->where('mandayid', $days[$j]->id)
+  									->first();
+  				
+
+					$manskeddays[$j]['mandtl'] = count($mandtl) > 0 ? $mandtl:
+							['timestart'=>0, 'timeend'=>0, 'loading'=>0];
+				}
+				$depts[$h]['employees'][$i]['manskeddays'] = $manskeddays;
+			}
+		}
+		
+		//return $depts;
+  	
+
+  	return view('task.mansked.week-print')->with('depts', $depts)->with('mansked', $mansked);
 	}
 
 	public function testWeeks(Request $request) {

@@ -100,6 +100,40 @@ class EmployeeRepository extends BaseRepository implements CacheableInterface
   }
 
 
+
+  /*
+  * @param: array of employeeid
+  * function: get all employees from @param aggregate with dept
+  *
+  */
+  public function byDeptFrmEmpIds(array $empids) {
+      $department = new Department;
+      $d1 = array_flatten($department->whereNotIn('code', ['KIT', 'CAS'])->orderBy('code', 'DESC')->get(['id'])->toArray());
+
+      $depts = [
+        ['code'=>'Din', 'name'=>'Dining', 'employees'=>[], 'deptid'=>$d1],
+        ['code'=>'Kit', 'name'=>'Kitchen', 'employees'=>[], 'deptid'=>['71B0A2D2674011E596ECDA40B3C0AA12']],
+        ['code'=>'Cas', 'name'=>'Cashier', 'employees'=>[], 'deptid'=>['DC60EC42B0B143AFA7D42312DA5D80BF']]
+      ];
+      
+      for($i=0; $i<= 2; $i++) { 
+          $employees = Employee::with('position')
+                                  ->select('lastname', 'firstname', 'positionid', 'employee.id')
+                                  ->join('position', 'position.id', '=', 'employee.positionid')
+                                  //->where('branchid', request()->user()->branchid)
+                                  ->whereIn('deptid', $depts[$i]['deptid'])
+                                  ->whereIn('employee.id', $empids)
+                          //->orderBy('position.ordinal', 'ASC')
+                          ->orderBy('employee.lastname', 'ASC')
+                          ->orderBy('employee.firstname', 'ASC')
+                          ->get();
+          $depts[$i]['employees'] = $employees;
+
+      }
+       return  $depts;
+  }
+
+
     
 
 

@@ -8,8 +8,18 @@ class Manskedday extends BaseModel {
 	protected $table = 'manskedday';
 	public $incrementing = false;
 	public $timestamps = false;
+  protected $dates = ['date'];
  	protected $fillable = ['manskedid', 'date', 'custcount', 'headspend', 'empcount', 'workhrs', 'breakhrs', 'loading'];
  	//public static $header = ['code', 'descriptor'];
+  protected $casts = [
+    'custcount' => 'integer',
+    'empcount' => 'integer',
+    'headspend' => 'float',
+    'workhrs' => 'float',
+    'breakhrs' => 'float',
+    'overload' => 'float',
+    'underload' => 'float'
+  ];
 
 
 
@@ -51,7 +61,7 @@ class Manskedday extends BaseModel {
   public function next($branchid=null){
     
     $res = $this->query()
-      ->select('manskedday.*')
+      ->select('manskedday.id')
       ->join('manskedhdr', function($join){
                             $join->on('manskedday.manskedid', '=', 'manskedhdr.id')
                                 ->where('manskedhdr.branchid', '=', session('user.branchid'));
@@ -65,7 +75,7 @@ class Manskedday extends BaseModel {
   public function previous($branchid=null){
     
     $res = $this->query()
-      ->select('manskedday.*')
+      ->select('manskedday.id')
       ->join('manskedhdr', function($join){
                             $join->on('manskedday.manskedid', '=', 'manskedhdr.id')
                                 ->where('manskedhdr.branchid', '=', session('user.branchid'));
