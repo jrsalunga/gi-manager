@@ -16,6 +16,7 @@ use App\Repositories\Filters\Regular;
 use App\Repositories\Filters\Male;
 use App\Repositories\Filters\Female;
 use App\Repositories\Filters\WithPosition;
+use App\Repositories\Criterias\ActiveEmployeeCriteria as ActiveEmployee;
 
 class ManskedController extends Controller {
 
@@ -25,6 +26,7 @@ class ManskedController extends Controller {
 
 	public function __construct(ManskedRepo $manskeds, EmployeeRepo $employees){
 		$this->employees =  $employees;
+		$this->employees->pushCriteria(new ActiveEmployee);
 		$this->manskeds =  $manskeds;
 
 	}
