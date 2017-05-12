@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>{{ session('user.branchcode') MANSKED {{ $mansked->year }}-W{{ $mansked->weekno }}</title>
+	<title>{{ session('user.branchcode') }} MANSKED {{ $mansked->year }}-W{{ $mansked->weekno }}</title>
 </head>
 
 <style type="text/css">
