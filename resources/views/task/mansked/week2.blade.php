@@ -158,7 +158,7 @@
                         @elseif($manday['mandtl']['loading'] < 0)
                           <span class="label label-danger pull-right" style="letter-spacing: 2px;">{{ $manday['mandtl']['loading']+0 }}</span>
                         @else
-                           - 
+                           
                         @endif
                       
                     </td>
