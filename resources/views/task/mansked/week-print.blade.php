@@ -143,7 +143,7 @@ table td.nbtl {
               	$arr[$k][$i]=0; 
               	$z[$k] = 0;
               ?>
-              @if($manday['mandtl']['daytype']=='1')
+              @if(!empty($manday['mandtl']['daytype']) && $manday['mandtl']['daytype']=='1')
               <?php 
               	$arr[$k][$i]++;
               	$z[$k]++;
