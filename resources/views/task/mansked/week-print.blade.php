@@ -169,7 +169,7 @@ table td.nbtl {
                 </td>
               @else
                 @if(!empty($manday['mandtl']['daytype']) && $manday['mandtl']['daytype']!='0')
-                  <td style="text-align: center; font-size: 10px; color: #ddd;">
+                  <td style="text-align: center; font-size: 10px; color: #aaa;">
                    
                     <?php
                       switch ($manday['mandtl']['daytype']) {
