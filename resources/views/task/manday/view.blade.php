@@ -1,8 +1,8 @@
 @extends('index')
 
-@section('title', '- Create Daily Man Schedule')
+@section('title', '- View Mansked')
 
-@section('body-class', 'mansked-create')
+@section('body-class', 'mansked-view')
 
 
 @section('container-body')

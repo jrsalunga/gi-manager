@@ -1,8 +1,8 @@
 @extends('index')
 
-@section('title', '- Create Daily Man Schedule')
+@section('title', '- Weekly Mansked')
 
-@section('body-class', 'mansked-create')
+@section('body-class', 'mansked-week')
 
 
 @section('container-body')
@@ -147,14 +147,12 @@
                 @foreach($dept['employees'][$i]['manskeddays'] as $manday)
                   @if(!empty($manday['mandtl']['daytype']))
                     <td>
-                      <div>
-                        {{ empty($manday['mandtl']['timestart']) ? '':date('g:i', strtotime($manday['mandtl']['timestart'])) }} 
-                           
+                      <span class="pull-left">
+                        {{ empty($manday['mandtl']['timestart']) || $manday['mandtl']['timestart']=='off' ? '':date('gA', strtotime($manday['mandtl']['timestart'])) }} 
                         - 
-                        {{ empty($manday['mandtl']['timeend']) ? '':date('g:i', strtotime($manday['mandtl']['timeend'])) }}
-                      </div>
-                      <div>
-                        
+                        {{ empty($manday['mandtl']['timeend']) || $manday['mandtl']['timeend']=='off' ? '':date('gA', strtotime($manday['mandtl']['timeend'])) }}
+                      </span>
+                      
                         @if($manday['mandtl']['loading'] > 0)
                           <span class="label label-primary pull-right" style="letter-spacing: 2px;">+{{ $manday['mandtl']['loading']+0 }}</span>
                         @elseif($manday['mandtl']['loading'] < 0)
@@ -162,7 +160,7 @@
                         @else
                            - 
                         @endif
-                      </div>
+                      
                     </td>
                   @else
                     <td>-</td>
