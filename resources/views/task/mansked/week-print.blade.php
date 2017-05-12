@@ -169,7 +169,30 @@ table td.nbtl {
                 </td>
               @else
                 @if(!empty($manday['mandtl']['daytype']) && $manday['mandtl']['daytype']!='0')
-                  <td>{{ $manday['mandtl']['daytype'] }}</td>
+                  <td>
+                    <?php
+                      switch ($manday['mandtl']['daytype']) {
+                        case '2':
+                          echo 'L';
+                          break;
+                        case '3':
+                          echo 'S';
+                          break;
+                        case '4':
+                          echo 'B';
+                          break;
+                        case '5':
+                          echo 'R';
+                          break;
+                        case '6':
+                          echo 'X';
+                          break;
+                        default:
+                          echo 'L';
+                          break;
+                      }
+                    ?>
+                  </td>
                 @else
                   <td>&nbsp;</td>
                 @endif
