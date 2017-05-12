@@ -1,17 +1,16 @@
-<?php
+<?php namespace App\Http\Controllers;
 
-namespace App\Http\Controllers;
-
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Employee;
+use DB;
+use URL;
+use Auth;
+use Carbon\Carbon;
 use App\Models\Branch;
+use App\Models\Employee;
+use App\Http\Controllers\Controller;
 use App\Models\Manskedhdr as Mansked;
 use App\Models\Manskedday as Manday;
 use App\Models\Manskeddtl as Mandtl;
-use Auth;
-use URL;
-use Carbon\Carbon;
+use Illuminate\Http\Request;
 use App\Repositories\EmployeeRepository as EmployeeRepo;
 use App\Repositories\ManskeddayRepository as MandayRepo;
 
@@ -385,7 +384,6 @@ class ManskeddayController extends Controller {
 		          foreach($request->input('manskeddtls') as $mandtl){
 								$n = Mandtl::find($mandtl['id']);
 								if(count($n) > 0){
-									//dd(count($n));
 									foreach ($mandtl as $key => $value) {
 										if($mandtl['timestart']=='off' && $key=='timestart'){
 											$n->breakstart = NULL;
@@ -398,7 +396,6 @@ class ManskeddayController extends Controller {
 									}
 									$n->save();
 								} else {
-									//dd($mandtl);
 									$m = new Mandtl;
 									foreach ($mandtl as $key => $value) {
 										if($key=='id')
