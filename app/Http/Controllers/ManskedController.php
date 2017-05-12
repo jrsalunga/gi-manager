@@ -26,7 +26,7 @@ class ManskedController extends Controller {
 
 	public function __construct(ManskedRepo $manskeds, EmployeeRepo $employees){
 		$this->employees =  $employees;
-		//$this->employees->pushCriteria(new ActiveEmployee);
+		$this->employees->pushCriteria(new ActiveEmployee);
 		$this->manskeds =  $manskeds;
 
 	}
@@ -250,7 +250,7 @@ class ManskedController extends Controller {
 			}
 		}
 		
-		//return $depts;
+		return $depts;
   	
 
   	return view('task.mansked.week-print')->with('depts', $depts)->with('mansked', $mansked);
