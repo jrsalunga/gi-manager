@@ -250,7 +250,7 @@ class ManskedController extends Controller {
 			}
 		}
 		
-		return $depts;
+		//return $depts;
   	
 
   	return view('task.mansked.week-print')->with('depts', $depts)->with('mansked', $mansked);
