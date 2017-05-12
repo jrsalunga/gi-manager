@@ -168,10 +168,10 @@ table td.nbtl {
                   </div>
                 </td>
               @else
-                @if($manday['mandtl']['daytype']=='0')
+                @if(!empty($manday['mandtl']['daytype']) && $manday['mandtl']['daytype']=='0')
                   <td>&nbsp;</td>
                 @else
-                  <td>{{ $manday['mandtl']['daytype']=='0' }}</td>
+                  <td>{{ $manday['mandtl']['daytype'] }}</td>
                 @endif
               @endif
             @endforeach
