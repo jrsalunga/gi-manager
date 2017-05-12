@@ -13,6 +13,7 @@ use App\Models\Manskeddtl as Mandtl;
 use Illuminate\Http\Request;
 use App\Repositories\EmployeeRepository as EmployeeRepo;
 use App\Repositories\ManskeddayRepository as MandayRepo;
+use App\Repositories\Criterias\ActiveEmployeeCriteria as ActiveEmployee;
 
 class ManskeddayController extends Controller {
 
@@ -22,6 +23,7 @@ class ManskeddayController extends Controller {
 
 	public function __construct(EmployeeRepo $employees, MandayRepo $manday) {
 		$this->employees = $employees;
+		$this->employees->pushCriteria(new ActiveEmployee);
 		$this->manday = $manday;
 		$this->branchid = Auth::user()->branchid;
 	}

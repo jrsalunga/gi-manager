@@ -26,7 +26,7 @@ class ManskedController extends Controller {
 
 	public function __construct(ManskedRepo $manskeds, EmployeeRepo $employees){
 		$this->employees =  $employees;
-		$this->employees->pushCriteria(new ActiveEmployee);
+		//$this->employees->pushCriteria(new ActiveEmployee);
 		$this->manskeds =  $manskeds;
 
 	}
