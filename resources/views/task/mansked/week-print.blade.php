@@ -169,7 +169,8 @@ table td.nbtl {
                 </td>
               @else
                 @if(!empty($manday['mandtl']['daytype']) && $manday['mandtl']['daytype']!='0')
-                  <td>
+                  <td style="text-align: center; font-size: 10px;">
+                   <em>
                     <?php
                       switch ($manday['mandtl']['daytype']) {
                         case '2':
@@ -192,6 +193,7 @@ table td.nbtl {
                           break;
                       }
                     ?>
+                    </em>
                   </td>
                 @else
                   <td>&nbsp;</td>
