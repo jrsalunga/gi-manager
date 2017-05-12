@@ -49,7 +49,7 @@ table td.nbtl {
 </style>
 <body onload="window.print()">
 
-<a class="prn" hrefs="javascript:window.print();">Print</a>
+<a class="prn" href="javascript:window.print();">Print</a>
 
 <h4 style="margin: 5px 0 0 0;">{{ session('user.branch') }} - {{ session('user.branchcode') }}</h4>
 <h4 style="margin: 5px 0 10px 0;">Manpower Sked {{ $mansked->year }}</h4>
@@ -168,7 +168,11 @@ table td.nbtl {
                   </div>
                 </td>
               @else
-                <td>&nbsp;</td>
+                @if($manday['mandtl']['daytype']=='0')
+                  <td>&nbsp;</td>
+                @else
+                  <td>{{ $manday['mandtl']['daytype']=='0' }}</td>
+                @endif
               @endif
             @endforeach
          
