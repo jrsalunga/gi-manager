@@ -402,7 +402,7 @@ class ManskeddayController extends Controller {
 											$m->id = $m->get_uid();
 										else
 											if ($mandtl['timestart']=='off' && $key=='timestart')
-												$n->{$key} = NULL;
+												$m->{$key} = NULL;
 											else 
 												$m->{$key} = $value;
 									}
