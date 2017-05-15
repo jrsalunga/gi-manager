@@ -268,4 +268,29 @@ class DailySalesRepository extends BaseRepository {
   }
 
 
+  public function firstOrNew(array $attributes, $field) {
+      
+    $attr_idx = [];
+    
+    if (is_array($field)) {
+      foreach ($field as $value) {
+        $attr_idx[$value] = array_pull($attributes, $value);
+      }
+    } else {
+      $attr_idx[$field] = array_pull($attributes, $field);
+    }
+
+    $m = $this->model();
+    $model = $m::firstOrNew($attr_idx);
+    //$this->model->firstOrNew($attr_idx);
+    
+    foreach ($attributes as $key => $value) {
+      $model->{$key} = $value;
+    }
+
+    return $model->save() ? $model : false;
+
+  }
+
+
 }

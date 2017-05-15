@@ -13,6 +13,7 @@ use App\Models\Manskeddtl as Mandtl;
 use Illuminate\Http\Request;
 use App\Repositories\EmployeeRepository as EmployeeRepo;
 use App\Repositories\ManskeddayRepository as MandayRepo;
+use App\Repositories\DailySalesRepository as DSRepo;
 use App\Repositories\Criterias\ActiveEmployeeCriteria as ActiveEmployee;
 
 class ManskeddayController extends Controller {
@@ -20,8 +21,10 @@ class ManskeddayController extends Controller {
 	protected $branchid = '';
 	private $employees;
 	protected $manday;
+	protected $ds;
 
-	public function __construct(EmployeeRepo $employees, MandayRepo $manday) {
+	public function __construct(EmployeeRepo $employees, MandayRepo $manday, DSRepo $ds) {
+		$this->ds = $ds;
 		$this->employees = $employees;
 		$this->employees->pushCriteria(new ActiveEmployee);
 		$this->manday = $manday;
@@ -414,6 +417,19 @@ class ManskeddayController extends Controller {
 									//return 'no mandtl found!';
 								}
 							}
+
+							$attrs = [
+								'branchid' 		=> $request->user()->branchid,
+								'date'				=> $manday->date->format('Y-m-d'),
+								'managerid'		=> $request->user()->id,
+								'target_cust'	=> $manday->custcount,
+								'target_headspend' 	=> $manday->headspend,
+								'target_empcount' 	=> $manday->empcount,
+								'target_mancostpct' => number_format((($manday->empcount*$manday->manskedhdr->mancost)/($manday->custcount*$manday->headspend)*100),2)
+							];
+
+							$this->ds->firstOrNew($attrs, ['branchid', 'date']);
+
 		        } catch(\Exception $e) {
 		          \DB::rollback();
 		          throw $e;

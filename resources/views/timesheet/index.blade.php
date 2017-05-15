@@ -68,6 +68,13 @@
 
 
     @if(count($data[0])>0)
+
+
+    <div>
+      <span></span>
+
+    </div>
+
     <div class="table-responsive">
     <table class="table table-hover table-bordered" style="margin-top: 0px;">
       <thead>
@@ -119,6 +126,18 @@
       </tbody>
     </table>
     </div>
+
+    <div style="margin: 10px 0;  font-size: 11px;">
+      <span>Legends:</span> 
+
+      <ul style="list-style: none;">
+        <li><div style="min-width: 30px; display: inline-block;" class="bg-success">&nbsp;</div> Punch In/Out</li>
+        <li><div style="min-width: 30px; display: inline-block;" class="bg-warning">&nbsp;</div> Manual Time In/Out</li>
+        <li><div style="min-width: 30px; display: inline-block;" class="bg-danger">&nbsp;</div> Not Assigned on this Branch / Resigned / (RM or AM or SKH) </li>
+      </ul>
+      
+    </div>
+
     @else
       No employee data
     @endif

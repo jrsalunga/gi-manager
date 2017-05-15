@@ -49,6 +49,11 @@ class DailySales extends BaseModel {
     return $value;
   }
 
+
+  public function targetSales(){
+    return $this->target_cust*$this->target_headspend;
+  }
+
 	
 	
  
