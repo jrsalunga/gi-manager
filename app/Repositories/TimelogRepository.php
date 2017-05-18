@@ -43,6 +43,7 @@ class TimelogRepository extends BaseRepository
                       $date->copy()->addDay()->format('Y-m-d').' 05:59:59' // '2015-11-14 05:59:59'
                     ])
                   ->where('branchid', session('user.branchid'))
+                  ->where('ignore', 0)
                   ->orderBy('datetime', 'ASC')
                   ->orderBy('txncode', 'ASC');
       });
