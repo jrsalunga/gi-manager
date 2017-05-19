@@ -122,7 +122,8 @@ class Manskedhdr extends BaseModel {
 */
   public function newWeek($branchid = null){
     $arr = [];
-    $obj = $this->query()->where('branchid', $branchid)->orderBy('createdate', 'DESC')->get()->first();
+    //$obj = $this->query()->where('branchid', $branchid)->orderBy('created_at', 'DESC')->get()->first();
+    $obj = $this->query()->where('branchid', $branchid)->orderBy('year', 'DESC')->orderBy('weekno', 'DESC')->get()->first();
     if(count($obj) <= 0){
       $arr['weekno'] = date('W', strtotime('now'));
       $arr['year'] = date('Y', strtotime('now'));

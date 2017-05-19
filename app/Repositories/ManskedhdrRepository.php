@@ -50,7 +50,7 @@ class ManskedhdrRepository extends BaseRepository
 
   public function newWeek(Request $request){
     $arr = [];
-    $obj = Mansked::where('branchid', $request->user()->branchid)->orderBy('createdate', 'DESC')->get()->first();
+    $obj = Mansked::where('branchid', $request->user()->branchid)->orderBy('created_at', 'DESC')->get()->first();
     if(count($obj) <= 0){
       $arr['weekno'] = date('W', strtotime('now'));
       $arr['year'] = date('Y', strtotime('now'));

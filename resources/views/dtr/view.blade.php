@@ -71,7 +71,7 @@
       @foreach($dtrs as $dtr)
         <tr>
           <td>
-            <a href="/dtr/{{$dtr->date->year}}/{{pad($dtr->date->month)}}/{{pad($dtr->date->format('d'))}}/{{$dtr->employee->lid()}}">
+            <a href="/dtr/{{$dtr->date->year}}/{{pad($dtr->date->month)}}/{{pad($dtr->date->format('d'))}}/{{$dtr->employee->id}}">
               {{ $x }}. {{ $dtr->employee->lastname }}, {{ $dtr->employee->firstname }}
             </a>
           </td>
