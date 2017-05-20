@@ -120,7 +120,7 @@
             <input type="text" class="form-control" id="manager" value="{{ $data['manager'] }}"  readonly>
           </div>
           <input type="hidden" id="managerid" name="managerid" value="{{ $data['managerid'] }}">
-          <input type="hidden" name="date" id="date" value="{{ date('Y-m-d', strtotime('now')) }}">
+          
           
         </div>
       </div>

@@ -273,7 +273,7 @@ class ManskedController extends Controller {
 		
 
 		$this->validate($request, [
-        'date' => 'required|date|max:10',
+        //'date' => 'required|date|max:10',
         'weekno' => 'required',
         'year' => 'required',
     ]);
@@ -308,12 +308,15 @@ class ManskedController extends Controller {
 		return $days;
 		*/
 
+		$x = c(firstDayOfWeek($request->input('weekno'), $request->input('year'))->format('Y-m-d'));
+
 
 		//$mansked = array_shift($mansked);
 		$mansked = new Mansked;
 		//return $mansked->getRefno();
 		$mansked->refno 		= $mansked->getRefno();
-		$mansked->date 			= $request->input('date');
+		//$mansked->date 			= $request->input('date');
+		$mansked->date 			= $x->format('Y-m-d');
 		$mansked->weekno		= $request->input('weekno');
 		$mansked->year			= $request->input('year');
 		$mansked->branchid 	= $request->input('branchid');
@@ -332,7 +335,7 @@ class ManskedController extends Controller {
     }
     */
     
-    $x = c(firstDayOfWeek($request->input('weekno'), $request->input('year'))->format('Y-m-d'));
+    
 
     for($c=0;$c<7;$c++) {
     	$manday = new Manday;
