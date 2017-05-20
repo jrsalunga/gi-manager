@@ -323,6 +323,7 @@ class ManskedController extends Controller {
 		$mansked->managerid = $request->input('managerid');
 		$mansked->mancost 	= $request->input('mancost');
 		$mansked->notes 		= $request->input('notes');
+		$mansked->updated_at= c();
 		$mansked->id 				= $mansked->get_uid();
 
 		$mandays = [];
