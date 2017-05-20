@@ -263,7 +263,7 @@ class ManskeddayController extends Controller {
 			$e = explode(':', $end);
 
 			for($i = $s[0]; $i < $e[0]; $i++){
-				$arr[] = $i;
+				$arr[] = intval($i);
 			}
 		}
 		return $arr;
