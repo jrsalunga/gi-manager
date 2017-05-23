@@ -21,9 +21,7 @@ class Manskedhdr extends BaseModel {
  
 
 
-  public function __construct(){
-    
-  }
+  
 
  	
   /***************** relations *****************************************************/

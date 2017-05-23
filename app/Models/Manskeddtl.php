@@ -11,6 +11,9 @@ class Manskeddtl extends BaseModel {
  	protected $fillable = ['mandayid', 'employeeid', 'daytype', 'timestart', 'breakstart', 'breakend', 'timeend', 'workhrs', 'breakhrs', 'loading'];
  	//public static $header = ['code', 'descriptor'];
 
+
+ 
+
 	public function manskedday() {
     return $this->belongsTo('App\Models\Manskedday', 'mandayid');
   }

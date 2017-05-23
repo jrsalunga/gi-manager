@@ -147,6 +147,7 @@
                 @foreach($dept['employees'][$i]['manskeddays'] as $manday)
                   @if(!empty($manday['mandtl']['daytype']))
                     <td>
+                      @if($manday['mandtl']['daytype'] <= 1)
                       <span class="pull-left">
                         {{ empty($manday['mandtl']['timestart']) || $manday['mandtl']['timestart']=='off' ? '':date('gA', strtotime($manday['mandtl']['timestart'])) }} 
                         - 
@@ -160,6 +161,12 @@
                         @else
                            
                         @endif
+                      @else
+
+                      <span style="color: #bbb;">
+                        {{ dayDesc($manday['mandtl']['daytype']) }}
+                      </span>
+                      @endif
                       
                     </td>
                   @else

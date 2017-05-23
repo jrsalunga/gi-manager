@@ -21,7 +21,7 @@ class Manskedday extends BaseModel {
     'underload' => 'float'
   ];
 
-
+  
 
  	/***************** relations *****************************************************/
 	public function manskedhdr() {
