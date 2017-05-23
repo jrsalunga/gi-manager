@@ -17,7 +17,7 @@ class Timelog extends BaseModel {
   {
     parent::__construct($attributes);
     if (app()->environment()==='production')
-      $this->setConnection('mysql');
+      $this->setConnection('mysql-tk');
     else  
     	$this->setConnection('tk-live');
   }
