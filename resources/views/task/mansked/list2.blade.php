@@ -41,37 +41,35 @@
     </nav>
 
     @include('_partials.alerts')
-
+    
     <div class="panel-group" id="accordion-week-days" role="tablist" aria-multiselectable="true">
-      <div class="panel panel-warning">
-        <div class="panel-heading" role="tab" id="headingOne">
-          <h4 class="panel-title">
-            <!--
-            <a role="button" data-toggle="collapse" data-parent="#accordion-week-days" href="#collapse-week{{ $new['weekno'] }}" aria-expanded="false" aria-controls="collapse-week{{ $new['weekno'] }}" class="collapsed">
-              <span class="glyphicon glyphicon-option-vertical"></span>
-            </a>
-            <a role="button" data-toggle="collapse" data-parent="#accordion-week-days" href="#collapse-week{{ $new['weekno'] }}" aria-expanded="false" aria-controls="collapse-week{{ $new['weekno'] }}" class="collapsed">
-              Week {{ $new['weekno'] }}
-            </a-->
-            {{ $new['year'] }} - W{{ $new['weekno'] }}
-            <span style="margin-left: 10%;">
-              {{ $new['weekdays'][0]->format('D, M d') }} - 
-              {{ $new['weekdays'][6]->format('D, M d') }}
-            </span>
-            @if(count($manskeds) > 1)
-            <a href="#myModal" class="pull-right" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-duplicate"></span></a>
-            @endif
-            <a href="/task/mansked/add" class="pull-right hidden-xs" style="margin-right:10%;"><span class="glyphicon glyphicon-plus"></span> create</a>
-          </h4>
-        </div>
-        <div id="collapse-week{{ $new['weekno'] }}" class="panel-collapse collapse " role="tabpanel" aria-labelledby="week{{ $new['weekno'] }}">
-          <div class="panel-body">
-            @for($i=0; $i<6; $i++)
-            <button class="btn btn-default" disabled><i class="fa fa-calendar-o"></i> {{ $new['weekdays'][$i]->format('D, M d') }}</button>
-            @endfor
+      
+
+      @if ($manskeds->currentPage()=='1')
+        <div class="panel panel-warning">
+          <div class="panel-heading" role="tab" id="headingOne">
+            <h4 class="panel-title">
+              {{ $new['year'] }} - W{{ $new['weekno'] }}
+              <span style="margin-left: 10%;">
+                {{ $new['weekdays'][0]->format('D, M d') }} - 
+                {{ $new['weekdays'][6]->format('D, M d') }}
+              </span>
+              @if(count($manskeds) > 1)
+              <a href="#myModal" class="pull-right" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-duplicate"></span></a>
+              @endif
+              <a href="/task/mansked/add" class="pull-right hidden-xs" style="margin-right:10%;"><span class="glyphicon glyphicon-plus"></span> create</a>
+            </h4>
           </div>
-        </div>
-      </div>
+          <div id="collapse-week{{ $new['weekno'] }}" class="panel-collapse collapse " role="tabpanel" aria-labelledby="week{{ $new['weekno'] }}">
+            <div class="panel-body">
+              @for($i=0; $i<6; $i++)
+              <button class="btn btn-default" disabled><i class="fa fa-calendar-o"></i> {{ $new['weekdays'][$i]->format('D, M d') }}</button>
+              @endfor
+            </div>
+          </div>
+        </div> <!-- .panel.panel-warning -->
+      @endif
+
       @if($manskeds[0] == null)
 
       </div>

@@ -47,7 +47,7 @@ table td.nbtl {
  }
 }
 </style>
-<body onload="window.print()">
+<body>
 
 <a class="prn" href="javascript:window.print();">Print</a>
 
