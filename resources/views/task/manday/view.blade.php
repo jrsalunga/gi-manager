@@ -192,13 +192,20 @@
                 @endif
 
               @else
-                <td class="text-right">-</td>
-                <td class="text-right">-</td>
-                <td class="text-right">-</td>
-                <td class="text-right">-</td>
-
-                <td class="text-right">-</td>
-                <td class="text-right">-</td>
+                @if($dept['employees'][$i]['manskeddtl']['daytype']>1)
+                  <td colspan="6" class="text-center">
+                    <span style="color: #bbb;">
+                      {{ dayDesc($dept['employees'][$i]['manskeddtl']['daytype']) }}
+                    </span>
+                  </td>
+                @else
+                  <td class="text-right">-</td>
+                  <td class="text-right">-</td>
+                  <td class="text-right">-</td>
+                  <td class="text-right">-</td>
+                  <td class="text-right">-</td>
+                  <td class="text-right">-</td>
+                @endif
               @endif
             </tr>
             <?php $ctr++ ?>
