@@ -65,6 +65,8 @@ class TimesheetController extends Controller
 			$timesheets[$key]['timelog'] = $this->timelog->generateTimesheet($employee->id, $date, collect($timelogs));
 		}
 
+		//return $timesheets;
+
 		$header = new StdClass;
 		$header->totalWorkedHours = collect($timesheets)->pluck('timelog')->sum('workedHours');
 
