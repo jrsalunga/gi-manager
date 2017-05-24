@@ -177,7 +177,12 @@ Route::controller('datatables', 'DatatablesController', [
 ]);
 
 
+get('conn/timelog', function(){
+	
+	$timelog = new \App\Models\Timelog;
 
+	return $timelog->getConnectionName();
+});
 
 
 
