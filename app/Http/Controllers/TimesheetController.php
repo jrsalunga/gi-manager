@@ -60,12 +60,14 @@ class TimesheetController extends Controller
 			->skipCriteria()
 			->getRawEmployeeTimelog($employeeid, $date, $date)
 			->all();
+
+			$timesheets[$key]['raw_timelog'] = $timelogs;
 	
 			//array_push($timesheets[$key]['timelog'], $this->timelog->generateTimesheet($employee->id, $date, collect($timelogs)));
 			$timesheets[$key]['timelog'] = $this->timelog->generateTimesheet($employee->id, $date, collect($timelogs));
 		}
 
-		//return $timesheets;
+		return $timesheets;
 
 		$header = new StdClass;
 		$header->totalWorkedHours = collect($timesheets)->pluck('timelog')->sum('workedHours');
