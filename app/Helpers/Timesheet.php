@@ -39,7 +39,7 @@ class Timesheet
 		for ($i=1; $i < 5; $i++) { 
         
       $log = $timelogs->where('employeeid', $employeeid)
-                      ->where('ignore', 0)
+                      //->where('ignore', 0)
                       ->where('txncode', $i)
                       ->sortBy('datetime')
                       ->first();
