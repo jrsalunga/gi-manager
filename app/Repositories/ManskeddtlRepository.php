@@ -2,9 +2,21 @@
 
 use App\User;
 use App\Models\Manskeddtl;
+use Prettus\Repository\Eloquent\BaseRepository;
+use Prettus\Repository\Traits\CacheableRepository;
+use Prettus\Repository\Contracts\CacheableInterface;
 
-class ManskeddtlRepository
+class ManskeddtlRepository extends BaseRepository implements CacheableInterface
 {
+
+  use CacheableRepository;
+
+
+
+  function model() {
+    return "App\\Models\\Manskeddtl";
+  }
+
     /**
      * Get all of the tasks for a given user.
      *

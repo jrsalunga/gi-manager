@@ -121,6 +121,8 @@
             <thead>
               <tr>
                 <th>Day(s)</th>
+                <th>Day Type</th>
+                <th class="text-right">Time Start</th>
                 <th class="text-right">Rendered Hours</th>
                 <th class="text-right">Tardy Hours</th>
                 <th class="text-right">OT Hours</th>
@@ -131,6 +133,9 @@
               </tr>
             </thead>
             <tbody>
+            <?php
+              $tot_tardy = 0;
+            ?>
             @foreach($timesheets as $timesheet)
               <tr 
                 @if($timesheet['date']->isToday())
@@ -143,48 +148,92 @@
               >
                 <td>
                   {{-- $timesheet['date']->format('Y-m-d') --}}
-                  <a href="/{{brcode()}}/timesheet?date={{$timesheet['date']->format('Y-m-d')}}">
+                  <a href="/timelog/employee/{{$employee->lid()}}?date={{$timesheet['date']->format('Y-m-d')}}">
                   {{ $timesheet['date']->format("D, M j") }}
                   </a>
                 </td>
-                <td class="text-right">
-                  @if($timesheet['timelog']->workHours->format('H:i')!=='00:00')
-                    <small><em>({{$timesheet['timelog']->workHours->format('H:i')}})</em></small>
+                <td>
+                  @if($timesheet['mandtl'])
+                    {{ dayDesc($timesheet['mandtl']->daytype) }}
+                  @else
+                    <span style="color: #bbb;">No Mansked</span>
                   @endif
-                  {{ $timesheet['timelog']->workedHours or '' }}
                 </td>
-                 <td class="text-right">
-                  
+                <td class="text-right">
+                  @if($timesheet['mandtl'])
+                  {{ empty($timesheet['mandtl']->timestart) || $timesheet['mandtl']->timestart=='off' ? '':date('g A', strtotime($timesheet['mandtl']->timestart)) }}
+                  @else
+                    
+                  @endif
+                </td>
+                <td class="text-right">
+                  <!--
+                  @if($timesheet['timelog']->workHours->format('H:i')!=='00:00')
+                    <small><em style="color: #aaa;">({{$timesheet['timelog']->workHours->format('H:i')}})</em></small>
+                  @endif
+                  -->
+                  <strong class="help" data-toggle="tooltip" title="{{$timesheet['timelog']->workHours->format('H')}} Hour(s) and {{$timesheet['timelog']->workHours->format('i')}} Minute(s)">
+                    {{ $timesheet['timelog']->workedHours or '' }}
+                  </strong>
+                </td>
+                <td class="text-right">
+                  @if($timesheet['tardy']>0)
+                    {{ $timesheet['tardy'] }}
+                  @endif 
                 </td>
                  <td class="text-right">
                   {{ $timesheet['timelog']->otedHours or '' }}
                 </td>
                 <td class="text-right">
                   @if(!empty($timesheet['timelog']->timein))
-                    {{ $timesheet['timelog']->timein->timelog->datetime->format('h:i A') }}
+                      @if($timesheet['timelog']->timein->timelog->entrytype=='2')
+                        <span class="text-danger">
+                      @else
+                        <span>
+                      @endif
+                      {{ $timesheet['timelog']->timein->timelog->datetime->format('h:i A') }}
+                      </span>
                   @else
-                    -
+                    
                   @endif
                 </td>
                 <td class="text-right">
                   @if(!empty($timesheet['timelog']->breakin))
+                    @if($timesheet['timelog']->breakin->timelog->entrytype=='2')
+                      <span class="text-danger">
+                    @else
+                      <span>
+                    @endif
                     {{ $timesheet['timelog']->breakin->timelog->datetime->format('h:i A') }}
+                    </span>
                   @else
-                    -
+                    
                   @endif
                 </td>
                 <td class="text-right">
                   @if(!empty($timesheet['timelog']->breakout))
+                    @if($timesheet['timelog']->breakout->timelog->entrytype=='2')
+                      <span class="text-danger">
+                    @else
+                      <span>
+                    @endif
                     {{ $timesheet['timelog']->breakout->timelog->datetime->format('h:i A') }}
+                    </span>
                   @else
-                    -
+                    
                   @endif
                 </td>
                 <td class="text-right">
                   @if(!empty($timesheet['timelog']->timeout))
+                    @if($timesheet['timelog']->timeout->timelog->entrytype=='2')
+                      <span class="text-danger">
+                    @else
+                      <span>
+                    @endif
                     {{ $timesheet['timelog']->timeout->timelog->datetime->format('h:i A') }}
+                    </span>
                   @else
-                    -
+                    
                   @endif
                 </td>
               </tr>
