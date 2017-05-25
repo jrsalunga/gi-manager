@@ -7,9 +7,13 @@ use Illuminate\Http\Request;
 use App\Models\Manskedhdr as Mansked;
 use Carbon\Carbon;
 use Prettus\Repository\Eloquent\BaseRepository;
+use Prettus\Repository\Traits\CacheableRepository;
+use Prettus\Repository\Contracts\CacheableInterface;
 
-class ManskedhdrRepository extends BaseRepository 
+class ManskedhdrRepository extends BaseRepository implements CacheableInterface
 {
+
+  use CacheableRepository;
 
   private $manskedhdrs;
 

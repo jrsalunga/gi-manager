@@ -291,7 +291,7 @@ class TimelogController extends Controller {
 
 		$ts = new \App\Helpers\Timesheet;
 		$timesheet = $ts->generate($employee->id, $date, $timelogs);
-
+		return dd($timesheet);
 		return view('timelog.employee')
 								->with('date', $date)
 								->with('mandtl', $mandtl)
