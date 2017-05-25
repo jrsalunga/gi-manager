@@ -27,7 +27,7 @@
               <span class="gly gly-stopwatch"></span>
               <span class="hidden-xs hidden-sm">Timelogs</span>
             </button>
-            <a href="/{{brcode()}}/timesheet" class="btn btn-default">
+            <a href="/{{brcode()}}/timesheet?date={{ $date->format('Y-m-d') }}" class="btn btn-default">
               <span class="glyphicon glyphicon-th-list"></span>
               <span class="hidden-xs hidden-sm">Timesheet</span>
             </a>

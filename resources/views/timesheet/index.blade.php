@@ -8,7 +8,7 @@
 <div class="container-fluid">
 	<ol class="breadcrumb">
     <li><span class="gly gly-shop"></span> <a href="/{{brcode()}}/dashboard">{{ $branch }}</a></li>
-    <li>Timesheet</li>
+    <li><a href="/{{brcode()}}/timesheet">Timesheet</a></li>
     <li class="active">{{ $dr->date->format('D, M j, Y') }}</li>
   </ol>
 
@@ -17,11 +17,11 @@
       <div class="container-fluid">
         <div class="navbar-form">
           <div class="btn-group" role="group">
-            <a href="/{{brcode()}}/dashboard" class="btn btn-default" title="Back to Main Menu">
-              <span class="gly gly-unshare"></span>
-              <span class="hidden-xs hidden-sm">Back</span>
+            <a href="/task/mansked" class="btn btn-default">
+              <span class="gly gly-notes-2"></span>
+              <span class="hidden-xs hidden-sm">Mansked</span>
             </a> 
-             <a href="/timelog" class="btn btn-default">
+             <a href="/{{brcode()}}/timelog" class="btn btn-default">
               <span class="gly gly-stopwatch"></span>
               <span class="hidden-xs hidden-sm">Timelogs</span>
             </a>
@@ -115,7 +115,17 @@
               @else
                 <td class="text-right {{ $t['entrytype']=='2'?'bg-warning':'bg-success' }}" 
                 title="{{ $t['datetime']->format('D, M j, Y h:i:s A') }} @ {{ $t['createdate']->format('D, M j, Y h:i:s A') }}">
-                  {{ $t['datetime']->format('h:i A') }}
+                  
+                  @if($e['counts'][$key]>1)
+
+                    <a href="/{{brcode()}}/timelog/employee/{{$e['employee']->lid()}}?date={{$dr->date->format('Y-m-d')}}&txncode={{$t['txncode']}}" class="text-danger">
+                    <span class="label label-danger pull-left" style="font-size: 9px;">{{ $e['counts'][$key] }}</span>
+                    </a>
+                      {{ $t['datetime']->format('h:i A') }}
+                  @else
+                    {{ $t['datetime']->format('h:i A') }}
+                  @endif
+
                 </td>
               @endif
            

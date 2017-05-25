@@ -98,10 +98,12 @@ class TimelogRepository extends BaseRepository
       $arr[0][$key]['onbr'] = in_array($emp['id'], $br_empids) ? true : false; // on branch??
 
       for ($i=1; $i < 5; $i++) { 
-        $arr[0][$key]['timelogs'][$i] = $col->where('employeeid', $emp['id'])
+        $c = $col->where('employeeid', $emp['id'])
                                             ->where('txncode', $i)
-                                            ->sortBy('datetime')
-                                            ->first();
+                                            ->sortBy('datetime');
+                                            
+        $arr[0][$key]['counts'][$i] = count($c);
+        $arr[0][$key]['timelogs'][$i] = $c->first();
       }
       
       $raw = $raw_timelogs->where('employeeid', $e->id)->sortBy('datetime');

@@ -14,7 +14,7 @@
   
   <ol class="breadcrumb">
     <li><span class="gly gly-shop"></span> <a href="/{{brcode()}}/dashboard">{{ $branch }}</a></li>
-    <li>Timesheet</li>
+    <li><a href="/{{brcode()}}/timesheet">Timesheet</a></li>
     <li class="active">{{ $employee->code or '' }}</li>
     <!--
     <li class="active">{{ $dr->date->format('D, M j, Y') }}</li>
@@ -26,11 +26,11 @@
       <div class="container-fluid">
         <div class="navbar-form">
           <div class="btn-group" role="group">
-            <a href="/{{brcode()}}/dashboard" class="btn btn-default" title="Back to Main Menu">
-              <span class="gly gly-unshare"></span>
-              <span class="hidden-xs hidden-sm">Back</span>
+            <a href="/task/mansked" class="btn btn-default">
+              <span class="gly gly-notes-2"></span>
+              <span class="hidden-xs hidden-sm">Mansked</span>
             </a> 
-            <a href="/timelog" class="btn btn-default">
+            <a href="/{{brcode()}}/timelog" class="btn btn-default">
               <span class="gly gly-stopwatch"></span>
               <span class="hidden-xs hidden-sm">Timelogs</span>
             </a>
@@ -39,27 +39,11 @@
               <span class="hidden-xs hidden-sm">Timesheet</span>
             </button>
           </div> <!-- end btn-grp -->
-          <div class="btn-group" role="group">
-            <a href="/timelog/add?ref=timesheet" class="btn btn-default" title="Back to Main Menu">
-              <span class="glyphicon glyphicon-plus"></span>
-              <span class="hidden-xs hidden-sm">Add Timelog</span>
-            </a> 
-          </div>
           <div class="btn-group pull-right clearfix" role="group">
             <div id="reportrange" class="btn btn-default">
               <span class="glyphicon glyphicon-calendar"></span>
               <span class="p">{{ $dr->fr->format("m/d/Y") }} - {{ $dr->to->format("m/d/Y") }}</span> 
             </div>
-            <!--
-            <a href="/{{brcode()}}/timesheet/{{$employee->lid()}}?date={{ $dr->date->copy()->subDay()->format('Y-m-d') }}" class="btn btn-default" title="{{ $dr->date->copy()->subDay()->format('Y-m-d') }}">
-              <span class="glyphicon glyphicon-chevron-left"></span>
-            </a>
-            <input type="text" class="btn btn-default" id="dp-date" value="{{ $dr->date->format('m/d/Y') }}" style="max-width: 110px;" readonly>
-            <label class="btn btn-default" for="dp-date"><span class="glyphicon glyphicon-calendar"></span></label>
-            <a href="/{{brcode()}}/timesheet/{{$employee->lid()}}?date={{ $dr->date->copy()->addDay()->format('Y-m-d') }}" class="btn btn-default" title="{{ $dr->date->copy()->addDay()->format('Y-m-d') }}">
-              <span class="glyphicon glyphicon-chevron-right"></span>
-            </a>
-            -->
           </div>
           
         </div>
