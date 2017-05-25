@@ -10,7 +10,8 @@ class Timelog extends BaseModel {
  	public static $header = ['code', 'lastname'];
  	protected $casts = [
     'txncode' => 'integer',
-    'entrytype' => 'integer'
+    'entrytype' => 'integer',
+    'ignore' => 'integer'
   ];
 
   public function __construct(array $attributes = [])
