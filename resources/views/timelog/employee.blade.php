@@ -9,7 +9,9 @@
 
   <ol class="breadcrumb">
     <li><span class="gly gly-shop"></span> <a href="/{{brcode()}}/dashboard">{{ $branch }}</a></li>
-    <li class="active">Timelog</li>
+    <li><a href="/{{brcode()}}/timelog">Timelog</a></li>
+    <li><a href="/{{brcode()}}/timelog/employee/{{$employee->lid()}}">{{$employee->code}}</a></li>
+    <li class="active">{{ $date->format('D, M j, Y') }}</li>
   </ol>
 
   <div>
@@ -17,9 +19,9 @@
       <div class="container-fluid">
         <div class="navbar-form">
           <div class="btn-group" role="group">
-            <a href="/{{brcode()}}/dashboard" class="btn btn-default" title="Back to Main Menu">
-              <span class="gly gly-unshare"></span>
-              <span class="hidden-xs hidden-sm">Back</span>
+            <a href="/task/mansked" class="btn btn-default">
+              <span class="gly gly-notes-2"></span>
+              <span class="hidden-xs hidden-sm">Mansked</span>
             </a> 
             <button type="button" class="btn btn-default active">
               <span class="gly gly-stopwatch"></span>
@@ -34,6 +36,17 @@
             <a href="/timelog/add" class="btn btn-default">
               <span class="glyphicon glyphicon-plus"></span>
               <span class="hidden-xs hidden-sm">Add Timelog</span>
+            </a>
+          </div>
+
+          <div class="btn-group pull-right clearfix" role="group">
+            <a href="/{{brcode()}}/timelog/employee/{{$employee->lid()}}?date={{$date->copy()->subDay()->format('Y-m-d')}}" class="btn btn-default" title="{{ $date->copy()->subDay()->format('Y-m-d') }}">
+              <span class="glyphicon glyphicon-chevron-left"></span>
+            </a>
+            <input type="text" class="btn btn-default" id="dp-date" value="{{ $date->format('m/d/Y') }}" style="max-width: 110px;" readonly>
+            <label class="btn btn-default  hidden-sm hidden-xs" for="dp-date"><span class="glyphicon glyphicon-calendar"></span></label>
+            <a href="/{{brcode()}}/timelog/employee/{{$employee->lid()}}?date={{ $date->copy()->addDay()->format('Y-m-d')}}" class="btn btn-default" title="{{ $date->copy()->addDay()->format('Y-m-d') }}">
+              <span class="glyphicon glyphicon-chevron-right"></span>
             </a>
           </div>
         </div>
@@ -122,12 +135,12 @@
               <table class="table">
                 <thead>
                   <tr>
-                    <th class="bg-default"></th>
-                    <th class="bg-default">Time Start/In</th>
-                    <th class="bg-default">Break Start/In</th>
-                    <th class="bg-default">Break End/Out</th>
-                    <th class="bg-default">Time End/Out</th>
-                    <th class="bg-default">Work Hours</th>
+                    <td class="bg-default"></td>
+                    <td class="bg-default">Time Start/In</td>
+                    <td class="bg-default">Break Start/In</td>
+                    <td class="bg-default">Break End/Out</td>
+                    <td class="bg-default">Time End/Out</td>
+                    <td class="bg-default">Work Hours</td>
                   </tr>
                 </thead>
                 <tbody>
@@ -156,7 +169,7 @@
                     @endif
                   </tr>
                   <tr>
-                    <td>Timelog</td>
+                    <td>Timesheet</td>
                     @if(is_null($timesheet))
                       <td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>
                     @else
@@ -187,7 +200,7 @@
                     <td>Txn Type</td>
                     <td>Time</td>
                     <td>Entry</td>
-                    <td>On Timelog</td>
+                    <td>On Timesheet</td>
                     <td>&nbsp;</td>
                   </tr>
                 </thead>
@@ -298,8 +311,25 @@
   @parent
   
   <script>
-  
+   moment.locale('en', { week : {
+      dow : 1 // Monday is the first day of the week.
+    }});
+
+  $('document').ready(function(){
+
     
- 
+
+    $('#dp-date').datetimepicker({
+      defaultDate: "{{ $date->format('Y-m-d') }}",
+      format: 'MM/DD/YYYY',
+      showTodayButton: true,
+      ignoreReadonly: true,
+    }).on('dp.change', function(e){
+      var date = e.date.format('YYYY-MM-DD');
+      console.log(date);
+      document.location.href = '/{{brcode()}}/timelog/employee/{{stl($employee->id)}}?date='+e.date.format('YYYY-MM-DD');
+      
+    });
+  });
   </script>
 @endsection
