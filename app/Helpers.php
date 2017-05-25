@@ -413,5 +413,11 @@ if (!function_exists('dayDesc')) {
     }
 }
 
+if (!function_exists('stl')) {
+    function stl($str) {
+        return strtolower($str);
+    }
+}
+
 
 

@@ -100,6 +100,8 @@ Route::get('timelog/{param1?}/{param2?}', ['uses'=>'TimelogController@getIndex']
           'param2'=>'week|[0-9]+']);
 Route::post('timelog', ['uses'=>'TimelogController@manualPost']);
 
+Route::get('/{brcode}/timelog/{param1?}/{param2?}', ['uses'=>'TimelogController@getIndex2']);
+
 
 Route::get('product/sales', ['uses'=>'SaleController@getDaily']);
 Route::get('{brcode}/product/sales', ['uses'=>'SaleController@getDaily']);

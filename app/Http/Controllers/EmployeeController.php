@@ -108,7 +108,7 @@ class EmployeeController extends Controller {
 
 	public function makeSingleView(Request $request, $id) {
 		$employee = Employee::with(['branch' => function ($query) {
-                                $query->select('code', 'descriptor', 'addr1', 'id');
+                                $query->select('code', 'descriptor', 'id');
                         }])->where('id', $id)
                         ->get()
                         ->first();
@@ -119,7 +119,7 @@ class EmployeeController extends Controller {
 	public function makeEditView(Request $request, $id) {
 		//$branches = Branch::orderBy('code')->get();
 		$employee = Employee::with(['branch' => function ($query) {
-                                $query->select('code', 'descriptor', 'addr1', 'id');
+                                $query->select('code', 'descriptor', 'id');
                         }])->where('id', $id)
                         ->get()
                         ->first();

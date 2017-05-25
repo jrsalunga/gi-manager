@@ -38,11 +38,16 @@ class Timesheet
 
 		for ($i=1; $i < 5; $i++) { 
         
+      if ($timelogs)  {
+
       $log = $timelogs->where('employeeid', $employeeid)
-                      //->where('ignore', 0)
+                      ->where('ignore', 0)
                       ->where('txncode', $i)
                       ->sortBy('datetime')
                       ->first();
+      } else {
+        $log = null;
+      }
 
       if (!is_null($log)) {
 	      

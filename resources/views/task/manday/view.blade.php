@@ -141,9 +141,19 @@
         <?php $ctr=1 ?>
         @foreach($depts as $dept)
           @for($i = 0; $i < count($dept['employees']); $i++)
-            <tr  data-mandtl-id="{{ $dept['employees'][$i]['manskeddtl']['id'] }}">
+          <?php 
+            $bg = $dept['employees'][$i]->lid()==request()->input('employeeid') ? 'bg-success':'';
+          ?>
+            <tr class="{{$bg}}"  data-mandtl-id="{{ $dept['employees'][$i]['manskeddtl']['id'] }}">
               <td>{{ strtoupper($dept['code']) }}</td>
-              <td>{{ $ctr }}. {{ $dept['employees'][$i]->lastname }}, {{ $dept['employees'][$i]->firstname }} <span class="label label-default pull-right">{{ $dept['employees'][$i]->position->code }}</span></td>
+              <td>{{ $ctr }}. 
+              
+              <a href="/{{brcode()}}/timelog/employee/{{$dept['employees'][$i]->lid()}}?date={{$manday->date->format('Y-m-d')}}">
+                {{ $dept['employees'][$i]->lastname }}, {{ $dept['employees'][$i]->firstname }} 
+              </a>
+
+
+              <span class="label label-default pull-right">{{ $dept['employees'][$i]->position->code }}</span></td>
               @if($dept['employees'][$i]['manskeddtl']['daytype']==1)
                 <td class="text-right">
                   <?php

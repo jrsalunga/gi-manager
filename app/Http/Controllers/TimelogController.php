@@ -7,14 +7,23 @@ use Illuminate\Http\Request;
 use App\Models\Employee;
 use Illuminate\Http\Response;
 use App\Repositories\TimelogRepository;
+use App\Repositories\EmployeeRepository as EmployeeRepo;
+use App\Repositories\ManskeddtlRepository as MandtlRepo;
+use App\Repositories\TimelogRepository as TimelogRepo;
 
 
 class TimelogController extends Controller {
 
 	private $_branchid;
+	private $employee;
+	private $mandtl;
+	private $timelog;
 
-	public function __construct(TimelogRepository $repo, Request $request){
+	public function __construct(TimelogRepository $repo, Request $request, EmployeeRepo $employee, MandtlRepo $mandtl, TimelogRepo $timelog){
 		$this->repository = $repo;
+		$this->employee = $employee;
+		$this->mandtl = $mandtl;
+		$this->timelog = $timelog;
 
 		if(is_null(session('user.branchid')) && is_null($request->cookie('branchid')))
 			return redirect()->route('auth.getlogin');
@@ -27,6 +36,17 @@ class TimelogController extends Controller {
 			return $this->makeAddView($request, $param1, $param2);
 		else
 			return $this->makeIndexView($request, $param1, $param2);
+	}
+
+
+	public function getIndex2(Request $request, $param1=null, $param2=null,  $param3=null){
+		if(strtolower(session('user.branchcode'))!=strtolower($param1))
+			return abort('404');
+
+		if($param2=='employee' && is_uuid($param3))
+			return $this->employeeTimelog($request, $param3);
+		else
+			return $this->makeIndexView($request, $param2, $param3);
 	}
 
 	public function makeIndexView(Request $request, $p1, $p2) {
@@ -236,5 +256,47 @@ class TimelogController extends Controller {
 			}
 		}
 		return json_encode($respone);
+	}
+
+
+	private function employeeTimelog(Request $request, $employeeid) {
+		$employee = $this->employee
+										//->skipCache()
+									->with(['branch'=>function($query){
+        						return $query->select(['code', 'descriptor', 'id']);
+        					}])
+        					->with(['position'=>function($query){
+        						return $query->select(['code', 'descriptor', 'id']);
+        					}])
+									->find($employeeid, ['code', 'lastname', 'firstname', 'branchid', 'positionid', 'id']);
+									
+		if (!$employee)
+		//if (!$employee || $employee->branch->code!=session('user.branchcode'))
+			return abort('404');
+
+		$mandtl = $this->mandtl
+									->skipCache()
+									->whereHas('manskedday', function ($query) use ($request) {
+										$query->where('date', $request->input('date'));
+									})
+									->with('manskedday.manskedhdr')
+									->findWhere(['employeeid'=>$employeeid])
+									->first();
+
+		$date = ($request->has('date') || is_iso_date($request->input('date')))
+			? c($request->input('date'))
+			: c();
+
+		$timelogs = $this->timelog->employeeTimelogs($employee, $date);
+
+		$ts = new \App\Helpers\Timesheet;
+		$timesheet = $ts->generate($employee->id, $date, $timelogs);
+
+		return view('timelog.employee')
+								->with('date', $date)
+								->with('mandtl', $mandtl)
+								->with('employee', $employee)
+								->with('timesheet', $timesheet)
+								->with('timelogs', $timelogs);
 	}
 }

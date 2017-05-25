@@ -106,7 +106,7 @@
           </div>
           <div class="panel-body text-right">
             <h3>
-              0
+              {{ $header->totalTardyHours }}
               <span class="small"> Hrs</span>
             </h3>
           </div>
@@ -148,7 +148,7 @@
               >
                 <td>
                   {{-- $timesheet['date']->format('Y-m-d') --}}
-                  <a href="/timelog/employee/{{$employee->lid()}}?date={{$timesheet['date']->format('Y-m-d')}}">
+                  <a href="/{{brcode()}}/timelog/employee/{{$employee->lid()}}?date={{$timesheet['date']->format('Y-m-d')}}">
                   {{ $timesheet['date']->format("D, M j") }}
                   </a>
                 </td>
