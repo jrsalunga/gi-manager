@@ -1,6 +1,6 @@
 @extends('index')
 
-@section('title', '- Employee DTR ('.strtoupper(brcode()).')')
+@section('title', '- Employee Timesheets ('.strtoupper(brcode()).')')
 
 @section('css-external')
   <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/2.1.24/daterangepicker.min.css">
@@ -186,10 +186,13 @@
                 </td>
                 <td class="text-right">
                   @if(!empty($timesheet['timelog']->timein))
-                      @if($timesheet['timelog']->timein->timelog->entrytype=='2')
-                        <span class="text-danger">
+                    <span data-toggle="tooltip" title="{{ $timesheet['timelog']->timein->timelog->datetime->format('h:i:s A') }}"
+                      @if(!$timesheet['timelog']->is_timein())
+                       style="color: #ccc;">
+                      @elseif($timesheet['timelog']->timein->timelog->entrytype=='2')
+                         class="text-danger">
                       @else
-                        <span>
+                        >
                       @endif
                       {{ $timesheet['timelog']->timein->timelog->datetime->format('h:i A') }}
                       </span>
@@ -199,23 +202,29 @@
                 </td>
                 <td class="text-right">
                   @if(!empty($timesheet['timelog']->breakin))
-                    @if($timesheet['timelog']->breakin->timelog->entrytype=='2')
-                      <span class="text-danger">
-                    @else
-                      <span>
-                    @endif
-                    {{ $timesheet['timelog']->breakin->timelog->datetime->format('h:i A') }}
-                    </span>
+                    <span data-toggle="tooltip" title="{{ $timesheet['timelog']->breakin->timelog->datetime->format('h:i:s A') }}"
+                      @if(!$timesheet['timelog']->is_breakin())
+                       style="color: #ccc;">
+                      @elseif($timesheet['timelog']->breakin->timelog->entrytype=='2')
+                         class="text-danger">
+                      @else
+                        >
+                      @endif
+                      {{ $timesheet['timelog']->breakin->timelog->datetime->format('h:i A') }}
+                      </span>
                   @else
                     
                   @endif
                 </td>
                 <td class="text-right">
                   @if(!empty($timesheet['timelog']->breakout))
-                    @if($timesheet['timelog']->breakout->timelog->entrytype=='2')
-                      <span class="text-danger">
+                    <span data-toggle="tooltip" title="{{ $timesheet['timelog']->breakout->timelog->datetime->format('h:i:s A') }}" 
+                    @if(!$timesheet['timelog']->is_breakout())
+                       style="color: #ccc;">
+                    @elseif($timesheet['timelog']->breakout->timelog->entrytype=='2')
+                       class="text-danger">
                     @else
-                      <span>
+                      >
                     @endif
                     {{ $timesheet['timelog']->breakout->timelog->datetime->format('h:i A') }}
                     </span>
@@ -225,12 +234,15 @@
                 </td>
                 <td class="text-right">
                   @if(!empty($timesheet['timelog']->timeout))
-                    @if($timesheet['timelog']->timeout->timelog->entrytype=='2')
-                      <span class="text-danger">
-                    @else
-                      <span>
-                    @endif
-                    {{ $timesheet['timelog']->timeout->timelog->datetime->format('h:i A') }}
+                    <span data-toggle="tooltip" title="{{ $timesheet['timelog']->timeout->timelog->datetime->format('h:i:s A') }}" 
+                      @if(!$timesheet['timelog']->is_timeout())
+                       style="color: #ccc;">
+                      @elseif($timesheet['timelog']->timeout->timelog->entrytype=='2')
+                        <span class="text-danger">
+                      @else
+                        <span>
+                      @endif
+                      {{ $timesheet['timelog']->timeout->timelog->datetime->format('h:i A') }}
                     </span>
                   @else
                     
