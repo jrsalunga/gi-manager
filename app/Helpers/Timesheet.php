@@ -53,7 +53,7 @@ class Timesheet
         $log = null;
       }
 
-      if (!is_null($log->first())) {
+      if (!is_null($log->first()) {
 	      switch ($i) {
           case 1:
             $this->timein = new Log($log->first());
