@@ -75,7 +75,6 @@ class Timesheet
             else
             $this->timeout = new Log($log);
             break;
-        }
       }
     }
 
