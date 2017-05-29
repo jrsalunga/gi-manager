@@ -47,34 +47,33 @@ class Timesheet
       $log = $timelogs->where('employeeid', $employeeid)
                       ->where('ignore', 0)
                       ->where('txncode', $i)
-                      ->sortBy('datetime');
-                      //->first();
+                      ->sortBy('datetime')
+                      ->first();
       } else {
         $log = null;
       }
 
-      if (!is_null($log->first())) {
-	      switch ($i) {
+      switch ($i) {
           case 1:
-            $this->timein = new Log($log->first());
+            $this->timein = new Log($log);
             break;
           case 2:
             if (is_null($this->breakin) && !is_null($this->timein))
-              $this->breakin = new Log($this->getLog($this->timein->timelog, $log));
+              $this->breakin = $this->getLog($this->timein->timelog, $timelogs, $i, $employeeid);
             else
-              $this->breakin = new Log($log->first());
+              $this->breakin = new Log($log);
             break;
           case 3:
             if (is_null($this->breakout) && !is_null($this->breakin))
-              $this->breakout = new Log($this->getLog($this->breakin->timelog, $log));
+              $this->breakout = $this->getLog($this->breakin->timelog, $timelogs, $i, $employeeid);
             else
-              $this->breakout = new Log($log->first());
+              $this->breakout = new Log($log);
             break;
           case 4:
             if (is_null($this->timeout) && !is_null($this->breakout))
-              $this->timeout = new Log($this->getLog($this->breakout->timelog, $log));
+              $this->timeout = $this->getLog($this->breakout->timelog, $timelogs, $i, $employeeid);
             else
-              $this->timeout = new Log($log->first());
+            $this->timeout = new Log($log);
             break;
         }
       }
@@ -86,10 +85,16 @@ class Timesheet
 		return $this;
 	}
 
-  private function getLog(Timelog $index, $timelogs) {
-    foreach ($timelogs as $key => $timelog) {
+  public function getLog(Timelog $index, $timelogs, $i, $employeeid) {
+
+    $x = $timelogs->where('employeeid', $employeeid)
+                      ->where('ignore', 0)
+                      ->where('txncode', $i)
+                      ->sortBy('datetime');
+
+    foreach ($x as $key => $timelog) {
       if ($index->datetime->lt($timelog->datetime))
-        return $timelog;
+        return new Log($timelog);
     }
   }
 
