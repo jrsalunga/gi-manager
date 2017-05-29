@@ -87,10 +87,16 @@ class Timesheet
 		return $this;
 	}
 
-  private function getLog(Timelog $index, $timelogs) {
-    foreach ($timelogs as $key => $timelog) {
+  public function getLog(Timelog $index, $timelogs, $i, $employeeid) {
+
+    $x = $timelogs->where('employeeid', $employeeid)
+                      ->where('ignore', 0)
+                      ->where('txncode', $i)
+                      ->sortBy('datetime');
+
+    foreach ($x as $key => $timelog) {
       if ($index->datetime->lt($timelog->datetime))
-        return $timelog;
+        return new Log($timelog);
     }
   }
 
