@@ -47,7 +47,7 @@ class Timesheet
       $log = $timelogs->where('employeeid', $employeeid)
                       ->where('ignore', 0)
                       ->where('txncode', $i)
-                      ->sortBy('datetime')
+                      ->sortBy('datetime');
                       //->first();
       } else {
         $log = null;
