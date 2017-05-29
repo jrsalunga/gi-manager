@@ -53,7 +53,9 @@ class Timesheet
         $log = null;
       }
 
-      switch ($i) {
+      if (!is_null($log)) {
+
+        switch ($i) {
           case 1:
             $this->timein = new Log($log);
             break;
@@ -75,6 +77,7 @@ class Timesheet
             else
             $this->timeout = new Log($log);
             break;
+        }
       }
     }
 
@@ -84,16 +87,10 @@ class Timesheet
 		return $this;
 	}
 
-  public function getLog(Timelog $index, $timelogs, $i, $employeeid) {
-
-    $x = $timelogs->where('employeeid', $employeeid)
-                      ->where('ignore', 0)
-                      ->where('txncode', $i)
-                      ->sortBy('datetime');
-
-    foreach ($x as $key => $timelog) {
+  private function getLog(Timelog $index, $timelogs) {
+    foreach ($timelogs as $key => $timelog) {
       if ($index->datetime->lt($timelog->datetime))
-        return new Log($timelog);
+        return $timelog;
     }
   }
 
