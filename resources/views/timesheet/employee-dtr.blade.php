@@ -62,6 +62,7 @@
                 {{ $employee->lastname }}, {{ $employee->firstname }}
                 <small>{{ $employee->code }}</small>
               </h3>
+              <p>{{ $employee->position->descriptor or '' }}</p>
               <p>
                 <em>Timesheet for {{ $dr->fr->format("D M j, Y") }} - {{ $dr->to->format("D M j, Y") }}</em>
               </p>

@@ -239,19 +239,19 @@
                         <?php
                         switch ($timelog->txncode) {
                           case '1':
-                            if ($timesheet->timein->timelog->datetime->eq($timelog->datetime))
+                            if (isset($timesheet->timein) && $timesheet->timein->timelog->datetime->eq($timelog->datetime))
                               echo '<span class="glyphicon glyphicon-ok" style="color: #468847;"></span>';
                             break;
                           case '2':
-                            if ($timesheet->breakin->timelog->datetime->eq($timelog->datetime))
+                            if (isset($timesheet->breakin) && $timesheet->breakin->timelog->datetime->eq($timelog->datetime))
                               echo '<span class="glyphicon glyphicon-ok" style="color: #468847;"></span>';
                             break;
                           case '3':
-                            if ($timesheet->breakout->timelog->datetime->eq($timelog->datetime))
+                            if (isset($timesheet->breakout) && $timesheet->breakout->timelog->datetime->eq($timelog->datetime))
                               echo '<span class="glyphicon glyphicon-ok" style="color: #468847;"></span>';
                             break;
                           case '4':
-                            if ($timesheet->timeout->timelog->datetime->eq($timelog->datetime))
+                            if (isset($timesheet->timeout) && $timesheet->timeout->timelog->datetime->eq($timelog->datetime))
                               echo '<span class="glyphicon glyphicon-ok" style="color: #468847;"></span>';
                             break;
                           default:

@@ -48,27 +48,35 @@ class Timesheet
                       ->where('ignore', 0)
                       ->where('txncode', $i)
                       ->sortBy('datetime')
-                      ->first();
+                      //->first();
       } else {
         $log = null;
       }
 
-      if (!is_null($log)) {
-	      
+      if (!is_null($log->first())) {
 	      switch ($i) {
-	      	case 1:
-	      		$this->timein = new Log($log);
-	      		break;
-	      	case 2:
-	      		$this->breakin = new Log($log);
-	      		break;
-	      	case 3:
-	      		$this->breakout = new Log($log);
-	      		break;
-	      	case 4:
-	      		$this->timeout = new Log($log);
-	      		break;
-	      }
+          case 1:
+            $this->timein = new Log($log->first());
+            break;
+          case 2:
+            if (is_null($this->breakin) && !is_null($this->timein))
+              $this->breakin = new Log($this->getLog($this->timein->timelog, $log));
+            else
+              $this->breakin = new Log($log->first());
+            break;
+          case 3:
+            if (is_null($this->breakout) && !is_null($this->breakin))
+              $this->breakout = new Log($this->getLog($this->breakin->timelog, $log));
+            else
+              $this->breakout = new Log($log->first());
+            break;
+          case 4:
+            if (is_null($this->timeout) && !is_null($this->breakout))
+              $this->timeout = new Log($this->getLog($this->breakout->timelog, $log));
+            else
+              $this->timeout = new Log($log->first());
+            break;
+        }
       }
     }
 
@@ -78,6 +86,12 @@ class Timesheet
 		return $this;
 	}
 
+  private function getLog(Timelog $index, $timelogs) {
+    foreach ($timelogs as $key => $timelog) {
+      if ($index->datetime->lt($timelog->datetime))
+        return $timelog;
+    }
+  }
 
 	private function checkBreak() {
 		if (!is_null($this->timein) && !is_null($this->breakout)
