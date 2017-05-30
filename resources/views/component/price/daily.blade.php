@@ -106,7 +106,7 @@
 
     @if($components)
     <div class="table-responsive">
-      <table class="table table-sort table-hover table-striped">
+      <table class="table table-hover table-striped table-sort">
         <thead>
           <tr>
             <th>Branch</th>
@@ -118,7 +118,7 @@
             <th class="text-right">Tran Cnt</th>
           </tr>
         </thead>
-        <thead>
+        <tbody>
         @foreach($components as $component)
           <tr class="<?=$component->code==strtoupper(brcode())?'bg-success':''?>">
             <td>
@@ -138,7 +138,7 @@
             <td class="text-right help" title="Negative transactions are not included">{{ number_format($component->trancnt, 0) }}</td>
           </tr>
         @endforeach
-        </thead>
+        </tbody>
       </table>
     </div>
     @else
