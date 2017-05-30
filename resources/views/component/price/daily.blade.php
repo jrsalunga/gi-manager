@@ -95,7 +95,7 @@
           </div><!-- end btn-grp -->
 
           <div class="btn-group hidden-xs" role="group" style="margin-left: 5px;">
-          	<input type="text" id="searchfield" class="form-control searchfield" value="{{ $filter->item }}" placeholder="Search Filter">
+          	<input type="text" id="searchfield" class="form-control searchfield" value="{{ $filter->item }}" placeholder="Search Component">
           </div>
           
         </div>
@@ -123,7 +123,7 @@
           <tr class="<?=$component->code==strtoupper(brcode())?'bg-success':''?>">
             <td>
               @if($component->code==strtoupper(brcode()))
-                <a href="/glv/component/purchases?table=component&item={{$filter->item}}&itemid={{$filter->id}}&fr={{$dr->fr->format('Y-m-d')}}&to={{$dr->to->format('Y-m-d')}}">
+                <a href="/{{brcode()}}/component/purchases?table=component&item={{$filter->item}}&itemid={{$filter->id}}&fr={{$dr->fr->format('Y-m-d')}}&to={{$dr->to->format('Y-m-d')}}">
                   {{ $component->code }}
                 </a>
               @else
@@ -142,7 +142,7 @@
       </table>
     </div>
     @else
-      No Data
+      
     @endif
 
 
