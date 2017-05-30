@@ -144,15 +144,15 @@
           <div class="list-group">
             <a href="/task/mansked" class="list-group-item">Manpower Scheduling</a>
             <a href="/{{brcode()}}/timesheet" class="list-group-item">Daily Timesheet</a>
-            <a href="/{{brcode()}}/dtr" class="list-group-item">DTR Generator</a>
-            <a href="#" class="list-group-item" style="color: #aaa;">Weekly Branch Report</a>
+            <a href="#" class="list-group-item" style="color: #aaa; cursor: not-allowed;">DTR Generator</a>
+            <a href="#" class="list-group-item" style="color: #aaa; cursor: not-allowed;">Weekly Branch Report</a>
           </div>
           <div class="list-group">
             <a href="/{{brcode()}}/employee" class="list-group-item"">Employees</a>
-            <a href="#" class="list-group-item" style="color: #aaa;">Trainee Status Changes</a>
-            <a href="#" class="list-group-item" style="color: #aaa;">Manpower Request</a>
-            <a href="#" class="list-group-item" style="color: #aaa;">Requests for Employee Status Change</a>
-            <a href="#" class="list-group-item" style="color: #aaa;">Notices of Resignation</a>
+            <a href="#" class="list-group-item" style="color: #aaa; cursor: not-allowed;">Trainee Status Changes</a>
+            <a href="#" class="list-group-item" style="color: #aaa; cursor: not-allowed;">Manpower Request</a>
+            <a href="#" class="list-group-item" style="color: #aaa; cursor: not-allowed;">Requests for Employee Status Change</a>
+            <a href="#" class="list-group-item" style="color: #aaa; cursor: not-allowed;">Notices of Resignation</a>
           </div>
   			</div>
   		</div> <!-- end: .panel -->

@@ -14,6 +14,7 @@ class TimesheetController extends Controller
 { 
 	public $timelog;
 	protected $mandtl;
+	protected $dr;
 
 	public function __construct(DateRange $dr, Timelog $timelog, MandtlRepo $mandtl) {
 		$this->timelog = $timelog;

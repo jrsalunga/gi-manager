@@ -110,6 +110,7 @@ Route::get('api/mdl/purchases/{id}', ['uses'=>'Purchase2Controller@ajaxPurchases
 
 Route::get('component/purchases', ['uses'=>'Purchase2Controller@getDaily']);
 Route::get('{brcode}/component/purchases', ['uses'=>'Purchase2Controller@getDaily']);
+Route::get('{brcode}/component/price/comparative', ['uses'=>'Purchase2Controller@componentComparative']);
 Route::get('api/search/component', ['uses'=>'Purchase2Controller@search']);
 
 /******************* API  *************************************************/

@@ -136,6 +136,19 @@ class Purchase2Repository extends BaseRepository implements CacheableInterface
   }
 
 
+  public function componentAverageByDR(DateRange $dr) {
+    return $this->scopeQuery(function($query) use ($dr) {
+      return $query->whereBetween('purchase.date', [$dr->fr->format('Y-m-d'), $dr->to->format('Y-m-d')])
+                    ->where('purchase.qty', '>', 0)
+                    ->where('purchase.ucost', '>', 0)
+                    ->leftJoin('hr.branch', 'branch.id', '=', 'purchase.branchid')
+                    ->select(DB::raw('branch.code, SUM(purchase.qty) as tot_qty, SUM(purchase.tcost) as tcost, (SUM(purchase.tcost)/SUM(purchase.qty)) as ave, MAX(purchase.ucost) as ucost_max, MIN(purchase.ucost) as ucost_min, MAX(purchase.qty) as qty_max, MIN(purchase.qty) as qty_min, count(purchase.id) as trancnt'))
+                    ->groupBy('purchase.branchid')
+                    ->orderBy('branch.code');
+    });
+  }
+
+
 
 
 

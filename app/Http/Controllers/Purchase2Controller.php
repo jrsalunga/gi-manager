@@ -29,7 +29,43 @@ class Purchase2Controller extends Controller {
     $this->dr = $dr;
   }
 
-  
+  private function getFilter(Request $request, $tables) {
+    $filter = new StdClass;
+    if($request->has('itemid') && $request->has('table') && $request->has('item')) {
+      
+      $id = strtolower($request->input('itemid'));
+      $table = strtolower($request->input('table'));
+
+      $c = '\App\Models\\'.ucfirst($table);
+      $i = $c::find($id);
+
+      if (strtolower($request->input('item'))==strtolower($i->descriptor)) {
+        $item = $request->input('item');
+      
+        if(is_uuid($id) && in_array($table, $tables))
+          $where[$table.'.id'] = $id;
+        else if($table==='payment')
+          $where['purchase.terms'] = $id;
+
+        $filter->table = $table;
+        $filter->id = $id;
+        $filter->item = $item;
+        $filter->isset = true;
+      } else {
+        $filter->table = '';
+        $filter->id = '';
+        $filter->item = '';
+        $filter->isset = false;
+      }
+    } else {
+      $filter->table = '';
+      $filter->id = '';
+      $filter->item = '';
+      $filter->isset = false;
+    }
+
+    return $filter;
+  }
 
   public function getDaily(Request $request) {
 
@@ -57,10 +93,12 @@ class Purchase2Controller extends Controller {
         $filter->table = $table;
         $filter->id = $id;
         $filter->item = $item;
+
       } else {
         $filter->table = '';
         $filter->id = '';
         $filter->item = '';
+        
       }
     } else {
       $filter->table = '';
@@ -106,6 +144,28 @@ class Purchase2Controller extends Controller {
 
     return $this->setDailyViewVars('component.purchased.daily', $purchases, $filter, $components, $compcats, $expenses, $expscats, $suppliers, $payments);
   
+  }
+
+
+
+
+  public function componentComparative(Request $request, $brcode) {
+    $filter = $this->getFilter($request, ['component']);
+    $components = null;
+
+    if ($filter->isset) {
+
+    $components = $this->purchase
+                  ->skipCache()
+                  ->skipCriteria()
+                  ->componentAverageByDR($this->dr)
+                  ->findWhere(['purchase.componentid' => $filter->id]);
+    }
+
+
+    return $this->setViewWithDR(view('component.price.daily')
+                ->with('filter', $filter)
+                ->with('components', $components));
   }
 
 
