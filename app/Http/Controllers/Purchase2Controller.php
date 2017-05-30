@@ -31,22 +31,22 @@ class Purchase2Controller extends Controller {
 
   private function getFilter(Request $request, $tables) {
     $filter = new StdClass;
-    if($request->has('itemid') && $request->has('table') && $request->has('item')) {
+    $table = strtolower($request->input('table'));
+    if($request->has('itemid') && $request->has('table') && $request->has('item') && in_array($table, $tables)) {
       
       $id = strtolower($request->input('itemid'));
-      $table = strtolower($request->input('table'));
 
       $c = '\App\Models\\'.ucfirst($table);
       $i = $c::find($id);
 
       if (strtolower($request->input('item'))==strtolower($i->descriptor)) {
         $item = $request->input('item');
-      
+        /*
         if(is_uuid($id) && in_array($table, $tables))
           $where[$table.'.id'] = $id;
         else if($table==='payment')
           $where['purchase.terms'] = $id;
-
+        */
         $filter->table = $table;
         $filter->id = $id;
         $filter->item = $item;
@@ -161,7 +161,6 @@ class Purchase2Controller extends Controller {
                   ->componentAverageByDR($this->dr)
                   ->findWhere(['purchase.componentid' => $filter->id]);
     }
-
 
     return $this->setViewWithDR(view('component.price.daily')
                 ->with('filter', $filter)

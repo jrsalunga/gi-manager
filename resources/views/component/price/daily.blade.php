@@ -105,8 +105,8 @@
     @include('_partials.alerts')
 
     @if($components)
-
-      <table class="table">
+    <div class="table-responsive">
+      <table class="table table-sort table-hover table-striped">
         <thead>
           <tr>
             <th>Branch</th>
@@ -120,19 +120,27 @@
         </thead>
         <thead>
         @foreach($components as $component)
-          <tr>
-            <td>{{ $component->code }}</td>
+          <tr class="<?=$component->code==strtoupper(brcode())?'bg-success':''?>">
+            <td>
+              @if($component->code==strtoupper(brcode()))
+                <a href="/glv/component/purchases?table=component&item={{$filter->item}}&itemid={{$filter->id}}&fr={{$dr->fr->format('Y-m-d')}}&to={{$dr->to->format('Y-m-d')}}">
+                  {{ $component->code }}
+                </a>
+              @else
+                {{ $component->code }}
+              @endif
+            </td>
             <td class="text-right">{{ number_format($component->tot_qty, 0) }}</td>
             <td class="text-right">{{ number_format($component->tcost, 2) }}</td>
             <td class="text-right">{{ number_format($component->ave, 2) }}</td>
             <td class="text-right">{{ number_format($component->ucost_min, 2) }} - {{ number_format($component->ucost_max, 2) }}</td>
             <td class="text-right">{{ number_format($component->qty_min, 2) }} - {{ number_format($component->qty_max, 2) }}</td>
-            <td class="text-right">{{ number_format($component->trancnt, 0) }}</td>
+            <td class="text-right help" title="Negative transactions are not included">{{ number_format($component->trancnt, 0) }}</td>
           </tr>
         @endforeach
         </thead>
       </table>
-
+    </div>
     @else
       No Data
     @endif
