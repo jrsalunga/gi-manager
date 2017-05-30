@@ -154,6 +154,9 @@
             <a href="#" class="list-group-item" style="color: #aaa; cursor: not-allowed;">Requests for Employee Status Change</a>
             <a href="#" class="list-group-item" style="color: #aaa; cursor: not-allowed;">Notices of Resignation</a>
           </div>
+          <div class="list-group">
+            <a href="/{{brcode()}}/component/price/comparative" class="list-group-item"">Comparative Component Cost</a>
+          </div>
   			</div>
   		</div> <!-- end: .panel -->
       <!--
