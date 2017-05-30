@@ -120,11 +120,11 @@
         </thead>
         <tbody>
         @foreach($components as $component)
-          <tr class="<?=$component->code==strtoupper(brcode())?'bg-success':''?>">
+          <tr class="<?=$component->code==strtoupper(brcode())?'bg-successs':''?>">
             <td>
               @if($component->code==strtoupper(brcode()))
                 <a href="/{{brcode()}}/component/purchases?table=component&item={{$filter->item}}&itemid={{$filter->id}}&fr={{$dr->fr->format('Y-m-d')}}&to={{$dr->to->format('Y-m-d')}}">
-                  {{ $component->code }}
+                  <b>{{ $component->code }}</b>
                 </a>
               @else
                 {{ $component->code }}
