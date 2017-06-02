@@ -23,9 +23,9 @@
       <div class="container-fluid">
         <div class="navbar-form">
           <div class="btn-group" role="group">
-            <a href="/{{brcode()}}/dashboard" class="btn btn-default" title="Back to Main Menu">
-              <span class="gly gly-unshare"></span>
-              <span class="hidden-xs hidden-sm">Back</span>
+            <a href="/{{brcode()}}/mansked" class="btn btn-default">
+              <span class="gly gly-notes-2"></span>
+              <span class="hidden-xs hidden-sm">Mansked</span>
             </a> 
             <a href="/timelog" class="btn btn-default">
               <span class="gly gly-stopwatch"></span>

@@ -139,7 +139,9 @@
                 </td>
                 <td>
                   @if($timesheet['mandtl'])
+                    <a href="/mansked/manday/{{strtolower($timesheet['mandtl']->mandayid)}}?employeeid={{$employee->lid()}}">
                     {{ dayDesc($timesheet['mandtl']->daytype) }}
+                    </a>
                   @else
                     <span style="color: #bbb;">No Mansked</span>
                   @endif
@@ -220,14 +222,14 @@
                 <td class="text-right">
                   @if(!empty($timesheet['timelog']->timeout))
                     <span data-toggle="tooltip" title="{{ $timesheet['timelog']->timeout->timelog->datetime->format('h:i:s A') }}" 
-                      @if(!$timesheet['timelog']->is_timeout())
-                       style="color: #ccc;">
-                      @elseif($timesheet['timelog']->timeout->timelog->entrytype=='2')
-                        <span class="text-danger">
-                      @else
-                        <span>
-                      @endif
-                      {{ $timesheet['timelog']->timeout->timelog->datetime->format('h:i A') }}
+                    @if(!$timesheet['timelog']->is_timeout())
+                     style="color: #ccc;">
+                    @elseif($timesheet['timelog']->timeout->timelog->entrytype=='2')
+                      class="text-danger">
+                    @else
+                      >
+                    @endif
+                    {{ $timesheet['timelog']->timeout->timelog->datetime->format('h:i A') }}
                     </span>
                   @else
                     
