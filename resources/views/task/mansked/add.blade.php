@@ -22,7 +22,7 @@
         <div class="navbar-form">
           <div class="btn-group" role="group">
             <a href="/task/mansked" class="btn btn-default">
-              <span class="gly gly-note-2"></span>
+              <span class="gly gly-notes-2"></span>
               <span class="hidden-xs hidden-sm">Mansked</span>
             </a> 
             <a href="/{{brcode()}}/timelog" class="btn btn-default">

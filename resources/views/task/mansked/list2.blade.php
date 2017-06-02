@@ -20,7 +20,7 @@
         <div class="navbar-form">
           <div class="btn-group" role="group">
             <button type="button" class="btn btn-default active">
-              <span class="gly gly-note-2"></span>
+              <span class="gly gly-notes-2"></span>
               <span class="hidden-xs hidden-sm">Mansked</span>
             </button>
             <a href="/{{brcode()}}/timelog" class="btn btn-default">
@@ -31,8 +31,6 @@
               <span class="glyphicon glyphicon-th-list"></span>
               <span class="hidden-xs hidden-sm">Timesheet</span>
             </a>
-            
-            
           </div>
 
           <div class="btn-group" role="group">
