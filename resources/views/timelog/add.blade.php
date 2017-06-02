@@ -23,7 +23,7 @@
       <div class="container-fluid">
         <div class="navbar-form">
           <div class="btn-group" role="group">
-            <a href="/{{brcode()}}/mansked" class="btn btn-default">
+            <a href="/task/mansked" class="btn btn-default">
               <span class="gly gly-notes-2"></span>
               <span class="hidden-xs hidden-sm">Mansked</span>
             </a> 
