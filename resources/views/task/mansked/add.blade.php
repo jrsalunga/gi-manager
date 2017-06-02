@@ -25,17 +25,21 @@
               <span class="gly gly-note-2"></span>
               <span class="hidden-xs hidden-sm">Mansked</span>
             </a> 
-            <!--
-            <button type="button" class="btn btn-default active">
-              <span class="glyphicon glyphicon-file"></span>
-            </button> -->
+            <a href="/{{brcode()}}/timelog" class="btn btn-default">
+              <span class="gly gly-stopwatch"></span>
+              <span class="hidden-xs hidden-sm">Timelogs</span>
+            </a>
+            <a href="/{{brcode()}}/timesheet" class="btn btn-default">
+              <span class="glyphicon glyphicon-th-list"></span>
+              <span class="hidden-xs hidden-sm">Timesheet</span>
+            </a>
           </div>
           <div class="btn-group" role="group">
-             <button type="button" class="btn btn-default active">
+            <button type="button" class="btn btn-default active">
               <span class="glyphicon glyphicon-plus"></span>
             </button>
           </div>
-      </div><!-- end btn-grp -->
+        </div><!-- end btn-grp -->
       </div>
     </nav>
 
