@@ -19,14 +19,18 @@
       <div class="container-fluid">
         <div class="navbar-form">
           <div class="btn-group" role="group">
-            <a href="/dashboard" class="btn btn-default" title="Back to Main Menu">
-              <span class="gly gly-unshare"></span>
-              <span class="hidden-xs hidden-sm">Back</span>
-            </a> 
             <button type="button" class="btn btn-default active">
               <span class="glyphicon glyphicon-th-list"></span>
               <span class="hidden-xs hidden-sm">Mansked List</span>
             </button>
+            <a href="/{{brcode()}}/timelog" class="btn btn-default">
+              <span class="gly gly-stopwatch"></span>
+              <span class="hidden-xs hidden-sm">Timelogs</span>
+            </a>
+            <a href="/{{brcode()}}/timesheet" class="btn btn-default">
+              <span class="glyphicon glyphicon-th-list"></span>
+              <span class="hidden-xs hidden-sm">Timesheet</span>
+            </a>
             
             
           </div>
@@ -34,6 +38,7 @@
           <div class="btn-group" role="group">
             <a href="/task/mansked/add" class="btn btn-default">
               <span class="glyphicon glyphicon-plus"></span>
+              <span class="hidden-xs hidden-sm">Add Mansked</span>
             </a>
           </div>
       </div><!-- end btn-grp -->
