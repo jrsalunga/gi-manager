@@ -260,6 +260,13 @@
                         }?>
                       </td>
                       <td>
+                        @if ($timelog->ignore)
+                          <i class="glyphicon glyphicon-ban-circle" style="color: #ccc;"></i> 
+                        @else
+                          <i class="glyphicon glyphicon-ok-circle" style="color: #468847;"></i> 
+                        @endif
+
+
                         @if(request()->has('action') && request()->input('action')=='ignore')
 
                           @if(request()->has('txncode') && request()->input('txncode')==$timelog->txncode)
