@@ -109,7 +109,7 @@ class TimelogController extends Controller {
 			'terminalid'	=> clientIP()
 		];
 
-		return $timelog = $this->repository->create($attributes);
+		$timelog = $this->repository->create($attributes);
 				
 		if (is_null($timelog)) {
 			return redirect('/timelog/add')->withErrors(

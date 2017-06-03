@@ -21,7 +21,7 @@
               <span class="gly gly-notes-2"></span>
               <span class="hidden-xs hidden-sm">Mansked</span>
             </a> 
-             <a href="/{{brcode()}}/timelog" class="btn btn-default">
+            <a href="/{{brcode()}}/timelog" class="btn btn-default">
               <span class="gly gly-stopwatch"></span>
               <span class="hidden-xs hidden-sm">Timelogs</span>
             </a>
@@ -82,8 +82,8 @@
           <th>Employee</th>
           <th class="text-right">Work Hours</th>
           <th class="text-right">Time In</th>
-          <th class="text-right">Break In</th>
-          <th class="text-right">Break Out</th>
+          <th class="text-right">Break Start</th>
+          <th class="text-right">Break End</th>
           <th class="text-right">Time Out</th>
         </tr>
       </thead>
