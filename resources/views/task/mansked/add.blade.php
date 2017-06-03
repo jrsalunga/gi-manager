@@ -37,6 +37,7 @@
           <div class="btn-group" role="group">
             <button type="button" class="btn btn-default active">
               <span class="glyphicon glyphicon-plus"></span>
+              <span class="hidden-xs hidden-sm">Add Mansked</span>
             </button>
           </div>
         </div><!-- end btn-grp -->

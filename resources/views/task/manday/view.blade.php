@@ -26,7 +26,7 @@
             </a>
             -->
             <a href="/task/mansked/{{$manday->date->year}}/week/{{$manday->date->weekOfYear}}" class="btn btn-default">
-              <span class="gly gly-table"></span>
+              <span class="fa fa-calendar"></span>
               <span class="hidden-sm hidden-xs">{{$manday->date->year}}-W{{$manday->date->weekOfYear}}</span>
             </a>
             <button type="button" class="btn btn-default active">

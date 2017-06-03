@@ -20,13 +20,24 @@
         <div class="navbar-form">
           <div class="btn-group" role="group">
             <a href="/task/mansked" class="btn btn-default">
-              <span class="glyphicon glyphicon-th-list"></span>
-              <span class="hidden-xs hidden-sm">Mansked List</span>
+              <span class="gly gly-notes-2"></span>
+              <span class="hidden-xs hidden-sm">Mansked</span>
             </a>
             <button type="button" class="btn btn-default active">
-              <span class="gly gly-table"></span>
+              <span class="fa fa-calendar"></span>
               <span class="hidden-xs hidden-sm">{{ $mansked->year }}-W{{ $mansked->weekno }}</span>
             </button>   
+          </div>
+          <div class="btn-group" role="group">
+            <a href="/{{brcode()}}/timelog" class="btn btn-default">
+              <span class="gly gly-stopwatch"></span>
+              <span class="hidden-xs hidden-sm">Timelogs</span>
+            </a>
+            
+            <a href="/{{brcode()}}/timesheet" class="btn btn-default">
+              <span class="glyphicon glyphicon-th-list"></span>
+              <span class="hidden-xs hidden-sm">Timesheet</span>
+            </a>
           </div>
 
           
