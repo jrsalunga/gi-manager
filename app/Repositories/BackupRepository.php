@@ -81,7 +81,7 @@ class BackupRepository extends BaseRepository
 
     $locator = new Locator('pos');
 
-
+    $branch = Branch::where('code', strtoupper(substr(request()->user()->name, 0, 3)))->first();
     $arr = [];
     $o = $fr->copy();
     do {
