@@ -12,7 +12,7 @@ use App\Repositories\Criterias\ByBranchCriteria;
 
 use Prettus\Repository\Traits\CacheableRepository;
 use Prettus\Repository\Contracts\CacheableInterface;
-
+use App\Models\Branch;
 
 //class BackupRepository extends BaseRepository implements CacheableInterface
 class BackupRepository extends BaseRepository 
