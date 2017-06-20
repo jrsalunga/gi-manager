@@ -37,6 +37,7 @@ class BackupRepository extends BaseRepository
   public function latestBackup() {
   	return $this->scopeQuery(function($query){
   		return $query
+        ->where('filename', 'like', 'GC%')
         ->orderBy('year','desc')
 				->orderBy('month','desc')
 				->orderBy('filename','desc')
