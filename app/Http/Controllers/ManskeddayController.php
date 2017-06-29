@@ -262,7 +262,10 @@ class ManskeddayController extends Controller {
 			$s = explode(':', $start);
 			$e = explode(':', $end);
 
-			for($i = $s[0]; $i < $e[0]; $i++){
+			$e = $e[0] < $s[0] ? $e[0]+24:$e[0];
+			$s = $s[0];
+
+			for($i = $s; $i < $e; $i++){
 				$arr[] = intval($i);
 			}
 		}
@@ -334,12 +337,10 @@ class ManskeddayController extends Controller {
 			->with('manskeddtls')
 			->find($param1);
 
-		//return $manday->manskeddtls()->all();
+		$edit = count($manday->manskeddtls);
 
-		
-		
 		//return dd($request);
-		if(count($manday) > 0){ // check if the $id 
+		if(count($manday) > 0) { // check if the $id 
 			$depts = $this->byDeptFrmEmpIds($manday, true);
 		} else {
 			return redirect(URL::previous());
@@ -348,6 +349,7 @@ class ManskeddayController extends Controller {
 		//return $depts;
 		return view('task.manday.view')
 							->with('depts', $depts)
+							->with('edit', $edit)
 							->with('manday', $manday->load('manskedhdr'))
 							->with('hours', $this->hourlyDuty($depts));
 	}

@@ -38,12 +38,12 @@
             @if(strtotime($manday->date) > strtotime('now'))
             <a href="/task/manday/{{strtolower($manday->id)}}/edit" class="btn btn-primary">
               <span class="glyphicon glyphicon-edit"></span>
-              <span class="hidden-sm hidden-xs">Edit</span>
+              <span class="hidden-sm hidden-xs">{{ $edit ? 'Edit':'Create' }}</span>
             </a>
             @else
             <button type="button" class="btn btn-default" disabled>
               <span class="glyphicon glyphicon-edit"></span>
-              <span class="hidden-sm hidden-xs">Edit</span>
+              <span class="hidden-sm hidden-xs">{{ $edit ? 'Edit':'Create' }}</span>
             </button>
             @endif
           </div><!-- end btn-grp -->
@@ -119,8 +119,11 @@
       <tbody>
           <tr>
           @foreach ($hours as $key => $value) 
-            <td data-value={{ date('g:i A', strtotime($key.'.00')) }}"" title="{{ $key }}" class="text-center"> 
-              {{ date('g A', strtotime($key.'.00')) }}
+            <?php 
+              $idx=$key>=24?$key-24:$key
+            ?>
+            <td data-value={{ date('g:i A', strtotime($idx.':00')) }}"" title="{{ $idx }}" class="text-center"> 
+              {{ date('g A', strtotime($idx.':00')) }}
             </td>
           @endforeach
           </tr>

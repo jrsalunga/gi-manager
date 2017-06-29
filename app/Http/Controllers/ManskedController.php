@@ -147,6 +147,7 @@ class ManskedController extends Controller {
 	public function makeViewWeek($request, $year, $weekno) {
 
 		$mansked = $this->manskeds
+								->skipCache()
 								->with('manskeddays.manskeddtls')
 								->findWhere([
 									'weekno'		=> $weekno,

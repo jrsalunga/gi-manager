@@ -192,10 +192,11 @@
       </tbody>
     </table>
     </div> <!-- end: .table-responsive -->
-    
-    
-      
+
   </div>
+  <p>&nbsp;</p>
+  <p style="font-size: 11px;"><b>Note:</b> Click on the Date to Create/Edit Manpower Schedule of the following day.   </p>
+  
 
 
 <!-- end main -->

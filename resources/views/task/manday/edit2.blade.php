@@ -113,7 +113,10 @@
       <tbody id="tb-houlryman">
           <tr class="t1">
           @foreach ($hours as $key => $value) 
-            <td title="{{ $key }}"> {{ date('g:i A', strtotime($key.'.00')) }}</td>
+            <?php 
+              $idx=$key>=24?$key-24:$key
+            ?>
+            <td title="{{ $idx }}"> {{ date('g:i A', strtotime($idx.':00')) }}</td>
           @endforeach
           </tr>
           <tr class="t2">
@@ -348,7 +351,7 @@
 
     <div class="row button-container">
       <div class="col-md-6">
-        <a href="{{ URL::previous() }}" class="btn btn-default">Cancel</a>
+        <a href="/task/manday/{{$manday->lid()}}" class="btn btn-default">Cancel</a>
         <button type="submit" class="btn btn-primary">Save</button>
       </div>
     </div>
