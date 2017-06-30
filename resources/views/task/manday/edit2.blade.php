@@ -659,7 +659,7 @@ var updateWorkhrs = function(el){
             if ($(this).parent().index()==4 && $(this)[0].value=='off') 
               $(this)[0].value = '18:00';
             if ($(this).parent().index()==5 && $(this)[0].value=='off') 
-              $(this)[0].value = '24:00';
+              $(this)[0].value = '0:00';
             $(this).trigger('change');
           }
           
