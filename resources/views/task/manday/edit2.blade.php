@@ -624,29 +624,29 @@ var updateWorkhrs = function(el){
           $(this).parent().removeClass('disabled');
 
           if (that.val()=='09:00') {
-            if ($(this).parent().index()==3 && $(this)[0].value=='off') 
-              $(this)[0].value = '13:00';
             if ($(this).parent().index()==4 && $(this)[0].value=='off') 
-              $(this)[0].value = '15:00';
+              $(this)[0].value = '13:00';
             if ($(this).parent().index()==5 && $(this)[0].value=='off') 
+              $(this)[0].value = '15:00';
+            if ($(this).parent().index()==6 && $(this)[0].value=='off') 
               $(this)[0].value = '21:00';
             $(this).trigger('change');
           }
 
           if (that.val()=='10:00') {
-            if ($(this).parent().index()==3 && $(this)[0].value=='off') 
-              $(this)[0].value = '14:00';
             if ($(this).parent().index()==4 && $(this)[0].value=='off') 
-              $(this)[0].value = '16:00';
+              $(this)[0].value = '14:00';
             if ($(this).parent().index()==5 && $(this)[0].value=='off') 
+              $(this)[0].value = '16:00';
+            if ($(this).parent().index()==6 && $(this)[0].value=='off') 
               $(this)[0].value = '22:00';
             $(this).trigger('change');
           }
 
           if (that.val()=='11:00') {
-            if ($(this).parent().index()==3 && $(this)[0].value=='off') 
-              $(this)[0].value = '15:00';
             if ($(this).parent().index()==4 && $(this)[0].value=='off') 
+              $(this)[0].value = '15:00';
+            if ($(this).parent().index()==5 && $(this)[0].value=='off') 
               $(this)[0].value = '17:00';
             if ($(this).parent().index()==5 && $(this)[0].value=='off') 
               $(this)[0].value = '23:00';
@@ -654,11 +654,11 @@ var updateWorkhrs = function(el){
           }
 
           if (that.val()=='12:00') {
-            if ($(this).parent().index()==3 && $(this)[0].value=='off') 
-              $(this)[0].value = '16:00';
             if ($(this).parent().index()==4 && $(this)[0].value=='off') 
-              $(this)[0].value = '18:00';
+              $(this)[0].value = '16:00';
             if ($(this).parent().index()==5 && $(this)[0].value=='off') 
+              $(this)[0].value = '18:00';
+            if ($(this).parent().index()==6 && $(this)[0].value=='off') 
               $(this)[0].value = '0:00';
             $(this).trigger('change');
           }
