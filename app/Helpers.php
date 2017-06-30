@@ -420,4 +420,17 @@ if (!function_exists('stl')) {
 }
 
 
+if (!function_exists('hourly')) {
+    function hourly($date='now', $len=24, $start=6) {
+      $arr = [];
+      $date = Carbon\Carbon::parse($date);
+      $t = Carbon\Carbon::parse($date->format('Y-m-d').' '.$start.':00');
+      for ($i=0; $i<$len; $i++) { 
+        $arr[$i] = $t->copy()->addHours($i);
+      }
+      return $arr;
+    }
+}
+
+
 

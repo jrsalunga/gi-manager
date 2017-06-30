@@ -275,6 +275,9 @@ class ManskeddayController extends Controller {
 
 	public function makeEditView(Request $request, $param1) {
 		//$manday = Manday::with('manskedhdr')->find($param1);
+		//return hourly();
+		//foreach (config('gi-dtr.hours') as $key => $value)
+		//	echo date('g:i A', strtotime($value.':00')).'<br>';
 
 		$manday = $this->manday
 			->skipCache()

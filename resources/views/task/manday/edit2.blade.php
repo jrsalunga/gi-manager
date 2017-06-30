@@ -136,6 +136,7 @@
           <td >
             Employee
           </td>
+          <td>&nbsp;</td>
           <td>
             Time Start
           </td>
@@ -174,11 +175,12 @@
                 <input type="hidden" id="manskeddtl{{ $ctr }}loading" name="manskeddtls[{{ $ctr }}][loading]" value="{{ empty($dept['employees'][$i]['manskeddtl']['loading']) ? 0:$dept['employees'][$i]['manskeddtl']['loading'] }}" class="loading">  
               </td>
               <td>{{ $ctr }}. {{ $dept['employees'][$i]->lastname }}, {{ $dept['employees'][$i]->firstname }} 
-              
-              <div class="btn-group pull-right" style="margin-left: 5px;">
+              <span class="label label-default pull-right">{{ $dept['employees'][$i]->position->code }}</span>
+              <td>
+              <div class="btn-group pull-right">
                 <div class="dropdown">
                   <button id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" 
-                  class="btn btn-default btn-xs dropdown-toggle" style="border:0;" tabindex="-1">
+                  class="btn btn-primary btn-xs dropdown-toggle" style="border:0;" tabindex="-1">
                     
                     <span class="br-code br{{$ctr}}">
                     <?php 
@@ -222,8 +224,7 @@
                   </ul>
                 </div>
               </div> <!-- end: btn-group pull-right -->
-
-              <span class="label label-default pull-right">{{ $dept['employees'][$i]->position->code }}</span>
+              </td>
 
 
               </td>
@@ -240,90 +241,49 @@
                   <select name="manskeddtls[{{ $ctr }}][timestart]" class="frm-ctrl tk-select timestart" data-index="{{$ctr}}"
                    data-input="manskeddtl{{$ctr}}daytype" data-br-code="br{{$ctr}}"> 
                     <option value="off">-</option>
-                    @for ($j = 1; $j <= 24; $j++)
-                      <?php $p = str_pad($j,2,'0',STR_PAD_LEFT)  ?>
-                      @if($dept['employees'][$i]['manskeddtl']['timestart'] == date('H:i', strtotime( $j .':00')))
-                        <option selected value="{{ $p }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
+                    @foreach(hourly() as $key => $time)
+                      @if($dept['employees'][$i]['manskeddtl']['timestart'] == $time->format('G:i'))
+                        <option selected value="{{ $time->format('G:i') }}">{{ $time->format('g:i A') }}</option>
                       @else
-                        <option value="{{ $p }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
+                        <option value="{{ $time->format('G:i') }}">{{ $time->format('g:i A') }}</option>
                       @endif
-
-                      <?php 
-                      /*
-                      @if($dept['employees'][$i]['manskeddtl']['timestart'] == date('G:i', strtotime( $j .':30')))
-                        <option selected value="{{ $j }}:30">{{ date('g:i A', strtotime( $j .':30')) }}</option>
-                      @else
-                        <option value="{{ $j }}:30">{{ date('g:i A', strtotime( $j .':30')) }}</option>
-                      @endif
-                      */?>
-                    @endfor
+                    @endforeach
                   </select>
                 </td>
                 <td class="text-right text-input {{ $disabled }}">
                   <select name="manskeddtls[{{ $ctr }}][breakstart]" class="frm-ctrl tk-select breakstart" data-index="{{$ctr}}" {{ $disabled }} tabindex="-1"> 
                     <option value="off">-</option>
-                    @for ($j = 1; $j <= 24; $j++)
-                      <?php $p = str_pad($j,2,'0',STR_PAD_LEFT)  ?>
-                      @if($dept['employees'][$i]['manskeddtl']['breakstart'] == date('H:i', strtotime( $p .':00')))
-                        <option selected value="{{ $p }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
-                      @else
-                        <option value="{{ $p }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
-                      @endif
-
-                      <?php 
-                      /*
-                      @if($dept['employees'][$i]['manskeddtl']['breakstart'] == date('G:i', strtotime( $j .':30')))
-                        <option selected value="{{ $j }}:30">{{ date('g:i A', strtotime( $j .':30')) }}</option>
-                      @else
-                        <option value="{{ $j }}:30">{{ date('g:i A', strtotime( $j .':30')) }}</option>
-                      @endif
-                      */?>
-                    @endfor
+                      @foreach(hourly() as $key => $time)
+                        @if($dept['employees'][$i]['manskeddtl']['breakstart'] == $time->format('G:i'))
+                          <option selected value="{{ $time->format('G:i') }}">{{ $time->format('g:i A') }}</option>
+                        @else
+                          <option value="{{ $time->format('G:i') }}">{{ $time->format('g:i A') }}</option>
+                        @endif
+                      @endforeach
                   </select>
                 </td>
                 <td class="text-right text-input {{ $disabled }}">
                   <select name="manskeddtls[{{ $ctr }}][breakend]" class="frm-ctrl tk-select breakend" data-index="{{$ctr}}" {{ $disabled }} tabindex="-1"> 
                     <option value="off">-</option>
-                    @for ($j = 1; $j <= 24; $j++)
-                      <?php $p = str_pad($j,2,'0',STR_PAD_LEFT)  ?>
-                      @if($dept['employees'][$i]['manskeddtl']['breakend'] == date('H:i', strtotime( $p .':00')))
-                        <option selected value="{{ $p }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
+                    @foreach(hourly() as $key => $time)
+                      @if($dept['employees'][$i]['manskeddtl']['breakend'] == $time->format('G:i'))
+                        <option selected value="{{ $time->format('G:i') }}">{{ $time->format('g:i A') }}</option>
                       @else
-                        <option value="{{ $p }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
+                        <option value="{{ $time->format('G:i') }}">{{ $time->format('g:i A') }}</option>
                       @endif
-                      
-                      <?php 
-                      /*
-                      @if($dept['employees'][$i]['manskeddtl']['breakend'] == date('G:i', strtotime( $j .':30')))
-                        <option selected value="{{ $j }}:30">{{ date('g:i A', strtotime( $j .':30')) }}</option>
-                      @else
-                        <option value="{{ $j }}:30">{{ date('g:i A', strtotime( $j .':30')) }}</option>
-                      @endif
-                      */?>
-                    @endfor
+                    @endforeach
                   </select>
                 </td>
                 <td class="text-right text-input {{ $disabled }}" data-value="{{$dept['employees'][$i]['manskeddtl']['timeend']}}">
                   <select name="manskeddtls[{{ $ctr }}][timeend]" class="frm-ctrl tk-select timeend" data-index="{{$ctr}}" {{ $disabled }} tabindex="-1"> 
                     <option value="off">-</option>
-                    @for ($j = 1; $j <= 24; $j++)
-                      @if($dept['employees'][$i]['manskeddtl']['timeend'] == date('H:i', strtotime( $j .':00')))
-                        <option selected value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
-                      @elseif ($dept['employees'][$i]['manskeddtl']['timeend'] == $j.':00')
-                        <option selected value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
+                     @foreach(hourly() as $key => $time)
+                      @if($dept['employees'][$i]['manskeddtl']['timeend'] == $time->format('G:i'))
+                        <option selected value="{{ $time->format('G:i') }}">{{ $time->format('g:i A') }}</option>
                       @else
-                        <option value="{{ $j }}:00">{{ date('g:i A', strtotime( $j .':00')) }}</option>
+                        <option value="{{ $time->format('G:i') }}">{{ $time->format('g:i A') }}</option>
                       @endif
-                      
-                      <?php 
-                      /*
-                      @if($dept['employees'][$i]['manskeddtl']['timeend'] == date('G:i', strtotime( $j .':30')))
-                        <option selected value="{{ $j }}:30">{{ date('g:i A', strtotime( $j .':30')) }}</option>
-                      @else
-                        <option value="{{ $j }}:30">{{ date('g:i A', strtotime( $j .':30')) }}</option>
-                      @endif
-                      */?>
-                    @endfor
+                    @endforeach
                   </select>
                 </td>
                 <td class="text-right td-workhrs">
@@ -356,10 +316,6 @@
       </div>
     </div>
     </form>
-
-    
-    
-      
   </div>
 
 

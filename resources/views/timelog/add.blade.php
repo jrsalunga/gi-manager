@@ -27,7 +27,7 @@
               <span class="gly gly-notes-2"></span>
               <span class="hidden-xs hidden-sm">Mansked</span>
             </a> 
-            <a href="/timelog" class="btn btn-default">
+            <a href="/{{brcode()}}/timelog" class="btn btn-default">
               <span class="gly gly-stopwatch"></span>
               <span class="hidden-xs hidden-sm">Timelogs</span>
             </a>
