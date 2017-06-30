@@ -199,7 +199,7 @@
               <td data-sort="{{$d->date->format('Y-m-d')}}">{{ $d->date->format('M j, D') }}</td>
               @if(!is_null($d->dailysale) && $d->dailysale['slsmtd_totgrs']>0)
               <td class="text-right" data-sort="{{ number_format($d->dailysale['slsmtd_totgrs'], 2,'.','') }}">
-                @if($d->dailysale['slsmtd_totgrs']>==0)
+                @if($d->dailysale['slsmtd_totgrs']==0)
                   {{ number_format($d->dailysale['slsmtd_totgrs'], 2) }}
                 @else
                   <a href="#" class="text-primary btn-slsmtd-totgrs" data-id="{{strtolower($d->dailysale['id'])}}" data-date="{{$d->date->format('Y-m-d')}}">
@@ -208,7 +208,7 @@
                 @endif
               </td>
               <td class="text-right" data-sort="{{ number_format($d->dailysale['purchcost'], 2,'.','') }}">
-                @if($d->dailysale['purchcost']>0)
+                @if($d->dailysale['purchcost']==0)
                   {{ number_format($d->dailysale['purchcost'], 2) }}
                 @else
                 <a href="#" data-date="{{ $d->date->format('Y-m-d') }}" data-id="{{strtolower($d->dailysale['id'])}}" class="text-primary btn-purch">
