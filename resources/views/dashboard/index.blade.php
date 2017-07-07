@@ -73,11 +73,11 @@
             		<tr>
             			<td>Date</td>
             			<td class="text-right">Sales</td>
-            			<td class="text-right">Purchased</td>
+            			<td class="text-right">Purchased Goods</td>
+                  <td class="text-right">OpEx</td>
                   <td class="text-right">Customers</td>
                   <td class="text-right">Employees</td>
-            			<td class="text-right">Man Cost %</td>
-            			<td class="text-right">Sales per Emp</td>
+                  <td class="text-right">Man Cost %</td>
             		</tr>
             	</thead>
             	<tbody>
@@ -86,20 +86,35 @@
 		            	@if($ctr < 9)
 		            	<tr>
 		            		<td>{{ $ds->date->format('D, M j') }}</td>
-		            		@if(!is_null($ds->dailysale) && $ds->dailysale->slsmtd_totgrs>0)
+		            		@if(!is_null($ds->dailysale))
                     <td class="text-right">
-                      @if($ds->dailysale->slsmtd_totgrs>0)
-                        <a href="/{{brcode()}}/product/sales?fr={{$ds->date->format('Y-m-d')}}&to={{$ds->date->format('Y-m-d')}}" data-toggle="loader">
-                          {{ number_format($ds->dailysale->slsmtd_totgrs,2) }}</td>
-                        </a>
-                      @else
-                        {{ number_format($ds->dailysale->sales,2) }}</td>
-                      @endif
+                      <span class="help" data-toggle="tooltip" title="Net Sales: {{ number_format($ds->dailysale->sales,2) }}">
+                        @if($ds->dailysale->slsmtd_totgrs==0)
+                            {{ number_format($ds->dailysale->slsmtd_totgrs,2) }}</td>
+                        @else
+                          <a href="/{{brcode()}}/product/sales?fr={{$ds->date->format('Y-m-d')}}&to={{$ds->date->format('Y-m-d')}}" data-toggle="loader">
+                          {{ number_format($ds->dailysale->slsmtd_totgrs,2) }}
+                          </a>
+                        @endif
+                      </span>
+                    </td>
+                    <td class="text-right">
+                      <a href="/{{brcode()}}/component/purchases?table=expscat&item=Food+Cost&itemid=7208aa3f5cf111e5adbc00ff59fbb323&fr={{$ds->date->format('Y-m-d')}}&to={{$ds->date->format('Y-m-d')}}" data-toggle="loader">
+                        {{ number_format($ds->dailysale->cos,2) }}
+                      </a>
+                    </td>
+                    <td class="text-right">
+                      <a href="/{{brcode()}}/component/purchases?table=expscat&item=Means+Operation&itemid=8a1c2ff95cf111e5adbc00ff59fbb323&fr={{$ds->date->format('Y-m-d')}}&to={{$ds->date->format('Y-m-d')}}" data-toggle="loader">
+                        {{ number_format($ds->dailysale->getOpex(),2) }}
+                      </a>
+                    </td>
+                    <!--
                     <td class="text-right">
                       <a href="/{{brcode()}}/component/purchases?fr={{$ds->date->format('Y-m-d')}}&to={{$ds->date->format('Y-m-d')}}" data-toggle="loader">
                         {{ number_format($ds->dailysale->purchcost,2) }}
                       </a>
                     </td>
+                    -->
 		            		<td class="text-right">{{ number_format($ds->dailysale->custcount,0,'',',') }}</td>
 		            		<td class="text-right">{{ number_format($ds->dailysale->empcount,0,'',',') }}</td>
 		            		<!--
@@ -109,7 +124,9 @@
 		            		<?php
 			                $s = $ds->dailysale->empcount=='0' ? '0.00':($ds->dailysale->sales/$ds->dailysale->empcount);
 			              ?>
+                    <!--
 			              <td class="text-right" data-sort="{{$s}}">{{number_format($s,2)}}</td>
+                    -->
 		            		@else
 		            		<td class="text-right">-</td>
 		            		<td class="text-right">-</td>

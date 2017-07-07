@@ -69,45 +69,53 @@ class Purchase2Controller extends Controller {
 
   public function getDaily(Request $request) {
 
-
+    $flag = false;
     $where = [];
     $fields = ['component', 'supplier', 'expense', 'expscat', 'compcat'];
     
     $filter = new StdClass;
-    if($request->has('itemid') && $request->has('table') && $request->has('item')) {
+    if ($request->has('itemid') && $request->has('table') && $request->has('item')) {
       
       $id = strtolower($request->input('itemid'));
       $table = strtolower($request->input('table'));
 
-      $c = '\App\Models\\'.ucfirst($table);
-      $i = $c::find($id);
+       if (is_uuid($id) && in_array($table, $fields)) {
+          
+          $c = '\App\Models\\'.ucfirst($table);
+          $i = $c::find($id);
 
-      if (strtolower($request->input('item'))==strtolower($i->descriptor)) {
-        $item = $request->input('item');
-      
-        if(is_uuid($id) && in_array($table, $fields))
+          $item = $i->descriptor;
           $where[$table.'.id'] = $id;
-        else if($table==='payment')
+          $flag = true;
+       } elseif ($table==='payment') {
+          
+          $item = $request->input('item');
           $where['purchase.terms'] = $id;
+          $flag = true;
+       } else {
+          $flag = false;
+       }
 
+      if ($flag) {
         $filter->table = $table;
         $filter->id = $id;
         $filter->item = $item;
-
+        $filter->isset = $flag;
       } else {
         $filter->table = '';
         $filter->id = '';
         $filter->item = '';
-        
+        $filter->isset = $flag;
       }
     } else {
       $filter->table = '';
       $filter->id = '';
       $filter->item = '';
+      $filter->isset = false;
     }
     
-    $this->dr->fr = c();
-    $this->dr->to = c();
+    //$this->dr->fr = c(now2('-1 day'));
+    //$this->dr->to = c(now2('-1 day'));
 
     $res = $this->dr->setDateRangeMode($request, 'daily');
 
@@ -147,15 +155,13 @@ class Purchase2Controller extends Controller {
   }
 
 
-
-
   public function componentComparative(Request $request, $brcode) {
     $filter = $this->getFilter($request, ['component']);
     $components = null;
 
     if ($filter->isset) {
 
-    $components = $this->purchase
+      $components = $this->purchase
                   ->skipCache()
                   ->skipCriteria()
                   ->componentAverageByDR($this->dr)

@@ -40,7 +40,32 @@ function now($val=null){
 			return date('Y-m-d', strtotime('now'));
 			break;
 	}
-	
+}
+
+function now2($val='now', $filter=null){
+    switch ($filter) {
+        case 'year':
+            return date('Y', strtotime($val));
+            break;
+        case 'month':
+            return date('m', strtotime($val));
+            break;
+        case 'day':
+            return date('d', strtotime($val));
+            break;
+        case 'Y':
+            return date('Y', strtotime($val));
+            break;
+        case 'M':
+            return date('m', strtotime($val));
+            break;
+        case 'D':
+            return date('d', strtotime($val));
+            break;
+        default:
+            return date('Y-m-d', strtotime($val));
+            break;
+    }
 }
 
 function pad($val, $len=2, $char='0', $direction=STR_PAD_LEFT){
