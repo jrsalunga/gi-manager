@@ -16,23 +16,17 @@
   @include('_partials.alerts')
 
   @if($inadequates)
-
-      <div class="alert alert-warning alert-important">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <strong><span class="glyphicon glyphicon-warning-sign"></span> Warning</strong>: No backup uploaded on the following date(s) below. This may affect the report generation.
-        <ul>
-        @foreach($inadequates as $d) 
-          <li>{{ $d->format('m/d/Y') }} - <b>GC{{ $d->format('mdy') }}.ZIP</b></li>
-        @endforeach
-        </ul>
-      </div>
-
+    <div class="alert alert-warning alert-important">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <strong><span class="glyphicon glyphicon-warning-sign"></span> Warning</strong>: No backup uploaded on the following date(s) below. This may affect the report generation.
+      <ul>
+      @foreach($inadequates as $d) 
+        <li>{{ $d->format('m/d/Y') }} - <b>GC{{ $d->format('mdy') }}.ZIP</b></li>
+      @endforeach
+      </ul>
+    </div>
   @endif
 
-  <!--
-  <div style="margin-top:50px;" class="hidden-xs"></div>
-  <div style="margin-top:10px;" class="visible-xs-block"></div>
-  -->
   <div class="row">
   	<div class="col-md-8">
   		<div id="panel-top-sales" class="panel panel-success">

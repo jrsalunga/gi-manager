@@ -309,7 +309,7 @@ class ManskedController extends Controller {
 		return $days;
 		*/
 
-		$x = c(firstDayOfWeek($request->input('weekno'), $request->input('year'))->format('Y-m-d'));
+		$x = firstDayOfWeek($request->input('weekno'), $request->input('year'));
 
 
 		//$mansked = array_shift($mansked);
@@ -328,17 +328,17 @@ class ManskedController extends Controller {
 		$mansked->id 				= $mansked->get_uid();
 
 		$mandays = [];
-		/*
+		
     foreach ($mansked->getDaysByWeekNo($request->input('weekno')) as $key => $date) {
     		$manday = new Manday;
     		$manday->date = $date;
     		$manday->id = $manday->get_uid();
         array_push($mandays, $manday);
     }
-    */
     
     
-
+    
+    /*
     for($c=0;$c<7;$c++) {
     	$manday = new Manday;
   		$manday->date = $x->format('Y-m-d');
@@ -348,6 +348,7 @@ class ManskedController extends Controller {
 			$x->addDay();
 			
 		}
+		*/
 		
    
 

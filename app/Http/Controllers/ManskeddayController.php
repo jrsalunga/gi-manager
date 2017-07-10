@@ -392,36 +392,49 @@ class ManskeddayController extends Controller {
 		      $manday->save();
 		        try {
 		          foreach($request->input('manskeddtls') as $mandtl){
-								$n = Mandtl::find($mandtl['id']);
-								if(count($n) > 0){
-									foreach ($mandtl as $key => $value) {
-										if($mandtl['timestart']=='off' && $key=='timestart'){
-											$n->breakstart = NULL;
-											$n->breakend = NULL;
-											$n->timeend = NULL;
-											$n->{$key} = NULL;
-										} else {
-											$n->{$key} = $value;
-										}
-									}
-									$n->save();
+								
+
+								if ($mandtl['daytype']=='5') {
+									$e = Employee::find($mandtl['employeeid']);
+									$e->empstatus = 4;
+									$e->save();
 								} else {
-									$m = new Mandtl;
-									foreach ($mandtl as $key => $value) {
-										if($key=='id')
-											$m->id = $m->get_uid();
-										else
-											if ($mandtl['timestart']=='off' && $key=='timestart')
-												$m->{$key} = NULL;
-											else 
-												$m->{$key} = $value;
+
+									$n = Mandtl::find($mandtl['id']);
+									if(count($n) > 0){
+										foreach ($mandtl as $key => $value) {
+											if($mandtl['timestart']=='off' && $key=='timestart'){
+												$n->breakstart = NULL;
+												$n->breakend = NULL;
+												$n->timeend = NULL;
+												$n->{$key} = NULL;
+											} else {
+												$n->{$key} = $value;
+											}
+										}
+										$n->save();
+									} else {
+										$m = new Mandtl;
+										foreach ($mandtl as $key => $value) {
+											if($key=='id')
+												$m->id = $m->get_uid();
+											else
+												if ($mandtl['timestart']=='off' && $key=='timestart')
+													$m->{$key} = NULL;
+												else 
+													$m->{$key} = $value;
+										}
+										$m->mandayid = $request->input('id');
+										$m->save();
+										//\DB::rollback();
+										//return 'no mandtl found!';
 									}
-									$m->mandayid = $request->input('id');
-									$m->save();
-									//\DB::rollback();
-									//return 'no mandtl found!';
 								}
 							}
+
+							$target_mancostpct = ($manday->custcount*$manday->headspend)==0
+								? 0
+								: (($manday->empcount*$manday->manskedhdr->mancost)/($manday->custcount*$manday->headspend)*100);
 
 							$attrs = [
 								'branchid' 		=> $request->user()->branchid,
@@ -430,7 +443,7 @@ class ManskeddayController extends Controller {
 								'target_cust'	=> $manday->custcount,
 								'target_headspend' 	=> $manday->headspend,
 								'target_empcount' 	=> $manday->empcount,
-								'target_mancostpct' => number_format((($manday->empcount*$manday->manskedhdr->mancost)/($manday->custcount*$manday->headspend)*100),2)
+								'target_mancostpct' => number_format($target_mancostpct,2)
 							];
 
 							$this->ds->firstOrNew($attrs, ['branchid', 'date']);
