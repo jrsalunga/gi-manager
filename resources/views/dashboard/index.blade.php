@@ -83,8 +83,8 @@
 		            		@if(!is_null($ds->dailysale))
                     <td class="text-right">
                       <span class="help" data-toggle="tooltip" title="Net Sales: {{ number_format($ds->dailysale->sales,2) }}">
-                        @if($ds->dailysale->slsmtd_totgrs==0)
-                            {{ number_format($ds->dailysale->slsmtd_totgrs,2) }}</td>
+                        @if(number_format($ds->dailysale->slsmtd_totgrs,2)=='0.00')
+                          -
                         @else
                           <a href="/{{brcode()}}/product/sales?fr={{$ds->date->format('Y-m-d')}}&to={{$ds->date->format('Y-m-d')}}" data-toggle="loader">
                           {{ number_format($ds->dailysale->slsmtd_totgrs,2) }}
@@ -93,14 +93,22 @@
                       </span>
                     </td>
                     <td class="text-right">
-                      <a href="/{{brcode()}}/component/purchases?table=expscat&item=Food+Cost&itemid=7208aa3f5cf111e5adbc00ff59fbb323&fr={{$ds->date->format('Y-m-d')}}&to={{$ds->date->format('Y-m-d')}}" data-toggle="loader">
-                        {{ number_format($ds->dailysale->cos,2) }}
-                      </a>
+                      @if(number_format($ds->dailysale->cos,2)=='0.00')
+                          -
+                      @else
+                        <a href="/{{brcode()}}/component/purchases?table=expscat&item=Food+Cost&itemid=7208aa3f5cf111e5adbc00ff59fbb323&fr={{$ds->date->format('Y-m-d')}}&to={{$ds->date->format('Y-m-d')}}" data-toggle="loader">
+                          {{ number_format($ds->dailysale->cos,2) }}
+                        </a>
+                      @endif
                     </td>
                     <td class="text-right">
-                      <a href="/{{brcode()}}/component/purchases?table=expscat&item=Means+Operation&itemid=8a1c2ff95cf111e5adbc00ff59fbb323&fr={{$ds->date->format('Y-m-d')}}&to={{$ds->date->format('Y-m-d')}}" data-toggle="loader">
-                        {{ number_format($ds->dailysale->getOpex(),2) }}
-                      </a>
+                      @if(number_format($ds->dailysale->getOpex(),2)=='0.00')
+                          -
+                      @else
+                        <a href="/{{brcode()}}/component/purchases?table=expscat&item=Means+Operation&itemid=8a1c2ff95cf111e5adbc00ff59fbb323&fr={{$ds->date->format('Y-m-d')}}&to={{$ds->date->format('Y-m-d')}}" data-toggle="loader">
+                          {{ number_format($ds->dailysale->getOpex(),2) }}
+                        </a>
+                      @endif
                     </td>
                     <!--
                     <td class="text-right">
@@ -109,12 +117,21 @@
                       </a>
                     </td>
                     -->
-		            		<td class="text-right">{{ number_format($ds->dailysale->custcount,0,'',',') }}</td>
-		            		<td class="text-right">{{ number_format($ds->dailysale->empcount,0,'',',') }}</td>
+		            		<td class="text-right">
+                      <?php $custcount = $ds->dailysale->custcount>0 ? number_format($ds->dailysale->custcount,0,'',','):'-' ?>
+                      {{ $custcount }}
+                    </td>
+		            		<td class="text-right">
+                      <?php $empcount = $ds->dailysale->empcount>0 ? number_format($ds->dailysale->empcount,0,'',','):'-' ?>
+                      {{ $empcount }}
+                    </td>
 		            		<!--
                     <td class="text-right">{{ number_format($ds->dailysale->empcount*session('user.branchmancost'),2) }} </td> 
 		            		-->
-                    <td class="text-right">{{ number_format($ds->dailysale->mancostpct,2) }}%</td>
+                    <td class="text-right">
+                      <?php $mancostpct = $ds->dailysale->mancostpct>0 ? number_format($ds->dailysale->mancostpct,2).'%':'-' ?>
+                      {{ $mancostpct }}
+                    </td>
 		            		<?php
 			                $s = $ds->dailysale->empcount=='0' ? '0.00':($ds->dailysale->sales/$ds->dailysale->empcount);
 			              ?>
