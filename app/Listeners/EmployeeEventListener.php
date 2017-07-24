@@ -23,7 +23,7 @@ class EmployeeEventListener
     ];
 
     $this->mailer->queue('emails.employee.resigned', $data, function ($message) use ($event, $data){
-      $message->subject('Resigned Employee: '. $data['code'] . ' [resign]');
+      $message->subject('Resigned Employee: '. $data['brcode'] . '[resign]');
       $message->from($event->user->email, $event->user->name.' ('.$event->user->email.')');
       $message->to('giligans.app@gmail.com');
     });
