@@ -22,7 +22,7 @@ class EmployeeEventListener
       'brcode'    => request()->user()->branch->code,
     ];
 
-    $this->mailer->send('emails.employee.resigned', $data, function ($message) use ($event, $data){
+    $this->mailer->queue('emails.employee.resigned', $data, function ($message) use ($event, $data){
       $message->subject('Resigned Employee: '. $data['code'] . ' [resign]');
       $message->from($event->user->email, $event->user->name.' ('.$event->user->email.')');
       $message->to('giligans.app@gmail.com');
