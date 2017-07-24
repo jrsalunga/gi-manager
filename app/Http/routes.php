@@ -103,6 +103,8 @@ Route::post('timelog', ['uses'=>'TimelogController@manualPost']);
 Route::get('/{brcode}/timelog/{param1?}/{param2?}', ['uses'=>'TimelogController@getIndex2']);
 
 
+Route::get('employee/resigned', ['uses'=>'EmployeeController@resigned']);
+
 Route::get('product/sales', ['uses'=>'SaleController@getDaily']);
 Route::get('{brcode}/product/sales', ['uses'=>'SaleController@getDaily']);
 Route::get('api/mdl/sales/{id}', ['uses'=>'SaleController@ajaxSales']);

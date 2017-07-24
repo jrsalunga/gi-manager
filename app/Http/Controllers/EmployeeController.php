@@ -10,7 +10,7 @@ use App\Models\Branch;
 use App\Repositories\EmployeeRepository;
 use App\Repositories\Criterias\ByBranchCriteria as ByBranch;
 use App\Repositories\Criterias\ActiveEmployeeCriteria as ActiveEmployee;
-
+use App\Events\Employee\Resigned;
 
 class EmployeeController extends Controller {
 
@@ -180,5 +180,13 @@ class EmployeeController extends Controller {
 	public function put(Request $request){
 		dd($request->all());
 
+	}
+
+
+	public function resigned(Request $request) {
+		$employee = \App\Models\Employee::where('code', '003684')->first(['code', 'lastname', 'firstname', 'id']);
+		//return $request->user()->branch->code;
+		event(new Resigned($employee));
+		return $employee;
 	}
 }

@@ -1,0 +1,1 @@
+<p>{{ $fullname }} was resigned at {{ $brcode }}</p>
