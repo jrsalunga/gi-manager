@@ -85,10 +85,10 @@
         </tr>
         <tr>
           <td class="text-right text-input">
-            <input type="text" name="custcount" id="custcount" class="frm-ctrl text-right" value="{{ $manday->custcount }}" autofocus onfocus="this.value = this.value">
+            <input type="text" name="custcount" id="custcount" class="frm-ctrl text-right" value="{{ $manday->custcount }}" autofocus onfocus="this.value = this.value" required="">
           </td>
           <td class="text-right text-input">
-            <input type="text" name="headspend" id="headspend" class="frm-ctrl text-right" value="{{ $manday->headspend }}">
+            <input type="text" name="headspend" id="headspend" class="frm-ctrl text-right" value="{{ $manday->headspend }}" required="">
           </td>
           <td class="text-right tb-empcount">
             {{ $manday->empcount }}
@@ -521,6 +521,9 @@ var updateWorkhrs = function(el){
   var time1 = 0;
   var time2 = 0;
   var time3 = 0;
+
+
+  te.prop('required', true);
 
   
   if(ts.val()!='off' && bs.val()!='off'){

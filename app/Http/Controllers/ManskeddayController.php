@@ -15,6 +15,7 @@ use App\Repositories\EmployeeRepository as EmployeeRepo;
 use App\Repositories\ManskeddayRepository as MandayRepo;
 use App\Repositories\DailySalesRepository as DSRepo;
 use App\Repositories\Criterias\ActiveEmployeeCriteria as ActiveEmployee;
+use App\Events\Employee\Resigned as EmployeeResigned;
 
 class ManskeddayController extends Controller {
 
@@ -397,7 +398,13 @@ class ManskeddayController extends Controller {
 								if ($mandtl['daytype']=='5') {
 									$e = Employee::find($mandtl['employeeid']);
 									$e->empstatus = 4;
-									$e->save();
+									$e->datestop = $manday->date->format('Y-m-d');
+									
+									if ($e->save()) {
+										if (app()->environment()==='production')
+                			event(new EmployeeResigned($e));
+									}
+
 								} else {
 
 									$n = Mandtl::find($mandtl['id']);

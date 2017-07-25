@@ -17,16 +17,11 @@ class EmployeeEventListener
   public function onResigned($event) {
 
     $data = [
-      'code'      => $event->employee->code,
-      'fullname'  => $event->employee->lastname.', '. $event->employee->firstname,
-      'brcode'    => request()->user()->branch->code,
+      'subject'  => 'Employee Resigned: '.$event->employee->code,
+      'body'  => $event->employee->lastname.', '. $event->employee->firstname .' resigned at '.request()->user()->branch->code
     ];
 
-    $this->mailer->queue('emails.employee.resigned', $data, function ($message) use ($event, $data){
-      $message->subject('Resigned Employee: '. $data['code'] . ' [resign]');
-      $message->from($event->user->email, $event->user->name.' ('.$event->user->email.')');
-      $message->to('giligans.app@gmail.com');
-    });
+    $this->generalMailer($event, $data, 'resign');
   }
 
   public function subscribe($events) {
@@ -34,6 +29,24 @@ class EmployeeEventListener
       'App\Events\Employee\Resigned',
       'App\Listeners\EmployeeEventListener@onResigned'
     );
+  }
+
+
+  private function generalMailer($event, $data, $tag=NULL) {
+
+    $this->mailer->queue('emails.general', $data, function ($message) use ($event, $data, $tag) {
+
+      $subject = $data['subject'];
+
+      if (!is_null($tag))
+        $subject .= ' ['.$tag.']';
+
+      $message->subject($subject);
+      $message->from($event->user->email, $event->user->name.' ('.$event->user->email.')');
+      $message->to('giligans.app@gmail.com');
+    
+    });
+  
   }
 }
 
