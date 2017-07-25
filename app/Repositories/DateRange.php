@@ -104,12 +104,21 @@ class DateRange {
   }
 
 
-  public function dateInterval(){
+  public function dateInterval_old(){
     //$to = $this->to->copy();
   	$to = $this->to->copy()->subDay();
     $interval = new DateInterval('P1D');
     $to->add($interval);
     return new DatePeriod($this->fr, $interval, $to);
+  }
+
+  public function dateInterval(){
+    $fr = $this->fr->copy();
+    $arr = [];
+     do {
+      array_push($arr, Carbon::parse($fr->format('Y-m-d').' 00:00:00'));
+    } while ($fr->addDay() <= $this->to);
+    return $arr;
   }
 
 
