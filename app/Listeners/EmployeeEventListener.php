@@ -40,7 +40,11 @@ class EmployeeEventListener
   public function subscribe($events) {
     $events->listen(
       'App\Events\Employee\Resigned',
-      'App\Listeners\EmployeeEventListener@onResigned',
+      'App\Listeners\EmployeeEventListener@onResigned'
+    );
+
+    $events->listen(
+      'App\Events\Employee\ChangeStatus',
       'App\Listeners\EmployeeEventListener@onChangeStatus'
     );
   }
