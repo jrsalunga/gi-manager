@@ -22,7 +22,7 @@ class ChangeStatus extends Event
     {
         $this->employee = $employee;
         $this->user = request()->user();
-        $this->status = $status
+        $this->status = $status;
     }
 
     /**
