@@ -24,10 +24,24 @@ class EmployeeEventListener
     $this->generalMailer($event, $data, 'resign');
   }
 
+  /**
+   * Handle Employee Resigned events.
+   */
+  public function onChangeStatus($event) {
+
+    $data = [
+      'subject'  => 'Employee Change Status: '.$event->employee->code,
+      'body'  => $event->employee->lastname.', '. $event->employee->firstname .' '. $event->status .' at '.request()->user()->branch->code
+    ];
+
+    $this->generalMailer($event, $data, $event->status);
+  }
+
   public function subscribe($events) {
     $events->listen(
       'App\Events\Employee\Resigned',
-      'App\Listeners\EmployeeEventListener@onResigned'
+      'App\Listeners\EmployeeEventListener@onResigned',
+      'App\Listeners\EmployeeEventListener@onChangeStatus',
     );
   }
 
