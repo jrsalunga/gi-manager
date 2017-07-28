@@ -402,10 +402,10 @@ class ManskeddayController extends Controller {
 									$e->datestop = $manday->date->format('Y-m-d');
 
 									switch ($mandtl['daytype']) {
-										case 7:
+										case '7':
 											$status = 'awol';
 											break;
-										case 8:
+										case '8':
 											$status = 'did not show up';
 											break;
 										default:
@@ -415,7 +415,7 @@ class ManskeddayController extends Controller {
 									
 									if ($e->save()) {
 										if (app()->environment()==='production')
-                			event(new EmployeeChangeStatus($e), $status);
+                			event(new EmployeeChangeStatus($e, $status));
 									}
 
 								} else {
