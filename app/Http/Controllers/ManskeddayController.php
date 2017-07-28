@@ -392,10 +392,10 @@ class ManskeddayController extends Controller {
 		    try {
 		      $manday->save();
 		        try {
-		          foreach($request->input('manskeddtls') as $mandtl){
+		          foreach ($request->input('manskeddtls') as $mandtl) {
 								
-
-								if ($mandtl['daytype']=='5') {
+								if ($mandtl['daytype']=='5' || $mandtl['daytype']=='7' || $mandtl['daytype']=='8') {
+									
 									$e = Employee::find($mandtl['employeeid']);
 									$e->empstatus = 4;
 									$e->datestop = $manday->date->format('Y-m-d');

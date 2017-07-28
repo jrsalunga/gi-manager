@@ -16,12 +16,20 @@ class EmployeeEventListener
    */
   public function onResigned($event) {
 
-    $data = [
-      'subject'  => 'Employee Resigned: '.$event->employee->code,
-      'body'  => $event->employee->lastname.', '. $event->employee->firstname .' resigned at '.request()->user()->branch->code
+    $status = [
+      5 => 'resigned',
+      7 => 'awol',
+      8 => 'did not show up',
     ];
 
-    $this->generalMailer($event, $data, 'resign');
+    $s = $status[$event->employee->empstatus];
+
+    $data = [
+      'subject'  => 'Employee: '.$event->employee->code,
+      'body'  => $event->employee->lastname.', '. $event->employee->firstname .' '. $s .' at '.request()->user()->branch->code
+    ];
+
+    $this->generalMailer($event, $data, $s);
   }
 
   public function subscribe($events) {

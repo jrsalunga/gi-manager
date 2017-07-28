@@ -430,6 +430,18 @@ if (!function_exists('dayDesc')) {
             else    
             echo 'Others';
           break;
+        case '7':
+            if ($short)
+                echo 'A';
+            else    
+            echo 'AWOL';
+          break;
+        case '8':
+            if ($short)
+                echo 'N';
+            else    
+            echo 'Did Not Show Up';
+          break;
         default:
           echo '-';
           break;

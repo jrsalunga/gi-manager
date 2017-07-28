@@ -121,8 +121,6 @@ class DateRange {
     return $arr;
   }
 
-
-
   public function monthInterval(){
   	$fr = $this->fr->copy();
   	$arr = [];

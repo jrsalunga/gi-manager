@@ -183,33 +183,7 @@
                   class="btn btn-primary btn-xs dropdown-toggle" style="border:0;" tabindex="-1">
                     
                     <span class="br-code br{{$ctr}}">
-                    <?php 
-                    switch ($dayType) {
-                      case 0:
-                        echo 'O';
-                        break;
-                      case 1:
-                        echo 'D';
-                        break;
-                      case 2:
-                        echo 'L';
-                        break;
-                      case 3:
-                        echo 'S';
-                        break;
-                      case 4:
-                        echo 'B';
-                        break;
-                      case 5:
-                        echo 'R';
-                        break;
-                      case 6:
-                        echo 'X';
-                        break;
-                      default:
-                        echo '-';
-                        break;
-                    }?>
+                    {{ dayDesc($dayType, true) }}
                     </span>
                     
                   </button>
@@ -220,6 +194,8 @@
                     <li><a href="#" data-code="S" data-value="3" data-input="manskeddtl{{$ctr}}daytype">Suspended</a></li>
                     <li><a href="#" data-code="B" data-value="4" data-input="manskeddtl{{$ctr}}daytype">Backup</a></li>
                     <li><a href="#" data-code="R" data-value="5" data-input="manskeddtl{{$ctr}}daytype">Resigned</a></li>
+                    <li><a href="#" data-code="A" data-value="7" data-input="manskeddtl{{$ctr}}daytype">AWOL</a></li>
+                    <li><a href="#" data-code="N" data-value="8" data-input="manskeddtl{{$ctr}}daytype">Did Not Show Up</a></li>
                     <li><a href="#" data-code="X" data-value="6" data-input="manskeddtl{{$ctr}}daytype">Other</a></li>
                   </ul>
                 </div>
