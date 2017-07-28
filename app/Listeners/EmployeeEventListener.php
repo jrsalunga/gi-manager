@@ -41,7 +41,7 @@ class EmployeeEventListener
     $events->listen(
       'App\Events\Employee\Resigned',
       'App\Listeners\EmployeeEventListener@onResigned',
-      'App\Listeners\EmployeeEventListener@onChangeStatus',
+      'App\Listeners\EmployeeEventListener@onChangeStatus'
     );
   }
 
