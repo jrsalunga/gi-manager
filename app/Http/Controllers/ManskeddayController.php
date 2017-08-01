@@ -207,8 +207,6 @@ class ManskeddayController extends Controller {
       		$be = $dept['employees'][$i]['manskeddtl']['breakend'];
       		$te = $dept['employees'][$i]['manskeddtl']['timeend'];
 
-      		
-
       		if($ts!='off' && $bs!='off' && $be!='off' && $te!='off'){
       			$hrs = $this->getHour($ts, $te);
 	      		foreach ($hrs as $hr) {
@@ -264,10 +262,10 @@ class ManskeddayController extends Controller {
 			$s = explode(':', $start);
 			$e = explode(':', $end);
 
-			$e = $e[0] < $s[0] ? $e[0]+24:$e[0];
+			$e = $e[0] < $s[0] ? $e[0]+24 : $e[0];
 			$s = $s[0];
 
-			for($i = $s; $i < $e; $i++){
+			for($i = $s; $i < $e; $i++) {
 				$arr[] = intval($i);
 			}
 		}
@@ -452,7 +450,7 @@ class ManskeddayController extends Controller {
 								}
 							}
 
-							$target_mancostpct = ($manday->custcount*$manday->headspend)==0
+							$target_mancostpct = ($manday->custcount*$manday->headspend) == 0
 								? 0
 								: (($manday->empcount*$manday->manskedhdr->mancost)/($manday->custcount*$manday->headspend)*100);
 

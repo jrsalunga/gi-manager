@@ -155,6 +155,9 @@ class ManskedController extends Controller {
 									'branchid' 	=> $request->user()->branchid
 								])->first();
 
+		if (!$mansked)
+			return abort('404');
+
 		$mandtls = collect(array_collapse($mansked->manskeddays->pluck('manskeddtls')->toArray()));
 
 		$empsOnMansked = $mandtls->pluck('employeeid')
@@ -405,11 +408,13 @@ class ManskedController extends Controller {
     								->where('year', $request->input('year'))
     								->where('branchid', $request->user()->branchid)
     								->get();
+    
     if(count($mansked1) > 0){
 			return redirect('/task/mansked')
                         ->withErrors(['message' => 'Manpower Schedule Week '. $request->input('nweekno') .' already exist!'])
                         ->withInput();
 		}
+
     $mansked = Mansked::find($request->input('lmanskedid'));
 		if(count($mansked) <= 0){
 			return redirect('/task/mansked')
@@ -417,75 +422,32 @@ class ManskedController extends Controller {
                         ->withInput();
 		}
 
-		$mansked->load('manskeddays');
-		$mandays = $mansked->manskeddays; 
 
-    foreach ($mandays as $manday) {
-    	$manday->load('manskeddtls');
-    }
+		
 
 
 
     $new_mansked = new Mansked;
 		//return $mansked->getRefno();
 		$new_mansked->refno 		= $new_mansked->getRefno();
-		$new_mansked->date 			= $mansked->date->format('Y-m-d');
+		$new_mansked->date 			= firstDayOfWeek($request->input('nweekno'), $request->input('year'));
 		$new_mansked->weekno		= $request->input('nweekno');
 		$new_mansked->year			= $request->input('year');
 		$new_mansked->branchid 	= $mansked->branchid;
 		$new_mansked->managerid = $mansked->managerid;
 		$new_mansked->mancost 	= $mansked->mancost;
-		$new_mansked->notes 		= $mansked->notes;
+		$new_mansked->notes 		= 'copied from week '.$request->input('lweekno');
 		$new_mansked->id 				= $mansked->get_uid();
 	
 
 
 		\DB::beginTransaction(); //Start transaction!
 
-		$new_mandays = [];
-    foreach ($new_mansked->getDaysByWeekNo($request->input('nweekno'), $request->input('year')) as $key => $date) {
-    		$new_manday 						= new Manday;
-    		$new_manday->date 			= $date->format('Y-m-d');
-    		$new_manday->custcount 	= $mandays[$key]->custcount;
-    		$new_manday->headspend	= $mandays[$key]->headspend;
-    		$new_manday->empcount		= $mandays[$key]->empcount;
-    		$new_manday->workhrs		= $mandays[$key]->workhrs;
-    		$new_manday->breakhrs		= $mandays[$key]->breakhrs;
-    		$new_manday->overload   = $mandays[$key]->overload;
-    		$new_manday->underload  = $mandays[$key]->underload;
-    		$new_manday->id 				= $new_manday->get_uid();
-        
-        $new_mandtls = [];
-        foreach ($mandays[$key]->manskeddtls as $mandtl) {
-        	$new_mandtl 						= new Mandtl;
-        	$new_mandtl->employeeid = $mandtl->employeeid;
-        	$new_mandtl->daytype 		= $mandtl->daytype;
-        	$new_mandtl->timestart 	= $mandtl->timestart;
-        	$new_mandtl->breakstart = $mandtl->breakstart;
-        	$new_mandtl->breakend 	= $mandtl->breakend;
-        	$new_mandtl->timeend 		= $mandtl->timeend;
-        	$new_mandtl->workhrs 		= $mandtl->workhrs;
-        	$new_mandtl->breakhrs 	= $mandtl->breakhrs;
-        	$new_mandtl->loading 		= $mandtl->loading;
-        	$new_mandtl->id 				= $new_mandtl->get_uid();
 
-        	array_push($new_mandtls, $new_mandtl);
-        }
-
-        try {
-        		$new_manday->manskeddtls()->saveMany($new_mandtls);
-        } catch(\Exception $e) {
-          \DB::rollback();
-          throw $e;
-        }
-
-        array_push($new_mandays, $new_manday);
-    }
-
-    try {
+		try {
        	$new_mansked->save();
         try {
-           	$new_mansked->manskeddays()->saveMany($new_mandays);
+        		$this->createMandays($new_mansked, $mansked, $request);
         } catch(\Exception $e) {
           \DB::rollback();
           throw $e;
@@ -508,6 +470,64 @@ class ManskedController extends Controller {
     }
 
      return $new_mansked;
+	}
+
+	private function createMandays($mansked, $mansked_old, $request) {
+
+		$mansked_old->load('manskeddays');
+		$mandays = $mansked_old->manskeddays; 
+
+    foreach ($mandays as $manday) {
+    	$manday->load('manskeddtls');
+    }
+
+		
+    foreach ($mansked->getDaysByWeekNo($request->input('nweekno'), $request->input('year')) as $key => $date) {
+    		
+    		$new_manday 						= new Manday;
+    		$new_manday->date 			= $date->format('Y-m-d');
+    		$new_manday->custcount 	= $mandays[$key]->custcount;
+    		$new_manday->headspend	= $mandays[$key]->headspend;
+    		$new_manday->empcount		= $mandays[$key]->empcount;
+    		$new_manday->workhrs		= $mandays[$key]->workhrs;
+    		$new_manday->breakhrs		= $mandays[$key]->breakhrs;
+    		$new_manday->overload   = $mandays[$key]->overload;
+    		$new_manday->underload  = $mandays[$key]->underload;
+    		$new_manday->id 				= $new_manday->get_uid();
+
+
+    		try {
+        	$manday = $mansked->manskeddays()->save($new_manday);
+        } catch(\Exception $e) {
+          \DB::rollback();
+          throw $e;
+        }
+        
+        $new_mandtls = [];
+        foreach ($mandays[$key]->manskeddtls as $mandtl) {
+        	
+        	$new_mandtl 						= new Mandtl;
+        	$new_mandtl->employeeid = $mandtl->employeeid;
+        	$new_mandtl->daytype 		= $mandtl->daytype;
+        	$new_mandtl->timestart 	= $mandtl->timestart;
+        	$new_mandtl->breakstart = $mandtl->breakstart;
+        	$new_mandtl->breakend 	= $mandtl->breakend;
+        	$new_mandtl->timeend 		= $mandtl->timeend;
+        	$new_mandtl->workhrs 		= $mandtl->workhrs;
+        	$new_mandtl->breakhrs 	= $mandtl->breakhrs;
+        	$new_mandtl->loading 		= $mandtl->loading;
+        	$new_mandtl->id 				= $new_mandtl->get_uid();
+
+        	array_push($new_mandtls, $new_mandtl);
+        }
+
+        try {
+        	$manday->manskeddtls()->saveMany($new_mandtls);
+        } catch(\Exception $e) {
+          \DB::rollback();
+          throw $e;
+        }
+    }
 	}
 
 
