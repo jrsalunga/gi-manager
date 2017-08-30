@@ -134,23 +134,24 @@ class TimelogRepository extends BaseRepository
     $col = collect($timelogs[0]);
 
     
-    if(count($employees)==0);
+    if(count($employees)==0) {
       $arr[0] = [];
+    } else {
+      foreach ($employees as $key => $employee) {
 
-
-    foreach ($employees as $key => $employee) {
-
-      $arr[0][$key]['employee'] = $employee;
-      
-      for ($i=1; $i < 5; $i++) { 
+        $arr[0][$key]['employee'] = $employee;
         
-        $arr[0][$key]['timelogs'][$i] = $col->where('employeeid', $employee->id)
-                                        ->where('txncode', $i)
-                                        ->sortBy('datetime')->first();
+        for ($i=1; $i < 5; $i++) { 
+          
+          $arr[0][$key]['timelogs'][$i] = $col->where('employeeid', $employee->id)
+                                          ->where('txncode', $i)
+                                          ->sortBy('datetime')->first();
+        }
+        $arr[0][$key]['raw'] = $timelogs[0]->where('employeeid', $employee->id)
+                              ->sortBy('datetime');
       }
-      $arr[0][$key]['raw'] = $timelogs[0]->where('employeeid', $employee->id)
-                            ->sortBy('datetime');
     }
+
     $arr[1] = $timelogs[1];
 
 
