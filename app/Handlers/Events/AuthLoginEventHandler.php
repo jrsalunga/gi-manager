@@ -40,7 +40,7 @@ class AuthLoginEventHandler
             $message->subject('Manager Logged In');
             $message->from('no-reply@giligansrestaurant.com', 'GI App - Manager');
             $message->to('giligans.app@gmail.com');
-            $message->to('freakyash_02@yahoo.com');
+            //$message->to('freakyash_02@yahoo.com');
         });
     }
 }

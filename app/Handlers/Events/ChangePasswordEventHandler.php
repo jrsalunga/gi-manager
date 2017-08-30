@@ -37,7 +37,7 @@ class ChangePasswordEventHandler
         ];
 
         \Mail::send('emails.change_password', $data, function ($message) {
-            $message->subject('User Change Password');
+            $message->subject('User Change Password [password]');
             $message->from('no-reply@giligansrestaurant.com', 'GI App - Manager');
             $message->to('giligans.app@gmail.com');
             $message->to('freakyash_02@yahoo.com');
