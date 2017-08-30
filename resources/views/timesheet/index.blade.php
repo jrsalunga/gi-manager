@@ -67,7 +67,7 @@
 
 
 
-    @if(count($data[0])>0)
+    @if(isset($data[0]) && count($data[0])>0)
 
 
     <div>
