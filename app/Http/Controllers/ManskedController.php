@@ -480,7 +480,6 @@ class ManskedController extends Controller {
     foreach ($mandays as $manday) {
     	$manday->load('manskeddtls');
     }
-
 		
     foreach ($mansked->getDaysByWeekNo($request->input('nweekno'), $request->input('year')) as $key => $date) {
     		

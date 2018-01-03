@@ -115,6 +115,10 @@ Route::get('{brcode}/component/purchases', ['uses'=>'Purchase2Controller@getDail
 Route::get('{brcode}/component/price/comparative', ['uses'=>'Purchase2Controller@componentComparative']);
 Route::get('api/search/component', ['uses'=>'Purchase2Controller@search']);
 
+Route::get('{brcode}/backups/log', ['uses'=>'BackupController@getHistory']);
+
+
+
 /******************* API  *************************************************/
 Route::group(['prefix'=>'api'], function(){
 

@@ -258,7 +258,6 @@ class Purchase2Controller extends Controller {
 
   public function search(Request $request) {
 
-
     $arr = [];
 
     if($request->has('q')) {
