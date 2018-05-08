@@ -53,13 +53,13 @@ class ManskedController extends Controller {
 		$branch = Branch::find($request->user()->branchid);
 		$new = $mansked->newWeek($branch->id);
 		$data = [
-			'branch' => $branch->code.' - ' .$branch->descriptor,
-			'branchid' => $branch->id,
-			'manager' => $request->user()->name,
+			'branch' 		=> $branch->code.' - ' .$branch->descriptor,
+			'branchid' 	=> $branch->id,
+			'manager' 	=> $request->user()->name,
 			'managerid' => $request->user()->id,
-			'mancost' => $branch->mancost,
-			'weekno' => $new['weekno'],
-			'year' => $new['year']
+			'mancost' 	=> $branch->mancost,
+			'weekno'		=> $new['weekno'],
+			'year' 			=> $new['year']
 		];
 		return view('task.mansked.add')->with('data', $data);
 	}
@@ -196,7 +196,6 @@ class ManskedController extends Controller {
 
 	public function makeViewWeekPrint($request, $year, $weekno){
 
-		
 		$mansked = $this->manskeds
 								->with('manskeddays.manskeddtls')
 								->findWhere([
@@ -255,7 +254,6 @@ class ManskedController extends Controller {
 		}
 		
 		//return $depts;
-  	
 
   	return view('task.mansked.week-print')->with('depts', $depts)->with('mansked', $mansked);
 	}

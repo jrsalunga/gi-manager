@@ -66,7 +66,6 @@ class ManskedhdrRepository extends BaseRepository implements CacheableInterface
         $arr['weekdays'] = $this->getDaysByWeekNo($obj->weekno+1);
         $arr['lmanskedid'] = $obj->id;
       } else {
-      //return dd($obj);
         $arr['weekno'] = 1;
         $arr['year'] = Carbon::parse($obj->date)->addYear()->year;
         $arr['weekdays'] = $this->getDaysByWeekNo(1, $arr['year']);
