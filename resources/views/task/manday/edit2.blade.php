@@ -426,6 +426,7 @@ var updateManPerHour = function(el){
         be='0.00';
         te='0.00';
       }
+      console.log(ts);
 
       if(ts!='off' && bs!='0.00'){
         var i = getHour(ts.split(':')[0], bs.split(':')[0]);
