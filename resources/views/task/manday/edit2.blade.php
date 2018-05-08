@@ -440,7 +440,7 @@ var updateManPerHour = function(el){
         });
       }
 
-      if(be!='0.00' && te!='0.00'){
+      if(be!='0.00' && te!='0.00' && te!==undefined && be!==undefined){
         console.log('be te');
         var j = getHour2(be.split(':')[0], te.split(':')[0]);
         j.forEach(function(el, idx, array) {
