@@ -426,9 +426,10 @@ var updateManPerHour = function(el){
         be='0.00';
         te='0.00';
       }
-      console.log(ts);
+      
 
-      if(ts!='off' && bs!='0.00' && ts!==undefined){
+      if(ts!='off' && bs!='0.00'){
+        console.log('ts bs');
         var i = getHour(ts.split(':')[0], bs.split(':')[0]);
         i.forEach(function(el, idx, array) {
             if(arr.hasOwnProperty(el)){
@@ -440,6 +441,7 @@ var updateManPerHour = function(el){
       }
 
       if(be!='0.00' && te!='0.00'){
+        console.log('be te');
         var j = getHour2(be.split(':')[0], te.split(':')[0]);
         j.forEach(function(el, idx, array) {
             if(arr.hasOwnProperty(el)){
@@ -451,6 +453,7 @@ var updateManPerHour = function(el){
       }
 
       if(ts!='0.00' && te!='0.00' && bs=='off' && be=='off'){
+        console.log('ts te bs be');
         var j = getHour2(ts.split(':')[0], te.split(':')[0]);
         j.forEach(function(el, idx, array) {
             if(arr.hasOwnProperty(el)){
@@ -462,6 +465,7 @@ var updateManPerHour = function(el){
       }
 
       if(ts!='0.00' && te!='0.00' && bs!='0.00' && be!='0.00'){
+        console.log('4');
         var j = getHour(bs.split(':')[0], be.split(':')[0]);
         j.forEach(function(el, idx, array) {
             if(arr.hasOwnProperty(el)){
