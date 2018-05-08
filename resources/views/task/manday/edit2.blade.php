@@ -452,7 +452,7 @@ var updateManPerHour = function(el){
         });
       }
 
-      if(ts!='0.00' && te!='0.00' && bs=='off' && be=='off'){
+      if(ts!='0.00' && te!='0.00' && bs=='off' && be=='off' && ts!==undefined && te!==undefined && bs!==undefined && be!==undefined){
         console.log('ts te bs be');
         var j = getHour2(ts.split(':')[0], te.split(':')[0]);
         j.forEach(function(el, idx, array) {
@@ -464,7 +464,7 @@ var updateManPerHour = function(el){
         });
       }
 
-      if(ts!='0.00' && te!='0.00' && bs!='0.00' && be!='0.00'){
+      if(ts!='0.00' && te!='0.00' && bs!='0.00' && be!='0.00' && ts!==undefined && te!==undefined && bs!==undefined && be!==undefined){
         console.log('4');
         var j = getHour(bs.split(':')[0], be.split(':')[0]);
         j.forEach(function(el, idx, array) {
