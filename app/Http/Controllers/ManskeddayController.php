@@ -374,7 +374,7 @@ class ManskeddayController extends Controller {
 
 	public function put(Request $request, $id){
 		//return $request->input('manskeddtls');
-		return $request->all();
+		//return $request->all();
 		if(strtolower($request->input('id')) == strtolower($id)){
 			$manday = Manday::find($id);
 			if(count($manday) > 0){
@@ -421,7 +421,7 @@ class ManskeddayController extends Controller {
 									$n = Mandtl::find($mandtl['id']);
 									if(count($n) > 0){
 										foreach ($mandtl as $key => $value) {
-											if($mandtl['timestart']=='off' && $key=='timestart'){
+											if(isset($mandtl['timestart']) && $mandtl['timestart']=='off' && $key=='timestart'){
 												$n->breakstart = NULL;
 												$n->breakend = NULL;
 												$n->timeend = NULL;
