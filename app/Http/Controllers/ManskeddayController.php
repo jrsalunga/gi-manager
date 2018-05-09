@@ -437,7 +437,7 @@ class ManskeddayController extends Controller {
 											if($key=='id')
 												$m->id = $m->get_uid();
 											else
-												if ($mandtl['timestart']=='off' && $key=='timestart')
+												if (isset($mandtl['timestart']) && $mandtl['timestart']=='off' && $key=='timestart')
 													$m->{$key} = NULL;
 												else 
 													$m->{$key} = $value;
