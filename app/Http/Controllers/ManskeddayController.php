@@ -17,6 +17,7 @@ use App\Repositories\DailySalesRepository as DSRepo;
 use App\Repositories\Criterias\ActiveEmployeeCriteria as ActiveEmployee;
 use App\Events\Employee\Resigned as EmployeeResigned;
 use App\Events\Employee\ChangeStatus as EmployeeChangeStatus;
+use Prettus\Repository\Events\RepositoryEntityUpdated;
 
 class ManskeddayController extends Controller {
 
@@ -412,8 +413,11 @@ class ManskeddayController extends Controller {
 									}
 									
 									if ($e->save()) {
-										if (app()->environment()==='production')
+										if (app()->environment()==='production') {
                 			event(new EmployeeChangeStatus($e, $status));
+                			event(new RepositoryEntityUpdated($this->employees, $e));
+										}
+
 									}
 
 								} else {
