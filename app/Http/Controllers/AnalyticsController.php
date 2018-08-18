@@ -28,6 +28,9 @@ class AnalyticsController extends Controller
 
     $dailysales = $this->ds->branchByDR($request->user()->branchid, $this->dr);
 
+    if ($request->has('raw'))
+      return $dailysales;
+
     return $this->setViewWithDR(view('dashboard.analytics')->with('dailysales', $dailysales));
   }
 
