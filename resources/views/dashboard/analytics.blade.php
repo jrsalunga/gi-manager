@@ -224,7 +224,8 @@
               ?>
               <td class="text-right" data-sort="{{$s}}">{{number_format($s,2)}}</td>
               <?php
-                $mancost = $d->dailysale['empcount']*session('user.branchmancost');
+                //$mancost = $d->dailysale['empcount']*session('user.branchmancost');
+                $mancost = $d->dailysale['mancost'];
                 $div_mancost+=($mancost!=0)?1:0; 
               ?>
               <td class="text-right" data-sort="{{ number_format($mancost,2,'.','') }}" 

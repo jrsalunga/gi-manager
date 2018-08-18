@@ -123,7 +123,7 @@ class Manskedhdr extends BaseModel {
     //$obj = $this->query()->where('branchid', $branchid)->orderBy('created_at', 'DESC')->get()->first();
     $obj = $this->query()->where('branchid', $branchid)->orderBy('year', 'DESC')->orderBy('weekno', 'DESC')->get()->first();
     if(count($obj) <= 0){
-      $arr['weekno'] = date('W', strtotime('now'));
+      $arr['weekno'] = date('W', strtotime('2018-04-30'));
       $arr['year'] = date('Y', strtotime('now'));
       $arr['weekdays'] = $this->getDaysByWeekNo($arr['weekno']);
     } else {
@@ -169,7 +169,7 @@ class Manskedhdr extends BaseModel {
 		return $weeks;
   }
 
-  public static function getManskedday($year, $weekno){
+  public static function getManskedday($year, $weekno) {
 
   	$mansked = Manskedhdr::with('manskeddays')
   												->where('weekno', $weekno)
