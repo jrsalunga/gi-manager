@@ -162,7 +162,7 @@
         @if(!request()->has('table'))
         <li role="presentation" style="float: right;margin-right:20px;">
           <div>
-          Net Sales:
+          Sales:
           <h3 id="tot-salesmtd-cost" class="text-right hidden-xs" style="margin:0 0 20px 0;">{{ number_format($ds->sales,2) }}</h3>
           <h4 id="tot-salesmtd-cost" class="text-right visible-xs" style="margin:0 0 20px 0;">{{ number_format($ds->sales,2) }}</h4>
           </div>
@@ -619,7 +619,7 @@
                 <tr>
                   <th>Time</th>
                   <th class="text-right">Customer Count</th>
-                  <th class="text-right">Sales</th>
+                  <th class="text-right">Amount of Order</th>
                 </tr>
               </thead>
               <tbody>
