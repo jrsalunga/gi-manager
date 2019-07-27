@@ -187,7 +187,7 @@
                 $div_tips = 0;
               ?>
             @foreach($dailysales as $d)
-            	<?php $div_sales+=($d->dailysale['slsmtd_totgrs']!=0)?1:0; ?>
+            	<?php $div_sales+=($d->dailysale['sales']!=0)?1:0; ?>
             	<?php $div_purchcost+=($d->dailysale['purchcost']!=0)?1:0; ?>
             	<?php $div_custcount+=($d->dailysale['custcount']!=0)?1:0; ?>
             	<?php $div_headspend+=($d->dailysale['headspend']!=0)?1:0; ?>
@@ -197,13 +197,13 @@
 
             <tr {{ $d->date->dayOfWeek=='0' ? 'class=warning':''  }}>
               <td data-sort="{{$d->date->format('Y-m-d')}}">{{ $d->date->format('M j, D') }}</td>
-              @if(!is_null($d->dailysale) && $d->dailysale['slsmtd_totgrs']>0)
-              <td class="text-right" data-sort="{{ number_format($d->dailysale['slsmtd_totgrs'], 2,'.','') }}">
-                @if($d->dailysale['slsmtd_totgrs']==0)
-                  {{ number_format($d->dailysale['slsmtd_totgrs'], 2) }}
+              @if(!is_null($d->dailysale) && $d->dailysale['sales']>0)
+              <td class="text-right" data-sort="{{ number_format($d->dailysale['sales'], 2,'.','') }}">
+                @if($d->dailysale['sales']==0)
+                  {{ number_format($d->dailysale['sales'], 2) }}
                 @else
                   <a href="#" class="text-primary btn-slsmtd-totgrs" data-id="{{strtolower($d->dailysale['id'])}}" data-date="{{$d->date->format('Y-m-d')}}">
-                  {{ number_format($d->dailysale['slsmtd_totgrs'], 2) }}
+                  {{ number_format($d->dailysale['sales'], 2) }}
                   </a>
                 @endif
               </td>
@@ -220,7 +220,7 @@
               <td class="text-right" data-sort="{{ number_format($d->dailysale['headspend'], 2,'.','') }}">{{ number_format($d->dailysale['headspend'], 2) }}</td>
               <td class="text-right" data-sort="{{ $d->dailysale['empcount'] }}">{{ $d->dailysale['empcount'] }}</td>
               <?php
-                $s = $d->dailysale['empcount']=='0' ? '0.00':($d->dailysale['slsmtd_totgrs']/$d->dailysale['empcount']);
+                $s = $d->dailysale['empcount']=='0' ? '0.00':($d->dailysale['sales']/$d->dailysale['empcount']);
               ?>
               <td class="text-right" data-sort="{{$s}}">{{number_format($s,2)}}</td>
               <?php
@@ -233,22 +233,22 @@
                 {{ number_format($d->dailysale['mancost'],0) }}
               </td>
               <td class="text-right" data-sort="{{ $d->dailysale['mancostpct'] }}"
-                @if(!empty($d->dailysale['slsmtd_totgrs']) && $d->dailysale['slsmtd_totgrs']!='0.00' && $d->dailysale['slsmtd_totgrs']!='0')   
-                title="({{$d->dailysale['empcount']}}*{{session('user.branchmancost')}})/{{$d->dailysale['slsmtd_totgrs']}} 
-                ={{(($d->dailysale['empcount']*session('user.branchmancost'))/$d->dailysale['slsmtd_totgrs'])*100}} "
+                @if(!empty($d->dailysale['sales']) && $d->dailysale['sales']!='0.00' && $d->dailysale['sales']!='0')   
+                title="({{$d->dailysale['empcount']}}*{{session('user.branchmancost')}})/{{$d->dailysale['sales']}} 
+                ={{(($d->dailysale['empcount']*session('user.branchmancost'))/$d->dailysale['sales'])*100}} "
                 @endif
                 >{{ $d->dailysale['mancostpct'] }}</td>
               <td class="text-right" data-sort="{{ number_format($d->dailysale['tips'],2,'.','') }}">{{ number_format($d->dailysale['tips'],2) }}</td>
               <td class="text-right" data-sort="{{ number_format($d->dailysale['tipspct'],2,'.','') }}">{{ number_format($d->dailysale['tipspct'], 2) }}</td>
               <?php
-                $tot_sales      += $d->dailysale['slsmtd_totgrs'];
+                $tot_sales      += $d->dailysale['sales'];
                 $tot_purchcost  += $d->dailysale['purchcost'];
                 $tot_custcount  += $d->dailysale['custcount'];
                 $tot_headspend  += $d->dailysale['headspend'];
                 $tot_empcount   += $d->dailysale['empcount'];
 
                 if($d->dailysale['empcount']!='0') {
-                  $tot_sales_emp += number_format(($d->dailysale['slsmtd_totgrs']/$d->dailysale['empcount']),2, '.', '');
+                  $tot_sales_emp += number_format(($d->dailysale['sales']/$d->dailysale['empcount']),2, '.', '');
                 }
 
                 $tot_mancost    += $mancost;
@@ -399,13 +399,13 @@
             <tr>
               <td>{{ $d->date->format('Y-m-d') }}</td>
               @if(!is_null($d->dailysale))
-              <td>{{ $d->dailysale['slsmtd_totgrs'] }}</td>
+              <td>{{ $d->dailysale['sales'] }}</td>
               <td>{{ $d->dailysale['purchcost'] }}</td>
               <td>{{ $d->dailysale['empcount'] }}</td>
               <td>{{ $d->dailysale['custcount'] }}</td>
               <td>{{ $d->dailysale['mancost'] }}</td>
               <td>{{ $d->dailysale['tips'] }}</td>
-              <td>{{ $d->dailysale['empcount']=='0' ? 0:number_format(($d->dailysale['slsmtd_totgrs']/$d->dailysale['empcount']), 2, '.', '') }}</td>
+              <td>{{ $d->dailysale['empcount']=='0' ? 0:number_format(($d->dailysale['sales']/$d->dailysale['empcount']), 2, '.', '') }}</td>
               @else 
               <td>0</td>
               <td>0</td>
