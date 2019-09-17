@@ -82,6 +82,7 @@
 		            		<td>{{ $ds->date->format('D, M j') }}</td>
 		            		@if(!is_null($ds->dailysale))
                     <td class="text-right">
+                      @if($ds->dailysale->slsmtd_totgrs>1)
                       <span class="help" data-toggle="tooltip" title="Net Sales: {{ number_format($ds->dailysale->sales,2) }}">
                         @if(number_format($ds->dailysale->sales,2)=='0.00')
                           -
@@ -91,6 +92,7 @@
                           </a>
                         @endif
                       </span>
+                      @endif
                     </td>
                     <td class="text-right">
                       @if(number_format($ds->dailysale->cos,2)=='0.00')
