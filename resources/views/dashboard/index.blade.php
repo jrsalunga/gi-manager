@@ -83,7 +83,7 @@
 		            		@if(!is_null($ds->dailysale))
                     <td class="text-right">
                       @if($ds->dailysale->slsmtd_totgrs>1)
-                      <span class="help" data-toggle="tooltip" title="Net Sales: {{ number_format($ds->dailysale->sales,2) }}">
+                      <span class="help" data-toggle="tooltip" title="Gross Sales: {{ number_format($ds->dailysale->slsmtd_totgrs,2) }}">
                         @if(number_format($ds->dailysale->sales,2)=='0.00')
                           -
                         @else
