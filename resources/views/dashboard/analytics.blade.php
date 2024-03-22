@@ -92,9 +92,9 @@
 
                 <ul class="dropdown-menu" aria-labelledby="date-type">
                   <li><a href="#" data-date-type="daily">Daily</a></li>
-                  <li><a href="#" data-date-type="weekly">Weekly</a></li>
+                  <!-- <li><a href="#" data-date-type="weekly">Weekly</a></li> -->
                   <li><a href="#" data-date-type="monthly">Monthly</a></li>
-                  <li><a href="#" data-date-type="quarterly">Quarterly</a></li>
+                 <!--  <li><a href="#" data-date-type="quarterly">Quarterly</a></li> -->
                   <li><a href="#" data-date-type="yearly">Yearly</a></li>
                 </ul>
               </div>
@@ -119,6 +119,10 @@
         <h3 id="h-tot-sales" style="margin:0">0</h3>
       </div>
       <div class="col-xs-6 col-md-3 text-right" style="margin-bottom: 10px;">
+        <p style="margin-bottom:0">Total Delivery Sales</p>
+        <h3 id="h-tot-tips" style="margin:0">0</h3>
+      </div>
+      <div class="col-xs-6 col-md-3 text-right" style="margin-bottom: 10px;">
         <p style="margin-bottom:0">Total Purchased</p>
         <h3 id="h-tot-purch" style="margin:0">0</h3>
       </div>
@@ -126,10 +130,7 @@
         <p style="margin-bottom:0">Total Manpower Cost</p>
         <h3 id="h-tot-mancost" style="margin:0">0</h3>
       </div>
-      <div class="col-xs-6 col-md-3 text-right" style="margin-bottom: 10px;">
-        <p style="margin-bottom:0">Sales per Employee</p>
-        <h3 id="h-tot-tips" style="margin:0">0</h3>
-      </div>
+      
 
     </div>
     <div class="row">
@@ -149,6 +150,7 @@
               <tr>
                   <th>Date</th>
                   <th class="text-right">Sales</th>
+                  <th class="text-right">Delivery</th>
                   <th class="text-right">Purchased</th>
                   <th class="text-right">Customers</th>
                   <th class="text-right">Head Spend</th>
@@ -168,6 +170,7 @@
             <tbody>
               <?php
                 $tot_sales = 0;
+                $tot_deliver = 0;
                 $tot_purchcost = 0;
                 $tot_custcount = 0;
                 $tot_headspend = 0;
@@ -179,6 +182,7 @@
                 $tot_tipspct = 0;
 
                 $div_sales = 0;
+                $div_deliver = 0;
                 $div_purchcost = 0;
                 $div_custcount = 0;
                 $div_headspend = 0;
@@ -188,6 +192,7 @@
               ?>
             @foreach($dailysales as $d)
             	<?php $div_sales+=($d->dailysale['sales']!=0)?1:0; ?>
+              <?php $div_deliver+=($d->dailysale['totdeliver']!=0)?1:0; ?>
             	<?php $div_purchcost+=($d->dailysale['purchcost']!=0)?1:0; ?>
             	<?php $div_custcount+=($d->dailysale['custcount']!=0)?1:0; ?>
             	<?php $div_headspend+=($d->dailysale['headspend']!=0)?1:0; ?>
@@ -206,6 +211,9 @@
                   {{ number_format($d->dailysale['sales'], 2) }}
                   </a>
                 @endif
+              </td>
+              <td class="text-right" data-sort="{{ number_format($d->dailysale['totdeliver'], 2,'.','') }}">
+                {{ number_format($d->dailysale['totdeliver'], 2) }}
               </td>
               <td class="text-right" data-sort="{{ number_format($d->dailysale['purchcost'], 2,'.','') }}">
                 @if($d->dailysale['purchcost']==0)
@@ -242,6 +250,7 @@
               <td class="text-right" data-sort="{{ number_format($d->dailysale['tipspct'],2,'.','') }}">{{ number_format($d->dailysale['tipspct'], 2) }}</td>
               <?php
                 $tot_sales      += $d->dailysale['sales'];
+                $tot_deliver    += $d->dailysale['totdeliver'];
                 $tot_purchcost  += $d->dailysale['purchcost'];
                 $tot_custcount  += $d->dailysale['custcount'];
                 $tot_headspend  += $d->dailysale['headspend'];
@@ -284,6 +293,14 @@
                 <div>
                 <em><small title="{{$tot_sales}}/{{$div_sales}}">
                   {{ $div_sales!=0?number_format($tot_sales/$div_sales,2):0 }}
+                </small></em>
+                </div>
+              </td>
+              <td class="text-right">
+                <strong id="f-tot-purch">{{ number_format($tot_deliver,2) }}</strong>
+                <div>
+                <em><small title="{{$tot_deliver}}/{{$div_deliver}}">
+                  {{ $div_deliver!=0?number_format($tot_deliver/$div_deliver,2):0 }}
                 </small></em>
                 </div>
               </td>
