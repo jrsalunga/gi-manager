@@ -153,6 +153,7 @@
                   <th class="text-right">Delivery</th>
                   <th class="text-right">Purchased</th>
                   <th class="text-right">Customers</th>
+                  <th class="text-right">Trans</th>
                   <th class="text-right">Head Spend</th>
                   <th class="text-right">Emp Count</th>
                   <th class="text-right">Sales per Emp</th>
@@ -180,6 +181,7 @@
                 $tot_mancostpct = 0;
                 $tot_tips = 0;
                 $tot_tipspct = 0;
+                $tot_trans = 0;
 
                 $div_sales = 0;
                 $div_deliver = 0;
@@ -189,6 +191,7 @@
                 $div_empcount = 0;
                 $div_mancost = 0;
                 $div_tips = 0;
+                $div_trans = 0;
               ?>
             @foreach($dailysales as $d)
             	<?php $div_sales+=($d->dailysale['sales']!=0)?1:0; ?>
@@ -198,6 +201,7 @@
             	<?php $div_headspend+=($d->dailysale['headspend']!=0)?1:0; ?>
             	<?php $div_empcount+=($d->dailysale['empcount']!=0)?1:0; ?>
             	<?php $div_tips+=($d->dailysale['tips']!=0)?1:0; ?>
+              <?php $div_trans+=($d->dailysale['trans_cnt']!=0)?1:0; ?>
 
 
             <tr {{ $d->date->dayOfWeek=='0' ? 'class=warning':''  }}>
@@ -225,6 +229,7 @@
                 @endif
               </td>
               <td class="text-right" data-sort="{{ number_format($d->dailysale['custcount'], 0) }}">{{ number_format($d->dailysale['custcount'], 0) }}</td>
+              <td class="text-right" data-sort="{{ number_format($d->dailysale['trans_cnt'], 0) }}">{{ number_format($d->dailysale['trans_cnt'], 0) }}</td>
               <td class="text-right" data-sort="{{ number_format($d->dailysale['headspend'], 2,'.','') }}">{{ number_format($d->dailysale['headspend'], 2) }}</td>
               <td class="text-right" data-sort="{{ $d->dailysale['empcount'] }}">{{ $d->dailysale['empcount'] }}</td>
               <?php
@@ -264,8 +269,10 @@
                 $tot_mancostpct += $d->dailysale['mancostpct'];
                 $tot_tips       += $d->dailysale['tips'];
                 $tot_tipspct    += $d->dailysale['tipspct'];
+                $tot_trans      += $d->dailysale['trans_cnt'];
               ?>
               @else 
+              <td class="text-right" data-sort="-">-</td>
               <td class="text-right" data-sort="-">-</td>
               <td class="text-right" data-sort="-">-</td>
               <td class="text-right" data-sort="-">-</td>
@@ -317,6 +324,14 @@
                 <div>
                 <em><small title="{{$tot_custcount}}/{{$div_custcount}}">
                   {{ $div_custcount!=0?number_format($tot_custcount/$div_custcount,2):0 }}
+                </small></em>
+                </div>
+              </td>
+              <td class="text-right">
+                <strong>{{ number_format($tot_trans, 0) }}</strong>
+                <div>
+                <em><small title="{{$tot_trans}}/{{$div_trans}}">
+                  {{ $div_trans!=0?number_format($tot_trans/$div_trans,2):0 }}
                 </small></em>
                 </div>
               </td>
