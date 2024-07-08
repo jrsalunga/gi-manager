@@ -283,6 +283,7 @@
               <td class="text-right" data-sort="-">-</td>
               <td class="text-right" data-sort="-">-</td>
               <td class="text-right" data-sort="-">-</td>
+              <td class="text-right" data-sort="-">-</td>
               @endif
             </tr>
             @endforeach
